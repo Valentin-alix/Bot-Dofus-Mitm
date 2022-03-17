@@ -6,6 +6,6 @@ description : bot en lien avec mysql pour stocker les données, pyshark pour sni
 les paquets, pywin32 pour automatisé les clics en arrière plan et tkinter pour l'interface
 graphique
 
-![erreur ajout](/assets/images/screenshot_bot_edit_item.PNG "page ajout item")
+![erreur ajout](/assets/images/bot_working.png "page ajout item")
 
 ![erreur liste](/assets/images/screenshot_liste_item.PNG "page liste items")
