@@ -1,47 +1,64 @@
 class Item:
     def __init__(self):
         self.__name = ""
-        self.__type_rune = []
-        self.__value_rune = []
-        self.__line_rune = []
-        self.__column_rune = []
+        self.__type_runes = ()
+        self.__id_runes = ()
+        self.__value_runes = []
+        self.__line_runes = []
+        self.__column_runes = []
 
     @property
     def name(self):
         return self.__name
 
     @property
-    def type_rune(self):
-        return self.__type_rune
+    def id_runes(self):
+        return self.__id_runes
 
     @property
-    def value_rune(self):
-        return self.__value_rune
+    def type_runes(self):
+        return self.__type_runes
 
     @property
-    def line_rune(self):
-        return self.__line_rune
+    def value_runes(self):
+        return self.__value_runes
 
     @property
-    def column_rune(self):
-        return self.__column_rune
+    def line_runes(self):
+        return self.__line_runes
+
+    @property
+    def column_runes(self):
+        return self.__column_runes
 
     @name.setter
     def name(self, value):
-        self.name = value
+        self.__name = value
 
-    @type_rune.setter
-    def type_rune(self, value):
-        self.type_rune = value
+    @type_runes.setter
+    def type_runes(self, value):
+        self.__type_runes = value
 
-    @value_rune.setter
-    def value_rune(self, value):
-        self.value_rune = value
+    @value_runes.setter
+    def value_runes(self, value):
+        self.__value_runes = value
 
-    @line_rune.setter
-    def line_rune(self, value):
-        self.line_rune = value
+    @line_runes.setter
+    def line_runes(self, value):
+        self.__line_runes = value
 
-    @column_rune.setter
-    def column_rune(self, value):
-        self.column_rune = value
+    @column_runes.setter
+    def column_runes(self, value):
+        self.__column_runes = value
+
+    @id_runes.setter
+    def id_runes(self, value):
+        self.__id_runes = value
+
+    def clear_item(self):
+        self.name = ""
+        self.type_runes.clear()
+        self.id_runes.clear()
+        self.value_runes.clear()
+        self.line_runes.clear()
+        self.column_runes.clear()

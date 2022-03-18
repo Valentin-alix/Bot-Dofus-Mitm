@@ -1,5 +1,7 @@
 import mysql.connector
 
+from models.item import Item
+
 
 class DatabaseManagement:
     def __init__(self):
@@ -56,22 +58,19 @@ class DatabaseManagement:
                 target_lines.append(item)
         return target_lines
 
-    def insert_or_update_target_lines_item(self, name: str, types_runes: list[str],
-                                           values_runes: list[int],
-                                           lines_runes: list[int],
-                                           columns_rune: list[int]):
+    def insert_or_update_target_lines_item(self, item: Item()):
 
-        if not self.check_if_item_exists(name):
-            self.insert_item(name)
+        if not self.check_if_item_exists(item.name):
+            self.insert_item(item.name)
 
-        self.drop_target_lines_item(name)
+        self.drop_target_lines_item(item.name)
         with self.database.cursor() as request:
-            for i in range(len(types_runes)):
+            for i in range(len(item.type_runes)):
                 request.execute("insert into target_line(type_rune, value_rune, line_rune, "
                                 "column_rune, name_item) values ( "
                                 "%s, %s, %s, %s, %s)", (
-                                    types_runes[i], values_runes[i], lines_runes[i], columns_rune[i],
-                                    name))
+                                    item.type_runes[i], item.value_runes[i], item.line_runes[i], item.column_runes[i],
+                                    item.name))
             self.database.commit()
 
     def drop_target_lines_item(self, name: str):
@@ -101,11 +100,11 @@ class DatabaseManagement:
             count_white_list = request.fetchone()
             return count_white_list[0]
 
-    def select_types_rune_by_runes_id(self, rune_id: list[int]) -> list:
+    def select_types_rune_by_runes_id(self, runes_id: list[int]) -> list:
         types_rune = []
         with self.database.cursor() as request:
-            for i in range(len(rune_id)):
-                request.execute("select name from rune where dofus_id = %s", (rune_id[i],))
+            for rune_id in runes_id:
+                request.execute("select name from rune where dofus_id = %s", (rune_id,))
                 result = request.fetchone()
                 if result is not None:
                     types_rune.append(result[0])

@@ -1,7 +1,6 @@
 import unittest
 
-from factory.reader import Reader
-from models import sniffer
+from factory import reader
 from models.sniffer import Sniffer
 
 
@@ -20,4 +19,4 @@ class TestPacket(unittest.TestCase):
         self.assertEqual(Sniffer.calcul_size(self.packet_test6), 208)
 
     def test_recup_id(self):
-        self.assertEqual(Reader.recuperation_id(self.packet_test1), 1972)
+        self.assertEqual(reader.id_packet_getter(self.packet_test1), 1972)

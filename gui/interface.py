@@ -5,13 +5,10 @@ from PIL import Image, ImageTk
 from assets.colors import Colors
 from assets.fonts import Fonts
 from databases.database_management import DatabaseManagement
+from models.item import Item
 
-inserted_item = []
+inserted_item = Item()
 interface = None
-
-
-def reset_inserted_item():
-    inserted_item.clear()
 
 
 class Interface:
@@ -25,13 +22,16 @@ class Interface:
         self.__icon_menu_size = 20
         self.__icon_size = 26
         self.__database = DatabaseManagement()
-        self.image_home = None
-        self.image_ajout_item = None
-        self.image_start_item = None
-        self.image_change_item = None
-        self.image_delete_item = None
-        self.image_valider = None
-        self.image_cancel = None
+
+        self.image_home = self.convert_image_to_interface_image("./assets/icones/home.png")
+        self.image_add_item = self.convert_image_to_interface_image("./assets/icones/add.png")
+        self.image_start_item = self.convert_image_to_interface_image("./assets/icones/weapon.png")
+        self.image_change_item = self.convert_image_to_interface_image("./assets/icones/change.png")
+        self.image_delete_item = self.convert_image_to_interface_image("./assets/icones/delete.png")
+        self.image_validate = self.convert_image_to_interface_image("./assets/icones/validate.png")
+        self.image_cancel = self.convert_image_to_interface_image("./assets/icones/cancel.png")
+        self.image_play = self.convert_image_to_interface_image("./assets/icones/play.png")
+
         self.frame_menu = None
 
     @property
@@ -79,36 +79,24 @@ class Interface:
     def window(self):
 
         self.root.title(self.title)
-        self.root.iconbitmap('./assets/icones/icone.ico')
+        self.root.iconbitmap('./assets/icones/logo.ico')
         self.root.config(bg=self.backgroundColor)
         self.root.option_add("*font", Fonts.baseFont)
 
         height_center = int(self.root.winfo_screenheight() / 2) - int(self.heightSize / 2)
         width_center = int(self.root.winfo_screenwidth() / 2) - int(self.widthSize / 2)
 
-        self.root.geometry("+{}+{}".format(width_center, height_center))
+        self.root.geometry(f"+{width_center}+{height_center}")
         self.root.minsize(self.widthSize, self.heightSize)
         self.root.maxsize(self.widthSize, height=0)
 
         self.frame_menu = Frame(self.root)
         self.frame_menu.grid()
 
-        self.image_home = Image.open("./assets/icones/home.png")
-        self.image_home = self.image_home.resize((self.icon_size, self.icon_size), Image.ANTIALIAS)
-        self.image_home = ImageTk.PhotoImage(self.image_home)
-
-        self.image_ajout_item = Image.open("./assets/icones/add.png")
-        self.image_ajout_item = self.image_ajout_item.resize((self.icon_size, self.icon_size), Image.ANTIALIAS)
-        self.image_ajout_item = ImageTk.PhotoImage(self.image_ajout_item)
-
-        self.image_start_item = Image.open("./assets/icones/arme.png")
-        self.image_start_item = self.image_start_item.resize((self.icon_size, self.icon_size), Image.ANTIALIAS)
-        self.image_start_item = ImageTk.PhotoImage(self.image_start_item)
-
         bouton_home = Button(self.frame_menu, image=self.image_home,
                              command=lambda: [self.clear_frame(self.root), self.home()])
         bouton_home.grid()
-        bouton_ajout_item = Button(self.frame_menu, image=self.image_ajout_item,
+        bouton_ajout_item = Button(self.frame_menu, image=self.image_add_item,
                                    command=lambda: [self.clear_frame(self.root),
                                                     self.ajout_item_window()])
         bouton_ajout_item.grid(row=1, column=0)
@@ -130,14 +118,13 @@ class Interface:
         self.currentPageIsHome = False
         frame_ajout_item = Frame(self.root, bg=self.backgroundColor)
         frame_ajout_item.grid(row=1, column=1)
-        if not inserted_item:
+        if not inserted_item.id_runes:
             label_text_attente = Label(frame_ajout_item, text="Insérer un Item dans l'atelier de forgemagie",
                                        font=(Fonts.baseFont, 10), width=78, height=20,
                                        bg=Colors.background_color, fg=Colors.foreground_color, relief="ridge")
             label_text_attente.grid(row=0, column=0)
         else:
-
-            types_runes = self.database.select_types_rune_by_runes_id(inserted_item[0])
+            inserted_item.type_runes = self.database.select_types_rune_by_runes_id(inserted_item.id_runes)
 
             type_rune_title = Label(frame_ajout_item, text="Type Rune", width=15, font=Fonts.baseFont,
                                     bg=Colors.light_black, fg=Colors.foreground_color)
@@ -169,28 +156,23 @@ class Interface:
             self.image_cancel = ImageTk.PhotoImage(image_cancel_item)
 
             button_cancel = Button(frame_ajout_item, image=self.image_cancel,
-                                   command=lambda: [reset_inserted_item(), self.clear_frame(self.root),
+                                   command=lambda: [inserted_item.clear_item(), self.clear_frame(self.root),
                                                     self.ajout_item_window()])
             button_cancel.grid(row=0, column=4, padx=5)
 
-            image_valider_item = Image.open("./assets/icones/valider.png")
-            image_valider_item = image_valider_item.resize((self.icon_size, self.icon_size), Image.ANTIALIAS)
-            self.image_valider = ImageTk.PhotoImage(image_valider_item)
-
             item_edited = []
 
-            button_valider = Button(frame_ajout_item, image=self.image_valider,
+            button_valider = Button(frame_ajout_item, image=self.image_validate,
                                     command=lambda: [
-                                        self.get_entry_and_insert_into_database(name_item_variable.get(), item_edited,
-                                                                                types_runes),
-                                        reset_inserted_item(),
+                                        self.get_entry_and_insert_into_database(name_item_variable.get(), item_edited
+                                                                                ),
+                                        inserted_item.clear_item(),
                                         self.clear_frame(self.root),
                                         self.ajout_item_window()])
             button_valider.grid(row=0, column=5)
 
-            # FIXME FAIRE TRUC INT VAR POUR RECUP VALUE
-            for i in range(len(types_runes)):
-                type_rune = Label(frame_ajout_item, text=types_runes[i], width=15, font=Fonts.baseFont,
+            for i in range(len(inserted_item.type_runes)):
+                type_rune = Label(frame_ajout_item, text=inserted_item.type_runes[i], width=15, font=Fonts.baseFont,
                                   bg="green")
                 type_rune.grid(column=0, row=i + 2, pady=2, padx=2)
 
@@ -198,10 +180,12 @@ class Interface:
                 variable_line_rune = IntVar()
                 variable_column_rune = IntVar()
 
+                skip_value = IntVar()
+
                 value_rune = Entry(frame_ajout_item, width=15, font=Fonts.baseFont, textvariable=variable_value_rune)
                 value_rune.grid(column=1, row=i + 2, pady=2)
                 value_rune.delete(first=0)
-                value_rune.insert(0, inserted_item[1][i])
+                value_rune.insert(0, inserted_item.value_runes[i])
 
                 line_rune = Entry(frame_ajout_item, width=15, font=Fonts.baseFont, textvariable=variable_line_rune)
                 line_rune.grid(column=2, row=i + 2, pady=2)
@@ -211,47 +195,56 @@ class Interface:
                 column_rune.grid(column=3, row=i + 2, pady=2)
                 column_rune.delete(first=0)
 
-                skip_line_button = Checkbutton(frame_ajout_item, text="Skip", font=Fonts.baseFont)
+                skip_line_button = Checkbutton(frame_ajout_item,
+                                               variable=skip_value, text="Skip", font=Fonts.baseFont,
+                                               )
                 skip_line_button.grid(column=4, row=i + 2)
 
-                item_edited.append([variable_value_rune, variable_line_rune, variable_column_rune])
+                item_edited.append([variable_value_rune, variable_line_rune, variable_column_rune, skip_value])
 
     def start_item_window(self):
 
         self.currentPageIsHome = False
         frame_ajout_item = Frame(self.root, bg=self.backgroundColor)
         frame_ajout_item.grid(row=1, column=1)
-        image_change_item = Image.open("./assets/icones/modifier.png")
-        image_change_item = image_change_item.resize((self.icon_size, self.icon_size), Image.ANTIALIAS)
-        self.image_change_item = ImageTk.PhotoImage(image_change_item)
-
-        image_delete_item = Image.open("./assets/icones/supprimer.png")
-        image_delete_item = image_delete_item.resize((self.icon_size, self.icon_size), Image.ANTIALIAS)
-        self.image_delete_item = ImageTk.PhotoImage(image_delete_item)
 
         items = self.database.select_all_items()
-        for i in range(len(items)):
-            bouton_item = Button(frame_ajout_item, text=items[i], font=Fonts.baseFont, width=70)
+        for i, item in enumerate(items):
+            bouton_item = Button(frame_ajout_item, text=item, font=Fonts.baseFont, width=70)
             bouton_item.grid(row=i + 1, column=0)
 
             bouton_change_item = Button(frame_ajout_item,
                                         image=self.image_change_item)
-            bouton_change_item.grid(row=i + 1, column=1)
+            bouton_change_item.grid(row=i + 1, column=2)
 
             bouton_delete_item = Button(frame_ajout_item,
                                         image=self.image_delete_item,
-                                        command=lambda: [self.database.drop_target_lines_item(items[i]),
-                                                         self.database.drop_item(items[i]),
+                                        command=lambda: [self.database.drop_target_lines_item(item),
+                                                         self.database.drop_item(item),
                                                          frame_ajout_item.destroy(), self.start_item_window()])
-            bouton_delete_item.grid(row=i + 1, column=2)
+            bouton_delete_item.grid(row=i + 1, column=1)
 
-    def get_entry_and_insert_into_database(self, name: str, item_edited: list, types_runes: list) -> list:
-        values_runes = []
-        lines_runes = []
-        columns_runes = []
-        for i in range(len(item_edited)):
-            values_runes.append(item_edited[i][0].get())
-            lines_runes.append(item_edited[i][1].get())
-            columns_runes.append(item_edited[i][2].get())
+            bouton_play_item = Button(frame_ajout_item,
+                                      image=self.image_play, command=lambda: print("et la le bot start"))
+            bouton_play_item.grid(row=i + 1, column=3)
 
-        self.database.insert_or_update_target_lines_item(name, types_runes, values_runes, lines_runes, columns_runes)
+    def get_entry_and_insert_into_database(self, name: str, item_edited: list):
+        inserted_item.name = name
+
+        for i, line in enumerate(item_edited):
+            if line[3].get():
+                del item_edited[i]
+                del inserted_item.type_runes[i]
+                break
+            else:
+                inserted_item.value_runes.append(line[0].get())
+                inserted_item.line_runes.append(line[1].get())
+                inserted_item.column_runes.append(line[2].get())
+
+        self.database.insert_or_update_target_lines_item(inserted_item)
+
+    def convert_image_to_interface_image(self, path: str):
+        image = Image.open(path)
+        image = image.resize((self.icon_size, self.icon_size), Image.ANTIALIAS)
+
+        return ImageTk.PhotoImage(image)

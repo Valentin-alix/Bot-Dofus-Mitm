@@ -2,7 +2,7 @@ import socket
 import pyshark
 
 from databases.database_management import DatabaseManagement
-from factory.reader import Reader
+from factory import reader
 from models.data import Data
 
 
@@ -13,6 +13,7 @@ class Sniffer:
         self.__filter_dofus = 'tcp port 5555 and len > 66'
         self.__ip_dofus = '172.65.237.72'
         self.__buffer = ''
+        self.__network_interface = "\\Device\\NPF_{3CC6E476-ECB5-46EF-9768-419794EAE46A}"
 
     @property
     def filter_dofus(self):
@@ -26,6 +27,10 @@ class Sniffer:
     def buffer(self):
         return self.__buffer
 
+    @property
+    def network_interface(self):
+        return self.__network_interface
+
     @buffer.setter
     def buffer(self, value):
         self.__buffer = value
@@ -34,7 +39,7 @@ class Sniffer:
         self.__buffer = ''
 
     def launch_sniffer(self):
-        capture = pyshark.LiveCapture(interface="\\Device\\NPF_{3CC6E476-ECB5-46EF-9768-419794EAE46A}",
+        capture = pyshark.LiveCapture(interface=self.network_interface,
                                       bpf_filter=self.filter_dofus)
         for packet in capture.sniff_continuously():
             if packet.ip.src == socket.gethostbyname(self.ip_dofus) and hasattr(packet, 'data') and hasattr(
@@ -58,7 +63,7 @@ class Sniffer:
         db = DatabaseManagement()
         if len(self.buffer) < 4:
             return
-        if not db.check_if_id_in_white_list(Reader.recuperation_id(self.buffer[:4])):
+        if not db.check_if_id_in_white_list(reader.id_packet_getter(self.buffer[:4])):
             self.reset_buffer()
             return
         if self.calcul_size(self.buffer) >= 600:
@@ -68,10 +73,10 @@ class Sniffer:
             return
 
         while (self.calcul_size(self.buffer) <= len(self.buffer)) and len(self.buffer) >= 4:
-            if not db.check_if_id_in_white_list(Reader.recuperation_id(self.buffer[:4])):
+            if not db.check_if_id_in_white_list(reader.id_packet_getter(self.buffer[:4])):
                 self.reset_buffer()
                 return
             else:
                 data_object = Data(bytearray.fromhex(self.buffer[:Sniffer.calcul_size(self.buffer)]))
-                Reader.interpretation(data_object)
+                reader.interpretation(data_object)
                 self.buffer = self.buffer[self.calcul_size(self.buffer):]
