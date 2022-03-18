@@ -38,6 +38,10 @@ class Interface:
     def root(self):
         return self.__root
 
+    @root.setter
+    def root(self, value):
+        self.__root = value
+
     @property
     def icon_size(self):
         return self.__icon_size
@@ -77,7 +81,6 @@ class Interface:
         self.currentPageIsHome = False
 
     def window(self):
-
         self.root.title(self.title)
         self.root.iconbitmap('./assets/icones/logo.ico')
         self.root.config(bg=self.backgroundColor)
@@ -209,6 +212,7 @@ class Interface:
         frame_ajout_item.grid(row=1, column=1)
 
         items = self.database.select_all_items()
+
         for i, item in enumerate(items):
             bouton_item = Button(frame_ajout_item, text=item, font=Fonts.baseFont, width=70)
             bouton_item.grid(row=i + 1, column=0)
@@ -225,7 +229,8 @@ class Interface:
             bouton_delete_item.grid(row=i + 1, column=1)
 
             bouton_play_item = Button(frame_ajout_item,
-                                      image=self.image_play, command=lambda: print("et la le bot start"))
+                                      image=self.image_play,
+                                      command=lambda item=item: [self.root.destroy(), self.working_window(item)])
             bouton_play_item.grid(row=i + 1, column=3)
 
     def get_entry_and_insert_into_database(self, name: str, item_edited: list):
@@ -248,3 +253,14 @@ class Interface:
         image = image.resize((self.icon_size, self.icon_size), Image.ANTIALIAS)
 
         return ImageTk.PhotoImage(image)
+
+    def working_window(self, item):
+        working_window = Tk()
+        working_window.iconbitmap("./assets/icones/logo.ico")
+        working_window.title("Bot en cours")
+        working_window.config(bg=Colors.background_color)
+
+        stop_button = Button(working_window, bg="red", width=10, text="STOP", command=lambda: [print("on arrete")])
+        stop_button.grid(row=0, column=0)
+        print(item)
+        working_window.mainloop()
