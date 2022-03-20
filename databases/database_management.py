@@ -48,14 +48,27 @@ class DatabaseManagement:
                 items.append(item[0])
         return items
 
-    def select_target_lines_by_name_item(self, name) -> list[list[str], list[int], list[int], list[int], list[int]]:
+    def select_target_lines_by_name_item(self, name) -> list[list[str], list[int], list[int], list[int]]:
         target_lines = []
+        type_runes = []
+        value_runes = []
+        line_runes = []
+        column_rune = []
+
         with self.database.cursor() as request:
-            request.execute("select type_rune, id_type_rune, value_rune, line_rune, column_rune from target_line "
+            request.execute("select type_rune, value_rune, line_rune, column_rune from target_line "
                             "where name_item = %s", (name,))
             results = request.fetchall()
             for item in results:
-                target_lines.append(item)
+                type_runes.append(item[0])
+                value_runes.append(item[1])
+                line_runes.append(item[2])
+                column_rune.append(item[3])
+
+        target_lines.append(type_runes)
+        target_lines.append(value_runes)
+        target_lines.append(line_runes)
+        target_lines.append(column_rune)
         return target_lines
 
     def insert_or_update_target_lines_item(self, item: Item()):
@@ -109,3 +122,13 @@ class DatabaseManagement:
                 if result is not None:
                     types_rune.append(result[0])
         return types_rune
+
+    def select_runes_id_by_types_rune(self, types_rune: list[str]) -> list:
+        id_runes = []
+        with self.database.cursor() as request:
+            for type_rune in types_rune:
+                request.execute("select dofus_id from rune where name = %s", (type_rune,))
+                result = request.fetchone()
+                if result is not None:
+                    id_runes.append(result[0])
+        return id_runes

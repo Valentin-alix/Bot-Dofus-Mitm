@@ -1,11 +1,13 @@
 class Item:
     def __init__(self):
         self.__name = ""
-        self.__type_runes = ()
-        self.__id_runes = ()
+        self.__type_runes = []
+        self.__id_runes = []
         self.__value_runes = []
         self.__line_runes = []
         self.__column_runes = []
+        self.__actual_values = []
+        self.__actual_id_values = []
 
     @property
     def name(self):
@@ -30,6 +32,22 @@ class Item:
     @property
     def column_runes(self):
         return self.__column_runes
+
+    @property
+    def actual_values(self):
+        return self.__actual_values
+
+    @property
+    def actual_id_values(self):
+        return self.__actual_id_values
+
+    @actual_id_values.setter
+    def actual_id_values(self, value):
+        self.__actual_id_values = value
+
+    @actual_values.setter
+    def actual_values(self, value):
+        self.__actual_values = value
 
     @name.setter
     def name(self, value):

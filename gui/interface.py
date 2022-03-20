@@ -5,10 +5,15 @@ from PIL import Image, ImageTk
 from assets.colors import Colors
 from assets.fonts import Fonts
 from databases.database_management import DatabaseManagement
+from factory import action
 from models.item import Item
 
 inserted_item = Item()
 interface = None
+
+
+def bot_is_playing_to_false():
+    action.bot_is_playing = False
 
 
 class Interface:
@@ -17,7 +22,7 @@ class Interface:
         self.__title = 'Bot FM'
         self.__backgroundColor = Colors.background_color
         self.__currentPageIsHome = False
-        self.__widthSize = 800
+        self.__widthSize = 900
         self.__heightSize = 500
         self.__icon_menu_size = 20
         self.__icon_size = 26
@@ -154,10 +159,6 @@ class Interface:
             name_item = Entry(frame_ajout_item, width=25, font=(Fonts.baseFont, 20), textvariable=name_item_variable)
             name_item.grid(column=1, columnspan=3, row=0)
 
-            image_cancel_item = Image.open("./assets/icones/cancel.png")
-            image_cancel_item = image_cancel_item.resize((self.icon_size, self.icon_size), Image.ANTIALIAS)
-            self.image_cancel = ImageTk.PhotoImage(image_cancel_item)
-
             button_cancel = Button(frame_ajout_item, image=self.image_cancel,
                                    command=lambda: [inserted_item.clear_item(), self.clear_frame(self.root),
                                                     self.ajout_item_window()])
@@ -230,10 +231,12 @@ class Interface:
 
             bouton_play_item = Button(frame_ajout_item,
                                       image=self.image_play,
-                                      command=lambda item=item: [self.root.destroy(), self.working_window(item)])
+                                      command=lambda item=item: [self.clear_frame(self.root), self.frame_menu.destroy(),
+                                                                 self.working_window(item)])
             bouton_play_item.grid(row=i + 1, column=3)
 
     def get_entry_and_insert_into_database(self, name: str, item_edited: list):
+        inserted_item.value_runes = []
         inserted_item.name = name
 
         for i, line in enumerate(item_edited):
@@ -255,12 +258,53 @@ class Interface:
         return ImageTk.PhotoImage(image)
 
     def working_window(self, item):
-        working_window = Tk()
-        working_window.iconbitmap("./assets/icones/logo.ico")
-        working_window.title("Bot en cours")
-        working_window.config(bg=Colors.background_color)
 
-        stop_button = Button(working_window, bg="red", width=10, text="STOP", command=lambda: [print("on arrete")])
-        stop_button.grid(row=0, column=0)
-        print(item)
-        working_window.mainloop()
+        action.bot_is_playing = True
+
+        target_lines = self.database.select_target_lines_by_name_item(item)
+
+        action.item.name = item
+        action.item.type_runes = target_lines[0]
+        action.item.value_runes = target_lines[1]
+        action.item.line_runes = target_lines[2]
+        action.item.column_runes = target_lines[3]
+        action.item.id_runes = self.database.select_runes_id_by_types_rune(action.item.type_runes)
+
+        working_window_frame = Frame(self.root)
+        working_window_frame.grid(row=1, column=1)
+        stop_button = Button(working_window_frame, bg="red", width=10, height=5, text="STOP",
+                             command=lambda: [bot_is_playing_to_false(), self.clear_frame(self.root), self.window()])
+        stop_button.grid(row=0, column=4, rowspan=2)
+
+        type_rune_title = Label(working_window_frame, text="Type Rune", width=15, font=Fonts.baseFont,
+                                bg=Colors.light_black, fg=Colors.foreground_color)
+        type_rune_title.grid(column=0, row=1, pady=2, padx=2)
+
+        value_rune_title = Label(working_window_frame, text="Valeur Ciblé", width=15,
+                                 font=Fonts.baseFont, bg=Colors.light_black, fg=Colors.foreground_color)
+        value_rune_title.grid(column=1, row=1, pady=2, padx=2)
+
+        line_rune_title = Label(working_window_frame, text="Ligne Rune", width=15,
+                                font=Fonts.baseFont, bg=Colors.light_black, fg=Colors.foreground_color)
+        line_rune_title.grid(column=2, row=1, pady=2, padx=2)
+
+        column_rune_title = Label(working_window_frame, text="Colonne Rune", width=15,
+                                  font=Fonts.baseFont, bg=Colors.light_black, fg=Colors.foreground_color)
+        column_rune_title.grid(column=3, row=1, pady=2, padx=2)
+
+        name_item_label = Label(working_window_frame, text=f"Nom : {item}", font=Fonts.baseFont, bg=Colors.light_black,
+                                fg=Colors.foreground_color, height=3, width=65)
+        name_item_label.grid(column=0, row=0, columnspan=4)
+
+        for i in range(len(target_lines[0])):
+            label_type = Label(working_window_frame, text=target_lines[0][i])
+            label_type.grid(column=0, row=i + 2)
+
+            label_value = Label(working_window_frame, text=target_lines[1][i])
+            label_value.grid(column=1, row=i + 2)
+
+            label_line = Label(working_window_frame, text=target_lines[2][i])
+            label_line.grid(column=2, row=i + 2)
+
+            label_column = Label(working_window_frame, text=target_lines[3][i])
+            label_column.grid(column=3, row=i + 2)

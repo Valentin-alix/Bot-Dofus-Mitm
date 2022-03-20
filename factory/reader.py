@@ -1,24 +1,23 @@
 from factory import action
 from gui import interface
 from models.data import Data
-from models.item import Item
-
-item_played: Item()
 
 
 def interpretation(data_object: Data):
-    if id_packet_getter(data_object) == 6242:
+    if id_packet_getter(data_object) == 6242 and action.bot_is_playing:
         data_object.readUnsignedShort()
         data_object.readByte()
-        craft_result = data_object.readByte()
-        object_gid = data_object.readVarUhShort()
+        # Ci dessous craft result
+        data_object.readByte()
+        # Ci dessous object GID
+        data_object.readVarUhShort()
         effects_len = data_object.readUnsignedShort()
 
         actions_id = []
         values = []
 
         for i in range(effects_len):
-            temp_id = data_object.readUnsignedShort()
+            data_object.readUnsignedShort()
             action_id = data_object.readVarUhShort()
             value = data_object.readVarUhShort()
             actions_id.append(action_id)
@@ -26,41 +25,51 @@ def interpretation(data_object: Data):
 
         data_object.readUnsignedShort()
         data_object.readByte()
-        object_uid = data_object.readVarUhInt()
-        quantity = data_object.readVarUhInt()
-        magic_pool_status = data_object.readByte()
+        # Ci-Dessous Object UID
+        data_object.readVarUhInt()
+        # Ci-Dessous Object quantity
+        data_object.readVarUhInt()
+        # Ci-Dessous Object magic_pool_status
+        data_object.readByte()
 
-        item_played.id_runes = actions_id
-        item_played.inserted_item.value_runes = values
+        action.item.actual_id_values = actions_id
+        action.item.actual_values = values
 
         action.click_based_on_values()
 
-    elif id_packet_getter(data_object) == 2329:
+    elif id_packet_getter(data_object) == 2329 and not action.bot_is_playing:
 
         header = data_object.readUnsignedShort()
         header += data_object.readByte()
 
-        remote = data_object.readBoolean()
-        position = data_object.readShort()
-        object_gid = data_object.readVarUhShort()
+        # Ci-dessous remote
+        data_object.readBoolean()
+        # Ci-dessous position
+        data_object.readShort()
+        # Ci-dessous object_gid
+        data_object.readVarUhShort()
         effects_len = data_object.readUnsignedShort()
         actions_id = []
         values = []
 
         for i in range(effects_len):
-            temp_id = data_object.readUnsignedShort()
+            data_object.readUnsignedShort()
             action_id = data_object.readVarUhShort()
             value = data_object.readVarUhShort()
             actions_id.append(action_id)
             values.append(value)
-        object_uid = data_object.readVarUhInt()
-        quantity = data_object.readVarUhInt()
+        # Ci-dessous object_uid
+        data_object.readVarUhInt()
+        # Ci-dessous quantity
+        data_object.readVarUhInt()
 
-        interface.inserted_item.id_runes = actions_id
-        interface.inserted_item.value_runes = values
+        # Si l'élément n'est pas une rune alors ->
+        if effects_len > 1:
+            interface.inserted_item.id_runes = actions_id
+            interface.inserted_item.value_runes = values
 
-        interface.interface.clear_frame(interface.interface.root)
-        interface.interface.ajout_item_window()
+            interface.interface.clear_frame(interface.interface.root)
+            interface.interface.ajout_item_window()
 
 
 def id_packet_getter(data_receive):
