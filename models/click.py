@@ -14,6 +14,7 @@ class Click:
         self.__fusion_rune_exo = win32api.MAKELONG(800, 170)
         self.__nickname = "Ezrealeeuu"
         self.__window_name = ""
+        self.__time_click = 0.2
         self.find_windows_name()
 
     @property
@@ -44,8 +45,12 @@ class Click:
     def nickname(self):
         return self.__nickname
 
+    @property
+    def time_click(self):
+        return self.__time_click
+
     def click_auto(self, x, y):
-        time.sleep(0.4)
+        time.sleep(self.time_click)
         hwnd = win32gui.FindWindow(None, self.windows_name)
         l_param = win32api.MAKELONG(x, y)
         win32gui.SendMessage(hwnd, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON, l_param)
@@ -65,8 +70,6 @@ class Click:
 
         win32gui.SendMessage(hwnd, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON, self.fusion_rune_exo)
         win32gui.SendMessage(hwnd, win32con.WM_LBUTTONUP, None, self.fusion_rune_exo)
-
-        time.sleep(0.5)
 
     def find_windows_name(self):
         def winEnumHandler(hwnd, ctx):

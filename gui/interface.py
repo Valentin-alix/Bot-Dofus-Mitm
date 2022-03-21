@@ -218,15 +218,17 @@ class Interface:
             bouton_item = Button(frame_ajout_item, text=item, font=Fonts.baseFont, width=70)
             bouton_item.grid(row=i + 1, column=0)
 
+            # FIXME FONCTION EDIT A FAIRE
             bouton_change_item = Button(frame_ajout_item,
-                                        image=self.image_change_item)
+                                        image=self.image_change_item, command=lambda: print("a faire"))
             bouton_change_item.grid(row=i + 1, column=2)
 
             bouton_delete_item = Button(frame_ajout_item,
                                         image=self.image_delete_item,
-                                        command=lambda: [self.database.drop_target_lines_item(item),
-                                                         self.database.drop_item(item),
-                                                         frame_ajout_item.destroy(), self.start_item_window()])
+                                        command=lambda item=item: [self.database.drop_target_lines_item(item),
+                                                                   self.database.drop_item(item),
+                                                                   frame_ajout_item.destroy(),
+                                                                   self.start_item_window()])
             bouton_delete_item.grid(row=i + 1, column=1)
 
             bouton_play_item = Button(frame_ajout_item,
@@ -240,14 +242,12 @@ class Interface:
         inserted_item.name = name
 
         for i, line in enumerate(item_edited):
-            if line[3].get():
-                del item_edited[i]
-                del inserted_item.type_runes[i]
-                break
-            else:
+            if not line[3].get():
                 inserted_item.value_runes.append(line[0].get())
                 inserted_item.line_runes.append(line[1].get())
                 inserted_item.column_runes.append(line[2].get())
+            else:
+                del inserted_item.type_runes[i]
 
         self.database.insert_or_update_target_lines_item(inserted_item)
 

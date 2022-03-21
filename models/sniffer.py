@@ -50,13 +50,15 @@ class Sniffer:
 
     @staticmethod
     def calcul_size(data: str):
+
         if len(data) == 0 or len(data) < 4:
             return 0
         size_of_size = int(bin(int(data[:4], 16))[2::][-2:]) * 2
-        if size_of_size == 0:
+        if size_of_size == 0 or len(data) == 4:
             return 4
         size = int(data[4:4 + size_of_size], 16) * 2
         total_size = 4 + size_of_size + size
+
         return total_size
 
     def extract_dofus_message(self):
