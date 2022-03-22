@@ -1,4 +1,4 @@
-
+import tkinter.messagebox
 from tkinter import *
 from PIL import Image, ImageTk
 from assets.colors import Colors
@@ -13,6 +13,20 @@ interface = None
 
 def bot_is_playing_to_false():
     action.bot_is_playing = False
+
+
+def catch_entries(item_edited) -> bool:
+    try:
+        item = Item()
+        item.value_runes = []
+        for i, line in enumerate(item_edited):
+            if not line[3].get():
+                item.value_runes.append(line[0].get())
+                item.line_runes.append(line[1].get())
+                item.column_runes.append(line[2].get())
+    except tkinter.TclError:
+        return False
+    return True
 
 
 class Interface:
@@ -168,11 +182,9 @@ class Interface:
 
             button_valider = Button(frame_ajout_item, image=self.image_validate,
                                     command=lambda: [
-                                        self.get_entries_and_insert_into_database(inserted_item.type_runes, item_edited,
-                                                                                  name_item_variable.get()),
-                                        inserted_item.clear_item(),
-                                        self.clear_frame(self.root),
-                                        self.ajout_item_window()])
+                                        self.on_valid_button_from_inserted_item(item_edited,
+                                                                                inserted_item,
+                                                                                name_item_variable.get())])
             button_valider.grid(row=0, column=5)
 
             for i in range(len(inserted_item)):
@@ -220,7 +232,8 @@ class Interface:
 
             bouton_change_item = Button(frame_ajout_item,
                                         image=self.image_change_item,
-                                        command=lambda item=item: [self.clear_frame(self.root), self.edit_item(item)])
+                                        command=lambda item=item: [self.clear_frame(self.root),
+                                                                   self.edit_item(item)])
             bouton_change_item.grid(row=i + 1, column=2)
 
             bouton_delete_item = Button(frame_ajout_item,
@@ -284,15 +297,10 @@ class Interface:
         button_cancel.grid(row=0, column=4, padx=5)
 
         item_edited = []
-
         button_valider = Button(self.frame_edit, image=self.image_validate,
-                                command=lambda: [
-                                    self.database.drop_target_lines_item(old_name),
-                                    self.database.drop_item(old_name),
-                                    self.get_entries_and_insert_into_database(item.type_runes, item_edited,
-                                                                              name_item_variable.get()),
-                                    self.clear_frame(self.root),
-                                    self.start_item_window()])
+                                command=lambda: self.on_valid_button_from_edit_item(item_edited, old_name, item,
+                                                                                    name_item_variable.get())
+                                )
         button_valider.grid(row=0, column=5)
 
         for i in range(len(item)):
@@ -327,6 +335,27 @@ class Interface:
             skip_line_button.grid(column=4, row=i + 2)
 
             item_edited.append([variable_value_rune, variable_line_rune, variable_column_rune, skip_value])
+
+    def on_valid_button_from_edit_item(self, item_edited, old_name, item, name_item_variable):
+        if catch_entries(item_edited):
+            self.database.drop_target_lines_item(old_name),
+            self.database.drop_item(old_name),
+            self.get_entries_and_insert_into_database(item.type_runes, item_edited,
+                                                      name_item_variable),
+            self.clear_frame(self.root),
+            self.start_item_window()
+        else:
+            tkinter.messagebox.showwarning("Erreur valeur", "Veuillez remplir tout les champs ou utiliser \"skip\"")
+
+    def on_valid_button_from_inserted_item(self, item_edited, item, name_item_variable):
+        if catch_entries(item_edited):
+            self.get_entries_and_insert_into_database(item.type_runes, item_edited,
+                                                      name_item_variable),
+            self.clear_frame(self.root),
+            inserted_item.clear_item(),
+            self.ajout_item_window(),
+        else:
+            tkinter.messagebox.showwarning("Erreur valeur", "Veuillez remplir tout les champs ou utiliser \"skip\"")
 
     def get_entries_and_insert_into_database(self, type_runes: list[int], item_edited: list, name: str):
         item = Item()

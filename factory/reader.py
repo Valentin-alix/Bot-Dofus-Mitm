@@ -4,7 +4,7 @@ from models.data import Data
 
 
 def interpretation(data_object: Data):
-    if id_packet_getter(data_object) == 6242 and action.bot_is_playing:
+    if id_packet_getter(data_object) == 2638 and action.bot_is_playing:
         data_object.readUnsignedShort()
         data_object.readByte()
         # Ci dessous craft result
@@ -37,7 +37,7 @@ def interpretation(data_object: Data):
 
         action.click_based_on_values()
 
-    elif id_packet_getter(data_object) == 2329 and not action.bot_is_playing:
+    elif id_packet_getter(data_object) == 6633 and not action.bot_is_playing:
 
         header = data_object.readUnsignedShort()
         header += data_object.readByte()
