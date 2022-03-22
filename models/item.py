@@ -1,13 +1,16 @@
 class Item:
     def __init__(self):
-        self.__name = ""
-        self.__type_runes = []
-        self.__id_runes = []
-        self.__value_runes = []
-        self.__line_runes = []
-        self.__column_runes = []
-        self.__actual_values = []
-        self.__actual_id_values = []
+        self.__name: str = ""
+        self.__type_runes: list[str] = []
+        self.__id_runes: list[int] = []
+        self.__value_runes: list[int] = []
+        self.__line_runes: list[int] = []
+        self.__column_runes: list[int] = []
+        self.__actual_values: list[int] = []
+        self.__actual_id_values: list[int] = []
+
+    def __len__(self):
+        return len(self.__id_runes)
 
     @property
     def name(self):

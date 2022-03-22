@@ -13,8 +13,8 @@ def interpretation(data_object: Data):
         data_object.readVarUhShort()
         effects_len = data_object.readUnsignedShort()
 
-        actions_id = []
-        values = []
+        actions_id: list[int] = []
+        values: list[int] = []
 
         for i in range(effects_len):
             data_object.readUnsignedShort()
@@ -49,8 +49,8 @@ def interpretation(data_object: Data):
         # Ci-dessous object_gid
         data_object.readVarUhShort()
         effects_len = data_object.readUnsignedShort()
-        actions_id = []
-        values = []
+        actions_id: list[int] = []
+        values: list[int] = []
 
         for i in range(effects_len):
             data_object.readUnsignedShort()

@@ -132,3 +132,8 @@ class DatabaseManagement:
                 if result is not None:
                     id_runes.append(result[0])
         return id_runes
+
+    def change_item_name(self, old_name, new_name):
+        with self.database.cursor() as request:
+            request.execute("update item set name = %s where name = %s", (new_name, old_name))
+            self.database.commit()

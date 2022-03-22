@@ -1,7 +1,6 @@
+
 from tkinter import *
-
 from PIL import Image, ImageTk
-
 from assets.colors import Colors
 from assets.fonts import Fonts
 from databases.database_management import DatabaseManagement
@@ -38,6 +37,7 @@ class Interface:
         self.image_play = self.convert_image_to_interface_image("./assets/icones/play.png")
 
         self.frame_menu = None
+        self.frame_edit = None
 
     @property
     def root(self):
@@ -168,14 +168,14 @@ class Interface:
 
             button_valider = Button(frame_ajout_item, image=self.image_validate,
                                     command=lambda: [
-                                        self.get_entry_and_insert_into_database(name_item_variable.get(), item_edited
-                                                                                ),
+                                        self.get_entries_and_insert_into_database(inserted_item.type_runes, item_edited,
+                                                                                  name_item_variable.get()),
                                         inserted_item.clear_item(),
                                         self.clear_frame(self.root),
                                         self.ajout_item_window()])
             button_valider.grid(row=0, column=5)
 
-            for i in range(len(inserted_item.type_runes)):
+            for i in range(len(inserted_item)):
                 type_rune = Label(frame_ajout_item, text=inserted_item.type_runes[i], width=15, font=Fonts.baseFont,
                                   bg="green")
                 type_rune.grid(column=0, row=i + 2, pady=2, padx=2)
@@ -218,9 +218,9 @@ class Interface:
             bouton_item = Button(frame_ajout_item, text=item, font=Fonts.baseFont, width=70)
             bouton_item.grid(row=i + 1, column=0)
 
-            # FIXME FONCTION EDIT A FAIRE
             bouton_change_item = Button(frame_ajout_item,
-                                        image=self.image_change_item, command=lambda: print("a faire"))
+                                        image=self.image_change_item,
+                                        command=lambda item=item: [self.clear_frame(self.root), self.edit_item(item)])
             bouton_change_item.grid(row=i + 1, column=2)
 
             bouton_delete_item = Button(frame_ajout_item,
@@ -237,19 +237,110 @@ class Interface:
                                                                  self.working_window(item)])
             bouton_play_item.grid(row=i + 1, column=3)
 
-    def get_entry_and_insert_into_database(self, name: str, item_edited: list):
-        inserted_item.value_runes = []
-        inserted_item.name = name
+    def edit_item(self, name: str):
 
+        old_name = name
+        self.frame_edit = Frame(self.root)
+        self.frame_edit.grid(row=1, column=1)
+        item = Item()
+
+        target_lines = self.database.select_target_lines_by_name_item(name)
+
+        item.name = name
+        item.type_runes = target_lines[0]
+        item.value_runes = target_lines[1]
+        item.line_runes = target_lines[2]
+        item.column_runes = target_lines[3]
+        item.id_runes = self.database.select_runes_id_by_types_rune(item.type_runes)
+
+        type_rune_title = Label(self.frame_edit, text="Type Rune", width=15, font=Fonts.baseFont,
+                                bg=Colors.light_black, fg=Colors.foreground_color)
+        type_rune_title.grid(column=0, row=1, pady=2, padx=2)
+
+        value_rune_title = Label(self.frame_edit, text="Valeur Ciblé", width=15,
+                                 font=Fonts.baseFont, bg=Colors.light_black, fg=Colors.foreground_color)
+        value_rune_title.grid(column=1, row=1, pady=2, padx=2)
+
+        line_rune_title = Label(self.frame_edit, text="Ligne Rune", width=15,
+                                font=Fonts.baseFont, bg=Colors.light_black, fg=Colors.foreground_color)
+        line_rune_title.grid(column=2, row=1, pady=2, padx=2)
+
+        column_rune_title = Label(self.frame_edit, text="Colonne Rune", width=15,
+                                  font=Fonts.baseFont, bg=Colors.light_black, fg=Colors.foreground_color)
+        column_rune_title.grid(column=3, row=1, pady=2, padx=2)
+
+        name_item_label = Label(self.frame_edit, text="Nom : ", font=Fonts.baseFont, bg=Colors.light_black,
+                                fg=Colors.foreground_color, width=15, height=2)
+        name_item_label.grid(column=0, row=0)
+
+        name_item_variable = StringVar()
+
+        name_item = Entry(self.frame_edit, width=25, font=(Fonts.baseFont, 20), textvariable=name_item_variable)
+        name_item.grid(column=1, columnspan=3, row=0)
+        name_item.insert(0, item.name)
+
+        button_cancel = Button(self.frame_edit, image=self.image_cancel,
+                               command=lambda: [self.clear_frame(self.root), self.start_item_window()])
+        button_cancel.grid(row=0, column=4, padx=5)
+
+        item_edited = []
+
+        button_valider = Button(self.frame_edit, image=self.image_validate,
+                                command=lambda: [
+                                    self.database.drop_target_lines_item(old_name),
+                                    self.database.drop_item(old_name),
+                                    self.get_entries_and_insert_into_database(item.type_runes, item_edited,
+                                                                              name_item_variable.get()),
+                                    self.clear_frame(self.root),
+                                    self.start_item_window()])
+        button_valider.grid(row=0, column=5)
+
+        for i in range(len(item)):
+            type_rune = Label(self.frame_edit, text=item.type_runes[i], width=15, font=Fonts.baseFont,
+                              bg="green")
+            type_rune.grid(column=0, row=i + 2, pady=2, padx=2)
+
+            variable_value_rune = IntVar()
+            variable_line_rune = IntVar()
+            variable_column_rune = IntVar()
+
+            skip_value = IntVar()
+
+            value_rune = Entry(self.frame_edit, width=15, font=Fonts.baseFont, textvariable=variable_value_rune)
+            value_rune.grid(column=1, row=i + 2, pady=2)
+            value_rune.delete(first=0)
+            value_rune.insert(0, item.value_runes[i])
+
+            line_rune = Entry(self.frame_edit, width=15, font=Fonts.baseFont, textvariable=variable_line_rune)
+            line_rune.grid(column=2, row=i + 2, pady=2)
+            line_rune.delete(first=0)
+            line_rune.insert(0, item.line_runes[i])
+
+            column_rune = Entry(self.frame_edit, width=15, font=Fonts.baseFont, textvariable=variable_column_rune)
+            column_rune.grid(column=3, row=i + 2, pady=2)
+            column_rune.delete(first=0)
+            column_rune.insert(0, item.column_runes[i])
+
+            skip_line_button = Checkbutton(self.frame_edit,
+                                           variable=skip_value, text="Skip", font=Fonts.baseFont,
+                                           )
+            skip_line_button.grid(column=4, row=i + 2)
+
+            item_edited.append([variable_value_rune, variable_line_rune, variable_column_rune, skip_value])
+
+    def get_entries_and_insert_into_database(self, type_runes: list[int], item_edited: list, name: str):
+        item = Item()
+        item.value_runes = []
+        item.name = name
         for i, line in enumerate(item_edited):
             if not line[3].get():
-                inserted_item.value_runes.append(line[0].get())
-                inserted_item.line_runes.append(line[1].get())
-                inserted_item.column_runes.append(line[2].get())
+                item.value_runes.append(line[0].get())
+                item.line_runes.append(line[1].get())
+                item.column_runes.append(line[2].get())
             else:
-                del inserted_item.type_runes[i]
-
-        self.database.insert_or_update_target_lines_item(inserted_item)
+                del type_runes[i]
+        item.type_runes = type_runes
+        self.database.insert_or_update_target_lines_item(item)
 
     def convert_image_to_interface_image(self, path: str):
         image = Image.open(path)
