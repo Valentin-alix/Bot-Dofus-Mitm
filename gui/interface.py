@@ -183,7 +183,6 @@ class Interface:
             button_valider = Button(frame_ajout_item, image=self.image_validate,
                                     command=lambda: [
                                         self.on_valid_button_from_inserted_item(item_edited,
-                                                                                inserted_item,
                                                                                 name_item_variable.get())])
             button_valider.grid(row=0, column=5)
 
@@ -347,9 +346,9 @@ class Interface:
         else:
             tkinter.messagebox.showwarning("Erreur valeur", "Veuillez remplir tout les champs ou utiliser \"skip\"")
 
-    def on_valid_button_from_inserted_item(self, item_edited, item, name_item_variable):
+    def on_valid_button_from_inserted_item(self, item_edited, name_item_variable):
         if catch_entries(item_edited):
-            self.get_entries_and_insert_into_database(item.type_runes, item_edited,
+            self.get_entries_and_insert_into_database(inserted_item.type_runes, item_edited,
                                                       name_item_variable),
             self.clear_frame(self.root),
             inserted_item.clear_item(),
@@ -361,13 +360,14 @@ class Interface:
         item = Item()
         item.value_runes = []
         item.name = name
+        base_size = len(type_runes)
         for i, line in enumerate(item_edited):
             if not line[3].get():
                 item.value_runes.append(line[0].get())
                 item.line_runes.append(line[1].get())
                 item.column_runes.append(line[2].get())
             else:
-                del type_runes[i]
+                del type_runes[i - (base_size - len(type_runes))]
         item.type_runes = type_runes
         self.database.insert_or_update_target_lines_item(item)
 
