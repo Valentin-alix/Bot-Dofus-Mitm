@@ -1,6 +1,7 @@
 import socket
 import pyshark
 
+from assets.colors import Colors
 from databases.database_management import DatabaseManagement
 from factory import reader
 from models.data import Data
@@ -9,7 +10,6 @@ from models.data import Data
 class Sniffer:
 
     def __init__(self):
-
         self.__filter_dofus = 'tcp port 5555 and len > 66'
         self.__ip_dofus = '172.65.237.72'
         self.__buffer = ''
@@ -53,7 +53,7 @@ class Sniffer:
 
         if len(data) == 0 or len(data) < 4:
             return 0
-        size_of_size = int(bin(int(data[:4], 16))[2::][-2:]) * 2
+        size_of_size = int(bin(int(data[:4], 16))[2::][-2:], 2) * 2
         if size_of_size == 0 or len(data) == 4:
             return 4
         size = int(data[4:4 + size_of_size], 16) * 2
@@ -65,10 +65,8 @@ class Sniffer:
         db = DatabaseManagement()
         if len(self.buffer) < 4:
             return
-        if not db.check_if_id_in_white_list(reader.id_packet_getter(self.buffer[:4])):
-            self.reset_buffer()
-            return
-        if self.calcul_size(self.buffer) >= 600:
+        if not db.check_if_id_in_white_list(reader.id_packet_getter(self.buffer[:4])) or self.calcul_size(self.buffer) >= 19998:
+            print(f" {Colors.FAIL}Mauvais paquet : {self.buffer} {Colors.RESET}")
             self.reset_buffer()
             return
         if self.calcul_size(self.buffer) > len(self.buffer):

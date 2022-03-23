@@ -1,3 +1,6 @@
+import datetime
+import time
+
 from models.click import Click
 from models.item import Item
 import numpy as np
@@ -33,3 +36,4 @@ def click_based_on_values():
         return
 
     click_item.click_rune(num_column, num_line)
+    time.time_since_click = datetime.datetime.now()
