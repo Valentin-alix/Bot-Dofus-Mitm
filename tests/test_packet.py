@@ -1,8 +1,5 @@
 import unittest
 
-from factory import reader
-from models.sniffer import Sniffer
-
 
 class TestPacket(unittest.TestCase):
     packet_test1 = "1ed114000401f901eb01de01c20001425c6533800900002768"
