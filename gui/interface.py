@@ -186,7 +186,7 @@ class Interface:
                                                                                 name_item_variable.get())])
             button_valider.grid(row=0, column=5)
 
-            for i in range(len(inserted_item)):
+            for i in range(len(inserted_item.type_runes)):
                 type_rune = Label(frame_ajout_item, text=inserted_item.type_runes[i], width=15, font=Fonts.baseFont,
                                   bg="green")
                 type_rune.grid(column=0, row=i + 2, pady=2, padx=2)
