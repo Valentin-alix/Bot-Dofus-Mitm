@@ -1,7 +1,6 @@
 import socket
 import pyshark
 
-from assets.colors import Colors
 from databases.database_management import DatabaseManagement
 from factory import reader
 from models.data import Data
@@ -66,7 +65,6 @@ class Sniffer:
         if len(self.buffer) < 4:
             return
         if not db.check_if_id_in_white_list(reader.id_packet_getter(self.buffer[:4])) or self.calcul_size(self.buffer) >= 19998:
-            print(f" {Colors.FAIL}Mauvais paquet : {self.buffer} {Colors.RESET}")
             self.reset_buffer()
             return
         if self.calcul_size(self.buffer) > len(self.buffer):

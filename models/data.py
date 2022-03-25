@@ -204,3 +204,12 @@ class Data:
 
     def writeVarUhShort(self, i):
         self.writeVarShort(i)
+
+
+class Buffer(Data):
+    def end(self):
+        del self.data[: self.pos]
+        self.pos = 0
+
+    def reset(self):
+        self.__init__()
