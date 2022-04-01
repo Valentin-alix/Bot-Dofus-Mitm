@@ -1,6 +1,7 @@
 import socket
 import pyshark
 
+from assets.colors import Colors
 from databases.database_management import DatabaseManagement
 from factory import reader
 from models.data import Data
@@ -44,6 +45,8 @@ class Sniffer:
             if packet.ip.src == socket.gethostbyname(self.ip_dofus) and hasattr(packet, 'data') and hasattr(
                     packet.data, 'data'):
                 self.buffer += packet.data.data
+                print(Colors.OK + packet.data.data + Colors.RESET)
+                print(Colors.WARNING + self.buffer + Colors.RESET)
                 if len(self.buffer) >= 4:
                     self.extract_dofus_message()
 
@@ -64,7 +67,8 @@ class Sniffer:
         db = DatabaseManagement()
         if len(self.buffer) < 4:
             return
-        if not db.check_if_id_in_white_list(reader.id_packet_getter(self.buffer[:4])) or self.calcul_size(self.buffer) >= 19998:
+        if not db.check_if_id_in_white_list(reader.id_packet_getter(self.buffer[:4])) or self.calcul_size(
+                self.buffer) >= 19998:
             self.reset_buffer()
             return
         if self.calcul_size(self.buffer) > len(self.buffer):
