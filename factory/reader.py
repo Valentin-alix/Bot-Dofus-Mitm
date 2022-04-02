@@ -3,12 +3,12 @@ from factory import action
 from gui import interface
 from models.data import Data
 
-ExchangeObjectAddedMessage = DatabaseManagement().select_needed_message_network()[1]
-ExchangeCraftResultMagicWithObjectDescMessage = DatabaseManagement().select_needed_message_network()[0]
+ExchangeObjectAddedMessage: int = DatabaseManagement().select_needed_message_network()[1][0]
+ExchangeCraftResultMagicWithObjectDescMessage: int = DatabaseManagement().select_needed_message_network()[0][0]
 
 
 def interpretation(data_object: Data):
-    if id_packet_getter(data_object) == ExchangeCraftResultMagicWithObjectDescMessage and action.bot_is_playing:
+    if int(id_packet_getter(data_object)) == int(ExchangeCraftResultMagicWithObjectDescMessage) and action.bot_is_playing:
         data_object.readUnsignedShort()
         data_object.readByte()
         # Ci dessous craft result
@@ -42,7 +42,6 @@ def interpretation(data_object: Data):
         action.click_based_on_values()
 
     elif id_packet_getter(data_object) == ExchangeObjectAddedMessage and not action.bot_is_playing:
-
         header = data_object.readUnsignedShort()
         header += data_object.readByte()
 

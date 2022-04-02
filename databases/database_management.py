@@ -138,7 +138,7 @@ class DatabaseManagement:
             request.execute("update item set name = %s where name = %s", (new_name, old_name))
             self.database.commit()
 
-    def select_needed_message_network(self):
+    def select_needed_message_network(self) -> list[int, int]:
         with self.database.cursor() as request:
             request.execute("select id_message from message_network where name_message = (%s or %s)",
                             ("ExchangeCraftResultMagicWithObjectDescMessage", "ExchangeObjectAddedMessage"))
