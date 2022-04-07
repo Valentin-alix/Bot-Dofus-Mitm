@@ -8,7 +8,12 @@ ExchangeCraftResultMagicWithObjectDescMessage: int = DatabaseManagement().select
 
 
 def interpretation(data_object: Data):
-    if int(id_packet_getter(data_object)) == int(ExchangeCraftResultMagicWithObjectDescMessage) and action.bot_is_playing:
+    try:
+        print(DatabaseManagement().select_message_by_id(id_packet_getter(data_object)))
+    except TypeError:
+        print(f"Message inconnu : {data_object}")
+    if int(id_packet_getter(data_object)) == int(
+            ExchangeCraftResultMagicWithObjectDescMessage) and action.bot_is_playing:
         data_object.readUnsignedShort()
         data_object.readByte()
         # Ci dessous craft result

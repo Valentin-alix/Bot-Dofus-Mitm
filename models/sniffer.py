@@ -1,7 +1,5 @@
 import socket
 import pyshark
-
-from databases.database_management import DatabaseManagement
 from factory import reader
 from models.data import Data
 
@@ -41,11 +39,13 @@ class Sniffer:
         capture = pyshark.LiveCapture(interface=self.network_interface,
                                       bpf_filter=self.filter_dofus)
         for packet in capture.sniff_continuously():
-            if packet.ip.src == socket.gethostbyname(self.ip_dofus) and hasattr(packet, 'data') and hasattr(
-                    packet.data, 'data'):
-                self.buffer += packet.data.data
-                if len(self.buffer) >= 4:
-                    self.extract_dofus_message()
+            try:
+                if packet.ip.src == socket.gethostbyname(self.ip_dofus):
+                    self.buffer += packet.data.data
+                    if len(self.buffer) >= 4:
+                        self.extract_dofus_message()
+            except AttributeError:
+                pass
 
     @staticmethod
     def calcul_size(data: str):
@@ -61,21 +61,16 @@ class Sniffer:
         return total_size
 
     def extract_dofus_message(self):
-        db = DatabaseManagement()
         if len(self.buffer) < 4:
             return
-        if not db.check_if_id_in_white_list(reader.id_packet_getter(self.buffer[:4])) or self.calcul_size(
-                self.buffer) >= 19998:
+        if self.calcul_size(self.buffer) >= 99999:
+            print(f"Reset Buffer : {self.buffer}")
             self.reset_buffer()
             return
         if self.calcul_size(self.buffer) > len(self.buffer):
             return
 
         while (self.calcul_size(self.buffer) <= len(self.buffer)) and len(self.buffer) >= 4:
-            if not db.check_if_id_in_white_list(reader.id_packet_getter(self.buffer[:4])):
-                self.reset_buffer()
-                return
-            else:
-                data_object = Data(bytearray.fromhex(self.buffer[:Sniffer.calcul_size(self.buffer)]))
-                reader.interpretation(data_object)
-                self.buffer = self.buffer[self.calcul_size(self.buffer):]
+            data_object = Data(bytearray.fromhex(self.buffer[:Sniffer.calcul_size(self.buffer)]))
+            reader.interpretation(data_object)
+            self.buffer = self.buffer[self.calcul_size(self.buffer):]

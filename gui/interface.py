@@ -1,6 +1,7 @@
 import tkinter.messagebox
 from tkinter import *
 from PIL import Image, ImageTk
+
 from assets.colors import Colors
 from assets.fonts import Fonts
 from databases.database_management import DatabaseManagement

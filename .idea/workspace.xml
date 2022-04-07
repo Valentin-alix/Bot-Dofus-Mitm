@@ -5,8 +5,9 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/databases/database_management.py" beforeDir="false" afterPath="$PROJECT_DIR$/databases/database_management.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/factory/reader.py" beforeDir="false" afterPath="$PROJECT_DIR$/factory/reader.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/interface.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/maj_protocol_id.py" beforeDir="false" afterPath="$PROJECT_DIR$/maj_protocol_id.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/sniffer.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/sniffer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/todo.md" beforeDir="false" afterPath="$PROJECT_DIR$/todo.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,6 +17,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/main.py" root0="FORCE_HIGHLIGHTING" />
+  </component>
   <component name="ProjectId" id="27DIhm8WQ1fznJe2s45R1tnAxHY" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -24,8 +28,8 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/decompiler.bat" />
-    <property name="settings.editor.selected.configurable" value="preferences.externalTools" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RunManager" selected="Python.main">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
@@ -87,8 +91,8 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.main" />
-        <item itemvalue="Python tests.Python tests for test_packet.TestPacket" />
         <item itemvalue="Python.maj_protocol_id" />
+        <item itemvalue="Python tests.Python tests for test_packet.TestPacket" />
       </list>
     </recent_temporary>
   </component>
@@ -108,7 +112,14 @@
       <option name="project" value="LOCAL" />
       <updated>1648848625018</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="commit">
+      <created>1648918302782</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1648918302782</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

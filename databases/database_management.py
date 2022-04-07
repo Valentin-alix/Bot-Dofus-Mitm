@@ -107,9 +107,9 @@ class DatabaseManagement:
             request.execute("delete from item where item.name = (%s)", (name,))
             self.database.commit()
 
-    def check_if_id_in_white_list(self, packet_id: int) -> bool:
+    def check_if_id_in_message(self, packet_id: int) -> bool:
         with self.database.cursor() as request:
-            request.execute("select count(*) from white_list where white_list_id = %s", (packet_id,))
+            request.execute("select count(*) from message_network where id_message = %s", (packet_id,))
             count_white_list = request.fetchone()
             return count_white_list[0]
 
@@ -140,7 +140,14 @@ class DatabaseManagement:
 
     def select_needed_message_network(self) -> list[int, int]:
         with self.database.cursor() as request:
-            request.execute("select id_message from message_network where name_message = (%s or %s)",
+            request.execute("select id_message from message_network where name_message = %s or name_message = %s",
                             ("ExchangeCraftResultMagicWithObjectDescMessage", "ExchangeObjectAddedMessage"))
             result = request.fetchall()
         return result
+
+    def select_message_by_id(self, id_message) -> str:
+        with self.database.cursor() as request:
+            request.execute("select name_message from message_network where id_message = %s",
+                            (id_message,))
+            result = request.fetchone()
+        return result[0]
