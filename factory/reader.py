@@ -1,3 +1,4 @@
+from assets.colors import Colors
 from databases.database_management import DatabaseManagement
 from factory import action
 from gui import interface
@@ -11,7 +12,7 @@ def interpretation(data_object: Data):
     try:
         print(DatabaseManagement().select_message_by_id(id_packet_getter(data_object)))
     except TypeError:
-        print(f"Message inconnu : {data_object}")
+        print(f"{Colors.FAIL}Message inconnu : {data_object}{Colors.RESET}")
     if int(id_packet_getter(data_object)) == int(
             ExchangeCraftResultMagicWithObjectDescMessage) and action.bot_is_playing:
         data_object.readUnsignedShort()

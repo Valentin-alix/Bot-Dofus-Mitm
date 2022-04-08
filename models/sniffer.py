@@ -1,5 +1,7 @@
 import socket
 import pyshark
+
+from assets.colors import Colors
 from factory import reader
 from models.data import Data
 
@@ -63,8 +65,8 @@ class Sniffer:
     def extract_dofus_message(self):
         if len(self.buffer) < 4:
             return
-        if self.calcul_size(self.buffer) >= 99999:
-            print(f"Reset Buffer : {self.buffer}")
+        if self.calcul_size(self.buffer) >= 19998:
+            print(f" {Colors.FAIL}Reset Buffer : {self.buffer}{Colors.RESET}")
             self.reset_buffer()
             return
         if self.calcul_size(self.buffer) > len(self.buffer):
