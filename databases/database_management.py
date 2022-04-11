@@ -151,3 +151,10 @@ class DatabaseManagement:
                             (id_message,))
             result = request.fetchone()
         return result[0]
+
+    def select_weight_by_rune_id(self, rune_id):
+        with self.database.cursor() as request:
+            request.execute("select reliquat_weight from rune where dofus_id = %s",
+                            (rune_id,))
+            result = request.fetchone()
+        return result[0]

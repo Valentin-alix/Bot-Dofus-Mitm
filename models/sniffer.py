@@ -1,7 +1,6 @@
 import socket
 import pyshark
 
-from assets.colors import Colors
 from factory import reader
 from models.data import Data
 
@@ -9,8 +8,9 @@ from models.data import Data
 class Sniffer:
 
     def __init__(self):
-        self.__filter_dofus = 'tcp port 5555 and len > 66'
+        self.__filter_dofus = 'tcp port 5555'
         self.__ip_dofus = '172.65.237.72'
+        self.__ip_pc = '192.168.1.14'
         self.__buffer = ''
         self.__network_interface = "\\Device\\NPF_{3CC6E476-ECB5-46EF-9768-419794EAE46A}"
 
@@ -21,6 +21,10 @@ class Sniffer:
     @property
     def ip_dofus(self):
         return self.__ip_dofus
+
+    @property
+    def ip_pc(self):
+        return self.__ip_pc
 
     @property
     def buffer(self):
@@ -46,6 +50,8 @@ class Sniffer:
                     self.buffer += packet.data.data
                     if len(self.buffer) >= 4:
                         self.extract_dofus_message()
+                elif packet.ip.src == socket.gethostbyname(self.ip_pc):
+                    print(packet.data.data)
             except AttributeError:
                 pass
 
@@ -66,7 +72,6 @@ class Sniffer:
         if len(self.buffer) < 4:
             return
         if self.calcul_size(self.buffer) >= 19998:
-            print(f" {Colors.FAIL}Reset Buffer : {self.buffer}{Colors.RESET}")
             self.reset_buffer()
             return
         if self.calcul_size(self.buffer) > len(self.buffer):

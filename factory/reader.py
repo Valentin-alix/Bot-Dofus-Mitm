@@ -9,10 +9,6 @@ ExchangeCraftResultMagicWithObjectDescMessage: int = DatabaseManagement().select
 
 
 def interpretation(data_object: Data):
-    try:
-        print(DatabaseManagement().select_message_by_id(id_packet_getter(data_object)))
-    except TypeError:
-        print(f"{Colors.FAIL}Message inconnu : {data_object}{Colors.RESET}")
     if int(id_packet_getter(data_object)) == int(
             ExchangeCraftResultMagicWithObjectDescMessage) and action.bot_is_playing:
         data_object.readUnsignedShort()
@@ -43,6 +39,7 @@ def interpretation(data_object: Data):
         data_object.readByte()
 
         action.item.actual_id_values = actions_id
+
         action.item.actual_values = values
 
         action.click_based_on_values()

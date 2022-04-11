@@ -1,6 +1,5 @@
 import datetime
 import time
-
 from models.click import Click
 from models.item import Item
 import numpy as np
@@ -32,8 +31,10 @@ def click_based_on_values():
             num_column = int(priority[2])
 
     if number_good_line == len(item):
+        print("Click exo")
         click_item.click_exo()
         return
 
     click_item.click_rune(num_column, num_line)
+    print(f"Click {num_column} {num_line}")
     time.time_since_click = datetime.datetime.now()
