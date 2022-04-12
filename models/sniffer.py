@@ -48,8 +48,7 @@ class Sniffer:
             try:
                 if packet.ip.src == socket.gethostbyname(self.ip_dofus):
                     self.buffer += packet.data.data
-                    if len(self.buffer) >= 4:
-                        self.extract_dofus_message()
+                    self.on_receive()
                 elif packet.ip.src == socket.gethostbyname(self.ip_pc):
                     print(packet.data.data)
             except AttributeError:
@@ -57,27 +56,18 @@ class Sniffer:
 
     @staticmethod
     def calcul_size(data: str):
+        try:
+            size_of_size = int(bin(int(data[:4], 16))[2::][-2:], 2) * 2
+            size = int(data[4:4 + size_of_size], 16) * 2
+            return 4 + size_of_size + size
+        except ValueError:
+            return len(data)
 
-        if len(data) == 0 or len(data) < 4:
-            return 0
-        size_of_size = int(bin(int(data[:4], 16))[2::][-2:], 2) * 2
-        if size_of_size == 0 or len(data) == 4:
-            return 4
-        size = int(data[4:4 + size_of_size], 16) * 2
-        total_size = 4 + size_of_size + size
-
-        return total_size
-
-    def extract_dofus_message(self):
-        if len(self.buffer) < 4:
-            return
+    def on_receive(self):
         if self.calcul_size(self.buffer) >= 19998:
             self.reset_buffer()
             return
-        if self.calcul_size(self.buffer) > len(self.buffer):
-            return
-
-        while (self.calcul_size(self.buffer) <= len(self.buffer)) and len(self.buffer) >= 4:
-            data_object = Data(bytearray.fromhex(self.buffer[:Sniffer.calcul_size(self.buffer)]))
+        while self.calcul_size(self.buffer) <= len(self.buffer) and len(self.buffer) >= 4:
+            data_object = Data(bytearray.fromhex(self.buffer[:self.calcul_size(self.buffer)]))
             reader.interpretation(data_object)
             self.buffer = self.buffer[self.calcul_size(self.buffer):]

@@ -14,7 +14,7 @@ class Click:
         self.__fusion_rune_exo = win32api.MAKELONG(800, 170)
         self.__nickname = "Ezrealeeuu"
         self.__window_name = ""
-        self.__time_click = 0.1
+        self.__time_click = 0.2
         self.find_windows_name()
 
     @property

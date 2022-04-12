@@ -1,10 +1,11 @@
 import threading
+import time
+
 from gui import interface
 from gui.interface import Interface
 from models.sniffer import Sniffer
 
 if __name__ == '__main__':
-
     interface.interface = Interface()
     sniffer = Sniffer()
 
