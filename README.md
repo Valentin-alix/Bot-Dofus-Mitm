@@ -4,8 +4,8 @@ How to use the bot :
 - Install dependencies ``pip install -r requirements.txt``
 - Import the bot_sniffer.sql file
 - Modify the path in decompiler.bat
-- Execute decompiler.bat
-- Execute maj_protocol_id.py
+- Execute decompiler.bat (Todo on every maj)
+- Execute maj_protocol_id.py (Todo on every maj)
 - Modify the nickname to the nickname of your personnage in models.clic.py
 - Modify the properties in models.sniffer.py
 
