@@ -2,14 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7701b342-ab0a-474d-a6d9-469b7bb2e9f8" name="Changes" comment="commit">
+      <change afterPath="$PROJECT_DIR$/setup.bat" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/databases/database_management.py" beforeDir="false" afterPath="$PROJECT_DIR$/databases/database_management.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/factory/reader.py" beforeDir="false" afterPath="$PROJECT_DIR$/factory/reader.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/maj_protocol_id.py" beforeDir="false" afterPath="$PROJECT_DIR$/maj_protocol_id.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/click.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/click.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/item.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/item.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/sniffer.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/sniffer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -158,7 +153,14 @@
       <option name="project" value="LOCAL" />
       <updated>1649760388637</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="commit">
+      <created>1650560306778</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1650560306778</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

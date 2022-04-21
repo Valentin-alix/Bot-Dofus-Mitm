@@ -1,6 +1,7 @@
 Bot with sniffer and pywin32 to automaticate clicks
 -
-How to use the bot : 
+How to use the bot :
+- Install dependencies ``pip install -r requirements.txt``
 - Import the bot_sniffer.sql file
 - Modify the path in decompiler.bat
 - Execute decompiler.bat
