@@ -78,7 +78,7 @@ def interpretation(data_object: Data):
             interface.interface.ajout_item_window()
 
 
-def id_packet_getter(data_receive):
+def id_packet_getter(data_receive) -> int:
     if not isinstance(data_receive, Data):
         data_receive = Data(bytearray.fromhex(data_receive[:4]))
     header = data_receive.readUnsignedShort()

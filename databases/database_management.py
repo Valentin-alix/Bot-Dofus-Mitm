@@ -48,7 +48,7 @@ class DatabaseManagement:
                 items.append(item[0])
         return items
 
-    def select_target_lines_by_name_item(self, name) -> list[list[str], list[int], list[int], list[int]]:
+    def select_target_lines_by_name_item(self, name: str) -> list[list[str], list[int], list[int], list[int]]:
         target_lines = []
         type_runes = []
         value_runes = []
@@ -133,7 +133,7 @@ class DatabaseManagement:
                     id_runes.append(result[0])
         return id_runes
 
-    def change_item_name(self, old_name, new_name):
+    def change_item_name(self, old_name: str, new_name: str):
         with self.database.cursor() as request:
             request.execute("update item set name = %s where name = %s", (new_name, old_name))
             self.database.commit()
@@ -145,14 +145,14 @@ class DatabaseManagement:
             result = request.fetchall()
         return result
 
-    def select_message_by_id(self, id_message) -> str:
+    def select_message_by_id(self, id_message: int) -> str:
         with self.database.cursor() as request:
             request.execute("select name_message from message_network where id_message = %s",
                             (id_message,))
             result = request.fetchone()
         return result[0]
 
-    def select_weight_by_rune_id(self, rune_id):
+    def select_weight_by_rune_id(self, rune_id: int) -> float:
         with self.database.cursor() as request:
             request.execute("select reliquat_weight from rune where dofus_id = %s",
                             (rune_id,))

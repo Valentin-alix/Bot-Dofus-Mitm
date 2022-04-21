@@ -49,7 +49,7 @@ class Click:
     def time_click(self):
         return self.__time_click
 
-    def click_auto(self, x, y):
+    def click_auto(self, x: int, y: int):
         time.sleep(self.time_click)
         hwnd = win32gui.FindWindow(None, self.windows_name)
         l_param = win32api.MAKELONG(x, y)

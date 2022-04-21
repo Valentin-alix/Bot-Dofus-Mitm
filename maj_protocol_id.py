@@ -23,6 +23,7 @@ def update_fm_and_item_id():
                             request.execute("insert into message_network(id_message, name_message) values (%s, %s)",
                                             (re.findall(r'\d+', line)[0], file[:-3]))
                             database.commit()
+                            break
 
 
 update_fm_and_item_id()

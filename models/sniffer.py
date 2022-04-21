@@ -15,15 +15,15 @@ class Sniffer:
         self.__network_interface = "\\Device\\NPF_{3CC6E476-ECB5-46EF-9768-419794EAE46A}"
 
     @property
-    def filter_dofus(self):
+    def filter_dofus(self) -> str:
         return self.__filter_dofus
 
     @property
-    def ip_dofus(self):
+    def ip_dofus(self) -> str:
         return self.__ip_dofus
 
     @property
-    def ip_pc(self):
+    def ip_pc(self) -> str:
         return self.__ip_pc
 
     @property
@@ -31,7 +31,7 @@ class Sniffer:
         return self.__buffer
 
     @property
-    def network_interface(self):
+    def network_interface(self) -> str:
         return self.__network_interface
 
     @buffer.setter
@@ -55,7 +55,7 @@ class Sniffer:
                 pass
 
     @staticmethod
-    def calcul_size(data: str):
+    def calcul_size(data: str) -> int:
         try:
             size_of_size = int(bin(int(data[:4], 16))[2::][-2:], 2) * 2
             size = int(data[4:4 + size_of_size], 16) * 2

@@ -1,6 +1,4 @@
 import threading
-import time
-
 from gui import interface
 from gui.interface import Interface
 from models.sniffer import Sniffer
