@@ -58,6 +58,8 @@ class Sniffer:
     def calcul_size(data: str) -> int:
         try:
             size_of_size = int(bin(int(data[:4], 16))[2::][-2:], 2) * 2
+            if size_of_size == 0:
+                return 4
             size = int(data[4:4 + size_of_size], 16) * 2
             return 4 + size_of_size + size
         except ValueError:

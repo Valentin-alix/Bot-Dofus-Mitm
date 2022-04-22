@@ -2,8 +2,8 @@ import tkinter.messagebox
 from tkinter import *
 from PIL import Image, ImageTk
 
-from assets.colors import Colors
-from assets.fonts import Fonts
+from static.assets.colors import Colors
+from static.assets.fonts import Fonts
 from databases.database_management import DatabaseManagement
 from factory import action
 from models.item import Item
@@ -42,14 +42,16 @@ class Interface:
         self.__icon_size = 26
         self.__database = DatabaseManagement()
 
-        self.image_home = self.convert_image_to_interface_image("./assets/icones/home.png")
-        self.image_add_item = self.convert_image_to_interface_image("./assets/icones/add.png")
-        self.image_start_item = self.convert_image_to_interface_image("./assets/icones/weapon.png")
-        self.image_change_item = self.convert_image_to_interface_image("./assets/icones/change.png")
-        self.image_delete_item = self.convert_image_to_interface_image("./assets/icones/delete.png")
-        self.image_validate = self.convert_image_to_interface_image("./assets/icones/validate.png")
-        self.image_cancel = self.convert_image_to_interface_image("./assets/icones/cancel.png")
-        self.image_play = self.convert_image_to_interface_image("./assets/icones/play.png")
+        self.path_images = "static/assets/icones/"
+
+        self.image_home = self.convert_image_to_interface_image(self.path_images + "home.png")
+        self.image_add_item = self.convert_image_to_interface_image(self.path_images + "add.png")
+        self.image_start_item = self.convert_image_to_interface_image(self.path_images + "weapon.png")
+        self.image_change_item = self.convert_image_to_interface_image(self.path_images + "change.png")
+        self.image_delete_item = self.convert_image_to_interface_image(self.path_images + "delete.png")
+        self.image_validate = self.convert_image_to_interface_image(self.path_images + "validate.png")
+        self.image_cancel = self.convert_image_to_interface_image(self.path_images + "cancel.png")
+        self.image_play = self.convert_image_to_interface_image(self.path_images + "play.png")
 
         self.frame_menu = None
         self.frame_edit = None
@@ -102,7 +104,7 @@ class Interface:
 
     def window(self):
         self.root.title(self.title)
-        self.root.iconbitmap('./assets/icones/logo.ico')
+        self.root.iconbitmap(self.path_images +'logo.ico')
         self.root.config(bg=self.backgroundColor)
         self.root.option_add("*font", Fonts.baseFont)
 

@@ -1,7 +1,7 @@
 import threading
 from gui import interface
 from gui.interface import Interface
-from models.sniffer import Sniffer
+from network.sniffer import Sniffer
 
 if __name__ == '__main__':
     interface.interface = Interface()

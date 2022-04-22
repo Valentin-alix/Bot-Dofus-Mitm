@@ -1,5 +1,5 @@
-from models import sniffer
-from models.click import Click
+from factory.click import Click
+from network import sniffer
 from models.item import Item
 import numpy as np
 

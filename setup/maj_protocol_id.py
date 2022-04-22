@@ -14,7 +14,7 @@ database = mysql.connector.connect(
 def update_fm_and_item_id():
     with database.cursor() as request:
         request.execute("delete from message_network")
-        for (repertoire, sousRepertoires, fichiers) in walk("decompiled_scripts"):
+        for (repertoire, sousRepertoires, fichiers) in walk("./static/scripts_resources"):
             for file in fichiers:
                 with open(repertoire + "\\" + file) as opened_file:
                     lines = opened_file.readlines()
