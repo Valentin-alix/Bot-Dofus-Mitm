@@ -7,7 +7,7 @@ class DatabaseManagement:
     def __init__(self):
         self.__host = "localhost"
         self.__login = "root"
-        self.__password = "root"
+        self.__password = ""
         self.__database_name = "bot_sniffer"
         self.__database = mysql.connector.connect(
             host=self.host,
