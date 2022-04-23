@@ -3,8 +3,8 @@ from factory import action
 from gui import interface
 from models.message import Message
 
-ExchangeObjectAddedMessage: int = DatabaseManagement().select_needed_message_network()[1][0]
-ExchangeCraftResultMagicWithObjectDescMessage: int = DatabaseManagement().select_needed_message_network()[0][0]
+ExchangeObjectAddedMessage: int = DatabaseManagement().select_id_by_message("ExchangeObjectAddedMessage")
+ExchangeCraftResultMagicWithObjectDescMessage: int = DatabaseManagement().select_id_by_message("ExchangeCraftResultMagicWithObjectDescMessage")
 
 
 def interpretation(message: Message):
