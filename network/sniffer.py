@@ -1,4 +1,6 @@
 import pyshark
+
+from com.ankamagames.jerakine.network.parser.NetworkMessageClassDefinition import NetworkMessageClassDefinition
 from databases.database_management import DatabaseManagement
 from models.data import Data
 from network import deserialiser
@@ -52,13 +54,15 @@ class Sniffer:
                     new_buffer.uncompress()
 
                 len_data = int.from_bytes(self.buffer.read(header & 3), "big")
-                if len_data > 5000 or not DatabaseManagement().select_message_by_id(message_id):
+                '''if len_data > 5000 or not DatabaseManagement().select_message_by_id(message_id):
                     self.buffer.__init__()
-                    break
+                    break'''
 
                 data = Data(self.buffer.read(len_data))
                 message = Message(message_id, data)
-                deserialiser.interpretation(message)
+                print(message_id)
+                print(NetworkMessageClassDefinition(DatabaseManagement().select_message_by_id(message_id), data).deserialize())
+                # deserialiser.interpretation(message)
                 del self.buffer.data[:2 + (header & 3) + len_data]
                 self.buffer.reset_pos()
             except IndexError:

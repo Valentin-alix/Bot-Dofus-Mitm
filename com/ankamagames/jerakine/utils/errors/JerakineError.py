@@ -1,0 +1,2 @@
+class JerakineError(Exception):
+    pass
