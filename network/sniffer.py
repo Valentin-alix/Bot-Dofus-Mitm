@@ -4,7 +4,6 @@ from com.ankamagames.jerakine.network.parser.NetworkMessageClassDefinition impor
 from databases.database_management import DatabaseManagement
 from models.data import Data
 from network import deserialiser
-from models.message import Message
 
 
 class Sniffer:
@@ -47,24 +46,18 @@ class Sniffer:
             try:
                 header = self.buffer.readUnsignedShort()
                 message_id = header >> 2
-
-                if message_id == 2:
-                    print("Decompressing NetworkDataContainerMessage...")
-                    new_buffer = Data(self.buffer.readByteArray())
-                    new_buffer.uncompress()
-
                 len_data = int.from_bytes(self.buffer.read(header & 3), "big")
-                '''if len_data > 5000 or not DatabaseManagement().select_message_by_id(message_id):
-                    self.buffer.__init__()
-                    break'''
-
                 data = Data(self.buffer.read(len_data))
-                message = Message(message_id, data)
-                print(message_id)
-                print(NetworkMessageClassDefinition(DatabaseManagement().select_message_by_id(message_id), data).deserialize())
-                # deserialiser.interpretation(message)
+                message = NetworkMessageClassDefinition(DatabaseManagement().select_message_by_id(message_id),
+                                                        data).deserialize()
+                print(message)
+                deserialiser.interpretation(message)
                 del self.buffer.data[:2 + (header & 3) + len_data]
                 self.buffer.reset_pos()
             except IndexError:
                 self.buffer.reset_pos()
+                break
+            except Exception as e:
+                print(e)
+                self.buffer.__init__()
                 break

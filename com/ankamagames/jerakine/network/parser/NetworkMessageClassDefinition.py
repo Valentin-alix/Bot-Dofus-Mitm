@@ -75,10 +75,8 @@ class NetworkMessageClassDefinition:
                 value = nmdf.NetMsgDataField(field, self.raw).deserialize()
             except Exception as e:
                 # if self.TRACE:
-                logger.debug(inst.__class__.__name__)
-                logger.debug(self._fields)
-                logger.error(str(e), exc_info=True)
-                raise KeyboardInterrupt
+                return
+                # raise KeyboardInterrupt
             if self.TRACE:
                 logger.debug(f"found value : {value}")
             setattr(inst, attrib, value)
