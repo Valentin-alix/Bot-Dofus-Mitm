@@ -50,7 +50,7 @@ class Sniffer:
                 data = Data(self.buffer.read(len_data))
                 message = NetworkMessageClassDefinition(DatabaseManagement().select_message_by_id(message_id),
                                                         data).deserialize()
-                print(message)
+                # print(message)
                 deserialiser.interpretation(message)
                 del self.buffer.data[:2 + (header & 3) + len_data]
                 self.buffer.reset_pos()
