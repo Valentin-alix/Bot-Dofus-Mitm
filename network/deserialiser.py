@@ -1,42 +1,39 @@
 from databases.database_management import DatabaseManagement
 from factory import action
 from gui import interface
-from models.data import Data
-
+from models.message import Message
 
 ExchangeObjectAddedMessage: int = DatabaseManagement().select_needed_message_network()[1][0]
 ExchangeCraftResultMagicWithObjectDescMessage: int = DatabaseManagement().select_needed_message_network()[0][0]
 
 
-def interpretation(data_object: Data):
-    if int(id_packet_getter(data_object)) == int(
+def interpretation(message: Message):
+    if message.message_id == int(
             ExchangeCraftResultMagicWithObjectDescMessage) and action.bot_is_playing:
-        data_object.readUnsignedShort()
-        data_object.readByte()
         # Ci dessous craft result
-        data_object.readByte()
+        message.data.readByte()
         # Ci dessous object GID
-        data_object.readVarUhShort()
-        effects_len = data_object.readUnsignedShort()
+        message.data.readVarUhShort()
+        effects_len = message.data.readUnsignedShort()
 
         actions_id: list[int] = []
         values: list[int] = []
 
         for i in range(effects_len):
-            data_object.readUnsignedShort()
-            action_id = data_object.readVarUhShort()
-            value = data_object.readVarUhShort()
+            message.data.readUnsignedShort()
+            action_id = message.data.readVarUhShort()
+            value = message.data.readVarUhShort()
             actions_id.append(action_id)
             values.append(value)
 
-        data_object.readUnsignedShort()
-        data_object.readByte()
+        message.data.readUnsignedShort()
+        message.data.readByte()
         # Ci-Dessous Object UID
-        data_object.readVarUhInt()
+        message.data.readVarUhInt()
         # Ci-Dessous Object quantity
-        data_object.readVarUhInt()
+        message.data.readVarUhInt()
         # Ci-Dessous Object magic_pool_status
-        data_object.readByte()
+        message.data.readByte()
 
         action.item.actual_id_values = actions_id
 
@@ -44,30 +41,27 @@ def interpretation(data_object: Data):
 
         action.click_based_on_values()
 
-    elif id_packet_getter(data_object) == ExchangeObjectAddedMessage and not action.bot_is_playing:
-        header = data_object.readUnsignedShort()
-        header += data_object.readByte()
-
+    elif message.message_id == ExchangeObjectAddedMessage and not action.bot_is_playing:
         # Ci-dessous remote
-        data_object.readBoolean()
+        message.data.readBoolean()
         # Ci-dessous position
-        data_object.readShort()
+        message.data.readShort()
         # Ci-dessous object_gid
-        data_object.readVarUhShort()
-        effects_len = data_object.readUnsignedShort()
+        message.data.readVarUhShort()
+        effects_len = message.data.readUnsignedShort()
         actions_id: list[int] = []
         values: list[int] = []
 
         for i in range(effects_len):
-            data_object.readUnsignedShort()
-            action_id = data_object.readVarUhShort()
-            value = data_object.readVarUhShort()
+            message.data.readUnsignedShort()
+            action_id = message.data.readVarUhShort()
+            value = message.data.readVarUhShort()
             actions_id.append(action_id)
             values.append(value)
         # Ci-dessous object_uid
-        data_object.readVarUhInt()
+        message.data.readVarUhInt()
         # Ci-dessous quantity
-        data_object.readVarUhInt()
+        message.data.readVarUhInt()
 
         # Si l'élément n'est pas une rune alors ->
         if effects_len > 1:
@@ -76,12 +70,3 @@ def interpretation(data_object: Data):
 
             interface.interface.clear_frame(interface.interface.root)
             interface.interface.ajout_item_window()
-
-
-def id_packet_getter(data_receive) -> int:
-    if not isinstance(data_receive, Data):
-        data_receive = Data(bytearray.fromhex(data_receive[:4]))
-    header = data_receive.readUnsignedShort()
-    id_value = header >> 2
-    data_receive.reset_pos()
-    return id_value

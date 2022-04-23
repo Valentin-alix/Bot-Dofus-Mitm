@@ -1,8 +1,8 @@
-import socket
 import pyshark
-
-from factory import reader
+from databases.database_management import DatabaseManagement
 from models.data import Data
+from network import deserialiser
+from models.message import Message
 
 
 class Sniffer:
@@ -10,9 +10,7 @@ class Sniffer:
     def __init__(self):
         self.__filter_dofus = 'tcp port 5555'
         self.__ip_dofus = '172.65.237.72'
-        self.__ip_pc = '192.168.1.14'
-        self.__buffer = ''
-        self.__network_interface = "\\Device\\NPF_{3CC6E476-ECB5-46EF-9768-419794EAE46A}"
+        self.__buffer = Data()
 
     @property
     def filter_dofus(self) -> str:
@@ -23,53 +21,46 @@ class Sniffer:
         return self.__ip_dofus
 
     @property
-    def ip_pc(self) -> str:
-        return self.__ip_pc
-
-    @property
     def buffer(self):
         return self.__buffer
-
-    @property
-    def network_interface(self) -> str:
-        return self.__network_interface
 
     @buffer.setter
     def buffer(self, value):
         self.__buffer = value
 
-    def reset_buffer(self):
-        self.__buffer = ''
-
     def launch_sniffer(self):
-        capture = pyshark.LiveCapture(interface=self.network_interface,
-                                      bpf_filter=self.filter_dofus)
+        capture = pyshark.LiveCapture(bpf_filter=self.filter_dofus)
         for packet in capture.sniff_continuously():
             try:
-                if packet.ip.src == socket.gethostbyname(self.ip_dofus):
-                    self.buffer += packet.data.data
+                if packet.ip.src == self.ip_dofus:
+                    self.buffer += bytearray.fromhex(packet.data.data)
                     self.on_receive()
-                elif packet.ip.src == socket.gethostbyname(self.ip_pc):
-                    print(packet.data.data)
+                else:
+                    pass
             except AttributeError:
                 pass
 
-    @staticmethod
-    def calcul_size(data: str) -> int:
-        try:
-            size_of_size = int(bin(int(data[:4], 16))[2::][-2:], 2) * 2
-            if size_of_size == 0:
-                return 4
-            size = int(data[4:4 + size_of_size], 16) * 2
-            return 4 + size_of_size + size
-        except ValueError:
-            return len(data)
-
     def on_receive(self):
-        if self.calcul_size(self.buffer) >= 19998:
-            self.reset_buffer()
-            return
-        while self.calcul_size(self.buffer) <= len(self.buffer) and len(self.buffer) >= 4:
-            data_object = Data(bytearray.fromhex(self.buffer[:self.calcul_size(self.buffer)]))
-            reader.interpretation(data_object)
-            self.buffer = self.buffer[self.calcul_size(self.buffer):]
+        while True:
+            try:
+                header = self.buffer.readUnsignedShort()
+                message_id = header >> 2
+
+                if message_id == 2:
+                    print("Decompressing NetworkDataContainerMessage...")
+                    new_buffer = Data(self.buffer.readByteArray())
+                    new_buffer.uncompress()
+
+                len_data = int.from_bytes(self.buffer.read(header & 3), "big")
+                if len_data > 5000 or not DatabaseManagement().select_message_by_id(message_id):
+                    self.buffer.__init__()
+                    break
+
+                data = Data(self.buffer.read(len_data))
+                message = Message(message_id, data)
+                deserialiser.interpretation(message)
+                del self.buffer.data[:2 + (header & 3) + len_data]
+                self.buffer.reset_pos()
+            except IndexError:
+                self.buffer.reset_pos()
+                break

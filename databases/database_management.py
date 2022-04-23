@@ -145,12 +145,15 @@ class DatabaseManagement:
             result = request.fetchall()
         return result
 
-    def select_message_by_id(self, id_message: int) -> str:
-        with self.database.cursor() as request:
-            request.execute("select name_message from message_network where id_message = %s",
-                            (id_message,))
-            result = request.fetchone()
-        return result[0]
+    def select_message_by_id(self, id_message: int):
+        try:
+            with self.database.cursor() as request:
+                request.execute("select name_message from message_network where id_message = %s",
+                                (id_message,))
+                result = request.fetchone()
+            return result[0]
+        except TypeError:
+            return False
 
     def select_weight_by_rune_id(self, rune_id: int) -> float:
         with self.database.cursor() as request:

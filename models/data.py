@@ -204,3 +204,7 @@ class Data:
 
     def writeVarUhShort(self, i):
         self.writeVarShort(i)
+
+    def end(self):
+        del self.data[self.pos:]
+        self.pos = 0
