@@ -3,6 +3,7 @@ import pyshark
 from databases.database_management import DatabaseManagement
 from models.data import Data
 from models.message import Message
+from network import deserialiser
 
 
 class Sniffer:
@@ -44,7 +45,7 @@ class Sniffer:
                 pass
 
     @staticmethod
-    def on_receive(buffer: Data(), from_client: bool):
+    def on_receive(buffer: Data, from_client: bool):
         while True:
             try:
                 header = buffer.readUnsignedShort()
@@ -68,7 +69,7 @@ class Sniffer:
 
                 data = Data(buffer.read(len_data))
                 message = Message(message_id, data)
-
+                deserialiser.interpretation(message)
                 buffer.end()
 
             except IndexError:

@@ -56,7 +56,7 @@ class DatabaseManagement:
         target_lines.append(column_rune)
         return target_lines
 
-    def insert_or_update_target_lines_item(self, item: Item()):
+    def insert_or_update_target_lines_item(self, item: Item):
 
         if not self.check_if_item_exists(item.name):
             self.insert_item(item.name)
@@ -108,7 +108,7 @@ class DatabaseManagement:
                     types_rune.append(result[0])
         return types_rune
 
-    def select_runes_id_by_types_rune(self, types_rune: list[str]) -> list:
+    def select_runes_id_by_types_rune(self, types_rune: list[str]) -> list[int]:
         id_runes = []
         with self.database.cursor() as request:
             for type_rune in types_rune:

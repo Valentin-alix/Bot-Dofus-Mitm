@@ -18,11 +18,11 @@ class Click:
         self.find_windows_name()
 
     @property
-    def windows_name(self):
+    def windows_name(self) -> str:
         return self.__window_name
 
     @windows_name.setter
-    def windows_name(self, value):
+    def windows_name(self, value : str):
         self.__window_name = value
 
     def click_auto(self, x: int, y: int):

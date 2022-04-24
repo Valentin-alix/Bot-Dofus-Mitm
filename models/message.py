@@ -7,9 +7,9 @@ class Message:
         self.__data = data
 
     @property
-    def message_id(self):
+    def message_id(self) -> int:
         return self.__message_id
 
     @property
-    def data(self):
+    def data(self) -> Data:
         return self.__data
