@@ -9,7 +9,7 @@ ExchangeCraftResultMagicWithObjectDescMessage: int = DatabaseManagement().select
 
 
 def interpretation(message: Message):
-    """# HelloConnectMessage
+    # HelloConnectMessage
     if message.message_id == DatabaseManagement().select_id_by_message("HelloConnectMessage"):
         salt = message.data.readUTF()
         key_len = message.data.readVarInt()
@@ -17,7 +17,8 @@ def interpretation(message: Message):
         for i in range(key_len):
             vals.append(message.data.readByte())
 
-        print(f"salt : {salt} key_len : {key_len} vals : {vals}")"""
+        print(f"salt : {salt} key_len : {key_len} vals : {vals}")
+
     if message.message_id == int(
             ExchangeCraftResultMagicWithObjectDescMessage) and action.BOT_IS_PLAYING:
         # Ci dessous craft result

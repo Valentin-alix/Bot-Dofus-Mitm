@@ -1,4 +1,3 @@
-import socket
 import threading
 
 from gui import interface
@@ -6,8 +5,6 @@ from gui.interface import Interface
 from network.sniffer import Sniffer
 
 if __name__ == '__main__':
-
-    print(socket.gethostbyname(socket.gethostname()))
 
     interface.interface = Interface()
     sniffer = Sniffer()
