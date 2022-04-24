@@ -206,5 +206,5 @@ class Data:
         self.writeVarShort(i)
 
     def end(self):
-        del self.data[self.pos:]
+        del self.data[:self.pos]
         self.pos = 0
