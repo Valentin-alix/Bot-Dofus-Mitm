@@ -1,5 +1,6 @@
 from databases.database_management import DatabaseManagement
 from factory import action
+from factory.action import Action
 from gui import interface
 from models.message import Message
 
@@ -50,7 +51,7 @@ def interpretation(message: Message):
 
         action.ITEM.actual_values = values
 
-        action.click_based_on_values()
+        Action().click_based_on_values()
 
     elif message.message_id == ExchangeObjectAddedMessage and not action.BOT_IS_PLAYING:
         # Ci-dessous remote

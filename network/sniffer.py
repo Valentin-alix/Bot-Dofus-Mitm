@@ -1,6 +1,9 @@
+import threading
+
 import pyshark
 
 from databases.database_management import DatabaseManagement
+from factory import action
 from models.data import Data
 from models.message import Message
 from network import deserialiser
@@ -63,12 +66,17 @@ class Sniffer:
                 len_data = int.from_bytes(buffer.read(header & 3), "big")
 
                 if not DatabaseManagement().select_message_by_id(message_id):
-                    print("stop")
+                    print("stop because of sniffer error")
                     exit()
+                if DatabaseManagement().select_message_by_id(message_id) == "ExchangeReadyMessage":
+                    action.WAITING_CLICK = False
                 print(DatabaseManagement().select_message_by_id(message_id))
                 data = Data(buffer.read(len_data))
                 message = Message(message_id, data)
-                deserialiser.interpretation(message)
+
+                interpretation_thread = threading.Thread(target=deserialiser.interpretation, args=(message,))
+                interpretation_thread.start()
+
                 buffer.end()
 
             except IndexError:
