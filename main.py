@@ -1,4 +1,5 @@
 import threading
+
 from gui import interface
 from gui.interface import Interface
 from network.sniffer import Sniffer

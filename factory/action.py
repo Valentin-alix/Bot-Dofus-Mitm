@@ -2,21 +2,21 @@ from factory.click import Click
 from models.item import Item
 import numpy as np
 
-bot_is_playing = False
-item = Item()
-click_item = Click()
+BOT_IS_PLAYING: bool = False
+ITEM: Item = Item()
+CLICK_ITEM: Click = Click()
 
 
 def click_based_on_values():
-    priorities = np.zeros((len(item), 3))
+    priorities = np.zeros((len(ITEM), 3))
 
-    for i, id_rune, in enumerate(item.id_runes):
-        for j, actual_id_rune, in enumerate(item.actual_id_values):
+    for i, id_rune, in enumerate(ITEM.id_runes):
+        for j, actual_id_rune, in enumerate(ITEM.actual_id_values):
             if id_rune == actual_id_rune:
-                priorities[i][0] = item.actual_values[j] / item.value_runes[i]
+                priorities[i][0] = ITEM.actual_values[j] / ITEM.value_runes[i]
 
-            priorities[i][1] = item.line_runes[i]
-            priorities[i][2] = item.column_runes[i]
+            priorities[i][1] = ITEM.line_runes[i]
+            priorities[i][2] = ITEM.column_runes[i]
 
     number_good_line: int = 0
 
@@ -28,10 +28,10 @@ def click_based_on_values():
             num_line = int(priority[1])
             num_column = int(priority[2])
 
-    if number_good_line == len(item):
+    if number_good_line == len(ITEM):
         print("Click exo")
-        click_item.click_exo()
+        CLICK_ITEM.click_exo()
         return
 
-    click_item.click_rune(num_column, num_line)
+    CLICK_ITEM.click_rune(num_column, num_line)
     print(f"Click {num_column} {num_line}")

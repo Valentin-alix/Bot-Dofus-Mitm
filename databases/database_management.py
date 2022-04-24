@@ -4,33 +4,18 @@ from models.item import Item
 
 
 class DatabaseManagement:
+    HOST: str = "localhost"
+    LOGIN: str = "root"
+    PASSWORD: str = ""
+    DATABASE_NAME: str = "bot_sniffer"
+
     def __init__(self):
-        self.__host = "localhost"
-        self.__login = "root"
-        self.__password = ""
-        self.__database_name = "bot_sniffer"
         self.__database = mysql.connector.connect(
-            host=self.host,
-            user=self.login,
-            password=self.password,
-            database=self.database_name,
+            host=self.HOST,
+            user=self.LOGIN,
+            password=self.PASSWORD,
+            database=self.DATABASE_NAME,
         )
-
-    @property
-    def host(self):
-        return self.__host
-
-    @property
-    def login(self):
-        return self.__login
-
-    @property
-    def password(self):
-        return self.__password
-
-    @property
-    def database_name(self):
-        return self.__database_name
 
     @property
     def database(self):

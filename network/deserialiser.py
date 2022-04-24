@@ -4,12 +4,22 @@ from gui import interface
 from models.message import Message
 
 ExchangeObjectAddedMessage: int = DatabaseManagement().select_id_by_message("ExchangeObjectAddedMessage")
-ExchangeCraftResultMagicWithObjectDescMessage: int = DatabaseManagement().select_id_by_message("ExchangeCraftResultMagicWithObjectDescMessage")
+ExchangeCraftResultMagicWithObjectDescMessage: int = DatabaseManagement().select_id_by_message(
+    "ExchangeCraftResultMagicWithObjectDescMessage")
 
 
 def interpretation(message: Message):
+    """# HelloConnectMessage
+    if message.message_id == DatabaseManagement().select_id_by_message("HelloConnectMessage"):
+        salt = message.data.readUTF()
+        key_len = message.data.readVarInt()
+        vals = []
+        for i in range(key_len):
+            vals.append(message.data.readByte())
+
+        print(f"salt : {salt} key_len : {key_len} vals : {vals}")"""
     if message.message_id == int(
-            ExchangeCraftResultMagicWithObjectDescMessage) and action.bot_is_playing:
+            ExchangeCraftResultMagicWithObjectDescMessage) and action.BOT_IS_PLAYING:
         # Ci dessous craft result
         message.data.readByte()
         # Ci dessous object GID
@@ -35,13 +45,13 @@ def interpretation(message: Message):
         # Ci-Dessous Object magic_pool_status
         message.data.readByte()
 
-        action.item.actual_id_values = actions_id
+        action.ITEM.actual_id_values = actions_id
 
-        action.item.actual_values = values
+        action.ITEM.actual_values = values
 
         action.click_based_on_values()
 
-    elif message.message_id == ExchangeObjectAddedMessage and not action.bot_is_playing:
+    elif message.message_id == ExchangeObjectAddedMessage and not action.BOT_IS_PLAYING:
         # Ci-dessous remote
         message.data.readBoolean()
         # Ci-dessous position

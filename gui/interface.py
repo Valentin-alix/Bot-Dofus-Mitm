@@ -13,7 +13,7 @@ interface = None
 
 
 def bot_is_playing_to_false():
-    action.bot_is_playing = False
+    action.BOT_IS_PLAYING = False
 
 
 def catch_entries(item_edited) -> bool:
@@ -31,15 +31,16 @@ def catch_entries(item_edited) -> bool:
 
 
 class Interface:
+    TITLE = 'Bot FM'
+    BACKGROUND_COLOR = Colors.background_color
+    WIDTH_SIZE = 900
+    HEIGHT_SIZE = 500
+    ICON_MENU_SIZE = 20
+    ICON_SIZE = 26
+
     def __init__(self):
         self.__root = Tk()
-        self.__title = 'Bot FM'
-        self.__backgroundColor = Colors.background_color
-        self.__currentPageIsHome = False
-        self.__widthSize = 900
-        self.__heightSize = 500
-        self.__icon_menu_size = 20
-        self.__icon_size = 26
+        self.__current_page_is_home = False
         self.__database = DatabaseManagement()
 
         self.path_images = "static/assets/icones/"
@@ -65,55 +66,35 @@ class Interface:
         self.__root = value
 
     @property
-    def icon_size(self):
-        return self.__icon_size
-
-    @property
-    def heightSize(self):
-        return self.__heightSize
-
-    @property
-    def title(self):
-        return self.__title
-
-    @property
-    def backgroundColor(self):
-        return self.__backgroundColor
-
-    @property
-    def currentPageIsHome(self):
-        return self.__currentPageIsHome
-
-    @property
-    def widthSize(self):
-        return self.__widthSize
+    def current_page_is_home(self):
+        return self.__current_page_is_home
 
     @property
     def database(self):
         return self.__database
 
-    @currentPageIsHome.setter
-    def currentPageIsHome(self, value: bool):
-        self.__currentPageIsHome = value
+    @current_page_is_home.setter
+    def current_page_is_home(self, value: bool):
+        self.__current_page_is_home = value
 
     def clear_frame(self, frame):
         for widget in frame.winfo_children():
             if widget != self.frame_menu:
                 widget.destroy()
-        self.currentPageIsHome = False
+        self.current_page_is_home = False
 
     def window(self):
-        self.root.title(self.title)
-        self.root.iconbitmap(self.path_images +'logo.ico')
-        self.root.config(bg=self.backgroundColor)
+        self.root.title(self.TITLE)
+        self.root.iconbitmap(self.path_images + 'logo.ico')
+        self.root.config(bg=self.BACKGROUND_COLOR)
         self.root.option_add("*font", Fonts.baseFont)
 
-        height_center = int(self.root.winfo_screenheight() / 2) - int(self.heightSize / 2)
-        width_center = int(self.root.winfo_screenwidth() / 2) - int(self.widthSize / 2)
+        height_center = int(self.root.winfo_screenheight() / 2) - int(self.HEIGHT_SIZE / 2)
+        width_center = int(self.root.winfo_screenwidth() / 2) - int(self.WIDTH_SIZE / 2)
 
         self.root.geometry(f"+{width_center}+{height_center}")
-        self.root.minsize(self.widthSize, self.heightSize)
-        self.root.maxsize(self.widthSize, height=0)
+        self.root.minsize(self.WIDTH_SIZE, self.HEIGHT_SIZE)
+        self.root.maxsize(self.WIDTH_SIZE, height=0)
 
         self.frame_menu = Frame(self.root)
         self.frame_menu.grid()
@@ -133,15 +114,15 @@ class Interface:
         self.home()
 
     def home(self):
-        if not self.currentPageIsHome:
-            frame_home = Frame(self.root, bg=self.backgroundColor)
+        if not self.current_page_is_home:
+            frame_home = Frame(self.root, bg=self.BACKGROUND_COLOR)
             frame_home.grid(row=1, column=1)
 
-            self.currentPageIsHome = True
+            self.current_page_is_home = True
 
     def ajout_item_window(self):
-        self.currentPageIsHome = False
-        frame_ajout_item = Frame(self.root, bg=self.backgroundColor)
+        self.current_page_is_home = False
+        frame_ajout_item = Frame(self.root, bg=self.BACKGROUND_COLOR)
         frame_ajout_item.grid(row=1, column=1)
         if not inserted_item.id_runes:
             label_text_attente = Label(frame_ajout_item, text="Insérer un Item dans l'atelier de forgemagie",
@@ -222,8 +203,8 @@ class Interface:
 
     def start_item_window(self):
 
-        self.currentPageIsHome = False
-        frame_ajout_item = Frame(self.root, bg=self.backgroundColor)
+        self.current_page_is_home = False
+        frame_ajout_item = Frame(self.root, bg=self.BACKGROUND_COLOR)
         frame_ajout_item.grid(row=1, column=1)
 
         items = self.database.select_all_items()
@@ -359,7 +340,7 @@ class Interface:
         else:
             tkinter.messagebox.showwarning("Erreur valeur", "Veuillez remplir tout les champs ou utiliser \"skip\"")
 
-    def get_entries_and_insert_into_database(self, type_runes: list[int], item_edited: list, name: str):
+    def get_entries_and_insert_into_database(self, type_runes: list[str], item_edited: list, name: str):
         item = Item()
         item.value_runes = []
         item.name = name
@@ -376,22 +357,22 @@ class Interface:
 
     def convert_image_to_interface_image(self, path: str):
         image = Image.open(path)
-        image = image.resize((self.icon_size, self.icon_size), Image.ANTIALIAS)
+        image = image.resize((self.ICON_SIZE, self.ICON_SIZE), Image.ANTIALIAS)
 
         return ImageTk.PhotoImage(image)
 
     def working_window(self, item):
 
-        action.bot_is_playing = True
+        action.BOT_IS_PLAYING = True
 
         target_lines = self.database.select_target_lines_by_name_item(item)
 
-        action.item.name = item
-        action.item.type_runes = target_lines[0]
-        action.item.value_runes = target_lines[1]
-        action.item.line_runes = target_lines[2]
-        action.item.column_runes = target_lines[3]
-        action.item.id_runes = self.database.select_runes_id_by_types_rune(action.item.type_runes)
+        action.ITEM.name = item
+        action.ITEM.type_runes = target_lines[0]
+        action.ITEM.value_runes = target_lines[1]
+        action.ITEM.line_runes = target_lines[2]
+        action.ITEM.column_runes = target_lines[3]
+        action.ITEM.id_runes = self.database.select_runes_id_by_types_rune(action.ITEM.type_runes)
 
         working_window_frame = Frame(self.root)
         working_window_frame.grid(row=1, column=1)
