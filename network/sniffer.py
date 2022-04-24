@@ -7,9 +7,8 @@ from network import deserialiser
 
 
 class Sniffer:
-    FILTER_DOFUS = 'tcp port 5555'
-    IP_DOFUS = '172.65.237.72'
-    IP_LOCALE = '192.168.1.21'
+    FILTER_DOFUS: str = 'tcp port 5555'
+    IP_LOCALE: str = '192.168.1.21'
 
     def __init__(self):
         self.__buffer_client = Data()
@@ -35,12 +34,12 @@ class Sniffer:
         capture = pyshark.LiveCapture(bpf_filter=self.FILTER_DOFUS)
         for packet in capture.sniff_continuously():
             try:
-                if packet.ip.src == self.IP_DOFUS:
-                    self.buffer_server += bytearray.fromhex(packet.data.data)
-                    self.on_receive(self.buffer_server, False)
-                elif packet.ip.src == self.IP_LOCALE:
+                if packet.ip.src == self.IP_LOCALE:
                     self.buffer_client += bytearray.fromhex(packet.data.data)
                     self.on_receive(self.buffer_client, True)
+                else:
+                    self.buffer_server += bytearray.fromhex(packet.data.data)
+                    self.on_receive(self.buffer_server, False)
             except AttributeError:
                 pass
 
@@ -66,7 +65,7 @@ class Sniffer:
                 if not DatabaseManagement().select_message_by_id(message_id):
                     print("stop")
                     exit()
-
+                print(DatabaseManagement().select_message_by_id(message_id))
                 data = Data(buffer.read(len_data))
                 message = Message(message_id, data)
                 deserialiser.interpretation(message)
