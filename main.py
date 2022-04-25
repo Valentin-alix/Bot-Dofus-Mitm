@@ -1,13 +1,13 @@
+import datetime
+import logging
 import threading
 from gui import interface
 from gui.interface import Interface
-from models.data import Data
-from models.message import Message
 from network.sniffer import Sniffer
 
 if __name__ == '__main__':
-    # deactivate print
-    # sys.stdout = open(os.devnull, 'w')
+    executed_time = str(datetime.datetime.now()).replace(':', '.')
+    logging.basicConfig(filename=f"log/{str(executed_time)}.log", level=logging.INFO)
 
     interface.interface = Interface()
     sniffer = Sniffer()

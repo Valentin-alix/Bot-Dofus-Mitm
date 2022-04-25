@@ -47,8 +47,6 @@ class Database:
 
     def insert_or_update_item(self, item: Item):
 
-        print(item.runes)
-
         if not self.check_if_item_exists(item.name):
             self.insert_item_name(item.name)
 

@@ -1,3 +1,4 @@
+import logging
 import threading
 
 import pyshark
@@ -37,7 +38,7 @@ class Sniffer:
         capture = pyshark.LiveCapture(bpf_filter=self.FILTER_DOFUS)
         for packet in capture.sniff_continuously():
             try:
-                print(packet.data.data)
+                logging.info(f"Received_Packet : {packet.data.data}")
                 if packet.ip.src == self.IP_LOCALE:
                     self.buffer_client += bytearray.fromhex(packet.data.data)
                     self.on_receive(self.buffer_client, True)
@@ -58,7 +59,7 @@ class Sniffer:
                     buffer.readUnsignedInt()
 
                 if id == 2:
-                    print("Message is NetworkDataContainerMessage! Uncompressing...")
+                    logging.info("Message is NetworkDataContainerMessage! Uncompressing...")
                     new_buffer = Data(buffer.readByteArray())
                     new_buffer.uncompress()
                     Sniffer.on_receive(new_buffer, from_client)
@@ -67,14 +68,13 @@ class Sniffer:
                 len_data = int.from_bytes(buffer.read(header & 3), "big")
 
                 if not Database().select_message_by_id(message_id):
-                    print("stop")
+                    logging.error("Can't get corresponding message to id")
                     exit()
                 if Database().select_message_by_id(message_id) == "ExchangeReadyMessage":
                     action.waiting_click = False
-                print(Database().select_message_by_id(message_id))
+                logging.info(f"Message :{Database().select_message_by_id(message_id)}")
                 data = Data(buffer.read(len_data))
                 message = Message(message_id, data)
-
                 interpretation_thread = threading.Thread(target=deserialiser.interpretation, args=(message,))
                 interpretation_thread.start()
 
