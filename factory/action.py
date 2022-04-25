@@ -1,30 +1,33 @@
 import datetime
+import time
 
 from factory.click import Click
-from models.item import Item
 import numpy as np
 
-BOT_IS_PLAYING: bool = False
-ITEM: Item = Item()
-CLICK_ITEM: Click = Click()
-WAITING_CLICK: bool = False
+from models.item import Item
+
+bot_is_playing: bool = False
+target_item: Item = Item()
+actual_item: Item = Item()
+click_item: Click = Click()
+waiting_click: bool = False
 
 
 class Action:
     @staticmethod
     def click_based_on_values():
-        global WAITING_CLICK
-        global BOT_IS_PLAYING
+        global waiting_click
+        global bot_is_playing
 
-        priorities = np.zeros((len(ITEM), 3))
+        priorities = np.zeros((len(target_item.runes), 3))
 
-        for i, id_rune, in enumerate(ITEM.id_runes):
-            for j, actual_id_rune, in enumerate(ITEM.actual_id_values):
-                if id_rune == actual_id_rune:
-                    priorities[i][0] = ITEM.actual_values[j] / ITEM.value_runes[i]
+        for i, target_rune, in enumerate(target_item.runes):
+            for rune in actual_item.runes:
+                if target_rune.get("type") == rune.get("type"):
+                    priorities[i][0] = rune.get("value") / target_rune.get("value")
 
-                priorities[i][1] = ITEM.line_runes[i]
-                priorities[i][2] = ITEM.column_runes[i]
+                priorities[i][1] = target_rune.get("line")
+                priorities[i][2] = target_rune.get("column")
 
         number_good_line: int = 0
 
@@ -36,28 +39,28 @@ class Action:
                 num_line = int(priority[1])
                 num_column = int(priority[2])
 
-        WAITING_CLICK = True
+        waiting_click = True
 
         first_time = datetime.datetime.now()
 
-        if number_good_line == len(ITEM):
+        if number_good_line == len(target_item.runes):
             print("Click Exo")
-            CLICK_ITEM.click_exo()
-            while WAITING_CLICK and BOT_IS_PLAYING:
-                if (datetime.datetime.now()-first_time).total_seconds() > 5:
-                    CLICK_ITEM.click_exo()
+            click_item.click_exo()
+            while waiting_click and bot_is_playing:
+                if (datetime.datetime.now() - first_time).total_seconds() > 5:
+                    click_item.click_exo()
                     first_time = datetime.datetime.now()
                 else:
-                    print()
+                    time.sleep(0.05)
             return
 
-        CLICK_ITEM.click_rune(num_column, num_line)
+        click_item.click_rune(num_column, num_line)
 
-        while WAITING_CLICK and BOT_IS_PLAYING:
-            if (datetime.datetime.now()-first_time).total_seconds() > 5:
-                CLICK_ITEM.click_rune(num_column, num_line)
+        while waiting_click and bot_is_playing:
+            if (datetime.datetime.now() - first_time).total_seconds() > 5:
+                click_item.click_rune(num_column, num_line)
                 first_time = datetime.datetime.now()
             else:
-                print()
+                time.sleep(0.05)
 
         print(f"Click {num_column} {num_line}")

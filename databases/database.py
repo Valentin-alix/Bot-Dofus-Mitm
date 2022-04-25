@@ -3,7 +3,7 @@ import mysql.connector
 from models.item import Item
 
 
-class DatabaseManagement:
+class Database:
     HOST: str = "localhost"
     LOGIN: str = "root"
     PASSWORD: str = ""
@@ -24,7 +24,7 @@ class DatabaseManagement:
     def close(self):
         self.database.close()
 
-    def select_all_items(self) -> list[str]:
+    def select_all_name_items(self) -> list[str]:
         items = []
         with self.database.cursor() as request:
             request.execute("select * from item")
@@ -33,50 +33,41 @@ class DatabaseManagement:
                 items.append(item[0])
         return items
 
-    def select_target_lines_by_name_item(self, name: str) -> list[list[str], list[int], list[int], list[int]]:
-        target_lines = []
-        type_runes = []
-        value_runes = []
-        line_runes = []
-        column_rune = []
-
+    def select_item_by_name(self, name: str) -> Item:
+        item = Item()
+        item.name = name
         with self.database.cursor() as request:
             request.execute("select type_rune, value_rune, line_rune, column_rune from target_line "
                             "where name_item = %s", (name,))
             results = request.fetchall()
-            for item in results:
-                type_runes.append(item[0])
-                value_runes.append(item[1])
-                line_runes.append(item[2])
-                column_rune.append(item[3])
+            for result in results:
+                item.runes.append({"type": result[0], "value": result[1], "line": result[2], "column": result[3]})
 
-        target_lines.append(type_runes)
-        target_lines.append(value_runes)
-        target_lines.append(line_runes)
-        target_lines.append(column_rune)
-        return target_lines
+        return item
 
-    def insert_or_update_target_lines_item(self, item: Item):
+    def insert_or_update_item(self, item: Item):
+
+        print(item.runes)
 
         if not self.check_if_item_exists(item.name):
-            self.insert_item(item.name)
+            self.insert_item_name(item.name)
 
-        self.drop_target_lines_item(item.name)
+        self.delete_target_line_item(item.name)
         with self.database.cursor() as request:
-            for i in range(len(item.type_runes)):
+            for rune in item.runes:
                 request.execute("insert into target_line(type_rune, value_rune, line_rune, "
                                 "column_rune, name_item) values ( "
                                 "%s, %s, %s, %s, %s)", (
-                                    item.type_runes[i], item.value_runes[i], item.line_runes[i], item.column_runes[i],
+                                    rune.get("type"), rune.get("value"), rune.get("line"), rune.get("column"),
                                     item.name))
             self.database.commit()
 
-    def drop_target_lines_item(self, name: str):
+    def delete_target_line_item(self, name: str):
         with self.database.cursor() as request:
             request.execute("delete from target_line where name_item = (%s)", (name,))
             self.database.commit()
 
-    def insert_item(self, name: str):
+    def insert_item_name(self, name: str):
         with self.database.cursor() as request:
             request.execute("insert into item(name) values (%s)", (name,))
             self.database.commit()
@@ -87,36 +78,10 @@ class DatabaseManagement:
             count_item = request.fetchone()
             return count_item[0]
 
-    def drop_item(self, name: str):
+    def drop_item_name(self, name: str):
         with self.database.cursor() as request:
             request.execute("delete from item where item.name = (%s)", (name,))
             self.database.commit()
-
-    def check_if_id_in_message(self, packet_id: int) -> bool:
-        with self.database.cursor() as request:
-            request.execute("select count(*) from message_network where id_message = %s", (packet_id,))
-            count_white_list = request.fetchone()
-            return count_white_list[0]
-
-    def select_types_rune_by_runes_id(self, runes_id: list[int]) -> list:
-        types_rune = []
-        with self.database.cursor() as request:
-            for rune_id in runes_id:
-                request.execute("select name from rune where dofus_id = %s", (rune_id,))
-                result = request.fetchone()
-                if result is not None:
-                    types_rune.append(result[0])
-        return types_rune
-
-    def select_runes_id_by_types_rune(self, types_rune: list[str]) -> list[int]:
-        id_runes = []
-        with self.database.cursor() as request:
-            for type_rune in types_rune:
-                request.execute("select dofus_id from rune where name = %s", (type_rune,))
-                result = request.fetchone()
-                if result is not None:
-                    id_runes.append(result[0])
-        return id_runes
 
     def change_item_name(self, old_name: str, new_name: str):
         with self.database.cursor() as request:
@@ -144,5 +109,11 @@ class DatabaseManagement:
         with self.database.cursor() as request:
             request.execute("select reliquat_weight from rune where dofus_id = %s",
                             (rune_id,))
+            result = request.fetchone()
+        return result[0]
+
+    def select_type_rune_by_id(self, rune_id: int) -> str:
+        with self.database.cursor() as request:
+            request.execute("select name from rune where dofus_id = %s", (rune_id,))
             result = request.fetchone()
         return result[0]

@@ -4,27 +4,24 @@ from PIL import Image, ImageTk
 
 from static.assets.colors import Colors
 from static.assets.fonts import Fonts
-from databases.database_management import DatabaseManagement
+from databases.database import Database
 from factory import action
 from models.item import Item
 
-inserted_item = Item()
+inserted_item_test = Item()
 interface = None
 
 
 def bot_is_playing_to_false():
-    action.BOT_IS_PLAYING = False
+    action.bot_is_playing = False
 
 
 def catch_entries(item_edited) -> bool:
     try:
         item = Item()
-        item.value_runes = []
         for i, line in enumerate(item_edited):
-            if not line[3].get():
-                item.value_runes.append(line[0].get())
-                item.line_runes.append(line[1].get())
-                item.column_runes.append(line[2].get())
+            if not line[4].get():
+                item.runes.append({"value": line[0].get(), "line": line[1].get(), "column": line[2].get()})
     except tkinter.TclError:
         return False
     return True
@@ -41,7 +38,6 @@ class Interface:
     def __init__(self):
         self.__root = Tk()
         self.__current_page_is_home = False
-        self.__database = DatabaseManagement()
 
         self.path_images = "static/assets/icones/"
 
@@ -68,10 +64,6 @@ class Interface:
     @property
     def current_page_is_home(self):
         return self.__current_page_is_home
-
-    @property
-    def database(self):
-        return self.__database
 
     @current_page_is_home.setter
     def current_page_is_home(self, value: bool):
@@ -124,13 +116,14 @@ class Interface:
         self.current_page_is_home = False
         frame_ajout_item = Frame(self.root, bg=self.BACKGROUND_COLOR)
         frame_ajout_item.grid(row=1, column=1)
-        if not inserted_item.id_runes:
+        print(len(inserted_item_test.runes))
+        print(inserted_item_test.runes)
+        if not inserted_item_test.runes:
             label_text_attente = Label(frame_ajout_item, text="Insérer un Item dans l'atelier de forgemagie",
                                        font=(Fonts.baseFont, 10), width=78, height=20,
                                        bg=Colors.background_color, fg=Colors.foreground_color, relief="ridge")
             label_text_attente.grid(row=0, column=0)
         else:
-            inserted_item.type_runes = self.database.select_types_rune_by_runes_id(inserted_item.id_runes)
 
             type_rune_title = Label(frame_ajout_item, text="Type Rune", width=15, font=Fonts.baseFont,
                                     bg=Colors.light_black, fg=Colors.foreground_color)
@@ -158,7 +151,7 @@ class Interface:
             name_item.grid(column=1, columnspan=3, row=0)
 
             button_cancel = Button(frame_ajout_item, image=self.image_cancel,
-                                   command=lambda: [inserted_item.clear_item(), self.clear_frame(self.root),
+                                   command=lambda: [inserted_item_test.__init__(), self.clear_frame(self.root),
                                                     self.ajout_item_window()])
             button_cancel.grid(row=0, column=4, padx=5)
 
@@ -170,8 +163,9 @@ class Interface:
                                                                                 name_item_variable.get())])
             button_valider.grid(row=0, column=5)
 
-            for i in range(len(inserted_item.type_runes)):
-                type_rune = Label(frame_ajout_item, text=inserted_item.type_runes[i], width=15, font=Fonts.baseFont,
+            for i in range(len(inserted_item_test.runes)):
+                type_rune = Label(frame_ajout_item, text=inserted_item_test.runes[i].get("type"), width=15,
+                                  font=Fonts.baseFont,
                                   bg="green")
                 type_rune.grid(column=0, row=i + 2, pady=2, padx=2)
 
@@ -184,7 +178,7 @@ class Interface:
                 value_rune = Entry(frame_ajout_item, width=15, font=Fonts.baseFont, textvariable=variable_value_rune)
                 value_rune.grid(column=1, row=i + 2, pady=2)
                 value_rune.delete(first=0)
-                value_rune.insert(0, inserted_item.value_runes[i])
+                value_rune.insert(0, inserted_item_test.runes[i].get("value"))
 
                 line_rune = Entry(frame_ajout_item, width=15, font=Fonts.baseFont, textvariable=variable_line_rune)
                 line_rune.grid(column=2, row=i + 2, pady=2)
@@ -199,7 +193,8 @@ class Interface:
                                                )
                 skip_line_button.grid(column=4, row=i + 2)
 
-                item_edited.append([variable_value_rune, variable_line_rune, variable_column_rune, skip_value])
+                item_edited.append([variable_value_rune, variable_line_rune, variable_column_rune,
+                                    inserted_item_test.runes[i].get("type"), skip_value])
 
     def start_item_window(self):
 
@@ -207,7 +202,7 @@ class Interface:
         frame_ajout_item = Frame(self.root, bg=self.BACKGROUND_COLOR)
         frame_ajout_item.grid(row=1, column=1)
 
-        items = self.database.select_all_items()
+        items = Database().select_all_name_items()
 
         for i, item in enumerate(items):
             bouton_item = Button(frame_ajout_item, text=item, font=Fonts.baseFont, width=70)
@@ -221,8 +216,8 @@ class Interface:
 
             bouton_delete_item = Button(frame_ajout_item,
                                         image=self.image_delete_item,
-                                        command=lambda item=item: [self.database.drop_target_lines_item(item),
-                                                                   self.database.drop_item(item),
+                                        command=lambda item=item: [Database().delete_target_line_item(item),
+                                                                   Database().drop_item_name(item),
                                                                    frame_ajout_item.destroy(),
                                                                    self.start_item_window()])
             bouton_delete_item.grid(row=i + 1, column=1)
@@ -238,16 +233,8 @@ class Interface:
         old_name = name
         self.frame_edit = Frame(self.root)
         self.frame_edit.grid(row=1, column=1)
-        item = Item()
 
-        target_lines = self.database.select_target_lines_by_name_item(name)
-
-        item.name = name
-        item.type_runes = target_lines[0]
-        item.value_runes = target_lines[1]
-        item.line_runes = target_lines[2]
-        item.column_runes = target_lines[3]
-        item.id_runes = self.database.select_runes_id_by_types_rune(item.type_runes)
+        item = Database().select_item_by_name(name)
 
         type_rune_title = Label(self.frame_edit, text="Type Rune", width=15, font=Fonts.baseFont,
                                 bg=Colors.light_black, fg=Colors.foreground_color)
@@ -281,13 +268,13 @@ class Interface:
 
         item_edited = []
         button_valider = Button(self.frame_edit, image=self.image_validate,
-                                command=lambda: self.on_valid_button_from_edit_item(item_edited, old_name, item,
+                                command=lambda: self.on_valid_button_from_edit_item(item_edited, old_name,
                                                                                     name_item_variable.get())
                                 )
         button_valider.grid(row=0, column=5)
 
-        for i in range(len(item)):
-            type_rune = Label(self.frame_edit, text=item.type_runes[i], width=15, font=Fonts.baseFont,
+        for i, rune in enumerate(item.runes):
+            type_rune = Label(self.frame_edit, text=rune.get("type"), width=15, font=Fonts.baseFont,
                               bg="green")
             type_rune.grid(column=0, row=i + 2, pady=2, padx=2)
 
@@ -300,30 +287,31 @@ class Interface:
             value_rune = Entry(self.frame_edit, width=15, font=Fonts.baseFont, textvariable=variable_value_rune)
             value_rune.grid(column=1, row=i + 2, pady=2)
             value_rune.delete(first=0)
-            value_rune.insert(0, item.value_runes[i])
+            value_rune.insert(0, rune.get("value"))
 
             line_rune = Entry(self.frame_edit, width=15, font=Fonts.baseFont, textvariable=variable_line_rune)
             line_rune.grid(column=2, row=i + 2, pady=2)
             line_rune.delete(first=0)
-            line_rune.insert(0, item.line_runes[i])
+            line_rune.insert(0, rune.get("line"))
 
             column_rune = Entry(self.frame_edit, width=15, font=Fonts.baseFont, textvariable=variable_column_rune)
             column_rune.grid(column=3, row=i + 2, pady=2)
             column_rune.delete(first=0)
-            column_rune.insert(0, item.column_runes[i])
+            column_rune.insert(0, rune.get("column"))
 
             skip_line_button = Checkbutton(self.frame_edit,
                                            variable=skip_value, text="Skip", font=Fonts.baseFont,
                                            )
             skip_line_button.grid(column=4, row=i + 2)
 
-            item_edited.append([variable_value_rune, variable_line_rune, variable_column_rune, skip_value])
+            item_edited.append(
+                [variable_value_rune, variable_line_rune, variable_column_rune, rune.get("type"), skip_value])
 
-    def on_valid_button_from_edit_item(self, item_edited, old_name, item, name_item_variable):
+    def on_valid_button_from_edit_item(self, item_edited, old_name, name_item_variable):
         if catch_entries(item_edited):
-            self.database.drop_target_lines_item(old_name),
-            self.database.drop_item(old_name),
-            self.get_entries_and_insert_into_database(item.type_runes, item_edited,
+            Database().delete_target_line_item(old_name),
+            Database().drop_item_name(old_name),
+            self.get_entries_and_insert_into_database(item_edited,
                                                       name_item_variable),
             self.clear_frame(self.root),
             self.start_item_window()
@@ -332,28 +320,25 @@ class Interface:
 
     def on_valid_button_from_inserted_item(self, item_edited, name_item_variable):
         if catch_entries(item_edited):
-            self.get_entries_and_insert_into_database(inserted_item.type_runes, item_edited,
-                                                      name_item_variable),
+            self.get_entries_and_insert_into_database(item_edited,
+                                                      name_item_variable)
             self.clear_frame(self.root),
-            inserted_item.clear_item(),
+            inserted_item_test.__init__(),
             self.ajout_item_window(),
         else:
             tkinter.messagebox.showwarning("Erreur valeur", "Veuillez remplir tout les champs ou utiliser \"skip\"")
 
-    def get_entries_and_insert_into_database(self, type_runes: list[str], item_edited: list, name: str):
+    def get_entries_and_insert_into_database(self, item_edited: list, name: str):
         item = Item()
-        item.value_runes = []
         item.name = name
-        base_size = len(type_runes)
+        base_size = len(item.runes)
         for i, line in enumerate(item_edited):
-            if not line[3].get():
-                item.value_runes.append(line[0].get())
-                item.line_runes.append(line[1].get())
-                item.column_runes.append(line[2].get())
+            if not line[4].get():
+                item.runes.append(
+                    {"value": line[0].get(), "line": line[1].get(), "column": line[2].get(), "type": line[3]})
             else:
-                del type_runes[i - (base_size - len(type_runes))]
-        item.type_runes = type_runes
-        self.database.insert_or_update_target_lines_item(item)
+                del item.runes[i - (base_size - len(item.runes))]
+        Database().insert_or_update_item(item)
 
     def convert_image_to_interface_image(self, path: str):
         image = Image.open(path)
@@ -361,18 +346,11 @@ class Interface:
 
         return ImageTk.PhotoImage(image)
 
-    def working_window(self, item):
+    def working_window(self, name):
 
-        action.BOT_IS_PLAYING = True
+        action.bot_is_playing = True
 
-        target_lines = self.database.select_target_lines_by_name_item(item)
-
-        action.ITEM.name = item
-        action.ITEM.type_runes = target_lines[0]
-        action.ITEM.value_runes = target_lines[1]
-        action.ITEM.line_runes = target_lines[2]
-        action.ITEM.column_runes = target_lines[3]
-        action.ITEM.id_runes = self.database.select_runes_id_by_types_rune(action.ITEM.type_runes)
+        action.target_item = Database().select_item_by_name(name)
 
         working_window_frame = Frame(self.root)
         working_window_frame.grid(row=1, column=1)
@@ -396,19 +374,20 @@ class Interface:
                                   font=Fonts.baseFont, bg=Colors.light_black, fg=Colors.foreground_color)
         column_rune_title.grid(column=3, row=1, pady=2, padx=2)
 
-        name_item_label = Label(working_window_frame, text=f"Nom : {item}", font=Fonts.baseFont, bg=Colors.light_black,
+        name_item_label = Label(working_window_frame, text=f"Nom : {action.target_item.name}", font=Fonts.baseFont,
+                                bg=Colors.light_black,
                                 fg=Colors.foreground_color, height=3, width=65)
         name_item_label.grid(column=0, row=0, columnspan=4)
 
-        for i in range(len(target_lines[0])):
-            label_type = Label(working_window_frame, text=target_lines[0][i])
+        for i, rune in enumerate(action.target_item.runes):
+            label_type = Label(working_window_frame, text=rune.get("type"))
             label_type.grid(column=0, row=i + 2)
 
-            label_value = Label(working_window_frame, text=target_lines[1][i])
+            label_value = Label(working_window_frame, text=rune.get("value"))
             label_value.grid(column=1, row=i + 2)
 
-            label_line = Label(working_window_frame, text=target_lines[2][i])
+            label_line = Label(working_window_frame, text=rune.get("line"))
             label_line.grid(column=2, row=i + 2)
 
-            label_column = Label(working_window_frame, text=target_lines[3][i])
+            label_column = Label(working_window_frame, text=rune.get("column"))
             label_column.grid(column=3, row=i + 2)

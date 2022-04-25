@@ -2,7 +2,7 @@ import threading
 
 import pyshark
 
-from databases.database_management import DatabaseManagement
+from databases.database import Database
 from factory import action
 from models.data import Data
 from models.message import Message
@@ -37,6 +37,7 @@ class Sniffer:
         capture = pyshark.LiveCapture(bpf_filter=self.FILTER_DOFUS)
         for packet in capture.sniff_continuously():
             try:
+                print(packet.data.data)
                 if packet.ip.src == self.IP_LOCALE:
                     self.buffer_client += bytearray.fromhex(packet.data.data)
                     self.on_receive(self.buffer_client, True)
@@ -65,12 +66,12 @@ class Sniffer:
 
                 len_data = int.from_bytes(buffer.read(header & 3), "big")
 
-                if not DatabaseManagement().select_message_by_id(message_id):
-                    print("stop because of sniffer error")
+                if not Database().select_message_by_id(message_id):
+                    print("stop")
                     exit()
-                if DatabaseManagement().select_message_by_id(message_id) == "ExchangeReadyMessage":
-                    action.WAITING_CLICK = False
-                print(DatabaseManagement().select_message_by_id(message_id))
+                if Database().select_message_by_id(message_id) == "ExchangeReadyMessage":
+                    action.waiting_click = False
+                print(Database().select_message_by_id(message_id))
                 data = Data(buffer.read(len_data))
                 message = Message(message_id, data)
 
