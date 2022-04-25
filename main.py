@@ -7,7 +7,7 @@ from network.sniffer import Sniffer
 
 if __name__ == '__main__':
     # deactivate print
-    sys.stdout = open(os.devnull, 'w')
+    # sys.stdout = open(os.devnull, 'w')
 
     interface.interface = Interface()
     sniffer = Sniffer()
