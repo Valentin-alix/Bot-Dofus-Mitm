@@ -69,6 +69,7 @@ class Sniffer:
 
                 if not Database().select_message_by_id(message_id):
                     logging.error("Can't get corresponding message to id")
+                    print("Exiting, error")
                     exit()
                 if Database().select_message_by_id(message_id) == "ExchangeReadyMessage":
                     action.waiting_click = False

@@ -14,7 +14,7 @@ class Click:
     TIME_CLICK: float = 0.1
 
     def __init__(self):
-        self.__window_name = ""
+        self.__window_name: str = ""
         self.find_windows_name()
 
     @property
@@ -22,7 +22,7 @@ class Click:
         return self.__window_name
 
     @windows_name.setter
-    def windows_name(self, value : str):
+    def windows_name(self, value: str):
         self.__window_name = value
 
     def click_auto(self, x: int, y: int):

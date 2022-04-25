@@ -8,7 +8,7 @@ from databases.database import Database
 from factory import action
 from models.item import Item
 
-inserted_item_test = Item()
+inserted_item_test: Item = Item()
 interface = None
 
 
@@ -28,15 +28,15 @@ def catch_entries(item_edited) -> bool:
 
 
 class Interface:
-    TITLE = 'Bot FM'
-    BACKGROUND_COLOR = Colors.background_color
-    WIDTH_SIZE = 900
-    HEIGHT_SIZE = 500
-    ICON_MENU_SIZE = 20
-    ICON_SIZE = 26
+    TITLE: str = 'Bot FM'
+    BACKGROUND_COLOR: str = Colors.background_color
+    WIDTH_SIZE: int = 900
+    HEIGHT_SIZE: int = 500
+    ICON_MENU_SIZE: int = 20
+    ICON_SIZE: int = 26
 
     def __init__(self):
-        self.__root = Tk()
+        self.__root: Tk = Tk()
         self.__current_page_is_home = False
 
         self.path_images = "static/assets/icones/"
