@@ -12,7 +12,7 @@ database = mysql.connector.connect(
 
 with database.cursor() as request:
     request.execute("delete from message_network")
-    for (repertoire, sousRepertoires, fichiers) in walk("./static/scripts_resources"):
+    for (repertoire, sousRepertoires, fichiers) in walk("scripts_resources"):
         for file in fichiers:
             with open(repertoire + "\\" + file) as opened_file:
                 lines = opened_file.readlines()

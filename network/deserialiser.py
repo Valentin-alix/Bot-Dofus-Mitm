@@ -20,7 +20,7 @@ def interpretation(message: Message) -> None:
         message.data.readVarUhShort()
         effects_len = message.data.readUnsignedShort()
 
-        for i in range(effects_len):
+        for _ in range(effects_len):
             message.data.readUnsignedShort()
             action_id = message.data.readVarUhShort()
             value = message.data.readVarUhShort()
@@ -39,7 +39,7 @@ def interpretation(message: Message) -> None:
 
         effects_len = message.data.readUnsignedShort()
 
-        for i in range(effects_len):
+        for _ in range(effects_len):
             message.data.readUnsignedShort()
             action_id = message.data.readVarUhShort()
             value = message.data.readVarUhShort()

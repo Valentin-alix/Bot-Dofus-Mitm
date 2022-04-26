@@ -53,7 +53,7 @@ class Sniffer:
                     header = temp_data.readUnsignedShort()
                     message_id = header >> 2
                     if not Database().select_message_by_id(message_id):
-                        logging.info(f"First packet dont find corresponding id, ignoring")
+                        logging.warning(f"First packet dont find corresponding id, ignoring")
                         continue
                     else:
                         self.first_paquet = False

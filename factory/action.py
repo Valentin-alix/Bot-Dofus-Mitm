@@ -48,7 +48,7 @@ class Action:
                     click_item.click_exo()
                     first_time = datetime.datetime.now()
                 else:
-                    time.sleep(0.05)
+                    time.sleep(0.01)
             return
 
         click_item.click_rune(num_column, num_line)
@@ -58,6 +58,6 @@ class Action:
                 click_item.click_rune(num_column, num_line)
                 first_time = datetime.datetime.now()
             else:
-                time.sleep(0.05)
+                time.sleep(0.01)
 
         logging.info(f"Click {num_column} {num_line}")

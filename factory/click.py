@@ -48,9 +48,9 @@ class Click:
         win32gui.SendMessage(hwnd, win32con.WM_LBUTTONUP, None, self.FUSION_RUNE_EXO)
 
     def find_windows_name(self) -> None:
-        def winEnumHandler(hwnd, ctx):
+        def win_enum_handler(hwnd, ctx):
             if win32gui.IsWindowVisible(hwnd):
                 if self.NICKNAME in win32gui.GetWindowText(hwnd):
                     self.windows_name = win32gui.GetWindowText(hwnd)
 
-        win32gui.EnumWindows(winEnumHandler, None)
+        win32gui.EnumWindows(win_enum_handler, None)
