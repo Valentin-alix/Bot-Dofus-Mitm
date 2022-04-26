@@ -1,4 +1,4 @@
-from models.data import Data
+from bot.models.data import Data
 
 
 class Message:

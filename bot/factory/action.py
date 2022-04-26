@@ -3,8 +3,8 @@ import logging
 import time
 from operator import itemgetter
 
-from factory.click import Click
-from models.item import Item
+from bot.factory.click import Click
+from bot.models.item import Item
 
 bot_is_playing: bool = False
 target_item: Item = Item()

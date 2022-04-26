@@ -1,8 +1,8 @@
-from databases.database import Database
-from factory import action
-from factory.action import Action
-from gui import interface
-from models.message import Message
+from bot.databases.database import Database
+from bot.factory import action
+from bot.factory.action import Action
+from bot.gui import interface
+from bot.models.message import Message
 
 ExchangeObjectAddedMessage: int = Database().select_id_by_message("ExchangeObjectAddedMessage")
 ExchangeCraftResultMagicWithObjectDescMessage: int = Database().select_id_by_message(

@@ -1,6 +1,6 @@
 import mysql.connector
 
-from models.item import Item
+from bot.models.item import Item
 
 
 class Database:

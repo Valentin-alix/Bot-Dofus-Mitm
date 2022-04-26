@@ -3,11 +3,11 @@ import threading
 
 import pyshark
 
-from databases.database import Database
-from factory import action
-from models.data import Data
-from models.message import Message
-from network import deserialiser
+from bot.databases.database import Database
+from bot.factory import action
+from bot.models.data import Data
+from bot.models.message import Message
+from bot.network import deserialiser
 
 
 class Sniffer:
@@ -15,7 +15,6 @@ class Sniffer:
     IP_LOCALE: str = '192.168.1.21'
 
     def __init__(self):
-        self.__first_packet: bool = True
         self.__buffer_client: Data = Data()
         self.__buffer_server: Data = Data()
 
@@ -24,16 +23,8 @@ class Sniffer:
         return self.__buffer_client
 
     @property
-    def first_paquet(self) -> bool:
-        return self.__first_packet
-
-    @property
     def buffer_server(self) -> Data:
         return self.__buffer_server
-
-    @first_paquet.setter
-    def first_paquet(self, value: bool) -> None:
-        self.__first_packet = value
 
     @buffer_client.setter
     def buffer_client(self, value) -> None:
@@ -48,16 +39,6 @@ class Sniffer:
         for packet in capture.sniff_continuously():
             try:
                 logging.info(f"Received_Packet : {packet.data.data}")
-                if self.first_paquet:
-                    temp_data = Data(bytearray.fromhex(packet.data.data))
-                    header = temp_data.readUnsignedShort()
-                    message_id = header >> 2
-                    if not Database().select_message_by_id(message_id):
-                        logging.warning(f"First packet dont find corresponding id, ignoring")
-                        continue
-                    else:
-                        self.first_paquet = False
-
                 if packet.ip.src == self.IP_LOCALE:
                     self.buffer_client += bytearray.fromhex(packet.data.data)
                     self.on_receive(self.buffer_client, True)
@@ -71,7 +52,7 @@ class Sniffer:
     def on_receive(buffer: Data, from_client: bool) -> None:
         while True:
             try:
-                logging.info(f"Trying to extract these data : {buffer}")
+                logging.info(f"{from_client} | Trying to extract these data : {buffer}")
 
                 header = buffer.readUnsignedShort()
                 message_id = header >> 2
@@ -90,8 +71,9 @@ class Sniffer:
 
                 if not Database().select_message_by_id(message_id):
                     logging.error("Can't get corresponding message to id")
-                    print("Exiting, error")
-                    exit()
+                    print("Error Sniffer")
+                    buffer.__init__()
+                    break
                 if Database().select_message_by_id(message_id) == "ExchangeReadyMessage":
                     action.waiting_click = False
                 logging.info(f"Message :{Database().select_message_by_id(message_id)}")

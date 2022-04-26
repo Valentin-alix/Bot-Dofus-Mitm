@@ -1,10 +1,9 @@
 import datetime
 import logging
 import threading
-from gui import interface
-from gui.interface import Interface
-from network.sniffer import Sniffer
-
+from bot.gui import interface
+from bot.gui.interface import Interface
+from bot.network.sniffer import Sniffer
 
 if __name__ == '__main__':
     executed_time = str(datetime.datetime.now()).replace(':', '.')

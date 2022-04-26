@@ -1,12 +1,13 @@
 import tkinter.messagebox
-from tkinter import *
+from tkinter import Tk, Frame, Button, Label, StringVar, Entry, IntVar, Checkbutton
+
 from PIL import Image, ImageTk
 
 from static.assets.colors import Colors
 from static.assets.fonts import Fonts
-from databases.database import Database
-from factory import action
-from models.item import Item
+from bot.databases.database import Database
+from bot.factory import action
+from bot.models.item import Item
 
 inserted_item_test: Item = Item()
 interface = None
