@@ -1,6 +1,7 @@
 import datetime
 import logging
 import time
+from operator import itemgetter
 
 from factory.click import Click
 from models.item import Item
@@ -20,44 +21,34 @@ class Action:
 
         priorities: list[dict] = []
         for i, target_rune, in enumerate(target_item.runes):
+            priorities.append({"value": 0, "line": target_rune.get("line"),
+                               "column": target_rune.get("column")})
             for rune in actual_item.runes:
                 if target_rune.get("type") == rune.get("type"):
-                    priorities.append(
-                        {"value": rune.get("value") / target_rune.get("value"), "line": target_rune.get("line"),
-                         "column": target_rune.get("column")})
+                    priorities[i]["value"] = rune.get("value") / target_rune.get("value")
 
-        number_good_line: int = 0
-
-        for priority in priorities:
-            if priority.get("value") >= 1:
-                number_good_line += 1
-            elif 'minimum' not in locals() or priority.get("value") < minimum:
-                minimum: float = priority.get("value")
-                num_line: int = priority.get("line")
-                num_column: int = priority.get("column")
+        high_priority = min(priorities, key=itemgetter('value'))
 
         waiting_click = True
 
-        first_time: datetime = datetime.datetime.now()
+        before_click_time: datetime = datetime.datetime.now()
 
-        if number_good_line == len(target_item.runes):
+        if high_priority.get("value") >= 1:
             click_item.click_exo()
             logging.info("Click Exo")
-            while waiting_click and bot_is_playing:
-                if (datetime.datetime.now() - first_time).total_seconds() > 5:
-                    click_item.click_exo()
-                    first_time = datetime.datetime.now()
-                else:
-                    time.sleep(0.01)
-            return
-
-        click_item.click_rune(num_column, num_line)
+        else:
+            click_item.click_rune(high_priority.get("column"), high_priority.get("line"))
+            logging.info(f"Click {high_priority.get('column')} {high_priority.get('line')}")
 
         while waiting_click and bot_is_playing:
-            if (datetime.datetime.now() - first_time).total_seconds() > 5:
-                click_item.click_rune(num_column, num_line)
-                first_time = datetime.datetime.now()
+            if (datetime.datetime.now() - before_click_time).total_seconds() > 5:
+                if high_priority.get("value") >= 1:
+                    click_item.click_exo()
+                    before_click_time = datetime.datetime.now()
+                else:
+                    click_item.click_rune(high_priority.get("column"), high_priority.get("line"))
+                    before_click_time = datetime.datetime.now()
             else:
-                time.sleep(0.01)
+                time.sleep(0.001)
 
-        logging.info(f"Click {num_column} {num_line}")
+
