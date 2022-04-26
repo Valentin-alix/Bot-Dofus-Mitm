@@ -5,6 +5,7 @@ from gui import interface
 from gui.interface import Interface
 from network.sniffer import Sniffer
 
+
 if __name__ == '__main__':
     executed_time = str(datetime.datetime.now()).replace(':', '.')
     logging.basicConfig(filename=f"log/{str(executed_time)}.log", level=logging.INFO)
