@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7701b342-ab0a-474d-a6d9-469b7bb2e9f8" name="Changes" comment="correction sniffer" />
+    <list default="true" id="7701b342-ab0a-474d-a6d9-469b7bb2e9f8" name="Changes" comment="correction sniffer">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/databases/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/databases/database.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/factory/action.py" beforeDir="false" afterPath="$PROJECT_DIR$/factory/action.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/factory/click.py" beforeDir="false" afterPath="$PROJECT_DIR$/factory/click.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/interface.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/item.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/item.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/message.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/message.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/network/deserialiser.py" beforeDir="false" afterPath="$PROJECT_DIR$/network/deserialiser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/network/sniffer.py" beforeDir="false" afterPath="$PROJECT_DIR$/network/sniffer.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -36,7 +46,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../pyd2bot" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="preferences.externalTools" />
   </component>
   <component name="RecentsManager">
@@ -366,7 +376,14 @@
       <option name="project" value="LOCAL" />
       <updated>1650924873287</updated>
     </task>
-    <option name="localTasksCounter" value="30" />
+    <task id="LOCAL-00030" summary="correction sniffer">
+      <created>1650924980061</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1650924980061</updated>
+    </task>
+    <option name="localTasksCounter" value="31" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

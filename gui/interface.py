@@ -116,8 +116,6 @@ class Interface:
         self.current_page_is_home = False
         frame_ajout_item = Frame(self.root, bg=self.BACKGROUND_COLOR)
         frame_ajout_item.grid(row=1, column=1)
-        print(len(inserted_item_test.runes))
-        print(inserted_item_test.runes)
         if not inserted_item_test.runes:
             label_text_attente = Label(frame_ajout_item, text="Insérer un Item dans l'atelier de forgemagie",
                                        font=(Fonts.baseFont, 10), width=78, height=20,

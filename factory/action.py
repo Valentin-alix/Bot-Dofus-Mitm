@@ -14,7 +14,7 @@ waiting_click: bool = False
 
 class Action:
     @staticmethod
-    def click_based_on_values():
+    def click_based_on_values() -> None:
         global waiting_click
         global bot_is_playing
 

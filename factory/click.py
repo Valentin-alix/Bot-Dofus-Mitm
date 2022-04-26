@@ -22,20 +22,20 @@ class Click:
         return self.__window_name
 
     @windows_name.setter
-    def windows_name(self, value: str):
+    def windows_name(self, value: str) -> None:
         self.__window_name = value
 
-    def click_auto(self, x: int, y: int):
+    def click_auto(self, x: int, y: int) -> None:
         time.sleep(self.TIME_CLICK)
         hwnd = win32gui.FindWindow(None, self.windows_name)
         l_param = win32api.MAKELONG(x, y)
         win32gui.SendMessage(hwnd, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON, l_param)
         win32gui.SendMessage(hwnd, win32con.WM_LBUTTONUP, None, l_param)
 
-    def click_rune(self, num_column: int, num_line: int):
+    def click_rune(self, num_column: int, num_line: int) -> None:
         self.click_auto(self.COLUMNS_POS[num_column], self.LINES_POS[num_line])
 
-    def click_exo(self):
+    def click_exo(self) -> None:
         hwnd = win32gui.FindWindow(None, self.windows_name)
         win32gui.SendMessage(hwnd, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON, self.POS_EXO_RUNE)
         win32gui.SendMessage(hwnd, win32con.WM_LBUTTONUP, None, self.POS_EXO_RUNE)
@@ -47,7 +47,7 @@ class Click:
         win32gui.SendMessage(hwnd, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON, self.FUSION_RUNE_EXO)
         win32gui.SendMessage(hwnd, win32con.WM_LBUTTONUP, None, self.FUSION_RUNE_EXO)
 
-    def find_windows_name(self):
+    def find_windows_name(self) -> None:
         def winEnumHandler(hwnd, ctx):
             if win32gui.IsWindowVisible(hwnd):
                 if self.NICKNAME in win32gui.GetWindowText(hwnd):

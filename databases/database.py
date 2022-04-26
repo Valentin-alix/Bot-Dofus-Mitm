@@ -21,7 +21,7 @@ class Database:
     def database(self):
         return self.__database
 
-    def close(self):
+    def close(self) -> None:
         self.database.close()
 
     def select_all_name_items(self) -> list[str]:
@@ -45,7 +45,7 @@ class Database:
 
         return item
 
-    def insert_or_update_item(self, item: Item):
+    def insert_or_update_item(self, item: Item) -> None:
 
         if not self.check_if_item_exists(item.name):
             self.insert_item_name(item.name)
@@ -60,12 +60,12 @@ class Database:
                                     item.name))
             self.database.commit()
 
-    def delete_target_line_item(self, name: str):
+    def delete_target_line_item(self, name: str) -> None:
         with self.database.cursor() as request:
             request.execute("delete from target_line where name_item = (%s)", (name,))
             self.database.commit()
 
-    def insert_item_name(self, name: str):
+    def insert_item_name(self, name: str) -> None:
         with self.database.cursor() as request:
             request.execute("insert into item(name) values (%s)", (name,))
             self.database.commit()
@@ -76,24 +76,24 @@ class Database:
             count_item = request.fetchone()
             return count_item[0]
 
-    def drop_item_name(self, name: str):
+    def drop_item_name(self, name: str) -> None:
         with self.database.cursor() as request:
             request.execute("delete from item where item.name = (%s)", (name,))
             self.database.commit()
 
-    def change_item_name(self, old_name: str, new_name: str):
+    def change_item_name(self, old_name: str, new_name: str) -> None:
         with self.database.cursor() as request:
             request.execute("update item set name = %s where name = %s", (new_name, old_name))
             self.database.commit()
 
-    def select_id_by_message(self, name_message: str):
+    def select_id_by_message(self, name_message: str) -> int:
         with self.database.cursor() as request:
             request.execute("select id_message from message_network where name_message = %s",
                             (name_message,))
             result = request.fetchone()
         return result[0]
 
-    def select_message_by_id(self, id_message: int):
+    def select_message_by_id(self, id_message: int) -> str or bool:
         try:
             with self.database.cursor() as request:
                 request.execute("select name_message from message_network where id_message = %s",

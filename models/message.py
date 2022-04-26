@@ -2,9 +2,9 @@ from models.data import Data
 
 
 class Message:
-    def __init__(self, message_id: int, data: Data):
-        self.__message_id = message_id
-        self.__data = data
+    def __init__(self, message_id: int = None, data: Data = None):
+        self.__message_id: int = message_id
+        self.__data: Data = data
 
     @property
     def message_id(self) -> int:

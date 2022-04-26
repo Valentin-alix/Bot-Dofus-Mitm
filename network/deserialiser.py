@@ -9,7 +9,7 @@ ExchangeCraftResultMagicWithObjectDescMessage: int = Database().select_id_by_mes
     "ExchangeCraftResultMagicWithObjectDescMessage")
 
 
-def interpretation(message: Message):
+def interpretation(message: Message) -> None:
     if message.message_id == int(
             ExchangeCraftResultMagicWithObjectDescMessage) and action.bot_is_playing:
 
