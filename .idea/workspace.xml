@@ -2,13 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7701b342-ab0a-474d-a6d9-469b7bb2e9f8" name="Changes" comment="update">
+      <change afterPath="$PROJECT_DIR$/MakeFile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bot/databases/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/databases/database.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bot/gui/interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/gui/interface.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bot/network/deserialiser.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/network/deserialiser.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bot/network/sniffer.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/network/sniffer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/todo.md" beforeDir="false" afterPath="$PROJECT_DIR$/todo.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,7 +39,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../pyd2bot" />
     <property name="settings.editor.selected.configurable" value="preferences.externalTools" />
   </component>
   <component name="RecentsManager">
@@ -61,7 +56,13 @@
       <recent name="C:\Users\valen\Documents\Workspace\Python\bot_sniffer_click\bot_mitm\setup" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.main">
+  <component name="RunManager" selected="Makefile Target.setup">
+    <configuration name="setup" type="MAKEFILE_TARGET_RUN_CONFIGURATION" factoryName="Makefile" temporary="true">
+      <makefile filename="$PROJECT_DIR$/MakeFile" target="setup" workingDirectory="" arguments="">
+        <envs />
+      </makefile>
+      <method v="2" />
+    </configuration>
     <configuration name="update" type="MAKEFILE_TARGET_RUN_CONFIGURATION" factoryName="Makefile" temporary="true">
       <makefile filename="$PROJECT_DIR$/Makefile" target="update" workingDirectory="" arguments="">
         <envs />
@@ -151,14 +152,15 @@
       <item itemvalue="Python.maj_protocol_id" />
       <item itemvalue="Python.protocolParser" />
       <item itemvalue="Python tests.Python tests for test_packet.TestPacket" />
+      <item itemvalue="Makefile Target.setup" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Makefile Target.setup" />
         <item itemvalue="Python.maj_protocol_id" />
         <item itemvalue="Makefile Target.update" />
         <item itemvalue="Python.protocolParser" />
         <item itemvalue="Python.main" />
-        <item itemvalue="Python tests.Python tests for test_packet.TestPacket" />
       </list>
     </recent_temporary>
   </component>
@@ -416,7 +418,14 @@
       <option name="project" value="LOCAL" />
       <updated>1650990739890</updated>
     </task>
-    <option name="localTasksCounter" value="36" />
+    <task id="LOCAL-00036" summary="update">
+      <created>1651060000005</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1651060000005</updated>
+    </task>
+    <option name="localTasksCounter" value="37" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

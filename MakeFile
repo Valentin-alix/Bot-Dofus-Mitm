@@ -1,0 +1,8 @@
+setup:
+	pip install -r requirements.txt
+
+update:
+	@echo "Updating Protocol..."
+	setup/decompiler.bat
+	@python setup/maj_protocol_id.py
+	@echo "Done"
