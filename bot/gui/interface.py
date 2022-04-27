@@ -9,7 +9,7 @@ from bot.databases.database import Database
 from bot.factory import action
 from bot.models.item import Item
 
-inserted_item_test: Item = Item()
+inserted_item: Item = Item()
 interface = None
 
 
@@ -117,7 +117,7 @@ class Interface:
         self.current_page_is_home = False
         frame_ajout_item = Frame(self.root, bg=self.BACKGROUND_COLOR)
         frame_ajout_item.grid(row=1, column=1)
-        if not inserted_item_test.runes:
+        if not inserted_item.runes:
             label_text_attente = Label(frame_ajout_item, text="Insérer un Item dans l'atelier de forgemagie",
                                        font=(Fonts.baseFont, 10), width=78, height=20,
                                        bg=Colors.background_color, fg=Colors.foreground_color, relief="ridge")
@@ -150,7 +150,7 @@ class Interface:
             name_item.grid(column=1, columnspan=3, row=0)
 
             button_cancel = Button(frame_ajout_item, image=self.image_cancel,
-                                   command=lambda: [inserted_item_test.__init__(), self.clear_frame(self.root),
+                                   command=lambda: [inserted_item.__init__(), self.clear_frame(self.root),
                                                     self.ajout_item_window()])
             button_cancel.grid(row=0, column=4, padx=5)
 
@@ -162,8 +162,8 @@ class Interface:
                                                                                 name_item_variable.get())])
             button_valider.grid(row=0, column=5)
 
-            for i in range(len(inserted_item_test.runes)):
-                type_rune = Label(frame_ajout_item, text=inserted_item_test.runes[i].get("type"), width=15,
+            for i in range(len(inserted_item.runes)):
+                type_rune = Label(frame_ajout_item, text=inserted_item.runes[i].get("type"), width=15,
                                   font=Fonts.baseFont,
                                   bg="green")
                 type_rune.grid(column=0, row=i + 2, pady=2, padx=2)
@@ -177,7 +177,7 @@ class Interface:
                 value_rune = Entry(frame_ajout_item, width=15, font=Fonts.baseFont, textvariable=variable_value_rune)
                 value_rune.grid(column=1, row=i + 2, pady=2)
                 value_rune.delete(first=0)
-                value_rune.insert(0, inserted_item_test.runes[i].get("value"))
+                value_rune.insert(0, inserted_item.runes[i].get("value"))
 
                 line_rune = Entry(frame_ajout_item, width=15, font=Fonts.baseFont, textvariable=variable_line_rune)
                 line_rune.grid(column=2, row=i + 2, pady=2)
@@ -193,7 +193,7 @@ class Interface:
                 skip_line_button.grid(column=4, row=i + 2)
 
                 item_edited.append([variable_value_rune, variable_line_rune, variable_column_rune,
-                                    inserted_item_test.runes[i].get("type"), skip_value])
+                                    inserted_item.runes[i].get("type"), skip_value])
 
     def start_item_window(self):
 
@@ -322,7 +322,7 @@ class Interface:
             self.get_entries_and_insert_into_database(item_edited,
                                                       name_item_variable)
             self.clear_frame(self.root),
-            inserted_item_test.__init__(),
+            inserted_item.__init__(),
             self.ajout_item_window(),
         else:
             tkinter.messagebox.showwarning("Erreur valeur", "Veuillez remplir tout les champs ou utiliser \"skip\"")

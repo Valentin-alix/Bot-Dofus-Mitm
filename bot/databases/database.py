@@ -25,13 +25,10 @@ class Database:
         self.connection.close()
 
     def select_all_name_items(self) -> list[str]:
-        items = []
         with self.connection.cursor() as request:
             request.execute("select * from item")
             results = request.fetchall()
-            for item in results:
-                items.append(item[0])
-        return items
+        return list(sum(results, ()))
 
     def select_item_by_name(self, name: str) -> Item:
         item = Item()

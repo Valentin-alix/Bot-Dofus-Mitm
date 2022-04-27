@@ -30,6 +30,7 @@ def interpretation(message: Message) -> None:
         Action().click_based_on_values()
 
     elif message.message_id == ExchangeObjectAddedMessage and not action.bot_is_playing:
+        interface.inserted_item.__init__()
         # Ci-dessous remote
         message.data.readBoolean()
         # Ci-dessous position
@@ -43,7 +44,7 @@ def interpretation(message: Message) -> None:
             message.data.readUnsignedShort()
             action_id = message.data.readVarUhShort()
             value = message.data.readVarUhShort()
-            interface.inserted_item_test.runes.append(
+            interface.inserted_item.runes.append(
                 {"type": Database().select_type_rune_by_id(action_id), "value": value})
 
         # Si l'élément n'est pas une rune alors ->

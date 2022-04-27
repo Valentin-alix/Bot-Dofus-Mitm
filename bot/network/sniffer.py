@@ -17,6 +17,7 @@ class Sniffer:
     def __init__(self):
         self.__buffer_client: Data = Data()
         self.__buffer_server: Data = Data()
+        self.__temp_buffer: Data = Data()
 
     @property
     def buffer_client(self) -> Data:
@@ -25,6 +26,14 @@ class Sniffer:
     @property
     def buffer_server(self) -> Data:
         return self.__buffer_server
+
+    @property
+    def temp_buffer(self):
+        return self.__temp_buffer
+
+    @temp_buffer.setter
+    def temp_buffer(self, value):
+        self.__temp_buffer = value
 
     @buffer_client.setter
     def buffer_client(self, value) -> None:
@@ -39,6 +48,13 @@ class Sniffer:
         for packet in capture.sniff_continuously():
             try:
                 logging.info(f"Received_Packet : {packet.data.data}")
+                try:
+                    if hasattr(packet.tcp.analysis, 'lost_segment'):
+                        print('ok')
+                        print(f"lost segment : {packet.tcp.analysis.lost_segment}")
+                except Exception as e:
+                    print(e)
+
                 if packet.ip.src == self.IP_LOCALE:
                     self.buffer_client += bytearray.fromhex(packet.data.data)
                     self.on_receive(self.buffer_client, True)
@@ -72,8 +88,9 @@ class Sniffer:
                 if not Database().select_message_by_id(message_id):
                     logging.error("Can't get corresponding message to id")
                     print("Error Sniffer")
-                    buffer.__init__()
-                    break
+                    exit()
+                    # buffer.__init__()
+                    # break
                 if Database().select_message_by_id(message_id) == "ExchangeReadyMessage":
                     action.waiting_click = False
                 logging.info(f"Message :{Database().select_message_by_id(message_id)}")

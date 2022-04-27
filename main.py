@@ -7,7 +7,7 @@ from bot.network.sniffer import Sniffer
 
 if __name__ == '__main__':
     executed_time = str(datetime.datetime.now()).replace(':', '.')
-    logging.basicConfig(filename=f"log/{str(executed_time)}.log", level=logging.INFO)
+    logging.basicConfig(filename=f"logs/{str(executed_time)}.log", level=logging.INFO)
 
     interface.interface = Interface()
     sniffer = Sniffer()
