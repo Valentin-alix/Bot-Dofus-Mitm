@@ -26,7 +26,7 @@ class Database:
 
     def select_all_name_items(self) -> list[str]:
         with self.connection.cursor() as request:
-            request.execute("select * from item")
+            request.execute("select name from item")
             results = request.fetchall()
         return list(sum(results, ()))
 
@@ -112,3 +112,14 @@ class Database:
             request.execute("select name from rune where dofus_id = %s", (rune_id,))
             result = request.fetchone()
         return result[0]
+
+    def update_quantity_on_target_line_by_type_rune(self, type_rune: str, name_item: str) -> None:
+        with self.connection.cursor() as request:
+            request.execute("update target_line set quantity=quantity+1 where type_rune = %s and name_item = %s",
+                            (type_rune, name_item))
+            self.connection.commit()
+
+    def update_exo_on_item_by_name(self, name: str) -> None:
+        with self.connection.cursor() as request:
+            request.execute("update item set attempt=attempt+1 where name = %s", (name,))
+            self.connection.commit()

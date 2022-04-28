@@ -3,6 +3,7 @@ import logging
 import time
 from operator import itemgetter
 
+from bot.databases.database import Database
 from bot.factory.click import Click
 from bot.models.item import Item
 
@@ -26,6 +27,7 @@ class Action:
             for rune in actual_item.runes:
                 if target_rune.get("type") == rune.get("type"):
                     priorities[i]["value"] = rune.get("value") / target_rune.get("value")
+                    priorities[i]["type"] = rune.get("type")
 
         high_priority = min(priorities, key=itemgetter('value'))
 
@@ -36,9 +38,11 @@ class Action:
         if high_priority.get("value") >= 1:
             click_item.click_exo()
             logging.info("Click Exo")
+            Database().update_exo_on_item_by_name(target_item.name)
         else:
             click_item.click_rune(high_priority.get("column"), high_priority.get("line"))
             logging.info(f"Click {high_priority.get('column')} {high_priority.get('line')}")
+            Database().update_quantity_on_target_line_by_type_rune(high_priority.get('type'), target_item.name)
 
         while waiting_click and bot_is_playing:
             if (datetime.datetime.now() - before_click_time).total_seconds() > 5:
