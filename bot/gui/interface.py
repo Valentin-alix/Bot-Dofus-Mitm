@@ -55,7 +55,7 @@ class Interface:
         self.frame_edit = None
 
     @property
-    def root(self):
+    def root(self) -> Tk:
         return self.__root
 
     @root.setter
@@ -63,7 +63,7 @@ class Interface:
         self.__root = value
 
     @property
-    def current_page_is_home(self):
+    def current_page_is_home(self) -> bool:
         return self.__current_page_is_home
 
     @current_page_is_home.setter
@@ -207,11 +207,15 @@ class Interface:
             bouton_item = Button(frame_ajout_item, text=item, font=Fonts.baseFont, width=70)
             bouton_item.grid(row=i + 1, column=0)
 
+            label_average_price = Button(frame_ajout_item, text=Database().select_price_item_per_tenta(item), width=15
+                                         )
+            label_average_price.grid(row=i + 1, column=1)
+
             bouton_change_item = Button(frame_ajout_item,
                                         image=self.image_change_item,
                                         command=lambda item=item: [self.clear_frame(self.root),
                                                                    self.edit_item(item)])
-            bouton_change_item.grid(row=i + 1, column=2)
+            bouton_change_item.grid(row=i + 1, column=3)
 
             bouton_delete_item = Button(frame_ajout_item,
                                         image=self.image_delete_item,
@@ -219,13 +223,13 @@ class Interface:
                                                                    Database().drop_item_name(item),
                                                                    frame_ajout_item.destroy(),
                                                                    self.start_item_window()])
-            bouton_delete_item.grid(row=i + 1, column=1)
+            bouton_delete_item.grid(row=i + 1, column=2)
 
             bouton_play_item = Button(frame_ajout_item,
                                       image=self.image_play,
                                       command=lambda item=item: [self.clear_frame(self.root), self.frame_menu.destroy(),
                                                                  self.working_window(item)])
-            bouton_play_item.grid(row=i + 1, column=3)
+            bouton_play_item.grid(row=i + 1, column=4)
 
     def edit_item(self, name: str):
 

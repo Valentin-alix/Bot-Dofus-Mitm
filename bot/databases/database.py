@@ -113,13 +113,37 @@ class Database:
             result = request.fetchone()
         return result[0]
 
-    def update_quantity_on_target_line_by_type_rune(self, type_rune: str, name_item: str) -> None:
+    def update_quantity_on_target_line_by_type_rune(self, type_rune: str, name_item: str, quantity: int) -> None:
         with self.connection.cursor() as request:
-            request.execute("update target_line set quantity=quantity+1 where type_rune = %s and name_item = %s",
-                            (type_rune, name_item))
+            request.execute("update target_line set quantity=quantity+%s where type_rune = %s and name_item = %s",
+                            (quantity, type_rune, name_item))
             self.connection.commit()
 
     def update_exo_on_item_by_name(self, name: str) -> None:
         with self.connection.cursor() as request:
             request.execute("update item set attempt=attempt+1 where name = %s", (name,))
             self.connection.commit()
+
+    def update_average_price_by_name(self, name: str, average_price: int) -> None:
+        with self.connection.cursor() as request:
+            request.execute("update rune set average_price = %s where name = %s", (average_price, name))
+            self.connection.commit()
+
+    def select_price_item_per_tenta(self, name: str) -> int:
+        try:
+            with self.connection.cursor() as request:
+                request.execute("select rune.name, rune.average_price*target_line.quantity as price_rune from rune "
+                                "join "
+                                "target_line on target_line.type_rune = rune.name WHERE target_line.name_item = %s;",
+                                (name,))
+                results = request.fetchall()
+                total_price: int = 0
+                for result in results:
+                    total_price += result[1]
+
+                request.execute("select item.attempt from item where item.name = %s", (name,))
+                attempt = request.fetchone()
+
+            return round(total_price / attempt[0], 1)
+        except ZeroDivisionError:
+            return 0

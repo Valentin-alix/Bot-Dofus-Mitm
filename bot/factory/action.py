@@ -40,9 +40,14 @@ class Action:
             logging.info("Click Exo")
             Database().update_exo_on_item_by_name(target_item.name)
         else:
+            quantity: int = 1
+            if high_priority.get('column') == 2:
+                quantity = 3
+            elif high_priority.get('column') == 3:
+                quantity = 10
             click_item.click_rune(high_priority.get("column"), high_priority.get("line"))
             logging.info(f"Click {high_priority.get('column')} {high_priority.get('line')}")
-            Database().update_quantity_on_target_line_by_type_rune(high_priority.get('type'), target_item.name)
+            Database().update_quantity_on_target_line_by_type_rune(high_priority.get('type'), target_item.name, quantity)
 
         while waiting_click and bot_is_playing:
             if (datetime.datetime.now() - before_click_time).total_seconds() > 5:
@@ -54,5 +59,3 @@ class Action:
                     before_click_time = datetime.datetime.now()
             else:
                 time.sleep(0.001)
-
-

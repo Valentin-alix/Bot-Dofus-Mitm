@@ -18,6 +18,7 @@ class Sniffer:
         self.__buffer_client: Data = Data()
         self.__buffer_server: Data = Data()
         self.__temp_buffer: Data = Data()
+        self.__temp_buffer_from_local: bool = False
 
     @property
     def buffer_client(self) -> Data:
@@ -30,6 +31,14 @@ class Sniffer:
     @property
     def temp_buffer(self):
         return self.__temp_buffer
+
+    @property
+    def temp_buffer_from_local(self):
+        return self.__temp_buffer_from_local
+
+    @temp_buffer_from_local.setter
+    def temp_buffer_from_local(self, value):
+        self.__temp_buffer_from_local = value
 
     @temp_buffer.setter
     def temp_buffer(self, value):
@@ -48,18 +57,24 @@ class Sniffer:
         for packet in capture.sniff_continuously():
             try:
                 logging.info(f"Received_Packet : {packet.data.data}")
-                try:
-                    if hasattr(packet.tcp.analysis, 'lost_segment'):
-                        print('ok')
-                        print(f"lost segment : {packet.tcp.analysis.lost_segment}")
-                except Exception as e:
-                    print(e)
+                if hasattr(packet[packet.transport_layer], 'analysis_lost_segment'):
+                    self.temp_buffer = bytearray.fromhex(packet.data.data)
+                    if packet.ip.src == self.IP_LOCALE:
+                        self.temp_buffer_from_local = True
+                    else:
+                        self.temp_buffer_from_local = False
 
                 if packet.ip.src == self.IP_LOCALE:
                     self.buffer_client += bytearray.fromhex(packet.data.data)
+                    if len(self.temp_buffer) != 0 and self.temp_buffer_from_local:
+                        self.buffer_client += self.temp_buffer
+                        self.temp_buffer.__init__()
                     self.on_receive(self.buffer_client, True)
                 else:
                     self.buffer_server += bytearray.fromhex(packet.data.data)
+                    if len(self.temp_buffer) != 0 and not self.temp_buffer_from_local:
+                        self.buffer_server += self.temp_buffer
+                        self.temp_buffer.__init__()
                     self.on_receive(self.buffer_server, False)
             except AttributeError:
                 pass
@@ -89,8 +104,6 @@ class Sniffer:
                     logging.error("Can't get corresponding message to id")
                     print("Error Sniffer")
                     exit()
-                    # buffer.__init__()
-                    # break
                 if Database().select_message_by_id(message_id) == "ExchangeReadyMessage":
                     action.waiting_click = False
                 logging.info(f"Message :{Database().select_message_by_id(message_id)}")
