@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7701b342-ab0a-474d-a6d9-469b7bb2e9f8" name="Changes" comment="add possibility to calcul rune/tenta">
+    <list default="true" id="7701b342-ab0a-474d-a6d9-469b7bb2e9f8" name="Changes" comment="complete kama/tenta + FIX SNIFFER bug with lost segment">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bot/databases/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/databases/database.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bot/factory/action.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/factory/action.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bot/gui/interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/gui/interface.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bot/network/sniffer.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/network/sniffer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -443,7 +439,14 @@
       <option name="project" value="LOCAL" />
       <updated>1651143962710</updated>
     </task>
-    <option name="localTasksCounter" value="39" />
+    <task id="LOCAL-00039" summary="complete kama/tenta + FIX SNIFFER bug with lost segment">
+      <created>1651174284396</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1651174284396</updated>
+    </task>
+    <option name="localTasksCounter" value="40" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -463,6 +466,7 @@
     <MESSAGE value="correction sniffer" />
     <MESSAGE value="update" />
     <MESSAGE value="add possibility to calcul rune/tenta" />
-    <option name="LAST_COMMIT_MESSAGE" value="add possibility to calcul rune/tenta" />
+    <MESSAGE value="complete kama/tenta + FIX SNIFFER bug with lost segment" />
+    <option name="LAST_COMMIT_MESSAGE" value="complete kama/tenta + FIX SNIFFER bug with lost segment" />
   </component>
 </project>
