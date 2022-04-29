@@ -17,8 +17,6 @@ class Sniffer:
     def __init__(self):
         self.__buffer_client: Data = Data()
         self.__buffer_server: Data = Data()
-        self.__temp_buffer: Data = Data()
-        self.__temp_buffer_from_local: bool = False
 
     @property
     def buffer_client(self) -> Data:
@@ -27,22 +25,6 @@ class Sniffer:
     @property
     def buffer_server(self) -> Data:
         return self.__buffer_server
-
-    @property
-    def temp_buffer(self):
-        return self.__temp_buffer
-
-    @property
-    def temp_buffer_from_local(self):
-        return self.__temp_buffer_from_local
-
-    @temp_buffer_from_local.setter
-    def temp_buffer_from_local(self, value):
-        self.__temp_buffer_from_local = value
-
-    @temp_buffer.setter
-    def temp_buffer(self, value):
-        self.__temp_buffer = value
 
     @buffer_client.setter
     def buffer_client(self, value) -> None:
@@ -55,52 +37,23 @@ class Sniffer:
     def launch_sniffer(self) -> None:
         capture = pyshark.LiveCapture(bpf_filter=self.FILTER_DOFUS)
         for packet in capture.sniff_continuously():
-            try:
-                logging.info(f"Received_Packet : {packet.data.data}")
-                if hasattr(packet[packet.transport_layer], 'analysis_lost_segment'):
-                    logging.info("erreur lost segment")
-                    self.temp_buffer = bytearray.fromhex(packet.data.data)
-                    if packet.ip.src == self.IP_LOCALE:
-                        self.temp_buffer_from_local = True
-                        continue
-                    else:
-                        self.temp_buffer_from_local = False
-                        continue
+            self.on_receive(packet)
 
-                try:
-                    if hasattr(packet.tcp, 'segment_data'):
-                        if packet.ip.src == self.IP_LOCALE:
-                            self.buffer_client += str(packet.tcp.segment_data).replace(":", "")
-                            if len(self.temp_buffer) != 0 and self.temp_buffer_from_local:
-                                self.buffer_client += self.temp_buffer
-                                self.temp_buffer.__init__()
-                            self.on_receive(self.buffer_client, True)
-                        else:
-                            self.buffer_server += str(packet.tcp.segment_data).replace(":", "")
-                            if len(self.temp_buffer) != 0 and not self.temp_buffer_from_local:
-                                self.buffer_server += self.temp_buffer
-                                self.temp_buffer.__init__()
-                            self.on_receive(self.buffer_server, False)
-                except AttributeError:
-                    pass
-
-                if packet.ip.src == self.IP_LOCALE:
-                    self.buffer_client += bytearray.fromhex(packet.data.data)
-                    if len(self.temp_buffer) != 0 and self.temp_buffer_from_local:
-                        self.buffer_client += self.temp_buffer
-                        self.temp_buffer.__init__()
-                    self.on_receive(self.buffer_client, True)
-                else:
-                    self.buffer_server += bytearray.fromhex(packet.data.data)
-                    if len(self.temp_buffer) != 0 and not self.temp_buffer_from_local:
-                        self.buffer_server += self.temp_buffer
-                        self.temp_buffer.__init__()
-                    self.on_receive(self.buffer_server, False)
-            except AttributeError:
-                pass
+    def on_receive(self, packet):
+        try:
+            if packet.ip.src == self.IP_LOCALE:
+                logging.info(f"Data receive : {packet.data.data}")
+                self.buffer_client += bytearray.fromhex(packet.data.data)
+                self.from_raw(self.buffer_client, True)
+            else:
+                logging.info(f"Data receive : {packet.data.data}")
+                self.buffer_server += bytearray.fromhex(packet.data.data)
+                self.from_raw(self.buffer_server, False)
+        except AttributeError:
+            pass
 
     @staticmethod
-    def on_receive(buffer: Data, from_client: bool) -> None:
+    def from_raw(buffer: Data, from_client: bool) -> None:
         while True:
             try:
                 logging.info(f"{from_client} | Trying to extract these data : {buffer}")
@@ -115,7 +68,7 @@ class Sniffer:
                     logging.info("Message is NetworkDataContainerMessage! Uncompressing...")
                     new_buffer = Data(buffer.readByteArray())
                     new_buffer.uncompress()
-                    Sniffer.on_receive(new_buffer, from_client)
+                    Sniffer.from_raw(new_buffer, from_client)
                     break
 
                 len_data = int.from_bytes(buffer.read(header & 3), "big")
@@ -131,9 +84,7 @@ class Sniffer:
                 message = Message(message_id, data)
                 interpretation_thread = threading.Thread(target=deserialiser.interpretation, args=(message,))
                 interpretation_thread.start()
-
                 buffer.end()
-
             except IndexError:
                 buffer.reset_pos()
                 break

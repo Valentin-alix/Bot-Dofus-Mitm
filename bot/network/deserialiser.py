@@ -50,4 +50,4 @@ def interpretation(message: Message) -> None:
         # Si l'élément n'est pas une rune alors ->
         if effects_len > 1:
             interface.interface.clear_frame(interface.interface.root)
-            interface.interface.ajout_item_window()
+            interface.interface.ajout_item_page()
