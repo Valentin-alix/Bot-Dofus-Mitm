@@ -5,6 +5,7 @@ pipeline {
         stage('Checkout'){
             steps {
                 checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'cb9df461-f2e0-4d16-84da-880e1a9618e5', url: 'https://gitlab.com/Valentin-alix/bot_mitm']]])
+                sh "python --version"
             }
         }
         stage('Build'){
