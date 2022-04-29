@@ -23,7 +23,6 @@ class Interface:
 
     def __init__(self):
         self.__root: Tk = Tk()
-        self.__current_page_is_home = False
         self.__page: str = ""
         self.path_images = "static/assets/icones/"
 
@@ -44,26 +43,18 @@ class Interface:
         return self.__root
 
     @property
-    def page(self):
+    def page(self) -> str:
         return self.__page
 
     @page.setter
-    def page(self, value):
+    def page(self, value: str) -> None:
         self.__page = value
 
     @root.setter
-    def root(self, value):
+    def root(self, value: Tk) -> None:
         self.__root = value
 
-    @property
-    def current_page_is_home(self) -> bool:
-        return self.__current_page_is_home
-
-    @current_page_is_home.setter
-    def current_page_is_home(self, value: bool):
-        self.__current_page_is_home = value
-
-    def window(self):
+    def window(self) -> None:
         self.root.title(self.TITLE)
         self.root.iconbitmap(self.path_images + 'logo.ico')
         self.root.config(bg=self.BACKGROUND_COLOR)
@@ -79,7 +70,7 @@ class Interface:
         self.menu()
         self.home_page()
 
-    def menu(self):
+    def menu(self) -> None:
         self.frame_menu = Frame(self.root)
         bouton_home = Button(self.frame_menu, image=self.image_home,
                              command=lambda: [self.home_page()])
@@ -95,14 +86,14 @@ class Interface:
         bouton_bot_working.grid(row=2, column=0)
         self.frame_menu.grid()
 
-    def home_page(self):
+    def home_page(self) -> None:
         if self.page != "Home":
             self.clear_frame(self.root)
             frame_home = Frame(self.root, bg=self.BACKGROUND_COLOR)
             frame_home.grid(row=1, column=1)
             self.page = "Home"
 
-    def ajout_item_page(self):
+    def ajout_item_page(self) -> None:
         if self.page != "Ajout Item":
             self.clear_frame(self.root)
             frame_ajout_item = Frame(self.root, bg=self.BACKGROUND_COLOR)
@@ -149,7 +140,9 @@ class Interface:
 
                 button_valider = Button(frame_ajout_item, image=self.image_validate,
                                         command=lambda: [
-                                            Interface.add_or_update_item(item_edited, name_item_variable.get()), inserted_item.__init__(), self.clear_frame(self.root), self.ajout_item_page()])
+                                            Interface.add_or_update_item(item_edited, name_item_variable.get()),
+                                            inserted_item.__init__(), self.clear_frame(self.root),
+                                            self.ajout_item_page()])
                 button_valider.grid(row=0, column=5)
 
                 for i in range(len(inserted_item.runes)):
@@ -188,7 +181,7 @@ class Interface:
                                         inserted_item.runes[i].get("type"), skip_value])
             self.page = "Ajout Item"
 
-    def start_item_page(self):
+    def start_item_page(self) -> None:
         if self.page != "Start Item":
             self.clear_frame(self.root)
             frame_ajout_item = Frame(self.root, bg=self.BACKGROUND_COLOR)
@@ -227,7 +220,7 @@ class Interface:
                 bouton_play_item.grid(row=i + 1, column=4)
             self.page = "Start Item"
 
-    def edit_item_page(self, name: str):
+    def edit_item_page(self, name: str) -> None:
         if self.page != "Edit Item":
             self.clear_frame(self.root)
             old_name = name
@@ -309,7 +302,7 @@ class Interface:
                     [variable_value_rune, variable_line_rune, variable_column_rune, rune.get("type"), skip_value])
             self.page = "Edit Item"
 
-    def working_page(self, name):
+    def working_page(self, name: str) -> None:
         if self.page != "Working":
             self.clear_frame(self.root)
             action.bot_is_playing = True
@@ -358,20 +351,20 @@ class Interface:
                 label_column.grid(column=3, row=i + 2)
             self.page = "Working"
 
-    def convert_image_to_interface_image(self, path: str):
+    def convert_image_to_interface_image(self, path: str) -> ImageTk:
         image = Image.open(path)
         image = image.resize((self.ICON_SIZE, self.ICON_SIZE), Image.ANTIALIAS)
 
         return ImageTk.PhotoImage(image)
 
-    def clear_frame(self, frame):
+    def clear_frame(self, frame) -> None:
         for widget in frame.winfo_children():
             if widget != self.frame_menu:
                 widget.destroy()
         self.page = ""
 
     @staticmethod
-    def add_or_update_item(item_edited, name, old_name=""):
+    def add_or_update_item(item_edited: list, name: str, old_name: str = "") -> None:
         try:
             Database().delete_target_line_item(old_name),
             Database().drop_item_name(old_name),
@@ -386,5 +379,5 @@ class Interface:
             tkinter.messagebox.showwarning("Erreur valeur", "Veuillez remplir tout les champs ou utiliser \"skip\"")
 
     @staticmethod
-    def stop_bot():
+    def stop_bot() -> None:
         action.bot_is_playing = False
