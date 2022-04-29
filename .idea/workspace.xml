@@ -3,7 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="7701b342-ab0a-474d-a6d9-469b7bb2e9f8" name="Changes" comment="update">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Jenkinsfile" beforeDir="false" afterPath="$PROJECT_DIR$/Jenkinsfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Jenkinsfile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/tests/sniffer_tests.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/tests/sniffer_tests.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/setup/decompiler.bat" beforeDir="false" afterPath="$PROJECT_DIR$/setup/decompiler.bat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/setup/maj_protocol_id.py" beforeDir="false" afterPath="$PROJECT_DIR$/setup/maj_protocol_id.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,7 +39,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/setup/maj_protocol_id.py" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="preferences.externalTools" />
   </component>
   <component name="RecentsManager">
@@ -54,7 +57,7 @@
       <recent name="C:\Users\valen\Documents\Workspace\Python\bot_sniffer_click\bot_mitm\setup" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.bot_hdv">
+  <component name="RunManager" selected="Python.bot_fm">
     <configuration name="setup" type="MAKEFILE_TARGET_RUN_CONFIGURATION" factoryName="Makefile" temporary="true">
       <makefile filename="$PROJECT_DIR$/MakeFile" target="setup" workingDirectory="" arguments="">
         <envs />
@@ -124,14 +127,46 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="Python tests for sniffer_tests.TestSniffer" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="bot_mitm" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/bot/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;sniffer_tests.TestSniffer&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Python tests for sniffer_tests.TestSniffer.test_no_exception" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="bot_mitm" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/bot/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;sniffer_tests.TestSniffer.test_no_exception&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
     <list>
       <item itemvalue="Makefile Target.setup" />
       <item itemvalue="Python.bot_fm" />
       <item itemvalue="Python.bot_hdv" />
       <item itemvalue="Python.maj_protocol_id" />
+      <item itemvalue="Python tests.Python tests for sniffer_tests.TestSniffer" />
+      <item itemvalue="Python tests.Python tests for sniffer_tests.TestSniffer.test_no_exception" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.Python tests for sniffer_tests.TestSniffer.test_no_exception" />
+        <item itemvalue="Python tests.Python tests for sniffer_tests.TestSniffer" />
         <item itemvalue="Python.bot_fm" />
         <item itemvalue="Makefile Target.setup" />
       </list>
@@ -468,7 +503,28 @@
       <option name="project" value="LOCAL" />
       <updated>1651245601109</updated>
     </task>
-    <option name="localTasksCounter" value="47" />
+    <task id="LOCAL-00047" summary="update">
+      <created>1651246309575</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1651246309575</updated>
+    </task>
+    <task id="LOCAL-00048" summary="update">
+      <created>1651246428164</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1651246428164</updated>
+    </task>
+    <task id="LOCAL-00049" summary="update">
+      <created>1651246531264</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1651246531264</updated>
+    </task>
+    <option name="localTasksCounter" value="50" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
