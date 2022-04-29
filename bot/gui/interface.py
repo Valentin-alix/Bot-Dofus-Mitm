@@ -24,7 +24,7 @@ class Interface:
     def __init__(self):
         self.__root: Tk = Tk()
         self.__page: str = ""
-        self.path_images = "static/assets/icones/"
+        self.path_images = "../static/assets/icones/"
 
         self.image_home = self.convert_image_to_interface_image(self.path_images + "home.png")
         self.image_add_item = self.convert_image_to_interface_image(self.path_images + "add.png")

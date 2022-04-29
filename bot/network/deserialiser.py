@@ -39,15 +39,14 @@ def interpretation(message: Message) -> None:
         message.data.readVarUhShort()
 
         effects_len = message.data.readUnsignedShort()
-
-        for _ in range(effects_len):
-            message.data.readUnsignedShort()
-            action_id = message.data.readVarUhShort()
-            value = message.data.readVarUhShort()
-            interface.inserted_item.runes.append(
-                {"type": Database().select_type_rune_by_id(action_id), "value": value})
-
         # Si l'élément n'est pas une rune alors ->
         if effects_len > 1:
+            for _ in range(effects_len):
+                message.data.readUnsignedShort()
+                action_id = message.data.readVarUhShort()
+                value = message.data.readVarUhShort()
+                interface.inserted_item.runes.append(
+                    {"type": Database().select_type_rune_by_id(action_id), "value": value})
+
             interface.interface.clear_frame(interface.interface.root)
             interface.interface.ajout_item_page()

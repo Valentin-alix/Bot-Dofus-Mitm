@@ -1,8 +1,6 @@
 -Verify sniffer works completely
 
--Redefine pos clicks
-
--Redo Interface
+-Implement bot hdv
 
 -Make full deserialiser with regex, converting AS to Python
 
