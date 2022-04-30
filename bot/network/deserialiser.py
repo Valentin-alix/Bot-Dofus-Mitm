@@ -73,7 +73,10 @@ def interpretation(message: Message) -> None:
             for _ in range(prices_len):
                 price: int = message.data.readVarUhLong()
                 prices.append(price)
-        type_rune: str = Database().select_type_rune_by_id(action_id)
+        try:
+            type_rune: str = Database().select_type_rune_by_id(action_id)
+        except TypeError:
+            return
         if prices[2]:
             average_price: int = prices[2] / 100
         elif prices[1]:
