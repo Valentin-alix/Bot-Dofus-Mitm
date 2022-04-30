@@ -55,8 +55,8 @@ def interpretation(message: Message) -> None:
             "ExchangeTypesItemsExchangerDescriptionForUserMessage") and action.bot_hdv_is_playing:
         prices: list = []
         action_id: int = 0
-        message.data.readVarUhInt()
-        message.data.readInt()
+        object_gid = message.data.readVarUhInt()
+        object_type = message.data.readInt()
         item_type_description_len = message.data.readUnsignedShort()
         for _ in range(item_type_description_len):
             message.data.readVarUhInt()
@@ -85,6 +85,7 @@ def interpretation(message: Message) -> None:
             average_price: int = prices[0]
         else:
             return
-
+        if not Database().select_name_by_item_id(object_gid):
+            return
         Database().update_average_price_by_name(type_rune, average_price)
         Database().update_average_price_by_name(f"-{type_rune}", average_price)

@@ -129,6 +129,21 @@ class Database:
             request.execute("update rune set average_price = %s where name = %s", (average_price, name))
             self.connection.commit()
 
+    def update_item_id_by_name(self, name: str, item_id: int) -> None:
+        with self.connection.cursor() as request:
+            request.execute("update rune set item_id = %s where name = %s", (item_id, name))
+            self.connection.commit()
+
+    def select_name_by_item_id(self, item_id: int) -> str or bool:
+        try:
+            with self.connection.cursor() as request:
+                request.execute("select name from rune where item_id = %s",
+                                (item_id,))
+                results = request.fetchall()
+            return results
+        except TypeError:
+            return False
+
     def select_price_item_per_tenta(self, name: str) -> int:
         try:
             with self.connection.cursor() as request:
