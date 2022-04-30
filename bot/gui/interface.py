@@ -193,11 +193,11 @@ class Interface:
                 bouton_item = Button(frame_ajout_item, text=item, font=Fonts.baseFont, width=70)
                 bouton_item.grid(row=i + 1, column=0)
                 if Database().select_price_item_per_tenta(item) >= 100000:
-                    color = 'red'
+                    color: str = 'red'
                 elif Database().select_price_item_per_tenta(item) >= 50000:
-                    color = 'orange'
+                    color: str = 'orange'
                 else:
-                    color = 'green'
+                    color: str = 'green'
                 label_average_price = Button(frame_ajout_item, bg=color,
                                              text=Database().select_price_item_per_tenta(item),
                                              width=15

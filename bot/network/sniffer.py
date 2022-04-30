@@ -39,12 +39,12 @@ class Sniffer:
         for packet in capture.sniff_continuously():
             self.on_receive(packet)
 
-    def on_receive(self, packet):
+    def on_receive(self, packet) -> None:
         try:
             if packet.ip.src == self.IP_LOCALE:
                 try:
                     logging.warning(f"tcp segment : {packet.tcp.segment_data}")
-                    data = str(packet.tcp.segment_data).replace(":", "")
+                    data: str = str(packet.tcp.segment_data).replace(":", "")
                     self.buffer_client += bytearray.fromhex(data)
                     self.from_raw(self.buffer_client, True)
                     return
