@@ -42,10 +42,26 @@ class Sniffer:
     def on_receive(self, packet):
         try:
             if packet.ip.src == self.IP_LOCALE:
+                try:
+                    logging.warning(f"tcp segment : {packet.tcp.segment_data}")
+                    data = str(packet.tcp.segment_data).replace(":", "")
+                    self.buffer_client += bytearray.fromhex(data)
+                    self.from_raw(self.buffer_client, True)
+                    return
+                except AttributeError:
+                    pass
                 logging.info(f"Data receive : {packet.data.data}")
                 self.buffer_client += bytearray.fromhex(packet.data.data)
                 self.from_raw(self.buffer_client, True)
             else:
+                try:
+                    logging.warning(f"tcp segment : {packet.tcp.segment_data}")
+                    data = str(packet.tcp.segment_data).replace(":", "")
+                    self.buffer_server += bytearray.fromhex(data)
+                    self.from_raw(self.buffer_server, False)
+                    return
+                except AttributeError:
+                    pass
                 logging.info(f"Data receive : {packet.data.data}")
                 self.buffer_server += bytearray.fromhex(packet.data.data)
                 self.from_raw(self.buffer_server, False)

@@ -1,3 +1,3 @@
 -Verify sniffer works completely
 
--Implement bot hdv -> verify what is going on if we select pa runes
+-Implement bot hdv -> automaticates clicks -> gives info on excel file with graphic
