@@ -1,0 +1,52 @@
+INFO:root:Data receive : 70940000795a
+INFO:root:True | Trying to extract these data : Data(bytearray.fromhex('70940000795a'))
+INFO:root:Message :LeaveDialogRequestMessage
+INFO:root:True | Trying to extract these data : Data(bytearray.fromhex(''))
+INFO:root:Data receive : 0065020b0063b0
+INFO:root:False | Trying to extract these data : Data(bytearray.fromhex('0065020b0063b0'))
+INFO:root:Message :ExchangeLeaveMessage
+INFO:root:False | Trying to extract these data : Data(bytearray.fromhex('63b0'))
+INFO:root:Message :BasicNoOperationMessage
+INFO:root:False | Trying to extract these data : Data(bytearray.fromhex(''))
+INFO:root:Data receive : 48250000795d100003117d019a019e41a9e0080c000000
+INFO:root:True | Trying to extract these data : Data(bytearray.fromhex('48250000795d100003117d019a019e41a9e0080c000000'))
+INFO:root:Message :GameMapMovementRequestMessage
+INFO:root:True | Trying to extract these data : Data(bytearray.fromhex(''))
+INFO:root:Data receive : 8ed51a0007017d018c019a019b019c019d019e0005425c65338009000063b0
+INFO:root:False | Trying to extract these data : Data(bytearray.fromhex('8ed51a0007017d018c019a019b019c019d019e0005425c65338009000063b0'))
+INFO:root:Message :GameMapMovementMessage
+INFO:root:False | Trying to extract these data : Data(bytearray.fromhex('63b0'))
+INFO:root:Message :BasicNoOperationMessage
+INFO:root:False | Trying to extract these data : Data(bytearray.fromhex(''))
+INFO:root:Data receive : 8c4a0125050023efbfbc2031346defbfbc2031306defbfbc20386d35efbfbc20386d35efbfbc20336d35626da0dd0008343071356a36316642628c4420048000000a436d6f69786572696f73000008dcae0f0005003fee9101000526518a011e2651f0150f2651f6150f2651a2030c26517306ebb8f63501003fc5b801000626518a01152651fc15092651d2010626519a030526516f012651f5150793dbf63501003fdf40000726517dbe012651d6010b2651d2010b2651d5010b2651d3010b2651d4010b2651800101ecd22b01003fdf40000726517dbc012651d6010b2651d2010b2651d5010b2651d3010b2651d4010b2651800101e7d22b01003fdf40000726517d8b022651d6010d2651d3010d2651d4010d2651d2010c2651d5010c2651891600afa78d0501
+INFO:root:False | Trying to extract these data : Data(bytearray.fromhex('8c4a0125050023efbfbc2031346defbfbc2031306defbfbc20386d35efbfbc20386d35efbfbc20336d35626da0dd0008343071356a36316642628c4420048000000a436d6f69786572696f73000008dcae0f0005003fee9101000526518a011e2651f0150f2651f6150f2651a2030c26517306ebb8f63501003fc5b801000626518a01152651fc15092651d2010626519a030526516f012651f5150793dbf63501003fdf40000726517dbe012651d6010b2651d2010b2651d5010b2651d3010b2651d4010b2651800101ecd22b01003fdf40000726517dbc012651d6010b2651d2010b2651d5010b2651d3010b2651d4010b2651800101e7d22b01003fdf40000726517d8b022651d6010d2651d3010d2651d4010d2651d2010c2651d5010c2651891600afa78d0501'))
+INFO:root:Message :ChatServerWithObjectMessage
+INFO:root:False | Trying to extract these data : Data(bytearray.fromhex(''))
+INFO:root:Data receive : 359c00007961
+INFO:root:True | Trying to extract these data : Data(bytearray.fromhex('359c00007961'))
+INFO:root:Message :GameMapMovementConfirmMessage
+INFO:root:True | Trying to extract these data : Data(bytearray.fromhex(''))
+INFO:root:Data receive : 87290000796207bce91fc7dde942
+INFO:root:True | Trying to extract these data : Data(bytearray.fromhex('87290000796207bce91fc7dde942'))
+INFO:root:Message :InteractiveUseRequestMessage
+INFO:root:True | Trying to extract these data : Data(bytearray.fromhex(''))
+INFO:root:Data receive : 63b0
+INFO:root:False | Trying to extract these data : Data(bytearray.fromhex('63b0'))
+INFO:root:Message :BasicNoOperationMessage
+INFO:root:False | Trying to extract these data : Data(bytearray.fromhex(''))
+INFO:root:Data receive : 4bfd0da480b8a6990ebce91fb801000115ad0900a480b8a6990e0000
+INFO:root:False | Trying to extract these data : Data(bytearray.fromhex('4bfd0da480b8a6990ebce91fb801000115ad0900a480b8a6990e0000'))
+INFO:root:Message :InteractiveUsedMessage
+INFO:root:False | Trying to extract these data : Data(bytearray.fromhex('15ad0900a480b8a6990e0000'))
+INFO:root:Message :JobMultiCraftAvailableSkillsMessage
+INFO:root:False | Trying to extract these data : Data(bytearray.fromhex(''))
+INFO:root:Data receive : 8be50841a95818060000006d4d0a427807c3c6701000007833fd02000063b0
+INFO:root:False | Trying to extract these data : Data(bytearray.fromhex('8be50841a95818060000006d4d0a427807c3c6701000007833fd02000063b0'))
+INFO:root:Message :CurrentMapMessage
+INFO:root:False | Trying to extract these data : Data(bytearray.fromhex('6d4d0a427807c3c6701000007833fd02000063b0'))
+INFO:root:Message :BasicTimeMessage
+INFO:root:False | Trying to extract these data : Data(bytearray.fromhex('33fd02000063b0'))
+INFO:root:Message :ListMapNpcsQuestStatusUpdateMessage
+INFO:root:False | Trying to extract these data : Data(bytearray.fromhex('63b0'))
+INFO:root:Message :BasicNoOperationMessage
+INFO:root:False | Trying to extract these data : Data(bytearray.fromhex(''))
