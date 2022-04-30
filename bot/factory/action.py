@@ -7,7 +7,8 @@ from bot.databases.database import Database
 from bot.factory.click import Click
 from bot.models.item import Item
 
-bot_is_playing: bool = False
+bot_fm_is_playing: bool = False
+bot_hdv_is_playing: bool = False
 target_item: Item = Item()
 actual_item: Item = Item()
 click_item: Click = Click()
@@ -18,7 +19,7 @@ class Action:
     @staticmethod
     def click_based_on_values() -> None:
         global waiting_click
-        global bot_is_playing
+        global bot_fm_is_playing
 
         priorities: list[dict] = []
         for i, target_rune, in enumerate(target_item.runes):
@@ -49,7 +50,7 @@ class Action:
             logging.info(f"Click {high_priority.get('column')} {high_priority.get('line')}")
             Database().update_quantity_on_target_line_by_type_rune(high_priority.get('type'), target_item.name, quantity)
 
-        while waiting_click and bot_is_playing:
+        while waiting_click and bot_fm_is_playing:
             if (datetime.datetime.now() - before_click_time).total_seconds() > 5:
                 if high_priority.get("value") >= 1:
                     click_item.click_exo()

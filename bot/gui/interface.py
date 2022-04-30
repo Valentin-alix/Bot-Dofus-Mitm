@@ -192,8 +192,14 @@ class Interface:
             for i, item in enumerate(items):
                 bouton_item = Button(frame_ajout_item, text=item, font=Fonts.baseFont, width=70)
                 bouton_item.grid(row=i + 1, column=0)
-
-                label_average_price = Button(frame_ajout_item, text=Database().select_price_item_per_tenta(item),
+                if Database().select_price_item_per_tenta(item) >= 100000:
+                    color = 'red'
+                elif Database().select_price_item_per_tenta(item) >= 50000:
+                    color = 'orange'
+                else:
+                    color = 'green'
+                label_average_price = Button(frame_ajout_item, bg=color,
+                                             text=Database().select_price_item_per_tenta(item),
                                              width=15
                                              )
                 label_average_price.grid(row=i + 1, column=1)
@@ -305,7 +311,7 @@ class Interface:
     def working_page(self, name: str) -> None:
         if self.page != "Working":
             self.clear_frame(self.root)
-            action.bot_is_playing = True
+            action.bot_fm_is_playing = True
 
             action.target_item = Database().select_item_by_name(name)
 
@@ -380,4 +386,4 @@ class Interface:
 
     @staticmethod
     def stop_bot() -> None:
-        action.bot_is_playing = False
+        action.bot_fm_is_playing = False
