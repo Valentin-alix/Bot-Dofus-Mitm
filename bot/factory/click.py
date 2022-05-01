@@ -13,7 +13,7 @@ class Click:
     NICKNAME: str = "Ezrealeeuu"
     TIME_CLICK: float = 0.1
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.__window_name: str = ""
         self.find_windows_name()
 
@@ -54,3 +54,10 @@ class Click:
                     self.windows_name = win32gui.GetWindowText(hwnd)
 
         win32gui.EnumWindows(win_enum_handler, None)
+
+    def scroll(self) -> None:
+        # FIXME take children window instead of dofus window
+        hwnd = win32gui.FindWindow(None, self.windows_name)
+        test_command = win32api.MAKELONG(300, 300)  # arg[0] key down arguments (CTRL);  arg[1] length of scroll;
+        test_cords = win32api.MAKELONG(200, 200)
+        win32api.SendMessage(hwnd, win32con.WM_MOUSEWHEEL, test_command, test_cords)

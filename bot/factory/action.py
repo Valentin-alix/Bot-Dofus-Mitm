@@ -1,4 +1,3 @@
-import datetime
 import logging
 import time
 from operator import itemgetter
@@ -34,7 +33,7 @@ class Action:
 
         waiting_click = True
 
-        before_click_time: datetime = datetime.datetime.now()
+        before_click_time: float = time.perf_counter()
 
         if high_priority.get("value") >= 1:
             click_item.click_exo()
@@ -48,15 +47,20 @@ class Action:
                 quantity = 10
             click_item.click_rune(high_priority.get("column"), high_priority.get("line"))
             logging.info(f"Click {high_priority.get('column')} {high_priority.get('line')}")
-            Database().update_quantity_on_target_line_by_type_rune(high_priority.get('type'), target_item.name, quantity)
+            Database().update_quantity_on_target_line_by_type_rune(high_priority.get('type'), target_item.name,
+                                                                   quantity)
 
         while waiting_click and bot_fm_is_playing:
-            if (datetime.datetime.now() - before_click_time).total_seconds() > 5:
+            if (time.perf_counter() - before_click_time) > 5.0:
                 if high_priority.get("value") >= 1:
                     click_item.click_exo()
-                    before_click_time = datetime.datetime.now()
+                    before_click_time = time.perf_counter()
                 else:
                     click_item.click_rune(high_priority.get("column"), high_priority.get("line"))
-                    before_click_time = datetime.datetime.now()
+                    before_click_time = time.perf_counter()
             else:
                 time.sleep(0.001)
+
+    @staticmethod
+    def click_hdv_runes() -> None:
+        pass

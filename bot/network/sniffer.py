@@ -14,7 +14,7 @@ class Sniffer:
     FILTER_DOFUS: str = 'tcp port 5555'
     IP_LOCALE: str = '192.168.1.21'
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.__buffer_client: Data = Data()
         self.__buffer_server: Data = Data()
 
@@ -91,8 +91,8 @@ class Sniffer:
 
                 if not Database().select_message_by_id(message_id):
                     logging.error("Can't get corresponding message to id")
-                    print("Error Sniffer")
-                    exit()
+                    print("Error Sniffer, réinitialisation buffer...")
+                    buffer.__init__()
                 if Database().select_message_by_id(message_id) == "ExchangeReadyMessage":
                     action.waiting_click = False
                 logging.info(f"Message :{Database().select_message_by_id(message_id)}")

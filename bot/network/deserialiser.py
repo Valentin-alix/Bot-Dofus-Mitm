@@ -70,9 +70,7 @@ def interpretation(message: Message) -> None:
 
             prices_len: int = message.data.readUnsignedShort()
 
-            for _ in range(prices_len):
-                price: int = message.data.readVarUhLong()
-                prices.append(price)
+            [prices.append(message.data.readVarUhLong()) for _ in range(prices_len)]
         try:
             type_rune: str = Database().select_type_rune_by_id(action_id)
         except TypeError:
