@@ -1,6 +1,6 @@
 import threading
 
-from bot.factory import action
+from bot.factory import action, graphic
 from bot.network.sniffer import Sniffer
 from static.assets.colors import Colors
 

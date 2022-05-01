@@ -2,6 +2,7 @@ import logging
 import threading
 
 import pyshark
+from requests import get
 
 from bot.databases.database import Database
 from bot.factory import action
@@ -12,7 +13,7 @@ from bot.network import deserialiser
 
 class Sniffer:
     FILTER_DOFUS: str = 'tcp port 5555'
-    IP_LOCALE: str = '192.168.1.21'
+    IP_LOCALE: str = '192.168.1.21' if get('https://api.ipify.org').content.decode('utf8') == '2.14.150.129' else '192.168.184.171'
 
     def __init__(self) -> None:
         self.__buffer_client: Data = Data()

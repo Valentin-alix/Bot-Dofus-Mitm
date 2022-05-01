@@ -1,7 +1,6 @@
 import datetime
 import logging
 import threading
-
 from bot.gui import interface
 from bot.gui.interface import Interface
 from network.sniffer import Sniffer
