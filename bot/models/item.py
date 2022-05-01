@@ -1,5 +1,5 @@
 class Item:
-    def __init__(self):
+    def __init__(self) -> None:
         self.__name: str = ""
         self.__runes: list[dict] = []
 
