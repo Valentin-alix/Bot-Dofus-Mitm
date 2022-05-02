@@ -1,9 +1,8 @@
 import logging
+import socket
 import threading
 
 import pyshark
-from requests import get
-
 from bot.databases.database import Database
 from bot.factory import action
 from bot.models.data import Data
@@ -11,9 +10,23 @@ from bot.models.message import Message
 from bot.network import deserialiser
 
 
+def get_local_ip():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.settimeout(0)
+    try:
+        # doesn't even have to be reachable
+        s.connect(('10.255.255.255', 1))
+        ip_local = s.getsockname()[0]
+    except Exception:
+        ip_local = '127.0.0.1'
+    finally:
+        s.close()
+    return ip_local
+
+
 class Sniffer:
     FILTER_DOFUS: str = 'tcp port 5555'
-    IP_LOCALE: str = '192.168.1.21' if get('https://api.ipify.org').content.decode('utf8') == '2.14.150.129' else '192.168.184.171'
+    IP_LOCALE = get_local_ip()
 
     def __init__(self) -> None:
         self.__buffer_client: Data = Data()
@@ -94,6 +107,7 @@ class Sniffer:
                     logging.error("Can't get corresponding message to id")
                     print("Error Sniffer, réinitialisation buffer...")
                     buffer.__init__()
+                    break
                 if Database().select_message_by_id(message_id) == "ExchangeReadyMessage":
                     action.waiting_click = False
                 logging.info(f"Message :{Database().select_message_by_id(message_id)}")

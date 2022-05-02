@@ -15,7 +15,6 @@ class Click:
 
     def __init__(self) -> None:
         self.__window_name: str = ""
-        self.find_windows_name()
 
     @property
     def windows_name(self) -> str:

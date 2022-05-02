@@ -17,6 +17,8 @@ waiting_click: bool = False
 class Action:
     @staticmethod
     def click_based_on_values() -> None:
+        if click_item.windows_name == "":
+            click_item.find_windows_name()
         global waiting_click
         global bot_fm_is_playing
 

@@ -1,5 +1,7 @@
+import datetime
+
 from bot.databases.database import Database
-from bot.factory import action
+from bot.factory import action, graphic
 from bot.factory.action import Action
 from bot.gui import interface
 from bot.models.message import Message
@@ -83,7 +85,8 @@ def interpretation(message: Message) -> None:
             average_price: int = prices[0]
         else:
             return
-        if not Database().select_name_by_item_id(object_gid):
+        if not Database().select_name_by_item_id(object_gid) or graphic.check_if_same_minutes(type_rune):
             return
+        graphic.maj_csv_value(datetime.datetime.now(), type_rune, average_price)
         Database().update_average_price_by_name(type_rune, average_price)
         Database().update_average_price_by_name(f"-{type_rune}", average_price)
