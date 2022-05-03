@@ -1,7 +1,7 @@
 import logging
 import threading
 
-from bot.factory import action, graphic, click
+from bot.factory import action, hdv_graphic, click
 from bot.network.sniffer import Sniffer
 
 if __name__ == '__main__':
@@ -17,4 +17,4 @@ if __name__ == '__main__':
     except Exception as e:
         exit()
     finally:
-        graphic.test_graphic()
+        hdv_graphic.save_graphic()

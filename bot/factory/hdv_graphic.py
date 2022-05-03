@@ -5,7 +5,7 @@ import numpy as np
 import pandas
 
 
-filename: str = 'C:\\Users\\valen\\Documents\\Workspace\\Python\\bot_mitm\\static\\resources\\prices_runes.csv'
+filename: str = '..\\static\\resources\\prices_runes.csv'
 
 
 def maj_csv_value(time: datetime.date, type_rune: str, cost: int) -> None:
@@ -29,7 +29,7 @@ def check_if_same_day(type_rune: str) -> bool:
     return False
 
 
-def test_graphic() -> None:
+def save_graphic() -> None:
     data_frame = pandas.read_csv(filename, sep=';')
     data_frame_test = data_frame.copy()
     data_frame_test.drop_duplicates(subset="Type", keep='first', inplace=True)
@@ -43,10 +43,5 @@ def test_graphic() -> None:
     ax.legend(loc='best')
     plt.legend(loc=2, prop={'size': 3.5})
     plt.yticks(np.arange(0.0, 45000.0, 2000.0))
-    plt.savefig(fname="C:\\Users\\valen\\Documents\\Workspace\\Python\\bot_mitm\\static\\assets\\images"
-                      "\\cost_rune_graph.png", dpi=130)
+    plt.savefig(fname="..\\static\\assets\\images\\cost_rune_graph.png", dpi=130)
     plt.close()
-
-
-if __name__ == "__main__":
-    pass

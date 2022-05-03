@@ -14,7 +14,7 @@ actual_item: Item = Item()
 waiting_click: bool = False
 
 
-def click_based_on_values() -> None:
+def click_fm() -> None:
     if click.window_name == "":
         click.find_windows_name()
     global waiting_click

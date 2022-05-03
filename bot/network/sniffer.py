@@ -7,8 +7,7 @@ import pyshark
 from bot.databases.database import Database
 from bot.factory import action
 from bot.models.data import Data
-from bot.models.message import Message
-from bot.network import deserialiser
+from bot.network.message import Message
 
 
 def get_local_ip() -> str:
@@ -96,8 +95,8 @@ class Sniffer:
                 logging.info(f"Message :{Database().select_message_by_id(message_id)}")
                 data = Data(buffer.read(len_data))
                 message = Message(message_id, data)
-                interpretation_thread = threading.Thread(target=deserialiser.interpretation, args=(message,))
-                interpretation_thread.start()
+                event_thread = threading.Thread(target=message.event())
+                event_thread.start()
                 buffer.end()
             except IndexError:
                 buffer.reset_pos()

@@ -6,16 +6,12 @@ from static import constant
 
 class Database:
     def __init__(self) -> None:
-        self.__connection = mysql.connector.connect(
+        self.connection = mysql.connector.connect(
             host=constant.HOST,
             user=constant.LOGIN,
             password=constant.PASSWORD,
             database=constant.DATABASE_NAME,
         )
-
-    @property
-    def connection(self):
-        return self.__connection
 
     def close(self) -> None:
         self.connection.close()
