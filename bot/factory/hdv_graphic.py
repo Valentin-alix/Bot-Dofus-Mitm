@@ -1,4 +1,5 @@
 import datetime
+import logging
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -30,6 +31,7 @@ def check_if_same_day(type_rune: str) -> bool:
 
 
 def save_graphic() -> None:
+    logging.info(msg="Download graphic...")
     data_frame = pandas.read_csv(filename, sep=';')
     data_frame_test = data_frame.copy()
     data_frame_test.drop_duplicates(subset="Type", keep='first', inplace=True)
@@ -45,3 +47,4 @@ def save_graphic() -> None:
     plt.yticks(np.arange(0.0, 45000.0, 2000.0))
     plt.savefig(fname="..\\static\\assets\\images\\cost_rune_graph.png", dpi=130)
     plt.close()
+    logging.info(msg="Done.")

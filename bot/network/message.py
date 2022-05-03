@@ -89,8 +89,8 @@ class Message:
                 average_price: int = prices[0]
             else:
                 return
-            if not Database().select_name_by_item_id(object_gid) or graphic.check_if_same_day(type_rune):
+            if not Database().select_name_by_item_id(object_gid) or hdv_graphic.check_if_same_day(type_rune):
                 return
-            graphic.maj_csv_value(datetime.date.today(), type_rune, average_price)
+            hdv_graphic.maj_csv_value(datetime.date.today(), type_rune, average_price)
             Database().update_average_price_by_name(type_rune, average_price)
             Database().update_average_price_by_name(f"-{type_rune}", average_price)
