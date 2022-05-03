@@ -2,7 +2,7 @@ import datetime
 
 from bot.databases.database import Database
 from bot.factory import action, graphic
-from bot.gui import interface
+from bot.gui import ui
 from bot.models.message import Message
 
 ExchangeObjectAddedMessage: int = Database().select_id_by_message("ExchangeObjectAddedMessage")
@@ -31,7 +31,7 @@ def interpretation(message: Message) -> None:
         action.click_based_on_values()
 
     elif message.message_id == ExchangeObjectAddedMessage and not action.bot_fm_is_playing:
-        interface.inserted_item.__init__()
+        ui.inserted_item.__init__()
         # Ci-dessous remote
         message.data.readBoolean()
         # Ci-dessous position
@@ -46,11 +46,11 @@ def interpretation(message: Message) -> None:
                 message.data.readUnsignedShort()
                 action_id = message.data.readVarUhShort()
                 value = message.data.readVarUhShort()
-                interface.inserted_item.runes.append(
+                ui.inserted_item.runes.append(
                     {"type": Database().select_type_rune_by_id(action_id), "value": value})
 
-            interface.interface.clear_frame(interface.interface.root)
-            interface.interface.ajout_item_page()
+            ui.interface.clear_frame(ui.interface)
+            ui.interface.ajout_item_page()
 
     elif message.message_id == Database().select_id_by_message(
             "ExchangeTypesItemsExchangerDescriptionForUserMessage") and action.bot_hdv_is_playing:

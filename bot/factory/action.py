@@ -5,6 +5,7 @@ from operator import itemgetter
 from bot.databases.database import Database
 from bot.factory import click
 from bot.models.item import Item
+from static import constant
 
 bot_fm_is_playing: bool = False
 bot_hdv_is_playing: bool = False
@@ -62,8 +63,8 @@ def click_based_on_values() -> None:
 
 
 def click_hdv_runes() -> None:
-    for scroll_y in click.SCROLL_HDV:
-        for line in click.LINES_HDV:
+    for scroll_y in constant.SCROLL_HDV:
+        for line in constant.LINES_HDV:
             click.click_auto(891, line)
             time.sleep(1)
             click.click_auto(891, line)

@@ -1,20 +1,16 @@
 import mysql.connector
 
 from bot.models.item import Item
+from static import constant
 
 
 class Database:
-    HOST: str = "localhost"
-    LOGIN: str = "root"
-    PASSWORD: str = ""
-    DATABASE_NAME: str = "bot_sniffer"
-
     def __init__(self) -> None:
         self.__connection = mysql.connector.connect(
-            host=self.HOST,
-            user=self.LOGIN,
-            password=self.PASSWORD,
-            database=self.DATABASE_NAME,
+            host=constant.HOST,
+            user=constant.LOGIN,
+            password=constant.PASSWORD,
+            database=constant.DATABASE_NAME,
         )
 
     @property

@@ -1,7 +1,8 @@
 import logging
 import socket
 import threading
-
+from dataclasses import dataclass
+from static import constant
 import pyshark
 from bot.databases.database import Database
 from bot.factory import action
@@ -24,38 +25,20 @@ def get_local_ip() -> str:
     return ip_local
 
 
+@dataclass
 class Sniffer:
-    FILTER_DOFUS: str = 'tcp port 5555'
-    IP_LOCALE = get_local_ip()
-
-    def __init__(self) -> None:
-        self.__buffer_client: Data = Data()
-        self.__buffer_server: Data = Data()
-
-    @property
-    def buffer_client(self) -> Data:
-        return self.__buffer_client
-
-    @property
-    def buffer_server(self) -> Data:
-        return self.__buffer_server
-
-    @buffer_client.setter
-    def buffer_client(self, value) -> None:
-        self.__buffer_client = value
-
-    @buffer_server.setter
-    def buffer_server(self, value) -> None:
-        self.__buffer_server = value
+    buffer_client: Data = Data()
+    buffer_server: Data = Data()
+    ip_local: str = get_local_ip()
 
     def launch_sniffer(self) -> None:
-        capture = pyshark.LiveCapture(bpf_filter=self.FILTER_DOFUS)
+        capture = pyshark.LiveCapture(bpf_filter=constant.FILTER_DOFUS)
         for packet in capture.sniff_continuously():
             self.on_receive(packet)
 
     def on_receive(self, packet) -> None:
         try:
-            if packet.ip.src == self.IP_LOCALE:
+            if packet.ip.src == self.ip_local:
                 try:
                     logging.warning(f"tcp segment : {packet.tcp.segment_data}")
                     data: str = str(packet.tcp.segment_data).replace(":", "")
