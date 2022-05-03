@@ -4,7 +4,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas
 
-filename: str = 'factory\\resources\\prices_runes.csv'
+
+filename: str = 'C:\\Users\\valen\\Documents\\Workspace\\Python\\bot_mitm\\static\\resources\\prices_runes.csv'
 
 
 def maj_csv_value(time: datetime.date, type_rune: str, cost: int) -> None:
@@ -42,9 +43,10 @@ def test_graphic() -> None:
     ax.legend(loc='best')
     plt.legend(loc=2, prop={'size': 3.5})
     plt.yticks(np.arange(0.0, 45000.0, 2000.0))
-    plt.savefig(fname="../static/assets/images/cost_rune_graph.png")
+    plt.savefig(fname="C:\\Users\\valen\\Documents\\Workspace\\Python\\bot_mitm\\static\\assets\\images"
+                      "\\cost_rune_graph.png", dpi=130)
     plt.close()
 
 
 if __name__ == "__main__":
-    test_graphic()
+    pass

@@ -1,13 +1,19 @@
-from bot.factory import action, graphic
+import logging
+import threading
+
+from bot.factory import action, graphic, click
 from bot.network.sniffer import Sniffer
-from static.assets.colors import Colors
 
 if __name__ == '__main__':
+    logging.basicConfig(filename="../logs/bot_fm.log", level=logging.INFO)
+    click.find_windows_name()
+    action.bot_hdv_is_playing = True
+    sniffer = Sniffer()
+    click_thread = threading.Thread(target=action.click_hdv_runes())
+    sniffer_thread = threading.Thread(target=sniffer.launch_sniffer())
     try:
-        print(Colors.WARNING + "Not fully implemented yet !" + Colors.RESET)
-        action.bot_hdv_is_playing = True
-        sniffer = Sniffer()
-        sniffer.launch_sniffer()
+        click_thread.start()
+        sniffer_thread.start()
     except Exception as e:
         exit()
     finally:

@@ -2,7 +2,6 @@ import datetime
 
 from bot.databases.database import Database
 from bot.factory import action, graphic
-from bot.factory.action import Action
 from bot.gui import interface
 from bot.models.message import Message
 
@@ -29,7 +28,7 @@ def interpretation(message: Message) -> None:
             action.actual_item.runes.append(
                 {"type": Database().select_type_rune_by_id(action_id), "value": value})
 
-        Action().click_based_on_values()
+        action.click_based_on_values()
 
     elif message.message_id == ExchangeObjectAddedMessage and not action.bot_fm_is_playing:
         interface.inserted_item.__init__()
@@ -55,6 +54,7 @@ def interpretation(message: Message) -> None:
 
     elif message.message_id == Database().select_id_by_message(
             "ExchangeTypesItemsExchangerDescriptionForUserMessage") and action.bot_hdv_is_playing:
+        action.waiting_click = False
         prices: list = []
         action_id: int = 0
         object_gid = message.data.readVarUhInt()

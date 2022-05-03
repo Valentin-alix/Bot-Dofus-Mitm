@@ -4,59 +4,54 @@ import win32gui
 import win32api
 import win32con
 
+LINES_POS: tuple = (251, 282, 313, 344, 375, 406, 437, 468, 499, 530, 561, 592, 623)
+COLUMNS_POS: tuple = (891, 930, 969)
+LINES_HDV: tuple = (160, 195, 230, 265, 300, 335, 370, 405, 440, 475, 510, 545, 580, 615)
+SCROLL_HDV: tuple = (220, 290, 360, 430, 500, 570, 640)
+POS_EXO_RUNE = win32api.MAKELONG(1050, 150)
+FUSION_RUNE_EXO = win32api.MAKELONG(800, 170)
+NICKNAME: str = "Ezrealeeuu"
+TIME_CLICK: float = 0.1
+window_name: str = ""
 
-class Click:
-    LINES_POS: tuple = (251, 282, 313, 344, 375, 406, 437, 468, 499, 530, 561, 592, 623)
-    COLUMNS_POS: tuple = (891, 930, 969)
-    POS_EXO_RUNE = win32api.MAKELONG(1050, 150)
-    FUSION_RUNE_EXO = win32api.MAKELONG(800, 170)
-    NICKNAME: str = "Ezrealeeuu"
-    TIME_CLICK: float = 0.1
 
-    def __init__(self) -> None:
-        self.__window_name: str = ""
+def click_auto(x: int, y: int) -> None:
+    global window_name
+    time.sleep(TIME_CLICK)
+    hwnd = win32gui.FindWindow(None, window_name)
+    l_param = win32api.MAKELONG(x, y)
+    win32gui.SendMessage(hwnd, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON, l_param)
+    win32gui.SendMessage(hwnd, win32con.WM_LBUTTONUP, None, l_param)
 
-    @property
-    def windows_name(self) -> str:
-        return self.__window_name
 
-    @windows_name.setter
-    def windows_name(self, value: str) -> None:
-        self.__window_name = value
+def click_rune(num_column: int, num_line: int) -> None:
+    global COLUMNS_POS
+    global LINES_POS
+    click_auto(COLUMNS_POS[num_column], LINES_POS[num_line])
 
-    def click_auto(self, x: int, y: int) -> None:
-        time.sleep(self.TIME_CLICK)
-        hwnd = win32gui.FindWindow(None, self.windows_name)
-        l_param = win32api.MAKELONG(x, y)
-        win32gui.SendMessage(hwnd, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON, l_param)
-        win32gui.SendMessage(hwnd, win32con.WM_LBUTTONUP, None, l_param)
 
-    def click_rune(self, num_column: int, num_line: int) -> None:
-        self.click_auto(self.COLUMNS_POS[num_column], self.LINES_POS[num_line])
+def click_exo() -> None:
+    global window_name
+    global POS_EXO_RUNE
+    global FUSION_RUNE_EXO
+    hwnd = win32gui.FindWindow(None, window_name)
+    win32gui.SendMessage(hwnd, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON, POS_EXO_RUNE)
+    win32gui.SendMessage(hwnd, win32con.WM_LBUTTONUP, None, POS_EXO_RUNE)
+    win32gui.SendMessage(hwnd, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON, POS_EXO_RUNE)
+    win32gui.SendMessage(hwnd, win32con.WM_LBUTTONUP, None, POS_EXO_RUNE)
 
-    def click_exo(self) -> None:
-        hwnd = win32gui.FindWindow(None, self.windows_name)
-        win32gui.SendMessage(hwnd, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON, self.POS_EXO_RUNE)
-        win32gui.SendMessage(hwnd, win32con.WM_LBUTTONUP, None, self.POS_EXO_RUNE)
-        win32gui.SendMessage(hwnd, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON, self.POS_EXO_RUNE)
-        win32gui.SendMessage(hwnd, win32con.WM_LBUTTONUP, None, self.POS_EXO_RUNE)
+    time.sleep(0.5)
 
-        time.sleep(0.5)
+    win32gui.SendMessage(hwnd, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON, FUSION_RUNE_EXO)
+    win32gui.SendMessage(hwnd, win32con.WM_LBUTTONUP, None, FUSION_RUNE_EXO)
 
-        win32gui.SendMessage(hwnd, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON, self.FUSION_RUNE_EXO)
-        win32gui.SendMessage(hwnd, win32con.WM_LBUTTONUP, None, self.FUSION_RUNE_EXO)
 
-    def find_windows_name(self) -> None:
-        def win_enum_handler(hwnd, ctx):
-            if win32gui.IsWindowVisible(hwnd):
-                if self.NICKNAME in win32gui.GetWindowText(hwnd):
-                    self.windows_name = win32gui.GetWindowText(hwnd)
+def find_windows_name() -> None:
+    def win_enum_handler(hwnd, ctx):
+        global window_name
+        global NICKNAME
+        if win32gui.IsWindowVisible(hwnd):
+            if NICKNAME in win32gui.GetWindowText(hwnd):
+                window_name = win32gui.GetWindowText(hwnd)
 
-        win32gui.EnumWindows(win_enum_handler, None)
-
-    def scroll(self) -> None:
-        # FIXME take children window instead of dofus window
-        hwnd = win32gui.FindWindow(None, self.windows_name)
-        test_command = win32api.MAKELONG(300, 300)
-        test_cords = win32api.MAKELONG(200, 200)
-        win32api.SendMessage(hwnd, win32con.WM_MOUSEWHEEL, test_command, test_cords)
+    win32gui.EnumWindows(win_enum_handler, None)

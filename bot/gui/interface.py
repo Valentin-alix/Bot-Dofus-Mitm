@@ -104,7 +104,7 @@ class Interface:
             frame_ajout_item.grid(row=1, column=1)
             if not inserted_item.runes:
                 label_text_attente = Label(frame_ajout_item, text="Insérer un Item dans l'atelier de forgemagie",
-                                           font=(Fonts.baseFont, 10), width=90, height=35,
+                                           font=(Fonts.baseFont, 10), width=104, height=35,
                                            bg=Colors.background_color, fg=Colors.foreground_color, relief="ridge")
                 label_text_attente.grid(row=0, column=0)
             else:
@@ -194,7 +194,7 @@ class Interface:
             items = Database().select_all_name_items()
 
             for i, item in enumerate(items):
-                bouton_item = Button(frame_ajout_item, text=item, font=Fonts.baseFont, width=70)
+                bouton_item = Button(frame_ajout_item, text=item, font=Fonts.baseFont, width=88)
                 bouton_item.grid(row=i + 1, column=0)
                 if Database().select_price_item_per_tenta(item) >= 100000:
                     color: str = 'red'

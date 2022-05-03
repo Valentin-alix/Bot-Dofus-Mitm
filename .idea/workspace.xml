@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7701b342-ab0a-474d-a6d9-469b7bb2e9f8" name="Changes" comment="fix">
+    <list default="true" id="7701b342-ab0a-474d-a6d9-469b7bb2e9f8" name="Changes" comment="update">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/bot_fm.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/bot_fm.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bot/bot_hdv.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/bot_hdv.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bot/databases/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/databases/database.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/factory/action.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/factory/action.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bot/factory/click.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/factory/click.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bot/factory/graphic.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/factory/graphic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bot/factory/resources/prices_runes.csv" beforeDir="false" afterPath="$PROJECT_DIR$/bot/factory/resources/prices_runes.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/factory/resources/prices_runes.csv" beforeDir="false" afterPath="$PROJECT_DIR$/static/resources/prices_runes.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bot/gui/interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/gui/interface.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bot/network/sniffer.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/network/sniffer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/network/deserialiser.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/network/deserialiser.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,7 +43,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/bot/gui" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../pyd2bot" />
     <property name="settings.editor.selected.configurable" value="RainbowCSV.Settings" />
   </component>
   <component name="RecentsManager">
@@ -54,14 +55,14 @@
       <recent name="C:\Users\valen\Documents\Workspace\Python\bot_mitm\assets\sound" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\valen\Documents\Workspace\Python\bot_mitm\static" />
       <recent name="C:\Users\valen\Documents\Workspace\Python\bot_mitm\logs" />
       <recent name="C:\Users\valen\Documents\Workspace\Python\bot_mitm\bot\factory\resources" />
       <recent name="C:\Users\valen\Documents\Workspace\Python\bot_mitm\bot" />
       <recent name="C:\Users\valen\Documents\Workspace\Python\bot_sniffer_click\bot_mitm\models" />
-      <recent name="C:\Users\valen\Documents\Workspace\Python\bot_sniffer_click\bot_mitm\network" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.bot_fm">
+  <component name="RunManager" selected="Python.bot_hdv">
     <configuration name="setup" type="MAKEFILE_TARGET_RUN_CONFIGURATION" factoryName="Makefile" temporary="true">
       <makefile filename="$PROJECT_DIR$/MakeFile" target="setup" workingDirectory="" arguments="">
         <envs />
@@ -229,13 +230,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1648848353236</updated>
-    </task>
-    <task id="LOCAL-00016" summary="commit">
-      <created>1650733176122</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1650733176122</updated>
     </task>
     <task id="LOCAL-00017" summary="commit">
       <created>1650734370710</created>
@@ -573,7 +567,14 @@
       <option name="project" value="LOCAL" />
       <updated>1651512591089</updated>
     </task>
-    <option name="localTasksCounter" value="65" />
+    <task id="LOCAL-00065" summary="update">
+      <created>1651537365285</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1651537365286</updated>
+    </task>
+    <option name="localTasksCounter" value="66" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -593,9 +594,9 @@
     <MESSAGE value="correction sniffer" />
     <MESSAGE value="add possibility to calcul rune/tenta" />
     <MESSAGE value="complete kama/tenta + FIX SNIFFER bug with lost segment" />
-    <MESSAGE value="update" />
     <MESSAGE value="update sniffer" />
     <MESSAGE value="fix" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix" />
+    <MESSAGE value="update" />
+    <option name="LAST_COMMIT_MESSAGE" value="update" />
   </component>
 </project>
