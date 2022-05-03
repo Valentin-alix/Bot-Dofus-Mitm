@@ -9,7 +9,7 @@ class Database:
     PASSWORD: str = ""
     DATABASE_NAME: str = "bot_sniffer"
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.__connection = mysql.connector.connect(
             host=self.HOST,
             user=self.LOGIN,

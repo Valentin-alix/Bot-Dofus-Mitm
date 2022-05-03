@@ -17,11 +17,11 @@ class Interface:
     TITLE: str = 'Bot FM'
     BACKGROUND_COLOR: str = Colors.background_color
     WIDTH_SIZE: int = 900
-    HEIGHT_SIZE: int = 500
+    HEIGHT_SIZE: int = 700
     ICON_MENU_SIZE: int = 20
     ICON_SIZE: int = 26
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.__root: Tk = Tk()
         self.__page: str = ""
         self.path_images = "../static/assets/icones/"
@@ -34,6 +34,8 @@ class Interface:
         self.image_validate = self.convert_image_to_interface_image(self.path_images + "validate.png")
         self.image_cancel = self.convert_image_to_interface_image(self.path_images + "cancel.png")
         self.image_play = self.convert_image_to_interface_image(self.path_images + "play.png")
+
+        self.image_graphic = ImageTk.PhotoImage(Image.open("..\\static\\assets\\images\\cost_rune_graph.png"))
 
         self.frame_menu = None
         self.frame_edit = None
@@ -92,6 +94,8 @@ class Interface:
             frame_home = Frame(self.root, bg=self.BACKGROUND_COLOR)
             frame_home.grid(row=1, column=1)
             self.page = "Home"
+            label_image = Label(frame_home, image=self.image_graphic)
+            label_image.pack()
 
     def ajout_item_page(self) -> None:
         if self.page != "Ajout Item":
@@ -100,7 +104,7 @@ class Interface:
             frame_ajout_item.grid(row=1, column=1)
             if not inserted_item.runes:
                 label_text_attente = Label(frame_ajout_item, text="Insérer un Item dans l'atelier de forgemagie",
-                                           font=(Fonts.baseFont, 10), width=78, height=20,
+                                           font=(Fonts.baseFont, 10), width=90, height=35,
                                            bg=Colors.background_color, fg=Colors.foreground_color, relief="ridge")
                 label_text_attente.grid(row=0, column=0)
             else:

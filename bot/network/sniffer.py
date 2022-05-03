@@ -10,7 +10,7 @@ from bot.models.message import Message
 from bot.network import deserialiser
 
 
-def get_local_ip():
+def get_local_ip() -> str:
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.settimeout(0)
     try:

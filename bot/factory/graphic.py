@@ -1,9 +1,10 @@
 import datetime
 
 import matplotlib.pyplot as plt
+import numpy as np
 import pandas
 
-filename: str = 'C:\\Users\\valen\\Documents\\Workspace\\Python\\bot_mitm\\bot\\factory\\resources\\prices_runes.csv'
+filename: str = 'factory\\resources\\prices_runes.csv'
 
 
 def maj_csv_value(time: datetime.date, type_rune: str, cost: int) -> None:
@@ -29,16 +30,20 @@ def check_if_same_day(type_rune: str) -> bool:
 
 def test_graphic() -> None:
     data_frame = pandas.read_csv(filename, sep=';')
-
+    data_frame_test = data_frame.copy()
+    data_frame_test.drop_duplicates(subset="Type", keep='first', inplace=True)
     fig, ax = plt.subplots()
-    for type_rune in data_frame['Type']:
+    for type_rune in data_frame_test['Type']:
         ax.plot(data_frame[data_frame.Type == type_rune].Time, data_frame[data_frame.Type == type_rune].Costs,
                 label=type_rune)
 
     ax.set_xlabel("Time")
     ax.set_ylabel("Costs")
     ax.legend(loc='best')
-    plt.show()
+    plt.legend(loc=2, prop={'size': 3.5})
+    plt.yticks(np.arange(0.0, 45000.0, 2000.0))
+    plt.savefig(fname="../static/assets/images/cost_rune_graph.png")
+    plt.close()
 
 
 if __name__ == "__main__":

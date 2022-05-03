@@ -3,9 +3,13 @@
   <component name="ChangeListManager">
     <list default="true" id="7701b342-ab0a-474d-a6d9-469b7bb2e9f8" name="Changes" comment="fix">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/bot_hdv.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/bot_hdv.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/databases/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/databases/database.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/factory/click.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/factory/click.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bot/factory/graphic.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/factory/graphic.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bot/factory/resources/prices_runes.csv" beforeDir="false" afterPath="$PROJECT_DIR$/bot/factory/resources/prices_runes.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bot/network/deserialiser.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/network/deserialiser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/gui/interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/gui/interface.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/network/sniffer.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/network/sniffer.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,11 +42,12 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/bot/gui" />
     <property name="settings.editor.selected.configurable" value="RainbowCSV.Settings" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\valen\Documents\Workspace\Python\bot_mitm\bot\gui" />
       <recent name="C:\Users\valen\Documents\Workspace\Python\bot_mitm\static\assets\icones" />
       <recent name="C:\Users\valen\Documents\Workspace\Python\bot_mitm" />
       <recent name="C:\Users\valen\Documents\Workspace\Python\bot_mitm\setup" />
@@ -56,7 +61,7 @@
       <recent name="C:\Users\valen\Documents\Workspace\Python\bot_sniffer_click\bot_mitm\network" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.graphic">
+  <component name="RunManager" selected="Python.bot_fm">
     <configuration name="setup" type="MAKEFILE_TARGET_RUN_CONFIGURATION" factoryName="Makefile" temporary="true">
       <makefile filename="$PROJECT_DIR$/MakeFile" target="setup" workingDirectory="" arguments="">
         <envs />
@@ -201,10 +206,10 @@
       <item itemvalue="Python.bot_fm" />
       <item itemvalue="Python.bot_hdv" />
       <item itemvalue="Python.maj_protocol_id" />
+      <item itemvalue="Python.graphic" />
       <item itemvalue="Python.test_csv" />
       <item itemvalue="Python tests.Python tests for sniffer_tests.TestSniffer" />
       <item itemvalue="Python tests.Python tests for sniffer_tests.TestSniffer.test_no_exception" />
-      <item itemvalue="Python.graphic" />
     </list>
     <recent_temporary>
       <list>
@@ -224,13 +229,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1648848353236</updated>
-    </task>
-    <task id="LOCAL-00015" summary="commit">
-      <created>1650727187560</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1650727187560</updated>
     </task>
     <task id="LOCAL-00016" summary="commit">
       <created>1650733176122</created>
@@ -568,7 +566,14 @@
       <option name="project" value="LOCAL" />
       <updated>1651509418929</updated>
     </task>
-    <option name="localTasksCounter" value="64" />
+    <task id="LOCAL-00064" summary="fix">
+      <created>1651512591089</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1651512591089</updated>
+    </task>
+    <option name="localTasksCounter" value="65" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

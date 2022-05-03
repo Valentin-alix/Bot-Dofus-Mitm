@@ -57,6 +57,6 @@ class Click:
     def scroll(self) -> None:
         # FIXME take children window instead of dofus window
         hwnd = win32gui.FindWindow(None, self.windows_name)
-        test_command = win32api.MAKELONG(300, 300)  # arg[0] key down arguments (CTRL);  arg[1] length of scroll;
+        test_command = win32api.MAKELONG(300, 300)
         test_cords = win32api.MAKELONG(200, 200)
         win32api.SendMessage(hwnd, win32con.WM_MOUSEWHEEL, test_command, test_cords)
