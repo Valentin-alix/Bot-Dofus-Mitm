@@ -3,11 +3,12 @@ import socket
 from asyncio import Queue, Event
 from dataclasses import dataclass
 
-from network.async_pyshark import AsyncLiveCapture
-from static import constant
 from databases.database import Database
 from models.data import Data
+from network.async_pyshark import AsyncLiveCapture
 from network.message import Message
+
+FILTER_DOFUS: str = 'tcp port 5555'
 
 
 def get_local_ip() -> str:
@@ -30,13 +31,13 @@ class Sniffer:
     queue_actual_item: Queue
     queue_inserted_item: Queue
     event_is_playing: Event
+    database: Database
     buffer_client: Data = Data()
     buffer_server: Data = Data()
     ip_local: str = get_local_ip()
-    database: Database = Database()
 
     async def launch_sniffer(self) -> None:
-        capture = AsyncLiveCapture(bpf_filter=constant.FILTER_DOFUS)
+        capture = AsyncLiveCapture(bpf_filter=FILTER_DOFUS)
         async for packet in capture.sniff_continuously():
             await self.on_receive(packet)
 

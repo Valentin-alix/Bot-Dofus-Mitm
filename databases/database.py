@@ -1,16 +1,20 @@
 import mysql.connector
 
 from models.item import Item
-from static import constant
+
+HOST: str = "localhost"
+LOGIN: str = "root"
+PASSWORD: str = ""
+DATABASE_NAME: str = "bot_sniffer"
 
 
 class Database:
     def __init__(self) -> None:
         self.connection = mysql.connector.connect(
-            host=constant.HOST,
-            user=constant.LOGIN,
-            password=constant.PASSWORD,
-            database=constant.DATABASE_NAME,
+            host=HOST,
+            user=LOGIN,
+            password=PASSWORD,
+            database=DATABASE_NAME,
         )
 
     def close(self) -> None:

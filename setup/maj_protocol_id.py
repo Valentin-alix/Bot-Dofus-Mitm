@@ -1,5 +1,5 @@
-from os import walk
 import re
+from os import walk
 
 import mysql.connector
 

@@ -1,21 +1,27 @@
 import asyncio
 import tkinter
-from asyncio import Queue, Event
 import tkinter as tk
+from asyncio import Queue, Event
 from tkinter import messagebox
 
 from PIL import ImageTk, Image
 
 from databases.database import Database
 from models.item import Item
-from static import constant
 from static.assets.colors import Colors
 from static.assets.fonts import Fonts
+
+TITLE: str = 'Bot FM'
+BACKGROUND_COLOR: str = Colors.background_color
+WIDTH_SIZE: int = 900
+HEIGHT_SIZE: int = 700
+ICON_MENU_SIZE: int = 20
+ICON_SIZE: int = 26
 
 
 class Ui(tk.Tk):
     def __init__(self, queue_target_item: Queue, queue_inserted_item: Queue, queue_actual_item: Queue,
-                 event_is_playing: Event) -> None:
+                 event_is_playing: Event, database: Database) -> None:
         super().__init__()
         self.queue_target_item: Queue = queue_target_item
         self.queue_inserted_item: Queue = queue_inserted_item
@@ -36,20 +42,20 @@ class Ui(tk.Tk):
         self.image_cancel: ImageTk = self.convert_image_to_interface_image(self.path_images + "cancel.png")
         self.image_play: ImageTk = self.convert_image_to_interface_image(self.path_images + "play.png")
         self.image_graphic: ImageTk = ImageTk.PhotoImage(Image.open("static/assets/images/cost_rune_graph.png"))
-        self.database: Database = Database()
+        self.database: Database = database
 
     async def window(self) -> None:
-        self.title(constant.TITLE)
+        self.title(TITLE)
         self.iconbitmap("static/assets/icones/logo.ico")
-        self.config(bg=constant.BACKGROUND_COLOR)
+        self.config(bg=BACKGROUND_COLOR)
         self.option_add("*font", Fonts.baseFont)
 
-        height_center = int(self.winfo_screenheight() / 2) - int(constant.HEIGHT_SIZE / 2)
-        width_center = int(self.winfo_screenwidth() / 2) - int(constant.WIDTH_SIZE / 2)
+        height_center = int(self.winfo_screenheight() / 2) - int(HEIGHT_SIZE / 2)
+        width_center = int(self.winfo_screenwidth() / 2) - int(WIDTH_SIZE / 2)
 
         self.geometry(f"+{width_center}+{height_center}")
-        self.minsize(constant.WIDTH_SIZE, constant.HEIGHT_SIZE)
-        self.maxsize(constant.WIDTH_SIZE, height=0)
+        self.minsize(WIDTH_SIZE, HEIGHT_SIZE)
+        self.maxsize(WIDTH_SIZE, height=0)
 
         self.menu()
         self.home_page()
@@ -77,7 +83,7 @@ class Ui(tk.Tk):
     def home_page(self) -> None:
         if self.page != "Home":
             self.clear_frame(self)
-            frame_home = tk.Frame(self, bg=constant.BACKGROUND_COLOR)
+            frame_home = tk.Frame(self, bg=BACKGROUND_COLOR)
             frame_home.grid(row=1, column=1)
             self.page = "Home"
             label_image = tk.Label(frame_home, image=self.image_graphic)
@@ -93,7 +99,7 @@ class Ui(tk.Tk):
         if self.page != "Ajout Item":
             self.clear_frame(self)
             self.page = "Ajout Item"
-            frame_ajout_item = tk.Frame(self, bg=constant.BACKGROUND_COLOR)
+            frame_ajout_item = tk.Frame(self, bg=BACKGROUND_COLOR)
             frame_ajout_item.grid(row=1, column=1)
             label_text_attente = tk.Label(frame_ajout_item, text="Insérer un Item dans l'atelier de forgemagie",
                                           font=(Fonts.baseFont, 10), width=104, height=35,
@@ -180,7 +186,7 @@ class Ui(tk.Tk):
     def start_item_page(self) -> None:
         if self.page != "Start Item":
             self.clear_frame(self)
-            frame_ajout_item = tk.Frame(self, bg=constant.BACKGROUND_COLOR)
+            frame_ajout_item = tk.Frame(self, bg=BACKGROUND_COLOR)
             frame_ajout_item.grid(row=1, column=1)
 
             items = self.database.select_all_name_items()
@@ -364,7 +370,7 @@ class Ui(tk.Tk):
     @staticmethod
     def convert_image_to_interface_image(path: str) -> ImageTk:
         image = Image.open(path)
-        image = image.resize((constant.ICON_SIZE, constant.ICON_SIZE), Image.ANTIALIAS)
+        image = image.resize((ICON_SIZE, ICON_SIZE), Image.ANTIALIAS)
 
         return ImageTk.PhotoImage(image)
 

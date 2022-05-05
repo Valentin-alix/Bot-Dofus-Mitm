@@ -1,26 +1,29 @@
 import datetime
 import logging
+from asyncio import Event
 
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pandas
-import matplotlib.pyplot as plt
 
 from bot.bot_click import BotClick
 
+LINES_HDV: tuple = (160, 195, 230, 265, 300, 335, 370, 405, 440, 475, 510, 545, 580, 615)
+SCROLL_HDV: tuple = (220, 290, 360, 430, 500, 570, 640)
 FILENAME: str = '..\\static\\resources\\prices_runes.csv'
 
 
 class BotHDV(BotClick):
+    event_ready: Event
+    event_is_playing: Event
+
     # FIXME
-    """def click_hdv_runes(self, ) -> None:
-        # pass argument entre les 2 threads
-        global bot_hdv_is_playing
+    """def click_hdv_runes(self) -> None:
         for scroll_y in constant.SCROLL_HDV:
             for line in constant.LINES_HDV:
                 before_click_time: float = time.perf_counter()
-                waiting_click = True
-                click.click_auto(891, line)
-                while click.waiting_click and bot_hdv_is_playing:
+                self.click(win32api.MAKELONG(891, line))
+                while not self.event_ready.is_set() and not self.event_is_playing.is_set():
                     if (time.perf_counter() - before_click_time) > 5.0:
                         click.click_auto(891, line)
                         before_click_time: float = time.perf_counter()
@@ -48,10 +51,10 @@ class BotHDV(BotClick):
                     time.sleep(0.001)"""
 
     @staticmethod
-    def maj_csv_value(time: datetime.date, type_rune: str, cost: int) -> None:
+    def maj_csv_value(time_when_maj: datetime.date, type_rune: str, cost: int) -> None:
         data = pandas.read_csv(FILENAME, sep=';')
         data_frame = pandas.DataFrame(data, columns=['Time', 'Type', 'Costs'])
-        data_new_row = pandas.DataFrame({'Time': [time], 'Type': [type_rune], 'Costs': [cost]})
+        data_new_row = pandas.DataFrame({'Time': [time_when_maj], 'Type': [type_rune], 'Costs': [cost]})
         data_frame = pandas.concat([data_frame, data_new_row])
         data_frame.to_csv(FILENAME, mode='w', index=False, header=True, sep=';')
 

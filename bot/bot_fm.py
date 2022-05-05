@@ -1,26 +1,27 @@
 import asyncio
 import logging
 import time
-from asyncio import Queue, Event
+from asyncio import Queue
 from dataclasses import dataclass
 from operator import itemgetter
+
 import win32api
 import win32gui
 
 from bot.bot_click import BotClick
-from databases.database import Database
 from models.item import Item
-from static import constant
+
+LINES_POS: tuple = (251, 282, 313, 344, 375, 406, 437, 468, 499, 530, 561, 592, 623)
+COLUMNS_POS: tuple = (891, 930, 969)
+POS_EXO_RUNE = win32api.MAKELONG(1050, 150)
+FUSION_RUNE_EXO = win32api.MAKELONG(800, 170)
 
 
 @dataclass
 class BotFM(BotClick):
     queue_target_item: Queue
     queue_actual_item: Queue
-    event_ready: Event
-    event_is_playing: Event
     target_item: Item = None
-    database: Database = Database()
 
     async def start(self):
         while True:
@@ -50,10 +51,10 @@ class BotFM(BotClick):
         self.event_ready.clear()
         before_click_time: float = time.perf_counter()
         if high_priority.get("value") >= 1:
-            self.click(constant.POS_EXO_RUNE)
-            self.click(constant.POS_EXO_RUNE)
+            self.click(POS_EXO_RUNE)
+            self.click(POS_EXO_RUNE)
             await asyncio.sleep(0.5)
-            self.click(constant.FUSION_RUNE_EXO)
+            self.click(FUSION_RUNE_EXO)
             logging.info("Click Exo")
             self.database.update_exo_on_item_by_name(self.target_item.name)
         else:
@@ -63,31 +64,22 @@ class BotFM(BotClick):
             elif high_priority.get('column') == 3:
                 quantity = 10
             await asyncio.sleep(0.1)
-            self.click(win32api.MAKELONG(constant.COLUMNS_POS[high_priority.get("column")],
-                                         constant.LINES_POS[high_priority.get("line")]))
+            self.click(win32api.MAKELONG(COLUMNS_POS[high_priority.get("column")],
+                                         LINES_POS[high_priority.get("line")]))
             logging.info(f"Click {high_priority.get('column')} {high_priority.get('line')}")
             self.database.update_quantity_on_target_line_by_type_rune(high_priority.get('type'), self.target_item.name,
                                                                       quantity)
         while not self.event_ready.is_set() and self.event_is_playing.is_set():
-            if time.perf_counter() - before_click_time > 5.0:
+            if time.perf_counter() - before_click_time > 4.0:
                 if high_priority.get("value") >= 1:
-                    self.click(constant.POS_EXO_RUNE)
-                    self.click(constant.POS_EXO_RUNE)
+                    self.click(POS_EXO_RUNE)
+                    self.click(POS_EXO_RUNE)
                     await asyncio.sleep(0.5)
-                    self.click(constant.FUSION_RUNE_EXO)
+                    self.click(FUSION_RUNE_EXO)
                     logging.info("Click Exo")
-                    self.database.update_exo_on_item_by_name(self.target_item.name)
                 else:
-                    quantity: int = 1
-                    if high_priority.get('column') == 2:
-                        quantity = 3
-                    elif high_priority.get('column') == 3:
-                        quantity = 10
-                    self.click(win32api.MAKELONG(constant.COLUMNS_POS[high_priority.get("column")],
-                                                 constant.LINES_POS[high_priority.get("line")]))
+                    self.click(win32api.MAKELONG(COLUMNS_POS[high_priority.get("column")],
+                                                 LINES_POS[high_priority.get("line")]))
                     logging.info(f"Click {high_priority.get('column')} {high_priority.get('line')}")
-                    self.database.update_quantity_on_target_line_by_type_rune(high_priority.get('type'),
-                                                                              self.target_item.name,
-                                                                              quantity)
                 before_click_time: float = time.perf_counter()
             await asyncio.sleep(0.001)
