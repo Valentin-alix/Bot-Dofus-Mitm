@@ -1,6 +1,5 @@
 import datetime
 import logging
-from asyncio import Event
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -10,65 +9,59 @@ from bot.bot_click import BotClick
 
 LINES_HDV: tuple = (160, 195, 230, 265, 300, 335, 370, 405, 440, 475, 510, 545, 580, 615)
 SCROLL_HDV: tuple = (220, 290, 360, 430, 500, 570, 640)
-FILENAME: str = '..\\static\\resources\\prices_runes.csv'
+FILENAME: str = 'static/resources/prices_runes.csv'
 
 
 class BotHDV(BotClick):
-    event_ready: Event
-    event_is_playing: Event
-
     # FIXME
     """def click_hdv_runes(self) -> None:
-        for scroll_y in constant.SCROLL_HDV:
-            for line in constant.LINES_HDV:
+        for scroll_y in SCROLL_HDV:
+            for line in LINES_HDV:
                 before_click_time: float = time.perf_counter()
                 self.click(win32api.MAKELONG(891, line))
                 while not self.event_ready.is_set() and not self.event_is_playing.is_set():
                     if (time.perf_counter() - before_click_time) > 5.0:
-                        click.click_auto(891, line)
+                        self.click(win32api.MAKELONG(891, line))
                         before_click_time: float = time.perf_counter()
                     else:
                         time.sleep(0.001)
                 time.sleep(1)
                 before_click_time: float = time.perf_counter()
-                waiting_click = True
-                click.click_auto(891, line)
-                while click.waiting_click and bot_hdv_is_playing:
+                self.click(win32api.MAKELONG(891, line))
+                while not self.event_ready.is_set() and self.event_is_playing.is_set():
                     if (time.perf_counter() - before_click_time) > 5.0:
-                        click.click_auto(891, line)
+                        self.click(win32api.MAKELONG(891, line))
                         before_click_time: float = time.perf_counter()
                     else:
                         time.sleep(0.001)
                 time.sleep(1)
             before_click_time: float = time.perf_counter()
-            waiting_click = True
-            click.click_auto(969, scroll_y)
-            while waiting_click and bot_hdv_is_playing:
+            self.click(win32api.MAKELONG(969, scroll_y))
+            while not self.event_ready.is_set() and self.event_is_playing.is_set():
                 if (time.perf_counter() - before_click_time) > 5.0:
-                    click.click_auto(969, scroll_y)
+                    self.click(win32api.MAKELONG(969, scroll_y))
                     before_click_time: float = time.perf_counter()
                 else:
                     time.sleep(0.001)"""
 
     @staticmethod
     def maj_csv_value(time_when_maj: datetime.date, type_rune: str, cost: int) -> None:
-        data = pandas.read_csv(FILENAME, sep=';')
-        data_frame = pandas.DataFrame(data, columns=['Time', 'Type', 'Costs'])
-        data_new_row = pandas.DataFrame({'Time': [time_when_maj], 'Type': [type_rune], 'Costs': [cost]})
-        data_frame = pandas.concat([data_frame, data_new_row])
-        data_frame.to_csv(FILENAME, mode='w', index=False, header=True, sep=';')
+        if not BotHDV.check_if_same_day(type_rune):
+            data = pandas.read_csv(FILENAME, sep=';')
+            data_frame = pandas.DataFrame(data, columns=['Time', 'Type', 'Costs'])
+            data_new_row = pandas.DataFrame({'Time': [time_when_maj], 'Type': [type_rune], 'Costs': [cost]})
+            data_frame = pandas.concat([data_frame, data_new_row])
+            data_frame.to_csv(FILENAME, mode='w', index=False, header=True, sep=';')
 
     @staticmethod
     def check_if_same_day(type_rune: str) -> bool:
         data = pandas.read_csv(FILENAME, sep=';')
         data.query(f"Type == \"{type_rune}\"", inplace=True)
         times_rune = pandas.to_datetime(data['Time']).dt.strftime('%Y-%m-%d')
-
         time_now = datetime.date.today()
         for time_rune in times_rune:
             if str(time_rune) == str(time_now):
                 return True
-
         return False
 
     @staticmethod
@@ -87,6 +80,6 @@ class BotHDV(BotClick):
         ax.legend(loc='best')
         plt.legend(loc=2, prop={'size': 3.5})
         plt.yticks(np.arange(0.0, 45000.0, 2000.0))
-        plt.savefig(fname="..\\static\\assets\\images\\cost_rune_graph.png", dpi=130)
+        plt.savefig(fname="static/assets/images/cost_rune_graph.png", dpi=130)
         plt.close()
         logging.info(msg="Done.")

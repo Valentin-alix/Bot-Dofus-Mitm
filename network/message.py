@@ -1,6 +1,8 @@
+import datetime
 from asyncio import Queue, Event
 from dataclasses import dataclass
 
+from bot.bot_hdv import BotHDV
 from databases.database import Database
 from models.data import Data
 from models.item import Item
@@ -54,9 +56,8 @@ class Message:
 
                 await queue_inserted_item.put(inserted_item)
 
-        '''elif self.message_id == Database().select_id_by_message(
+        elif self.message_id == Database().select_id_by_message(
                 "ExchangeTypesItemsExchangerDescriptionForUserMessage"):
-            # action.waiting_click = False
             prices: list = []
             action_id: int = 0
             object_gid = self.data.readVarUhInt()
@@ -87,8 +88,7 @@ class Message:
                 average_price: int = prices[0]
             else:
                 return
-            # if not Database().select_name_by_item_id(object_gid) or hdv_graphic.check_if_same_day(type_rune):
-            #    return
-            # hdv_graphic.maj_csv_value(datetime.date.today(), type_rune, average_price)
-            Database().update_average_price_by_name(type_rune, average_price)
-            Database().update_average_price_by_name(f"-{type_rune}", average_price)'''
+            if database.select_name_by_item_id(object_gid):
+                BotHDV.maj_csv_value(datetime.date.today(), type_rune, average_price)
+            database.update_average_price_by_name(type_rune, average_price)
+            database.update_average_price_by_name(f"-{type_rune}", average_price)

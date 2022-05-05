@@ -1,19 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7701b342-ab0a-474d-a6d9-469b7bb2e9f8" name="Changes" comment="big update, use of async">
+    <list default="true" id="7701b342-ab0a-474d-a6d9-469b7bb2e9f8" name="Changes" comment="update, fix">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bot/bot_click.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/bot_click.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bot/bot_fm.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/bot_fm.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bot/bot_hdv.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/bot_hdv.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/databases/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/databases/database.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/interface/ui.py" beforeDir="false" afterPath="$PROJECT_DIR$/interface/ui.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/network/message.py" beforeDir="false" afterPath="$PROJECT_DIR$/network/message.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/network/sniffer.py" beforeDir="false" afterPath="$PROJECT_DIR$/network/sniffer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/setup/maj_protocol_id.py" beforeDir="false" afterPath="$PROJECT_DIR$/setup/maj_protocol_id.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/constant.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/resources/prices_runes.csv" beforeDir="false" afterPath="$PROJECT_DIR$/static/resources/prices_runes.csv" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -94,6 +89,27 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="maj_protocol_id" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="bot_mitm" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/setup" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/setup/maj_protocol_id.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="Python tests for sniffer_tests.TestSniffer" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="bot_mitm" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -127,9 +143,11 @@
       <item itemvalue="Python.main" />
       <item itemvalue="Python tests.Python tests for sniffer_tests.TestSniffer" />
       <item itemvalue="Python tests.Python tests for sniffer_tests.TestSniffer.test_no_exception" />
+      <item itemvalue="Python.maj_protocol_id" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.maj_protocol_id" />
         <item itemvalue="Makefile Target.setup" />
         <item itemvalue="Python tests.Python tests for sniffer_tests.TestSniffer.test_no_exception" />
         <item itemvalue="Python tests.Python tests for sniffer_tests.TestSniffer" />
@@ -144,13 +162,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1648848353236</updated>
-    </task>
-    <task id="LOCAL-00021" summary="correction sniffer">
-      <created>1650819172620</created>
-      <option name="number" value="00021" />
-      <option name="presentableId" value="LOCAL-00021" />
-      <option name="project" value="LOCAL" />
-      <updated>1650819172620</updated>
     </task>
     <task id="LOCAL-00022" summary="correction sniffer">
       <created>1650820359750</created>
@@ -488,7 +499,14 @@
       <option name="project" value="LOCAL" />
       <updated>1651752689030</updated>
     </task>
-    <option name="localTasksCounter" value="70" />
+    <task id="LOCAL-00070" summary="update, fix">
+      <created>1651755016778</created>
+      <option name="number" value="00070" />
+      <option name="presentableId" value="LOCAL-00070" />
+      <option name="project" value="LOCAL" />
+      <updated>1651755016778</updated>
+    </task>
+    <option name="localTasksCounter" value="71" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -512,6 +530,7 @@
     <MESSAGE value="fix" />
     <MESSAGE value="update" />
     <MESSAGE value="big update, use of async" />
-    <option name="LAST_COMMIT_MESSAGE" value="big update, use of async" />
+    <MESSAGE value="update, fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="update, fix" />
   </component>
 </project>

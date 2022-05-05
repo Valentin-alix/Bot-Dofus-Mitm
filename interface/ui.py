@@ -30,7 +30,7 @@ class Ui(tk.Tk):
         self.frame_menu: tk.Frame = None
         self.frame_edit: tk.Frame = None
         self.page: str = ""
-        self.interval = 1 / 20
+        self.interval = 1 / 15
         self.inserted_item: Item = Item()
         self.path_images: str = "static/assets/icones/"
         self.image_home: ImageTk = self.convert_image_to_interface_image(self.path_images + "home.png")
@@ -87,7 +87,9 @@ class Ui(tk.Tk):
             frame_home.grid(row=1, column=1)
             self.page = "Home"
             label_image = tk.Label(frame_home, image=self.image_graphic)
-            label_image.pack()
+            label_image.grid(row=0, column=1)
+            """bouton_reload = tk.Button(frame_home, text="Reload", command=lambda: BotHDV.save_graphic())
+            bouton_reload.grid(row=0, column=0)"""
 
     async def check_inserted_item(self) -> None:
         while True:

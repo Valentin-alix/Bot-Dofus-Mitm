@@ -31,7 +31,7 @@ class BotFM(BotClick):
                 if not self.queue_actual_item.empty():
                     actual_item = await self.queue_actual_item.get()
                     await self.click_rune(actual_item)
-            await asyncio.sleep(0.001)
+            await asyncio.sleep(0.01)
 
     async def click_rune(self, actual_item: Item):
         if self.windows_name is None:
@@ -70,7 +70,7 @@ class BotFM(BotClick):
             self.database.update_quantity_on_target_line_by_type_rune(high_priority.get('type'), self.target_item.name,
                                                                       quantity)
         while not self.event_ready.is_set() and self.event_is_playing.is_set():
-            if time.perf_counter() - before_click_time > 4.0:
+            if time.perf_counter() - before_click_time > 6.0:
                 if high_priority.get("value") >= 1:
                     self.click(POS_EXO_RUNE)
                     self.click(POS_EXO_RUNE)
@@ -82,4 +82,4 @@ class BotFM(BotClick):
                                                  LINES_POS[high_priority.get("line")]))
                     logging.info(f"Click {high_priority.get('column')} {high_priority.get('line')}")
                 before_click_time: float = time.perf_counter()
-            await asyncio.sleep(0.001)
+            await asyncio.sleep(0.01)

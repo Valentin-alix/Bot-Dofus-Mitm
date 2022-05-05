@@ -1,6 +1,6 @@
 import asyncio
-from asyncio import Queue, Event
 
+from asyncio import Queue, Event
 from bot.bot_fm import BotFM
 from databases.database import Database
 from interface.ui import Ui
@@ -8,6 +8,7 @@ from network.sniffer import Sniffer
 
 
 async def main_fm():
+
     database: Database = Database()
 
     queue_target_item: Queue = Queue()
