@@ -46,12 +46,13 @@ class BotHDV(BotClick):
 
     @staticmethod
     def maj_csv_value(time_when_maj: datetime.date, type_rune: str, cost: int) -> None:
-        if not BotHDV.check_if_same_day(type_rune):
-            data = pandas.read_csv(FILENAME, sep=';')
-            data_frame = pandas.DataFrame(data, columns=['Time', 'Type', 'Costs'])
-            data_new_row = pandas.DataFrame({'Time': [time_when_maj], 'Type': [type_rune], 'Costs': [cost]})
-            data_frame = pandas.concat([data_frame, data_new_row])
-            data_frame.to_csv(FILENAME, mode='w', index=False, header=True, sep=';')
+        if BotHDV.check_if_same_day(type_rune):
+            return
+        data = pandas.read_csv(FILENAME, sep=';')
+        data_frame = pandas.DataFrame(data, columns=['Time', 'Type', 'Costs'])
+        data_new_row = pandas.DataFrame({'Time': [time_when_maj], 'Type': [type_rune], 'Costs': [cost]})
+        data_frame = pandas.concat([data_frame, data_new_row])
+        data_frame.to_csv(FILENAME, mode='w', index=False, header=True, sep=';')
 
     @staticmethod
     def check_if_same_day(type_rune: str) -> bool:
@@ -59,10 +60,7 @@ class BotHDV(BotClick):
         data.query(f"Type == \"{type_rune}\"", inplace=True)
         times_rune = pandas.to_datetime(data['Time']).dt.strftime('%Y-%m-%d')
         time_now = datetime.date.today()
-        for time_rune in times_rune:
-            if str(time_rune) == str(time_now):
-                return True
-        return False
+        return any(str(time_rune) == str(time_now) for time_rune in times_rune)
 
     @staticmethod
     def save_graphic() -> None:
@@ -71,9 +69,8 @@ class BotHDV(BotClick):
         data_frame_test = data_frame.copy()
         data_frame_test.drop_duplicates(subset="Type", keep='first', inplace=True)
         fig, ax = plt.subplots()
-        for type_rune in data_frame_test['Type']:
-            ax.plot(data_frame[data_frame.Type == type_rune].Time, data_frame[data_frame.Type == type_rune].Costs,
-                    label=type_rune)
+        [ax.plot(data_frame[data_frame.Type == type_rune].Time, data_frame[data_frame.Type == type_rune].Costs,
+                 label=type_rune) for type_rune in data_frame_test['Type']]
 
         ax.set_xlabel("Time")
         ax.set_ylabel("Costs")

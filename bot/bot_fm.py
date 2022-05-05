@@ -23,16 +23,17 @@ class BotFM(BotClick):
     queue_actual_item: Queue
     target_item: Item = None
 
-    async def start(self):
+    async def start(self) -> None:
         while True:
-            if self.event_is_playing.is_set():
-                if not self.queue_target_item.empty():
-                    self.target_item = await self.queue_target_item.get()
-                if not self.queue_actual_item.empty():
-                    await self.click_rune(await self.queue_actual_item.get())
-            await asyncio.sleep(0)
+            await asyncio.sleep(0.001)
+            if not self.event_is_playing.is_set():
+                continue
+            if not self.queue_target_item.empty():
+                self.target_item = await self.queue_target_item.get()
+            if not self.queue_actual_item.empty():
+                await self.click_rune(await self.queue_actual_item.get())
 
-    async def click_rune(self, actual_item: Item):
+    async def click_rune(self, actual_item: Item) -> None:
         if self.windows_name is None:
             self.find_windows_name()
             self.hwnd = win32gui.FindWindow(None, self.windows_name)
@@ -69,16 +70,17 @@ class BotFM(BotClick):
             self.database.update_quantity_on_target_line_by_type_rune(high_priority.get('type'), self.target_item.name,
                                                                       quantity)
         while not self.event_ready.is_set() and self.event_is_playing.is_set():
-            if time.perf_counter() - before_click_time > 6.0:
-                before_click_time: float = time.perf_counter()
-                if high_priority.get("value") >= 1:
-                    self.click(POS_EXO_RUNE)
-                    self.click(POS_EXO_RUNE)
-                    await asyncio.sleep(0.5)
-                    self.click(FUSION_RUNE_EXO)
-                    logging.info("Click Exo")
-                else:
-                    self.click(win32api.MAKELONG(COLUMNS_POS[high_priority.get("column")],
-                                                 LINES_POS[high_priority.get("line")]))
-                    logging.info(f"Click {high_priority.get('column')} {high_priority.get('line')}")
-            await asyncio.sleep(0)
+            await asyncio.sleep(0.001)
+            if time.perf_counter() - before_click_time < 6.0:
+                continue
+            before_click_time: float = time.perf_counter()
+            if high_priority.get("value") >= 1:
+                self.click(POS_EXO_RUNE)
+                self.click(POS_EXO_RUNE)
+                await asyncio.sleep(0.5)
+                self.click(FUSION_RUNE_EXO)
+                logging.info("Click Exo")
+            else:
+                self.click(win32api.MAKELONG(COLUMNS_POS[high_priority.get("column")],
+                                             LINES_POS[high_priority.get("line")]))
+                logging.info(f"Click {high_priority.get('column')} {high_priority.get('line')}")

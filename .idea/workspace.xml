@@ -3,9 +3,11 @@
   <component name="ChangeListManager">
     <list default="true" id="7701b342-ab0a-474d-a6d9-469b7bb2e9f8" name="Changes" comment="update, fix">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/bot_click.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/bot_click.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bot/bot_fm.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/bot_fm.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/bot_hdv.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/bot_hdv.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/interface/ui.py" beforeDir="false" afterPath="$PROJECT_DIR$/interface/ui.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/network/sniffer.py" beforeDir="false" afterPath="$PROJECT_DIR$/network/sniffer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/network/message.py" beforeDir="false" afterPath="$PROJECT_DIR$/network/message.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -159,13 +161,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1648848353236</updated>
-    </task>
-    <task id="LOCAL-00023" summary="correction sniffer">
-      <created>1650820749801</created>
-      <option name="number" value="00023" />
-      <option name="presentableId" value="LOCAL-00023" />
-      <option name="project" value="LOCAL" />
-      <updated>1650820749801</updated>
     </task>
     <task id="LOCAL-00024" summary="correction sniffer">
       <created>1650841472356</created>
@@ -503,7 +498,14 @@
       <option name="project" value="LOCAL" />
       <updated>1651763511193</updated>
     </task>
-    <option name="localTasksCounter" value="72" />
+    <task id="LOCAL-00072" summary="update, fix">
+      <created>1651766166758</created>
+      <option name="number" value="00072" />
+      <option name="presentableId" value="LOCAL-00072" />
+      <option name="project" value="LOCAL" />
+      <updated>1651766166758</updated>
+    </task>
+    <option name="localTasksCounter" value="73" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

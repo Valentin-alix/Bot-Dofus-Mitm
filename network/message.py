@@ -27,10 +27,8 @@ class Message:
 
             for _ in range(effects_len):
                 self.data.readUnsignedShort()
-                action_id = self.data.readVarUhShort()
-                value = self.data.readVarUhShort()
                 actual_item.runes.append(
-                    {"type": database.select_type_rune_by_id(action_id), "value": value})
+                    {"type": database.select_type_rune_by_id(self.data.readVarUhShort()), "value": self.data.readVarUhShort()})
 
             await queue_actual_item.put(actual_item)
 
@@ -49,10 +47,8 @@ class Message:
             if effects_len > 1:
                 for _ in range(effects_len):
                     self.data.readUnsignedShort()
-                    action_id = self.data.readVarUhShort()
-                    value = self.data.readVarUhShort()
                     inserted_item.runes.append(
-                        {"type": database.select_type_rune_by_id(action_id), "value": value})
+                        {"type": database.select_type_rune_by_id(self.data.readVarUhShort()), "value": self.data.readVarUhShort()})
 
                 await queue_inserted_item.put(inserted_item)
 
@@ -61,7 +57,7 @@ class Message:
             prices: list = []
             action_id: int = 0
             object_gid = self.data.readVarUhInt()
-            object_type = self.data.readInt()
+            self.data.readInt()
             item_type_description_len = self.data.readUnsignedShort()
             for _ in range(item_type_description_len):
                 self.data.readVarUhInt()
@@ -77,7 +73,7 @@ class Message:
 
                 [prices.append(self.data.readVarUhLong()) for _ in range(prices_len)]
             try:
-                type_rune: str = Database().select_type_rune_by_id(action_id)
+                type_rune: str = database.select_type_rune_by_id(action_id)
             except TypeError:
                 return
             if prices[2]:
