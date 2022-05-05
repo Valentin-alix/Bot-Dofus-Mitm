@@ -1,3 +1,5 @@
--Implement bot hdv -> automaticates clicks -> gives info on excel file with graphic
+-use ternary and list comprehensions
 
--Use Async
+-factorise database class
+
+-factorise Queue management
