@@ -1,5 +1,4 @@
 import datetime
-import logging
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -48,23 +47,17 @@ class BotHDV(BotClick):
     def maj_csv_value(time_when_maj: datetime.date, type_rune: str, cost: int) -> None:
         if BotHDV.check_if_same_day(type_rune):
             return
-        data = pandas.read_csv(FILENAME, sep=';')
-        data_frame = pandas.DataFrame(data, columns=['Time', 'Type', 'Costs'])
-        data_new_row = pandas.DataFrame({'Time': [time_when_maj], 'Type': [type_rune], 'Costs': [cost]})
-        data_frame = pandas.concat([data_frame, data_new_row])
+        data_frame = pandas.DataFrame(pandas.read_csv(FILENAME, sep=';'), columns=['Time', 'Type', 'Costs'])
+        data_frame = pandas.concat([data_frame, pandas.DataFrame({'Time': [time_when_maj], 'Type': [type_rune], 'Costs': [cost]})])
         data_frame.to_csv(FILENAME, mode='w', index=False, header=True, sep=';')
 
     @staticmethod
     def check_if_same_day(type_rune: str) -> bool:
-        data = pandas.read_csv(FILENAME, sep=';')
-        data.query(f"Type == \"{type_rune}\"", inplace=True)
-        times_rune = pandas.to_datetime(data['Time']).dt.strftime('%Y-%m-%d')
-        time_now = datetime.date.today()
-        return any(str(time_rune) == str(time_now) for time_rune in times_rune)
+        data = pandas.read_csv(FILENAME, sep=';').query(f"Type == \"{type_rune}\"", inplace=True)
+        return any(str(time_rune) == str(datetime.date.today()) for time_rune in pandas.to_datetime(data['Time']).dt.strftime('%Y-%m-%d'))
 
     @staticmethod
     def save_graphic() -> None:
-        logging.info(msg="Download graphic...")
         data_frame = pandas.read_csv(FILENAME, sep=';')
         data_frame_test = data_frame.copy()
         data_frame_test.drop_duplicates(subset="Type", keep='first', inplace=True)
@@ -79,4 +72,3 @@ class BotHDV(BotClick):
         plt.yticks(np.arange(0.0, 45000.0, 2000.0))
         plt.savefig(fname="static/assets/images/cost_rune_graph.png", dpi=130)
         plt.close()
-        logging.info(msg="Done.")

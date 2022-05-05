@@ -18,13 +18,9 @@ class Message:
         if self.message_id == int(database.select_id_by_message(
                 "ExchangeCraftResultMagicWithObjectDescMessage")) and event_is_playing.is_set():
             actual_item: Item = Item()
-            # action.actual_item.__init__()
-            # Ci dessous craft result
             self.data.readByte()
-            # Ci dessous object GID
             self.data.readVarUhShort()
             effects_len = self.data.readUnsignedShort()
-
             for _ in range(effects_len):
                 self.data.readUnsignedShort()
                 actual_item.runes.append(
@@ -86,5 +82,5 @@ class Message:
                 return
             if database.select_name_by_item_id(object_gid):
                 BotHDV.maj_csv_value(datetime.date.today(), type_rune, average_price)
-            database.update_average_price_by_name(type_rune, average_price)
-            database.update_average_price_by_name(f"-{type_rune}", average_price)
+                database.update_average_price_by_name(type_rune, average_price)
+                database.update_average_price_by_name(f"-{type_rune}", average_price)

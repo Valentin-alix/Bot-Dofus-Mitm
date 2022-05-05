@@ -23,8 +23,7 @@ class Database:
     def select_all_name_items(self) -> list[str]:
         with self.connection.cursor() as request:
             request.execute("select name from item")
-            results = request.fetchall()
-        return list(sum(results, ()))
+            return list(sum(request.fetchall(), ()))
 
     def select_item_by_name(self, name: str) -> Item:
         item = Item()
@@ -32,10 +31,8 @@ class Database:
         with self.connection.cursor() as request:
             request.execute("select type_rune, value_rune, line_rune, column_rune from target_line "
                             "where name_item = %s", (name,))
-            results = request.fetchall()
             [item.runes.append({"type": result[0], "value": result[1], "line": result[2], "column": result[3]}) for
-             result in results]
-
+             result in request.fetchall()]
         return item
 
     def insert_or_update_item(self, item: Item) -> None:
@@ -65,8 +62,7 @@ class Database:
     def check_if_item_exists(self, name: str) -> bool:
         with self.connection.cursor() as request:
             request.execute("select count(*) from item where item.name = (%s)", (name,))
-            count_item = request.fetchone()
-            return count_item[0]
+            return request.fetchone()[0]
 
     def drop_item_name(self, name: str) -> None:
         with self.connection.cursor() as request:
@@ -82,16 +78,14 @@ class Database:
         with self.connection.cursor() as request:
             request.execute("select id_message from message_network where name_message = %s",
                             (name_message,))
-            result = request.fetchone()
-        return result[0]
+            return request.fetchone()[0]
 
     def select_message_by_id(self, id_message: int) -> str or bool:
         try:
             with self.connection.cursor() as request:
                 request.execute("select name_message from message_network where id_message = %s",
                                 (id_message,))
-                result = request.fetchone()
-            return result[0]
+                return request.fetchone()[0]
         except TypeError:
             return False
 
@@ -134,8 +128,7 @@ class Database:
             with self.connection.cursor() as request:
                 request.execute("select name from rune where item_id = %s",
                                 (item_id,))
-                results = request.fetchall()
-            return results
+                return request.fetchall()
         except TypeError:
             return False
 
@@ -146,14 +139,8 @@ class Database:
                                 "join "
                                 "target_line on target_line.type_rune = rune.name WHERE target_line.name_item = %s;",
                                 (name,))
-                results = request.fetchall()
-                total_price: int = 0
-                for result in results:
-                    total_price += result[1]
-
+                total_price: int = sum(result[1] for result in request.fetchall())
                 request.execute("select item.attempt from item where item.name = %s", (name,))
-                attempt = request.fetchone()
-
-            return round(total_price / attempt[0], 1)
+                return round(total_price / request.fetchone()[0], 1)
         except ZeroDivisionError:
             return 0

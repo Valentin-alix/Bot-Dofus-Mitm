@@ -33,14 +33,14 @@ class Ui(tk.Tk):
         self.interval = 1 / 15
         self.inserted_item: Item = Item()
         self.path_images: str = "static/assets/icones/"
-        self.image_home: ImageTk = self.convert_image_to_interface_image(self.path_images + "home.png")
-        self.image_add_item: ImageTk = self.convert_image_to_interface_image(self.path_images + "add.png")
-        self.image_start_item: ImageTk = self.convert_image_to_interface_image(self.path_images + "weapon.png")
-        self.image_change_item: ImageTk = self.convert_image_to_interface_image(self.path_images + "change.png")
-        self.image_delete_item: ImageTk = self.convert_image_to_interface_image(self.path_images + "delete.png")
-        self.image_validate: ImageTk = self.convert_image_to_interface_image(self.path_images + "validate.png")
-        self.image_cancel: ImageTk = self.convert_image_to_interface_image(self.path_images + "cancel.png")
-        self.image_play: ImageTk = self.convert_image_to_interface_image(self.path_images + "play.png")
+        self.image_home: ImageTk = self.convert_image_to_interface_image(f"{self.path_images}home.png")
+        self.image_add_item: ImageTk = self.convert_image_to_interface_image(f"{self.path_images}add.png")
+        self.image_start_item: ImageTk = self.convert_image_to_interface_image(f"{self.path_images}weapon.png")
+        self.image_change_item: ImageTk = self.convert_image_to_interface_image(f"{self.path_images}change.png")
+        self.image_delete_item: ImageTk = self.convert_image_to_interface_image(f"{self.path_images}delete.png")
+        self.image_validate: ImageTk = self.convert_image_to_interface_image(f"{self.path_images}validate.png")
+        self.image_cancel: ImageTk = self.convert_image_to_interface_image(f"{self.path_images}cancel.png")
+        self.image_play: ImageTk = self.convert_image_to_interface_image(f"{self.path_images}play.png")
         self.image_graphic: ImageTk = ImageTk.PhotoImage(Image.open("static/assets/images/cost_rune_graph.png"))
         self.database: Database = database
 
@@ -388,7 +388,7 @@ class Ui(tk.Tk):
             self.database.drop_item_name(old_name),
             item = Item()
             item.name = name
-            for i, line in enumerate(item_edited):
+            for line in item_edited:
                 if not line[4].get():
                     item.runes.append(
                         {"value": line[0].get(), "line": line[1].get(), "column": line[2].get(), "type": line[3]})
