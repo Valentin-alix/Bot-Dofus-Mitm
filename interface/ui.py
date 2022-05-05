@@ -391,6 +391,6 @@ class Ui(tk.Tk):
             messagebox.showwarning("Erreur valeur", "Veuillez remplir tout les champs ou utiliser \"skip\"")
 
     async def stop_bot(self) -> None:
-        self.queue_actual_item = None
-        self.queue_target_item = None
+        while not self.queue_actual_item.empty():
+            await self.queue_actual_item.get()
         self.event_is_playing.clear()
