@@ -68,10 +68,7 @@ class Data:
         return bool(ans[0])
 
     def writeBoolean(self, b):
-        if b:
-            self.data += b"\x01"
-        else:
-            self.data += b"\x00"
+        self.data += b"\x01" if b else b"\x00"
 
     def readByte(self):
         return int.from_bytes(self.read(1), "big", signed=True)

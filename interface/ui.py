@@ -60,7 +60,7 @@ class Ui(tk.Tk):
         self.menu()
         self.home_page()
 
-    async def updater(self):
+    async def updater(self) -> None:
         while True:
             self.update()
             await asyncio.sleep(self.interval)

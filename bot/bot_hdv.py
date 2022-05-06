@@ -48,13 +48,17 @@ class BotHDV(BotClick):
         if BotHDV.check_if_same_day(type_rune):
             return
         data_frame = pandas.DataFrame(pandas.read_csv(FILENAME, sep=';'), columns=['Time', 'Type', 'Costs'])
-        data_frame = pandas.concat([data_frame, pandas.DataFrame({'Time': [time_when_maj], 'Type': [type_rune], 'Costs': [cost]})])
+        data_frame = pandas.concat(
+            [data_frame, pandas.DataFrame({'Time': [time_when_maj], 'Type': [type_rune], 'Costs': [cost]})])
         data_frame.to_csv(FILENAME, mode='w', index=False, header=True, sep=';')
 
     @staticmethod
     def check_if_same_day(type_rune: str) -> bool:
-        data = pandas.read_csv(FILENAME, sep=';').query(f"Type == \"{type_rune}\"", inplace=True)
-        return any(str(time_rune) == str(datetime.date.today()) for time_rune in pandas.to_datetime(data['Time']).dt.strftime('%Y-%m-%d'))
+        data = pandas.read_csv(FILENAME, sep=';')
+        data.query(f"Type == \"{type_rune}\"", inplace=True)
+
+        return any(str(time_rune) == str(datetime.date.today()) for time_rune in
+                   pandas.to_datetime(data['Time']).dt.strftime('%Y-%m-%d'))
 
     @staticmethod
     def save_graphic() -> None:

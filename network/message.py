@@ -45,7 +45,6 @@ class Message:
                     self.data.readUnsignedShort()
                     inserted_item.runes.append(
                         {"type": database.select_type_rune_by_id(self.data.readVarUhShort()), "value": self.data.readVarUhShort()})
-
                 await queue_inserted_item.put(inserted_item)
 
         elif self.message_id == Database().select_id_by_message(

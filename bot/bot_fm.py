@@ -4,7 +4,6 @@ import time
 from asyncio import Queue
 from dataclasses import dataclass
 from operator import itemgetter
-
 import win32api
 import win32gui
 
