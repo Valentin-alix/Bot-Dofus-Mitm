@@ -2,15 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7701b342-ab0a-474d-a6d9-469b7bb2e9f8" name="Changes" comment="update, fix">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bot/bot_fm.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/bot_fm.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bot/bot_hdv.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/bot_hdv.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/interface/ui.py" beforeDir="false" afterPath="$PROJECT_DIR$/interface/ui.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MakeFile" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/data.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/data.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/network/message.py" beforeDir="false" afterPath="$PROJECT_DIR$/network/message.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/prices_runes.csv" beforeDir="false" afterPath="$PROJECT_DIR$/static/resources/prices_runes.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/todo.md" beforeDir="false" afterPath="$PROJECT_DIR$/todo.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/performance_click.prof" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/todo.md" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
