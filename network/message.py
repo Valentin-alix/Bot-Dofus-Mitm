@@ -1,5 +1,7 @@
 from dataclasses import dataclass
+
 import eel
+
 from databases.database import Database
 from models.data import Data
 from models.item import Item

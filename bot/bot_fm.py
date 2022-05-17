@@ -1,5 +1,6 @@
 import time
 from dataclasses import dataclass
+
 import win32api
 
 from bot.bot_click import BotClick

@@ -1,11 +1,11 @@
 from dataclasses import dataclass, field
 from threading import Event
 
-from databases.database import Database
-
 import win32api
 import win32con
 import win32gui
+
+from databases.database import Database
 
 
 @dataclass
