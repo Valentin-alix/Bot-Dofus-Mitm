@@ -1,0 +1,5 @@
+.idea
+.vscode
+as_script_resources
+**/logs
+**/__pycache__

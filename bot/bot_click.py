@@ -1,18 +1,17 @@
-from asyncio import Event
 from dataclasses import dataclass, field
+from threading import Event
+
+from databases.database import Database
 
 import win32api
 import win32con
 import win32gui
-
-from databases.database import Database
 
 
 @dataclass
 class BotClick:
     database: Database
     nickname: str
-    event_ready: Event
     event_is_playing: Event
     windows_name: str = field(default=None, init=False)
     hwnd: int = field(default=None, init=False)

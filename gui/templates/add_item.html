@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}
+    Add Item
+{% endblock %}
+{% block content %}
+    <div class="add_item">
+        <label>Name : </label>
+        <input type="text" id="name_item">
+        <button type="button" class="btn btn-outline-success" style="height:34px; width:145px;">Ajouter</button>
+        <br>
+        <label>Type Rune</label>
+        <label for="center_label" >Valeur</label><label for="center_label">Ligne</label for="center_label"><label for="center_label">Colonne</label><br>
+        <div id="inserted_item">
+        </div>
+    </div>
+    <script>
+        item = JSON.parse(localStorage.getItem("item"));
+        var liste = document.getElementById("inserted_item");
+        liste.innerHTML = "";
+        for (line of item)
+        {   
+            var newL = document.createElement("label");
+            newL.appendChild(document.createTextNode(`${line['type']}`))
+            liste.appendChild(newL);
+
+            var newI = document.createElement("input");
+            newI.appendChild(document.createTextNode(`${line['value']}`))
+            liste.appendChild(newI);
+
+            var newI = document.createElement("input");
+            liste.appendChild(newI);
+
+            var newI = document.createElement("input");
+            liste.appendChild(newI);
+
+            liste.appendChild(document.createElement('br'));
+        }
+    </script>
+{% endblock %}

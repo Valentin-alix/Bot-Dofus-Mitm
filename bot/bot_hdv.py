@@ -8,7 +8,7 @@ from bot.bot_click import BotClick
 
 LINES_HDV: tuple = (160, 195, 230, 265, 300, 335, 370, 405, 440, 475, 510, 545, 580, 615)
 SCROLL_HDV: tuple = (220, 290, 360, 430, 500, 570, 640)
-FILENAME: str = 'static/resources/prices_runes.csv'
+FILENAME: str = 'static/csv_resources/prices_runes.csv'
 
 
 class BotHDV(BotClick):
