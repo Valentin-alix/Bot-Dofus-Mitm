@@ -6,7 +6,7 @@
     <div class="add_item">
         <label>Name : </label>
         <input type="text" id="name_item">
-        <button type="button" class="btn btn-outline-success" style="height:34px; width:145px;">Ajouter</button>
+        <button type="button" onclick="update_item();" class="btn btn-outline-success" style="height:34px; width:145px;">Ajouter</button>
         <br>
         <label>Type Rune</label>
         <label for="center_label" >Valeur</label><label for="center_label">Ligne</label for="center_label"><label for="center_label">Colonne</label><br>
@@ -24,13 +24,16 @@
             liste.appendChild(newL);
 
             var newI = document.createElement("input");
-            newI.appendChild(document.createTextNode(`${line['value']}`))
+            newI.setAttribute("id", "Value");
+            newI.value = `${line['value']}`;
             liste.appendChild(newI);
 
             var newI = document.createElement("input");
+            newI.setAttribute("id", "Line");
             liste.appendChild(newI);
 
             var newI = document.createElement("input");
+            newI.setAttribute("id", "Column");
             liste.appendChild(newI);
 
             liste.appendChild(document.createElement('br'));

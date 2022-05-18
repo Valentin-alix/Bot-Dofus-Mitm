@@ -66,3 +66,19 @@ class Database:
             request.execute("insert into message_network(protocol_id, message_name) values (%s, %s)",
                             (protocol_id, message_name))
             self.connection.commit()
+
+    @staticmethod
+    def insert_item(target_line: list[dict], name_item: str)-> None:
+        connection = mysql.connector.connect(
+            host=HOST,
+            user=LOGIN,
+            password=PASSWORD,
+            database=DATABASE_NAME,
+        )
+        #FIXME FAIRE UNE PROCÉDURE POUR SA
+        '''with connection.cursor() as request:
+            request.execute("insert into item(name) values (%s)",
+                            (name_item,))
+            request.execute("insert into target_line(value, item_id, rune_id, line, column) select ",
+                            (name_item,))
+            connection.commit()'''
