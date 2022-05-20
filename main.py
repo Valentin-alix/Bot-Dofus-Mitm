@@ -1,4 +1,5 @@
 import logging
+from queue import Queue
 from threading import Event, Thread
 
 import eel
@@ -6,6 +7,12 @@ import eel
 from bot.bot_fm import BotFM
 from databases.database import Database
 from network.sniffer import Sniffer
+
+queue_play_item: Queue = Queue()
+
+@eel.expose
+def play_item(item_name):
+    queue_play_item.put(item_name)
 
 if __name__ == "__main__":
 
@@ -15,10 +22,9 @@ if __name__ == "__main__":
     logger = logging.getLogger(__name__)
     logger.info("Starting Bot")
 
-    event_is_playing: Event = Event()
     database = Database()
-    bot_fm = BotFM(database, "Ezrealeeuu", event_is_playing)
-    sniffer = Sniffer(database, event_is_playing)
+    bot_fm = BotFM(database, "Ezrealeeuu", queue_play_item)
+    sniffer = Sniffer(database)
 
     sniffer_thread = Thread(target=sniffer.launch_sniffer, daemon=True)
     bot_fm_thread = Thread(target=bot_fm.start, daemon=True)

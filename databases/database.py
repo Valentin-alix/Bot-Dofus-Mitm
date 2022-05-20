@@ -1,5 +1,5 @@
 import logging
-
+import eel
 import mysql.connector
 
 HOST: str = "localhost"
@@ -8,6 +8,37 @@ PASSWORD: str = "admin"
 DATABASE_NAME: str = "bot_mitm"
 
 logger = logging.getLogger(__name__)
+
+@eel.expose
+def insert_item(target_line: list[dict], name_item: str)-> None:
+    logger.info(f"Updating Database with : {name_item} | {target_line}")
+    {'Type': 'Vitalité', 'Value': '217', 'Line': '0', 'Column': '0'}
+    connection = mysql.connector.connect(
+        host=HOST,
+        user=LOGIN,
+        password=PASSWORD,
+        database=DATABASE_NAME,
+    )
+    with connection.cursor() as request:
+        request.execute("insert into item(name) values (%s)",
+                        (name_item,))
+        connection.commit()
+        for line in target_line:
+            request.execute("call insert_target_line(%s,%s,%s,%s,%s)", (line['Value'], name_item, line['Type'], line['Line'], line['Column']))
+        connection.commit()
+
+@eel.expose
+def get_all_items()-> dict:
+    logger.info("Getting items infos")
+    connection = mysql.connector.connect(
+        host=HOST,
+        user=LOGIN,
+        password=PASSWORD,
+        database=DATABASE_NAME,
+    )
+    with connection.cursor() as request:
+        request.execute("select name, attempts from item")
+        return request.fetchall()
 
 
 class Database:
@@ -67,18 +98,4 @@ class Database:
                             (protocol_id, message_name))
             self.connection.commit()
 
-    @staticmethod
-    def insert_item(target_line: list[dict], name_item: str)-> None:
-        connection = mysql.connector.connect(
-            host=HOST,
-            user=LOGIN,
-            password=PASSWORD,
-            database=DATABASE_NAME,
-        )
-        #FIXME FAIRE UNE PROCÉDURE POUR SA
-        '''with connection.cursor() as request:
-            request.execute("insert into item(name) values (%s)",
-                            (name_item,))
-            request.execute("insert into target_line(value, item_id, rune_id, line, column) select ",
-                            (name_item,))
-            connection.commit()'''
+    

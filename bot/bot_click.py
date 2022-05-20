@@ -12,7 +12,6 @@ from databases.database import Database
 class BotClick:
     database: Database
     nickname: str
-    event_is_playing: Event
     windows_name: str = field(default=None, init=False)
     hwnd: int = field(default=None, init=False)
 

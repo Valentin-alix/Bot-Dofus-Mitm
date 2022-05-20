@@ -29,9 +29,8 @@ def get_local_ip() -> str:
 
 
 class Sniffer:
-    def __init__(self, database, event_is_playing: Event):
+    def __init__(self, database):
         self.database: Database = database
-        self.event_is_playing: Event = event_is_playing
         self.buffer_client: Data = Data()
         self.buffer_server: Data = Data()
         self.ip_local: str = get_local_ip()

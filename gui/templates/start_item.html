@@ -3,5 +3,24 @@
     Start Item
 {% endblock %}
 {% block content %}
-    liste des items avec start button etc
+    <table class="table table-success table-striped-columns" id="liste_items">
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Attempt</th>
+            <th scope="col">Average Price</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    
 {% endblock %}
+{% block javascripts %}
+    <script>
+        //FIXME
+        eel.get_all_items()(display_item)
+    </script>
+{% endblock %}
+
+    

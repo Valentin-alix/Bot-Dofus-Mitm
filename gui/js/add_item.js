@@ -1,5 +1,3 @@
-// TO GET ITEM INSERTED AND EVENTUALLY ADD IT TO DATABASE
-// TRY EVENT LISTENER ON HREF ADD ITEM AVEC PARAM DE ITEM POUR VOIR
 eel.expose(on_inserted_item);
 function on_inserted_item(item)
 {   
@@ -23,7 +21,6 @@ function update_item()
         {   
             case "BR":
                 continue;
-            //FIX ME VERIFIER QUE TYPE DANS DB
             case "LABEL":
                 {
                     dict_edited_item.push({});
@@ -70,6 +67,6 @@ function update_item()
                 }
         }
     }
-    //ADD DICT TO DB WITH NAME ITEM
+    eel.insert_item(dict_edited_item, name_item);
     redirect("waiting_item.html");
 }

@@ -1,3 +1,6 @@
+import logging
+from queue import Queue
+import queue
 import time
 from dataclasses import dataclass
 
@@ -11,14 +14,22 @@ COLUMNS_POS: tuple = (891, 930, 969)
 POS_EXO_RUNE = win32api.MAKELONG(1050, 150)
 FUSION_RUNE_EXO = win32api.MAKELONG(800, 170)
 
+logger = logging.getLogger(__name__)
 
 @dataclass
 class BotFM(BotClick):
+    queue_play_item: Queue
     target_item: Item = None
 
     def start(self) -> None:
-        while not self.event_is_playing.is_set():
-            time.sleep(1.0)
+        while True:
+            # Get target_lines (type, value, column, line) with name and pass it to Item()
+            self.target_item = self.queue_play_item.get()
+            logger.info(f"Starting item... : {self.target_item}")
+            while self.queue_play_item.empty:
+                logger.info("Clicking on item...")
+                time.sleep(0.1)
+            time.sleep(0.1)
 
 
     '''async def click_rune(self, actual_item: Item) -> None:
