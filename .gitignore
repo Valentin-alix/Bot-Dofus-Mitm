@@ -1,5 +1,6 @@
 .vscode
 as_script_resources
-**/logs
-**/__pycache__
+*/logs
+__pycache__/
+*.py[cod]
 .venv

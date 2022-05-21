@@ -14,7 +14,7 @@ function display_item(items)
     {
         $("table tbody").append(`<tr>
         <td>${item[0]}</td>
-        <td><button onclick="play_item('${item[0]}')">Play</button></td>
+        <td><button class="btn btn-success" onclick="play_item('${item[0]}')">Play</button></td>
         </tr>`); 
     }
 }
