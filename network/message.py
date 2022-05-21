@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 import logging
+from multiprocessing import Event
 from queue import Queue
 
 import eel
@@ -14,9 +15,9 @@ class Message:
     message_id: int = None
     data: Data = None
 
-    def event(self, database: Database, queue_actual_item: Queue) -> None:
+    def event(self, database: Database, queue_actual_item: Queue, event_is_playing: Event) -> None:
         if self.message_id == int(database.select_protocol_id_by_message_name(
-                "ExchangeCraftResultMagicWithObjectDescMessage")):
+                "ExchangeCraftResultMagicWithObjectDescMessage")) and event_is_playing.is_set():
             actual_item = []
             self.data.readByte()
             self.data.readVarUhShort()
@@ -29,7 +30,7 @@ class Message:
             queue_actual_item.put(actual_item)
 
         elif self.message_id == int(
-                database.select_protocol_id_by_message_name("ExchangeObjectAddedMessage")):
+                database.select_protocol_id_by_message_name("ExchangeObjectAddedMessage"))and not event_is_playing.is_set():
             inserted_item = []
             # Ci-dessous remote
             self.data.readBoolean()

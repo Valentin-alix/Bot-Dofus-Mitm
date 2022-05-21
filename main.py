@@ -26,6 +26,12 @@ def play_item(item_name):
 @eel.expose
 def stop_item():
     event_is_playing.clear()
+    while not queue_actual_item.empty():
+        queue_actual_item.get()
+    while not queue_target_item.empty():
+        queue_target_item.get()
+    event_ready.clear()
+    event_move.clear()
 
 if __name__ == "__main__":
     

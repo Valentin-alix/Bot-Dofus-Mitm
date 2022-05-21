@@ -1,6 +1,11 @@
 function play_item(item_name)
 {
-    eel.play_item(item_name)
+    eel.play_item(item_name);
+}
+
+function stop_bot()
+{
+    eel.stop_item();
 }
 
 function display_item(items)
@@ -9,7 +14,6 @@ function display_item(items)
     {
         $("table tbody").append(`<tr>
         <td>${item[0]}</td>
-        <td>${item[1]}</td>
         <td><button onclick="play_item('${item[0]}')">Play</button></td>
         </tr>`); 
     }

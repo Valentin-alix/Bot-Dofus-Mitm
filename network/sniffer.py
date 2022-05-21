@@ -116,7 +116,7 @@ class Sniffer:
                         self.event_ready.clear()
                         self.event_move.set()
                         
-                message.event(self.database, self.queue_actual_item)
+                message.event(self.database, self.queue_actual_item, self.event_is_playing)
                 buffer.end()
             except IndexError:
                 buffer.reset_pos()
