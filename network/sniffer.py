@@ -1,4 +1,5 @@
 import logging
+from queue import Queue
 import socket
 from threading import Event
 
@@ -29,8 +30,12 @@ def get_local_ip() -> str:
 
 
 class Sniffer:
-    def __init__(self, database):
+    def __init__(self, database: Database, queue_actual_item: Queue, event_ready: Event, event_move:Event, event_is_playing: Event):
         self.database: Database = database
+        self.queue_actual_item: Queue = queue_actual_item
+        self.event_ready: Event = event_ready
+        self.event_move: Event = event_move
+        self.event_is_playing: Event = event_is_playing
         self.buffer_client: Data = Data()
         self.buffer_server: Data = Data()
         self.ip_local: str = get_local_ip()
@@ -89,7 +94,6 @@ class Sniffer:
                     break
 
                 len_data = int.from_bytes(buffer.read(header & 3), "big")
-
                 if not self.database.select_message_by_protocol_id(message_id):
                     logger.error("Can't get corresponding message to id, reinitializing buffer")
                     buffer.__init__()
@@ -97,7 +101,22 @@ class Sniffer:
                 logger.info(f"Message :{self.database.select_message_by_protocol_id(message_id)}")
                 data = Data(buffer.read(len_data))
                 message = Message(message_id, data)
-                message.event(self.database)
+                
+                logger.info(f"event is playing :  {self.event_is_playing.is_set()}")
+                logger.info(self.database.select_message_by_protocol_id(message_id))
+                
+                if self.event_is_playing.is_set():
+                    logger.info("event is playing")
+                    if self.database.select_message_by_protocol_id(message_id) == "ExchangeReadyMessage":
+                        logger.info('set event ready')
+                        self.event_ready.clear()
+                        self.event_ready.set()
+                    if self.database.select_message_by_protocol_id(message_id) == "ExchangeObjectMoveMessage":
+                        logger.info('set event move')
+                        self.event_ready.clear()
+                        self.event_move.set()
+                        
+                message.event(self.database, self.queue_actual_item)
                 buffer.end()
             except IndexError:
                 buffer.reset_pos()

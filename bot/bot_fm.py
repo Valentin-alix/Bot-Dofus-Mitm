@@ -1,83 +1,54 @@
 import logging
+from operator import itemgetter
 from queue import Queue
-import queue
+from threading import Thread
 import time
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
-import win32api
+import win32gui
 
 from bot.bot_click import BotClick
-from models.item import Item
-
-LINES_POS: tuple = (251, 282, 313, 344, 375, 406, 437, 468, 499, 530, 561, 592, 623)
-COLUMNS_POS: tuple = (891, 930, 969)
-POS_EXO_RUNE = win32api.MAKELONG(1050, 150)
-FUSION_RUNE_EXO = win32api.MAKELONG(800, 170)
 
 logger = logging.getLogger(__name__)
 
 @dataclass
 class BotFM(BotClick):
-    queue_play_item: Queue
-    target_item: Item = None
+    queue_target_item: Queue
+    queue_actual_item: Queue
+    target_item: list[dict] = field(default_factory=list)
+    actual_item: list[dict] = field(default_factory=list)
 
     def start(self) -> None:
         while True:
-            # Get target_lines (type, value, column, line) with name and pass it to Item()
-            self.target_item = self.queue_play_item.get()
+            self.target_item = self.database.select_target_line_by_name(self.queue_target_item.get())
             logger.info(f"Starting item... : {self.target_item}")
-            while self.queue_play_item.empty:
-                logger.info("Clicking on item...")
-                time.sleep(0.1)
-            time.sleep(0.1)
+            while self.event_is_playing.is_set():
+                self.actual_item = self.queue_actual_item.get()
+                self.click_rune()
+                time.sleep(0.01)
+            time.sleep(0.01)
 
 
-    '''async def click_rune(self, actual_item: Item) -> None:
+    def click_rune(self) -> None:
         if self.windows_name is None:
             self.find_windows_name()
             self.hwnd = win32gui.FindWindow(None, self.windows_name)
-
+        
         priorities: list[dict] = []
-        for i, target_rune, in enumerate(self.target_item.runes):
+        for i, target_rune, in enumerate(self.target_item):
             priorities.append({"value": 0, "line": target_rune.get("line"),
                                "column": target_rune.get("column")})
-            for rune in actual_item.runes:
-                if target_rune.get("type") == rune.get("type"):
+            for rune in self.actual_item:
+                if target_rune.get("rune_name") == rune.get("rune_name"):
                     priorities[i]["value"] = rune.get("value") / target_rune.get("value")
-                    priorities[i]["type"] = rune.get("type")
-
+                    priorities[i]["rune_name"] = rune.get("rune_name")
+        
         high_priority = min(priorities, key=itemgetter('value'))
-        before_click_time: float = time.perf_counter()
+        
         if high_priority.get("value") >= 1:
-            self.click(POS_EXO_RUNE)
-            self.click(POS_EXO_RUNE)
-            self.click(FUSION_RUNE_EXO)
-            logging.info("Click Exo")
-            self.database.update_exo_on_item_by_name(self.target_item.name)
+            self.click_exo()
+            logger.info("Click Exo")
         else:
-            quantity: int = 1
-            if high_priority.get('column') == 2:
-                quantity = 3
-            elif high_priority.get('column') == 3:
-                quantity = 10
-            time.sleep(1.0)
-            self.click(win32api.MAKELONG(COLUMNS_POS[high_priority.get("column")],
-                                         LINES_POS[high_priority.get("line")]))
-            logging.info(f"Click {high_priority.get('column')} {high_priority.get('line')}")
-            self.database.update_quantity_on_target_line_by_type_rune(high_priority.get('type'), self.target_item.name,
-                                                                      quantity)
-        while not self.event_ready.is_set() and self.event_is_playing.is_set():
-            await asyncio.sleep(0.001)
-            if time.perf_counter() - before_click_time < 6.0:
-                continue
-            before_click_time: float = time.perf_counter()
-            if high_priority.get("value") >= 1:
-                self.click(POS_EXO_RUNE)
-                self.click(POS_EXO_RUNE)
-                await asyncio.sleep(0.5)
-                self.click(FUSION_RUNE_EXO)
-                logging.info("Click Exo")
-            else:
-                self.click(win32api.MAKELONG(COLUMNS_POS[high_priority.get("column")],
-                                             LINES_POS[high_priority.get("line")]))
-                logging.info(f"Click {high_priority.get('column')} {high_priority.get('line')}")'''
+            time.sleep(0.1)
+            self.click_on_rune(high_priority.get("column"),high_priority.get("line"))
+            logger.info(f"Click {high_priority.get('column')} {high_priority.get('line')}")

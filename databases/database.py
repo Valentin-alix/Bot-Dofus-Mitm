@@ -1,4 +1,5 @@
 import logging
+from MySQLdb import InternalError
 import eel
 import mysql.connector
 
@@ -72,6 +73,12 @@ class Database:
             request.execute("select rune_name from rune where rune_id = %s", (rune_id,))
             return request.fetchone()[0]
 
+    def select_target_line_by_name(self, item_name: str) -> list[tuple]:
+        with self.connection.cursor(dictionary=True) as request:
+            request.execute("select `value`, rune.rune_name, line, `column` from target_line join rune on target_line.rune_id = rune.id join item on item.id = target_line.item_id where item.name = %s;", (item_name,))
+            return request.fetchall()
+        
+    
     def delete_message_network(self) -> None:
         with self.connection.cursor() as request:
             request.execute("delete from message_network")
