@@ -13,5 +13,5 @@
 You can now launch the bot, insert an item in the forgemagie workshop, 
 edit item values, valid and launch the item in the start item page
 
-![StartPage](gui/assets/images/StartPage.PNG)
-![GraphicPage](gui/assets/images/GraphicPage.PNG)
+![](gui/assets/images/StartPage.PNG = x250)
+![](gui/assets/images/GraphicPage.PNG = x250)
