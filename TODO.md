@@ -1,4 +1,4 @@
-Include negative rune,
-Optimise performance,
-Make graphic more lisible, show only year / month
-Find bug..
+- Include negative rune,
+- Optimise performance,
+- Make graphic more lisible, show only year / month
+- Find bug..
