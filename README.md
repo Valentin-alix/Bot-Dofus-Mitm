@@ -1,8 +1,8 @@
-# BOT FORGEMAGIE
+# BOT Forgemagie
 
 ## Bot with sniffer and pywin32 to automaticate clicks
--
-How to use the bot :
+
+### How to use the bot :
 - Install dependencies ``pip install -r requirements.txt``
 - Import the bot_sniffer.sql file
 - Modify the path in decompiler.bat
@@ -12,3 +12,6 @@ How to use the bot :
 
 You can now launch the bot, insert an item in the forgemagie workshop, 
 edit item values, valid and launch the item in the start item page
+
+![StartPage](gui/assets/images/StartPage.PNG)
+![GraphicPage](gui/assets/images/GraphicPage.PNG)
