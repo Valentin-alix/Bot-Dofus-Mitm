@@ -1,1 +1,3 @@
-passer argument between thread 1, thread 2 et eel gui
+Include negative rune,
+Optimiser performance,
+Find bug..

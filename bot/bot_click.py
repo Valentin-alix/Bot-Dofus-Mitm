@@ -32,7 +32,7 @@ class BotClick:
         before_click = time.perf_counter()
         self.click(win32api.MAKELONG(COLUMNS_POS[num_column], LINES_POS[num_line]))
         while self.event_is_playing.is_set() and not self.event_ready.is_set():
-            time.sleep(0.01)
+            time.sleep(0.001)
             if time.perf_counter() - before_click > 5.0:
                 self.click(win32api.MAKELONG(COLUMNS_POS[num_column], LINES_POS[num_line]))
                 before_click = time.perf_counter()

@@ -18,7 +18,6 @@ class Message:
     data: Data = None
 
     def event(self, database: Database, queue_actual_item: Queue, event_is_playing: Event) -> None:
-        logger.info(self.message_id)
         if self.message_id == int(database.select_protocol_id_by_message_name(
                 "ExchangeCraftResultMagicWithObjectDescMessage")) and event_is_playing.is_set():
             actual_item = []

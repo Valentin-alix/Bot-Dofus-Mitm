@@ -1,3 +1,4 @@
+from asyncio.log import logger
 import datetime
 from time import time, perf_counter
 import eel
@@ -28,7 +29,7 @@ def save_graphic() -> None:
     plt.yticks(np.arange(0.0, 45000.0, 2000.0))
     plt.savefig(fname="gui/assets/images/cost_rune_graph.png", dpi=130)
     plt.close()
-    print(perf_counter() - avant)
+    logger.info(f"Refresh graphic in : {perf_counter() - avant}")
 
 class BotHDV(BotClick):
     #FIXME AUTOMATE CLICKS

@@ -1,7 +1,6 @@
 import logging
 from operator import itemgetter
 from queue import Queue
-from threading import Thread
 import time
 from dataclasses import dataclass, field
 
@@ -25,11 +24,13 @@ class BotFM(BotClick):
             while self.event_is_playing.is_set():
                 self.actual_item = self.queue_actual_item.get()
                 self.click_rune()
-                time.sleep(0.01)
-            time.sleep(0.01)
+                time.sleep(0.001)
+            time.sleep(0.001)
 
 
     def click_rune(self) -> None:
+        logger.info(f"actual item : {self.actual_item}")
+        logger.info(f"target item : {self.target_item}")
         if self.windows_name is None:
             self.find_windows_name()
             self.hwnd = win32gui.FindWindow(None, self.windows_name)

@@ -8,7 +8,7 @@ from bot.bot_fm import BotFM
 from databases.database import Database
 from network.sniffer import Sniffer
 
-logging.basicConfig(level=logging.INFO, filename="logs/bot.log", filemode="w+", format="%(asctime)s - %("
+logging.basicConfig(level=logging.INFO, filename="logs/bot.log", filemode="w+", format=" %(filename)s: %(asctime)s - %("
                                                                                            "levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
