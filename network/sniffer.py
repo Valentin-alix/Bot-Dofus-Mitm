@@ -102,20 +102,15 @@ class Sniffer:
                 data = Data(buffer.read(len_data))
                 message = Message(message_id, data)
                 
-                logger.info(f"event is playing :  {self.event_is_playing.is_set()}")
                 logger.info(self.database.select_message_by_protocol_id(message_id))
                 
                 if self.event_is_playing.is_set():
-                    logger.info("event is playing")
                     if self.database.select_message_by_protocol_id(message_id) == "ExchangeReadyMessage":
-                        logger.info('set event ready')
                         self.event_ready.clear()
                         self.event_ready.set()
                     if self.database.select_message_by_protocol_id(message_id) == "ExchangeObjectMoveMessage":
-                        logger.info('set event move')
                         self.event_ready.clear()
                         self.event_move.set()
-                        
                 message.event(self.database, self.queue_actual_item, self.event_is_playing)
                 buffer.end()
             except IndexError:

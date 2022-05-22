@@ -18,6 +18,7 @@ class Message:
     data: Data = None
 
     def event(self, database: Database, queue_actual_item: Queue, event_is_playing: Event) -> None:
+        logger.info(self.message_id)
         if self.message_id == int(database.select_protocol_id_by_message_name(
                 "ExchangeCraftResultMagicWithObjectDescMessage")) and event_is_playing.is_set():
             actual_item = []
@@ -51,8 +52,8 @@ class Message:
                          "value": self.data.readVarUhShort()})
 
             eel.on_inserted_item(inserted_item)
-        elif self.message_id == Database().select_id_by_message(
-                "ExchangeTypesItemsExchangerDescriptionForUserMessage"):
+        elif self.message_id == int(database.select_protocol_id_by_message_name(
+                "ExchangeTypesItemsExchangerDescriptionForUserMessage")):
             prices: list = []
             action_id: int = 0
             object_gid = self.data.readVarUhInt()
@@ -72,7 +73,7 @@ class Message:
 
                 [prices.append(self.data.readVarUhLong()) for _ in range(prices_len)]
             try:
-                type_rune: str = database.select_type_rune_by_id(action_id)
+                type_rune: str = database.select_rune_name_by_rune_id(action_id)
             except TypeError:
                 return
             if prices[2]:
@@ -83,8 +84,8 @@ class Message:
                 average_price: int = prices[0]
             else:
                 return
-            # FIXME UPDATE ADD OBJECT GID
-            if database.select_name_by_item_id(object_gid):
+            
+            if database.select_name_by_object_id(object_gid):
                 BotHDV.maj_csv_value(datetime.date.today(), type_rune, average_price)
                 database.update_average_price_by_name(type_rune, average_price)
-                database.update_average_price_by_name(f"-{type_rune}", average_price)
+                # database.update_average_price_by_name(f"-{type_rune}", average_price)

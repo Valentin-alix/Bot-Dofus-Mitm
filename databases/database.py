@@ -30,7 +30,6 @@ def insert_item(target_line: list[dict], name_item: str)-> None:
 
 @eel.expose
 def get_all_items()-> dict:
-    logger.info("Getting items infos")
     connection = mysql.connector.connect(
         host=HOST,
         user=LOGIN,
@@ -41,6 +40,19 @@ def get_all_items()-> dict:
         request.execute("select name, attempts from item")
         return request.fetchall()
 
+@eel.expose
+def delete_item(name_item: str)-> None:
+    connection = mysql.connector.connect(
+        host=HOST,
+        user=LOGIN,
+        password=PASSWORD,
+        database=DATABASE_NAME,
+    )
+    with connection.cursor() as request:
+        request.execute("delete target_line.* from target_line join item on target_line.item_id = item.id where item.name = %s", (name_item,))
+        connection.commit()
+        request.execute("delete from item where name = %s", (name_item,))
+        connection.commit()
 
 class Database:
     def __init__(self) -> None:
@@ -77,7 +89,14 @@ class Database:
         with self.connection.cursor(dictionary=True) as request:
             request.execute("select `value`, rune.rune_name, line, `column` from target_line join rune on target_line.rune_id = rune.id join item on item.id = target_line.item_id where item.name = %s;", (item_name,))
             return request.fetchall()
-        
+    
+    def select_name_by_object_id(self, object_id: int) -> str or bool:
+        try:
+            with self.connection.cursor() as request:
+                request.execute("select rune_id from rune where object_id = %s", (object_id,))
+                return request.fetchone()[0]
+        except TypeError:
+            return False
     
     def delete_message_network(self) -> None:
         with self.connection.cursor() as request:
@@ -99,6 +118,18 @@ class Database:
                                 (rune_id, rune_name, reliquat_weight))
             self.connection.commit()
 
+    def update_average_price_by_name(self, type_rune: str, average_price: int) -> None:
+        with self.connection.cursor() as request:
+            request.execute("update rune set average_price = %s where rune_name = %s",
+                            (average_price, type_rune))
+            self.connection.commit()
+    
+    def update_object_id_by_rune_id(self, object_id: int, rune_id: int) -> None:
+        with self.connection.cursor() as request:
+            request.execute("update rune set object_id = %s where rune_id = %s",
+                            (object_id, rune_id))
+            self.connection.commit()
+    
     def insert_message_network(self, protocol_id: int, message_name: str) -> None:
         with self.connection.cursor() as request:
             request.execute("insert into message_network(protocol_id, message_name) values (%s, %s)",
