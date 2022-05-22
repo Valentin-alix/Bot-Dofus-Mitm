@@ -1,4 +1,6 @@
-Bot with sniffer and pywin32 to automaticate clicks
+# BOT FORGEMAGIE
+
+## Bot with sniffer and pywin32 to automaticate clicks
 -
 How to use the bot :
 - Install dependencies ``pip install -r requirements.txt``
