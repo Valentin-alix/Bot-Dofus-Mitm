@@ -87,4 +87,4 @@ class Message:
             if select_name_by_object_id(object_gid):
                 BotHDV.maj_csv_value(datetime.date.today(), type_rune, average_price)
                 update_average_price_by_name(type_rune, average_price)
-                # update_average_price_by_name(f"-{type_rune}", average_price)
+                update_average_price_by_name(f"-{type_rune}", average_price)

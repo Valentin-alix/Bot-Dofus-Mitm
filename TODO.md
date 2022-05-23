@@ -1,4 +1,4 @@
-- Include negative rune,
+- Add edit option, skip line options
 - Optimise performance,
 - Make graphic more lisible, show only year / month
 - Find bug..
