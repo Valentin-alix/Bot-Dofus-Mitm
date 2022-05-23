@@ -1,4 +1,4 @@
-- Add edit option, skip line options
-- Optimise performance,
-- Make graphic more lisible, show only year / month
+- Keep button disabled when playing even if change page
+- Optimize performance,
+- Make graphic more readable, show only year / month
 - Find bug..

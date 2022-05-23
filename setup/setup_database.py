@@ -5,6 +5,7 @@ from databases.database import delete_all_rune, delete_message_network, insert_m
 
 
 
+
 def setup_list_runes():
     list_rune = {111: "PA", 112: "Dommages", 115: "%Critique", 117: "Portée", 118: "Force", 119: "Agilité",
                  123: "Chance",

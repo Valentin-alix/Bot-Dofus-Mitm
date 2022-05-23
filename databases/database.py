@@ -70,7 +70,7 @@ def select_name_by_object_id(object_id: int) -> str or bool:
     try:
         with connection.cursor() as request:
             request.execute("select rune_id from rune where object_id = %s", (object_id,))
-            return request.fetchone()[0]
+            return request.fetchall()
     except TypeError:
         return False
 
