@@ -7,6 +7,7 @@ from dataclasses import dataclass, field
 import win32gui
 
 from bot.bot_click import BotClick
+from databases.database import *
 
 logger = logging.getLogger(__name__)
 
@@ -19,7 +20,7 @@ class BotFM(BotClick):
 
     def start(self) -> None:
         while True:
-            self.target_item = self.database.select_target_line_by_name(self.queue_target_item.get())
+            self.target_item = select_target_line_by_name(self.queue_target_item.get())
             logger.info(f"Starting item... : {self.target_item}")
             while self.event_is_playing.is_set():
                 self.actual_item = self.queue_actual_item.get()

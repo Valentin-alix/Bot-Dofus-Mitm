@@ -4,8 +4,8 @@ import socket
 from threading import Event
 
 import pyshark
+from databases.database import *
 
-from databases.database import Database
 from models.data import Data
 from network.message import Message
 
@@ -30,8 +30,7 @@ def get_local_ip() -> str:
 
 
 class Sniffer:
-    def __init__(self, database: Database, queue_actual_item: Queue, event_ready: Event, event_move:Event, event_is_playing: Event):
-        self.database: Database = database
+    def __init__(self, queue_actual_item: Queue, event_ready: Event, event_move:Event, event_is_playing: Event):
         self.queue_actual_item: Queue = queue_actual_item
         self.event_ready: Event = event_ready
         self.event_move: Event = event_move
@@ -94,24 +93,24 @@ class Sniffer:
                     break
 
                 len_data = int.from_bytes(buffer.read(header & 3), "big")
-                if not self.database.select_message_by_protocol_id(message_id):
+                if not select_message_by_protocol_id(message_id):
                     logger.error("Can't get corresponding message to id, reinitializing buffer")
                     buffer.__init__()
                     break
-                logger.info(f"Message :{self.database.select_message_by_protocol_id(message_id)}")
+                logger.info(f"Message :{select_message_by_protocol_id(message_id)}")
                 data = Data(buffer.read(len_data))
                 message = Message(message_id, data)
                 
-                logger.info(self.database.select_message_by_protocol_id(message_id))
+                logger.info(select_message_by_protocol_id(message_id))
                 
                 if self.event_is_playing.is_set():
-                    if self.database.select_message_by_protocol_id(message_id) == "ExchangeReadyMessage":
+                    if select_message_by_protocol_id(message_id) == "ExchangeReadyMessage":
                         self.event_ready.clear()
                         self.event_ready.set()
-                    if self.database.select_message_by_protocol_id(message_id) == "ExchangeObjectMoveMessage":
+                    if select_message_by_protocol_id(message_id) == "ExchangeObjectMoveMessage":
                         self.event_ready.clear()
                         self.event_move.set()
-                message.event(self.database, self.queue_actual_item, self.event_is_playing)
+                message.event(self.queue_actual_item, self.event_is_playing)
                 buffer.end()
             except IndexError:
                 buffer.reset_pos()

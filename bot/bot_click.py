@@ -6,8 +6,6 @@ import win32api
 import win32con
 import win32gui
 
-from databases.database import Database
-
 LINES_POS: tuple = (251, 282, 313, 344, 375, 406, 437, 468, 499, 530, 561, 592, 623)
 COLUMNS_POS: tuple = (891, 930, 969)
 POS_EXO_RUNE = win32api.MAKELONG(1050, 150)
@@ -15,7 +13,6 @@ FUSION_RUNE_EXO = win32api.MAKELONG(800, 170)
 
 @dataclass
 class BotClick:
-    database: Database
     nickname: str
     event_is_playing: Event
     event_ready: Event
@@ -45,7 +42,7 @@ class BotClick:
         self.click(POS_EXO_RUNE)
         self.click(POS_EXO_RUNE)
         while self.event_is_playing.is_set() and not self.event_move.is_set():
-            time.sleep(0.01)
+            time.sleep(0.001)
             if time.perf_counter() - before_click > 5.0:
                 self.click(POS_EXO_RUNE)
                 self.click(POS_EXO_RUNE)
@@ -54,7 +51,7 @@ class BotClick:
         time.sleep(0.5)
         self.click(FUSION_RUNE_EXO)
         while self.event_is_playing.is_set() and not self.event_ready.is_set():
-            time.sleep(0.01)
+            time.sleep(0.001)
             if time.perf_counter() - before_click > 5.0:
                 self.click(FUSION_RUNE_EXO)
                 before_click = time.perf_counter()

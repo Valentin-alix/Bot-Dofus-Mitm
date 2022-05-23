@@ -6,8 +6,8 @@ from queue import Queue
 
 import eel
 from bot.bot_hdv import BotHDV
+from databases.database import *
 
-from databases.database import Database
 from models.data import Data
 
 logger = logging.getLogger(__name__)
@@ -17,8 +17,8 @@ class Message:
     message_id: int = None
     data: Data = None
 
-    def event(self, database: Database, queue_actual_item: Queue, event_is_playing: Event) -> None:
-        if self.message_id == int(database.select_protocol_id_by_message_name(
+    def event(self, queue_actual_item: Queue, event_is_playing: Event) -> None:
+        if self.message_id == int(select_protocol_id_by_message_name(
                 "ExchangeCraftResultMagicWithObjectDescMessage")) and event_is_playing.is_set():
             actual_item = []
             self.data.readByte()
@@ -27,12 +27,12 @@ class Message:
             for _ in range(effects_len):
                 self.data.readUnsignedShort()
                 actual_item.append(
-                    {"rune_name": database.select_rune_name_by_rune_id(self.data.readVarUhShort()),
+                    {"rune_name": select_rune_name_by_rune_id(self.data.readVarUhShort()),
                      "value": self.data.readVarUhShort()})
             queue_actual_item.put(actual_item)
 
         elif self.message_id == int(
-                database.select_protocol_id_by_message_name("ExchangeObjectAddedMessage"))and not event_is_playing.is_set():
+                select_protocol_id_by_message_name("ExchangeObjectAddedMessage"))and not event_is_playing.is_set():
             inserted_item = []
             # Ci-dessous remote
             self.data.readBoolean()
@@ -47,11 +47,11 @@ class Message:
                 for _ in range(effects_len):
                     self.data.readUnsignedShort()
                     inserted_item.append(
-                        {"type": database.select_rune_name_by_rune_id(self.data.readVarUhShort()),
+                        {"type": select_rune_name_by_rune_id(self.data.readVarUhShort()),
                          "value": self.data.readVarUhShort()})
 
             eel.on_inserted_item(inserted_item)
-        elif self.message_id == int(database.select_protocol_id_by_message_name(
+        elif self.message_id == int(select_protocol_id_by_message_name(
                 "ExchangeTypesItemsExchangerDescriptionForUserMessage")):
             prices: list = []
             action_id: int = 0
@@ -72,7 +72,7 @@ class Message:
 
                 [prices.append(self.data.readVarUhLong()) for _ in range(prices_len)]
             try:
-                type_rune: str = database.select_rune_name_by_rune_id(action_id)
+                type_rune: str = select_rune_name_by_rune_id(action_id)
             except TypeError:
                 return
             if prices[2]:
@@ -84,7 +84,7 @@ class Message:
             else:
                 return
             
-            if database.select_name_by_object_id(object_gid):
+            if select_name_by_object_id(object_gid):
                 BotHDV.maj_csv_value(datetime.date.today(), type_rune, average_price)
-                database.update_average_price_by_name(type_rune, average_price)
-                # database.update_average_price_by_name(f"-{type_rune}", average_price)
+                update_average_price_by_name(type_rune, average_price)
+                # update_average_price_by_name(f"-{type_rune}", average_price)
