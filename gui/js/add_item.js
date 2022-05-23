@@ -9,63 +9,28 @@ function on_inserted_item(item)
     }
 }
 
+
 function update_item()
 {
-    const edited_item = document.getElementById("inserted_item");
     const name_item = document.getElementById("name_item").value;
     let dict_edited_item = [];
-    const lines = edited_item.childNodes;
-    for (const line of lines)
-    {   
-        switch (line.nodeName)
-        {   
-            case "BR":
-                continue;
-            case "LABEL":
-                {
-                    dict_edited_item.push({});
-                    dict_edited_item[dict_edited_item.length-1]['Type'] = line.textContent;
-                    continue;
-                }
-            case "INPUT":
-                let parsed_int = parseInt(line.value);
-                switch (line.id)
-                {
-                    case "Value":
-                        if (Number.isInteger(parsed_int))
-                        {
-                            dict_edited_item[dict_edited_item.length-1]['Value'] = line.value;
-                            continue;
-                        }
-                        else
-                        {
-                            alert("Veuillez remplir tous les champs avec des valeurs corrects");
-                            return
-                        }
-                    case "Line":
-                        if (Number.isInteger(parsed_int) && parsed_int <= 13)
-                        {
-                            dict_edited_item[dict_edited_item.length-1]['Line'] = line.value;
-                            continue;
-                        }
-                        else
-                        {
-                            alert("Veuillez remplir tous les champs avec des valeurs corrects");
-                            return
-                        }
-                    case "Column":
-                        if (Number.isInteger(parsed_int) && parsed_int <= 2)
-                        {
-                            dict_edited_item[dict_edited_item.length-1]['Column'] = line.value;
-                            continue;
-                        }
-                        else
-                        {
-                            alert("Veuillez remplir tous les champs avec des valeurs corrects");
-                            return
-                        }
-                }
+
+    let all_types = document.querySelectorAll("#Type")
+    let all_values = document.querySelectorAll("#Value")
+    let all_columns = document.querySelectorAll("#Column")
+    let all_lines = document.querySelectorAll("#Line")
+    for (var i=0; i<all_types.length; i++)
+    {
+        if (!Number.isInteger(parseInt(all_lines[i].value)) || !Number.isInteger(parseInt(all_columns[i].value)) || !Number.isInteger(parseInt(all_values[i].value)))
+        {
+            alert("Veuillez compléter les champs avec des valeurs valides")
+            return;
         }
+        dict_edited_item.push({})
+        dict_edited_item[dict_edited_item.length-1]['Type'] = all_types[i].textContent;
+        dict_edited_item[dict_edited_item.length-1]['Value'] = all_values[i].value;
+        dict_edited_item[dict_edited_item.length-1]['Line'] = all_lines[i].value;
+        dict_edited_item[dict_edited_item.length-1]['Column'] = all_columns[i].value;
     }
     eel.insert_item(dict_edited_item, name_item);
     redirect("waiting_item.html");

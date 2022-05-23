@@ -15,32 +15,41 @@
     </div>
     <script>
         item = JSON.parse(localStorage.getItem("item"));
-        var liste = document.getElementById("inserted_item");
-        liste.innerHTML = "";
+        let inserted_item = document.getElementById("inserted_item");
         for (line of item)
         {   
-            var newL = document.createElement("label");
-            newL.appendChild(document.createTextNode(`${line['type']}`))
-            liste.appendChild(newL);
+            let lineDiv = document.createElement("div");
+            lineDiv.setAttribute("id", line['type']);
 
-            var newI = document.createElement("input");
-            newI.setAttribute("id", "Value");
-            newI.value = `${line['value']}`;
-            liste.appendChild(newI);
+            let typeLabel = document.createElement("label");
+            typeLabel.appendChild(document.createTextNode(`${line['type']}`))
+            typeLabel.setAttribute("id", "Type");
+            lineDiv.appendChild(typeLabel);
 
-            var newI = document.createElement("input");
-            newI.setAttribute("id", "Line");
-            liste.appendChild(newI);
+            let valueInput = document.createElement("input");
+            valueInput.setAttribute("id", "Value");
+            valueInput.value = `${line['value']}`;
+            lineDiv.appendChild(valueInput);
 
-            var newI = document.createElement("input");
-            newI.setAttribute("id", "Column");
-            liste.appendChild(newI);
+            let lineInput = document.createElement("input");
+            lineInput.setAttribute("id", "Line");
+            lineDiv.appendChild(lineInput);
 
-            var newB = document.createElement("button");
-            newB.setAttribute("id", line['type']);
-            liste.appendChild(newB);
+            let columnInput = document.createElement("input");
+            columnInput.setAttribute("id", "Column");
+            lineDiv.appendChild(columnInput);
 
-            liste.appendChild(document.createElement('br'));
+            let SkipButton = document.createElement("button");
+            let name_line = line['type']
+            SkipButton.setAttribute("class", "skipButton")
+            SkipButton.setAttribute("id", name_line);
+            SkipButton.innerHTML = "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='white' class='bi bi-x' viewBox='0 0 16 16'><path d='M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z'/></svg>"
+            SkipButton.onclick = function(event) {
+                document.getElementById(name_line).remove()
+              }
+            lineDiv.appendChild(SkipButton);
+
+            inserted_item.append(lineDiv);
         }
     </script>
 {% endblock %}

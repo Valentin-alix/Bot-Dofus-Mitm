@@ -43,3 +43,8 @@ label[for=center_label]{
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
 }
+
+.skipButton
+{
+    background-color: grey;
+}
