@@ -16,6 +16,7 @@ class BotClick:
     nickname: str
     event_is_playing: Event
     event_ready: Event
+    event_magic: Event
     event_move: Event
     windows_name: str = field(default=None, init=False)
     hwnd: int = field(default=None, init=False)
@@ -26,9 +27,10 @@ class BotClick:
 
     def click_on_rune(self, num_column, num_line) -> None:
         self.event_ready.clear()
+        self.event_magic.clear()
         before_click = time.perf_counter()
         self.click(win32api.MAKELONG(COLUMNS_POS[num_column], LINES_POS[num_line]))
-        while self.event_is_playing.is_set() and not self.event_ready.is_set():
+        while self.event_is_playing.is_set() and not self.event_ready.is_set() and not self.event_magic.is_set():
             time.sleep(0.001)
             if time.perf_counter() - before_click > 5.0:
                 self.click(win32api.MAKELONG(COLUMNS_POS[num_column], LINES_POS[num_line]))

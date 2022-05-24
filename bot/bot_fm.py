@@ -51,6 +51,6 @@ class BotFM(BotClick):
             self.click_exo()
             logger.info("Click Exo")
         else:
-            time.sleep(0.1)
+            time.sleep(0.05)
             self.click_on_rune(high_priority.get("column"),high_priority.get("line"))
             logger.info(f"Click {high_priority.get('column')} {high_priority.get('line')}")

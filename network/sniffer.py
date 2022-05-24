@@ -30,9 +30,10 @@ def get_local_ip() -> str:
 
 
 class Sniffer:
-    def __init__(self, queue_actual_item: Queue, event_ready: Event, event_move:Event, event_is_playing: Event):
+    def __init__(self, queue_actual_item: Queue, event_ready: Event, event_magic: Event, event_move:Event, event_is_playing: Event):
         self.queue_actual_item: Queue = queue_actual_item
         self.event_ready: Event = event_ready
+        self.event_magic: Event = event_magic
         self.event_move: Event = event_move
         self.event_is_playing: Event = event_is_playing
         self.buffer_client: Data = Data()
@@ -107,9 +108,12 @@ class Sniffer:
                     if select_message_by_protocol_id(message_id) == "ExchangeReadyMessage":
                         self.event_ready.clear()
                         self.event_ready.set()
-                    if select_message_by_protocol_id(message_id) == "ExchangeObjectMoveMessage":
-                        self.event_ready.clear()
+                    elif select_message_by_protocol_id(message_id) == "ExchangeObjectMoveMessage":
+                        self.event_move.clear()
                         self.event_move.set()
+                    elif select_message_by_protocol_id(message_id) == "ExchangeCraftResultMagicWithObjectDescMessage":
+                        self.event_magic.clear()
+                        self.event_magic.set()
                 message.event(self.queue_actual_item, self.event_is_playing)
                 buffer.end()
             except IndexError:
