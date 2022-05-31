@@ -1,8 +1,6 @@
 import logging
 from queue import Queue
 from threading import Event, Thread
-from time import time
-
 import eel
 
 from bot.bot_fm import BotFM
@@ -33,8 +31,6 @@ def stop_item():
         queue_target_item.get()
     event_ready.clear()
     event_move.clear()
-    
-    
     
 if __name__ == "__main__":
     eel.init('gui')

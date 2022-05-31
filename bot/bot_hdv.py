@@ -1,12 +1,14 @@
-from asyncio.log import logger
 import datetime
-from time import time, perf_counter
+import logging
+from time import perf_counter
 import eel
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pandas
 
 from bot.bot_click import BotClick
+
+logger = logging.getLogger(__name__)
 
 LINES_HDV: tuple = (160, 195, 230, 265, 300, 335, 370, 405, 440, 475, 510, 545, 580, 615)
 SCROLL_HDV: tuple = (220, 290, 360, 430, 500, 570, 640)
@@ -19,10 +21,12 @@ def save_graphic() -> None:
     data_frame_test = data_frame.copy()
     data_frame_test.drop_duplicates(subset="Type", keep='first', inplace=True)
     fig, ax = plt.subplots()
+    data_frame = data_frame.sort_index()
     [ax.plot(data_frame[data_frame.Type == type_rune].Time, data_frame[data_frame.Type == type_rune].Costs,
                 label=type_rune) for type_rune in data_frame_test['Type']]
 
     ax.set_xlabel("Time")
+    
     ax.set_ylabel("Costs")
     ax.legend(loc='best')
     plt.legend(loc=2, prop={'size': 3.5})
@@ -32,7 +36,7 @@ def save_graphic() -> None:
     logger.info(f"Refresh graphic in : {perf_counter() - avant}")
 
 class BotHDV(BotClick):
-    #FIXME AUTOMATE CLICKS
+    #TODO AUTOMATE CLICKS
     
     @staticmethod
     def maj_csv_value(time_when_maj: datetime.date, type_rune: str, cost: int) -> None:

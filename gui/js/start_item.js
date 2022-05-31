@@ -1,12 +1,12 @@
 function play_item(item_name)
 {
     eel.play_item(item_name);
-    all_play_button = document.querySelectorAll("#play_button")
+    /*all_play_button = document.querySelectorAll("#play_button")
     for (play_button of all_play_button)
     {
         play_button.disabled = true;
     }
-    document.getElementById("stop_button").disabled = false;
+    document.getElementById("stop_button").disabled = false;*/
 }
 
 function delete_item(item_name)
@@ -20,12 +20,12 @@ function stop_bot()
 {
     eel.stop_item();
     
-    all_play_button = document.querySelectorAll("#play_button")
+    /*all_play_button = document.querySelectorAll("#play_button")
     for (play_button of all_play_button)
     {
         play_button.disabled = false;
     }
-    document.getElementById("stop_button").disabled = true;
+    document.getElementById("stop_button").disabled = true;*/
 }
 
 function display_item(items)

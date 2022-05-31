@@ -53,6 +53,7 @@ class Message:
             eel.on_inserted_item(inserted_item)
         elif self.message_id == int(select_protocol_id_by_message_name(
                 "ExchangeTypesItemsExchangerDescriptionForUserMessage")):
+            logger.info("Adding Rune in csv...")
             prices: list = []
             action_id: int = 0
             object_gid = self.data.readVarUhInt()
