@@ -30,7 +30,7 @@ def get_local_ip() -> str:
 
 
 class Sniffer:
-    def __init__(self, queue_actual_item: Queue, event_ready: Event, event_magic: Event, event_move:Event, event_is_playing: Event):
+    def __init__(self, queue_actual_item: Queue, event_ready: Event, event_magic: Event, event_move: Event, event_is_playing: Event):
         self.queue_actual_item: Queue = queue_actual_item
         self.event_ready: Event = event_ready
         self.event_magic: Event = event_magic
@@ -78,7 +78,8 @@ class Sniffer:
     def from_raw(self, buffer: Data, from_client: bool) -> None:
         while True:
             try:
-                logger.info(f"{from_client} | Trying to extract these data : {buffer}")
+                logger.info(
+                    f"{from_client} | Trying to extract these data : {buffer}")
 
                 header = buffer.readUnsignedShort()
                 message_id = header >> 2
@@ -87,7 +88,8 @@ class Sniffer:
                     buffer.readUnsignedInt()
 
                 if id == 2:
-                    logger.info("Message is NetworkDataContainerMessage! Uncompressing...")
+                    logger.info(
+                        "Message is NetworkDataContainerMessage! Uncompressing...")
                     new_buffer = Data(buffer.readByteArray())
                     new_buffer.uncompress()
                     self.from_raw(new_buffer, from_client)
@@ -95,23 +97,28 @@ class Sniffer:
 
                 len_data = int.from_bytes(buffer.read(header & 3), "big")
                 if not select_message_by_protocol_id(message_id):
-                    logger.error("Can't get corresponding message to id, reinitializing buffer")
+                    logger.error(
+                        "Can't get corresponding message to id, reinitializing buffer")
                     buffer.__init__()
                     break
-                logger.info(f"Message :{select_message_by_protocol_id(message_id)}")
+                logger.info(
+                    f"Message :{select_message_by_protocol_id(message_id)}")
                 data = Data(buffer.read(len_data))
                 message = Message(message_id, data)
-                
+
                 logger.info(select_message_by_protocol_id(message_id))
-                
+
                 if self.event_is_playing.is_set():
                     if select_message_by_protocol_id(message_id) == "ExchangeReadyMessage":
+                        logger.info("clear ready message then set")
                         self.event_ready.clear()
                         self.event_ready.set()
                     elif select_message_by_protocol_id(message_id) == "ExchangeObjectMoveMessage":
+                        logger.info("clear ready message then set")
                         self.event_move.clear()
                         self.event_move.set()
                     elif select_message_by_protocol_id(message_id) == "ExchangeCraftResultMagicWithObjectDescMessage":
+                        logger.info("clear ready message then set")
                         self.event_magic.clear()
                         self.event_magic.set()
                 message.event(self.queue_actual_item, self.event_is_playing)

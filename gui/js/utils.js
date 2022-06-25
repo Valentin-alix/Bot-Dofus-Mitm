@@ -7,7 +7,7 @@ function redirect(page = "home.html") {
   document.location.href = page;
 }
 
-// FIXME TO FIX BUG WHEN CHANGING QUICKLY PAGE
+// FIXME BUG WHEN CHANGING QUICKLY PAGE
 window.onload = function () {
   for (anchor of document.getElementsByTagName("a")) {
     anchor.addEventListener(

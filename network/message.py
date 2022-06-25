@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 import datetime
 import logging
-from multiprocessing import Event
 from queue import Queue
+from threading import Event
 
 import eel
 from bot.bot_hdv import BotHDV
@@ -11,6 +11,7 @@ from databases.database import *
 from models.data import Data
 
 logger = logging.getLogger(__name__)
+
 
 @dataclass
 class Message:
@@ -29,10 +30,13 @@ class Message:
                 actual_item.append(
                     {"rune_name": select_rune_name_by_rune_id(self.data.readVarUhShort()),
                      "value": self.data.readVarUhShort()})
+            with queue_actual_item.mutex:
+                queue_actual_item.queue.clear()
+            logger.info(f"Receiving message with : {actual_item}")
             queue_actual_item.put(actual_item)
 
         elif self.message_id == int(
-                select_protocol_id_by_message_name("ExchangeObjectAddedMessage"))and not event_is_playing.is_set():
+                select_protocol_id_by_message_name("ExchangeObjectAddedMessage")) and not event_is_playing.is_set():
             inserted_item = []
             # Ci-dessous remote
             self.data.readBoolean()
@@ -71,7 +75,8 @@ class Message:
 
                 prices_len: int = self.data.readUnsignedShort()
 
-                [prices.append(self.data.readVarUhLong()) for _ in range(prices_len)]
+                [prices.append(self.data.readVarUhLong())
+                 for _ in range(prices_len)]
             try:
                 type_rune: str = select_rune_name_by_rune_id(action_id)
             except TypeError:
@@ -84,8 +89,9 @@ class Message:
                 average_price: int = prices[0]
             else:
                 return
-            
+
             if select_name_by_object_id(object_gid):
-                BotHDV.maj_csv_value(datetime.date.today(), type_rune, average_price)
+                BotHDV.maj_csv_value(datetime.date.today(),
+                                     type_rune, average_price)
                 update_average_price_by_name(type_rune, average_price)
                 update_average_price_by_name(f"-{type_rune}", average_price)

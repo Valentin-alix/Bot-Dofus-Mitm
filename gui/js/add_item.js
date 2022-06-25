@@ -1,3 +1,5 @@
+const VAR_REGEX = /[^A-Za-z0-9]+/
+
 eel.expose(on_inserted_item);
 function on_inserted_item(item)
 {   
@@ -12,7 +14,14 @@ function on_inserted_item(item)
 
 function update_item()
 {
-    const name_item = document.getElementById("name_item").value;
+    let name_item = document.getElementById("name_item").value;
+
+    if (VAR_REGEX.test(name_item))
+    {
+        alert("Veuillez mettre un nom d'item valide (seulement des chiffres et des lettres)")
+        return
+    }
+
     let dict_edited_item = [];
 
     let all_types = document.querySelectorAll("#Type")

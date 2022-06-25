@@ -1,4 +1,4 @@
-- Keep button disabled when playing even if change page
-- Optimize performance,
+- Optimize performance(especially on the launch)
 - Make graphic more readable, show only year / month
 - Find bug..
+- Find a better looking icon

@@ -2,6 +2,7 @@ import re
 from os import walk
 from databases.database import delete_all_rune, delete_message_network, insert_message_network, insert_rune
 
+
 def setup_list_runes():
     list_rune = {111: "PA", 112: "Dommages", 115: "%Critique", 117: "Portée", 118: "Force", 119: "Agilité",
                  123: "Chance",
@@ -30,6 +31,7 @@ def maj_protocol_id():
                 lines = opened_file.readlines()
                 [insert_message_network(re.findall(r'\d+', line)[0], file[:-3]) for line in lines if
                  "protocolId:uint" in line]
+
 
 if __name__ == "__main__":
     maj_protocol_id()
