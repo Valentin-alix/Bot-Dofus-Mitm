@@ -1,4 +1,6 @@
+- Fix bug with sniffer/click threads ?
+- Fix bug when changing item it sometimes don't launch
+- Fix bug with database
 - Optimize performance(especially on the launch)
 - Make graphic more readable, show only year / month
-- Find bug..
-- Find a better looking icon
+- Find bugs..

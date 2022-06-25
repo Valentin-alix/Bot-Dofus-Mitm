@@ -190,6 +190,7 @@ class Data:
             ans += (b & 0b01111111) << i
             if not b & 0b10000000:
                 return ans
+        logger.error("Too much data")
         raise Exception("Too much data")
 
     def writeVarShort(self, i):

@@ -30,8 +30,6 @@ class Message:
                 actual_item.append(
                     {"rune_name": select_rune_name_by_rune_id(self.data.readVarUhShort()),
                      "value": self.data.readVarUhShort()})
-            with queue_actual_item.mutex:
-                queue_actual_item.queue.clear()
             logger.info(f"Receiving message with : {actual_item}")
             queue_actual_item.put(actual_item)
 

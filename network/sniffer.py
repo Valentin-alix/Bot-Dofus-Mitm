@@ -110,16 +110,13 @@ class Sniffer:
 
                 if self.event_is_playing.is_set():
                     if select_message_by_protocol_id(message_id) == "ExchangeReadyMessage":
-                        logger.info("clear ready message then set")
-                        self.event_ready.clear()
+                        logger.info("set ready message")
                         self.event_ready.set()
                     elif select_message_by_protocol_id(message_id) == "ExchangeObjectMoveMessage":
-                        logger.info("clear ready message then set")
-                        self.event_move.clear()
+                        logger.info("set move message")
                         self.event_move.set()
                     elif select_message_by_protocol_id(message_id) == "ExchangeCraftResultMagicWithObjectDescMessage":
-                        logger.info("clear ready message then set")
-                        self.event_magic.clear()
+                        logger.info("set magic message")
                         self.event_magic.set()
                 message.event(self.queue_actual_item, self.event_is_playing)
                 buffer.end()
