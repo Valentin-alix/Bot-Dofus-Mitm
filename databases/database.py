@@ -1,6 +1,6 @@
 import logging
 import eel
-import mysql.connector
+from mysql.connector import connect, Error
 
 logger = logging.getLogger(__name__)
 
@@ -9,13 +9,12 @@ LOGIN: str = "root"
 PASSWORD: str = "admin"
 DATABASE_NAME: str = "bot_mitm"
 
-connection = mysql.connector.connect(
-    host=HOST,
-    user=LOGIN,
-    password=PASSWORD,
-    database=DATABASE_NAME,
-)
-logger.info("MySQL connection done")
+try:
+    connection =  connect(host=HOST, user=LOGIN, password=PASSWORD, database=DATABASE_NAME)
+    logger.info("MySQL connection done")
+except Error as e:
+    print(e)
+    logger.info("MySQL connection error")
 
 
 @eel.expose

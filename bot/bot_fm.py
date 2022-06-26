@@ -1,4 +1,3 @@
-from cmath import log
 import logging
 from operator import itemgetter
 from queue import Queue
@@ -16,7 +15,6 @@ logger = logging.getLogger(__name__)
 @dataclass
 class BotFM(BotClick):
     queue_target_item: Queue
-    queue_actual_item: Queue
     target_item: list[dict] = field(default_factory=list)
     actual_item: list[dict] = field(default_factory=list)
 
@@ -55,7 +53,7 @@ class BotFM(BotClick):
             logger.info("Click Exo")
             self.click_exo()
         else:
-            time.sleep(0.2)
+            time.sleep(0.15)
             logger.info(
                 f"Click {high_priority.get('column')} {high_priority.get('line')}")
             self.click_on_rune(high_priority.get("column"),

@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 import logging
+from queue import Queue
 from threading import Event
 import time
 import numpy as np
@@ -19,9 +20,9 @@ FUSION_RUNE_EXO = win32api.MAKELONG(800, 170)
 @dataclass
 class BotClick:
     nickname: str
+    queue_actual_item: Queue
     event_is_playing: Event
     event_ready: Event
-    event_magic: Event
     event_move: Event
     windows_name: str = field(default=None, init=False)
     hwnd: int = field(default=None, init=False)
@@ -32,14 +33,12 @@ class BotClick:
         win32gui.SendMessage(self.hwnd, win32con.WM_LBUTTONUP, None, l_param)
 
     def click_on_rune(self, num_column, num_line) -> None:
-        self.event_ready.clear()
-        self.event_magic.clear()
         before_click = time.perf_counter()
         self.click(win32api.MAKELONG(
             COLUMNS_POS[num_column], LINES_POS[num_line]))
-        while self.event_is_playing.is_set() and not self.event_ready.is_set() and not self.event_magic.is_set():
+        while self.event_is_playing.is_set() and self.queue_actual_item.empty():
             time.sleep(0.001)
-            if time.perf_counter() - before_click > 5.0:
+            if time.perf_counter() - before_click > 7.0:
                 logger.info(
                     f"5 seconds passed, reclicking...{num_column} | {num_line}")
                 self.click(win32api.MAKELONG(
@@ -54,7 +53,7 @@ class BotClick:
         self.click(POS_EXO_RUNE)
         while self.event_is_playing.is_set() and not self.event_move.is_set():
             time.sleep(0.001)
-            if time.perf_counter() - before_click > 5.0:
+            if time.perf_counter() - before_click > 7.0:
                 logger.info("5 seconds passed, reclicking move exo...")
                 self.click(POS_EXO_RUNE)
                 self.click(POS_EXO_RUNE)
