@@ -53,7 +53,7 @@ class Message:
                          "value": self.data.readVarUhShort()})
 
             eel.on_inserted_item(inserted_item)
-        elif self.message_id == int(select_protocol_id_by_message_name(
+        '''elif self.message_id == int(select_protocol_id_by_message_name(
                 "ExchangeTypesItemsExchangerDescriptionForUserMessage")):
             logger.info("Adding Rune in csv...")
             prices: list = []
@@ -92,4 +92,4 @@ class Message:
                 BotHDV.maj_csv_value(datetime.date.today(),
                                      type_rune, average_price)
                 update_average_price_by_name(type_rune, average_price)
-                update_average_price_by_name(f"-{type_rune}", average_price)
+                update_average_price_by_name(f"-{type_rune}", average_price)'''

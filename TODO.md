@@ -1,5 +1,6 @@
+- Add average price per rune
 - Fix bug with sniffer/click threads ?
-- Fix bug when changing item it sometimes don't launch
+- Fix bug when changing item it sometimes don't launch : ExchangeItemDescriptionMessage bug : ?
 - Fix bug with database
 - Optimize performance(especially on the launch)
 - Make graphic more readable, show only year / month
