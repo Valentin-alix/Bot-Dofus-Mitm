@@ -47,9 +47,8 @@ class Sniffer:
 
     def on_receive(self, packet) -> None:
         if hasattr(packet, 'tcp') and hasattr(packet.tcp, 'payload'):
-            packet_data = packet.tcp.payload
+            packet_data = packet.tcp.payload.replace(":", "")
             if packet.ip.src == self.ip_local:
-
                 logger.info(f"Data receive : {packet_data}")
                 self.buffer_client += bytearray.fromhex(packet_data)
                 self.from_raw(self.buffer_client, True)
