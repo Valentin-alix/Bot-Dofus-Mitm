@@ -1,9 +1,9 @@
- main.py: 2022-09-04 19:04:14,918 - INFO - Starting Bot
- sniffer.py: 2022-09-04 19:04:14,918 - INFO - Local ip = 192.168.249.171
- sniffer.py: 2022-09-04 19:04:14,918 - INFO - Launching Sniffer
- handler.py: 2022-09-04 19:04:15,401 - INFO - 127.0.0.1 - - [2022-09-04 19:04:15] "GET /templates/home.html HTTP/1.1" 200 4045 0.005003
- handler.py: 2022-09-04 19:04:15,420 - INFO - 127.0.0.1 - - [2022-09-04 19:04:15] "GET /css/style.css HTTP/1.1" 200 809 0.003002
- handler.py: 2022-09-04 19:04:15,421 - INFO - 127.0.0.1 - - [2022-09-04 19:04:15] "GET /eel.js HTTP/1.1" 200 6069 0.000000
- handler.py: 2022-09-04 19:04:15,425 - INFO - 127.0.0.1 - - [2022-09-04 19:04:15] "GET /js/add_item.js HTTP/1.1" 200 1953 0.000996
- handler.py: 2022-09-04 19:04:15,439 - INFO - 127.0.0.1 - - [2022-09-04 19:04:15] "GET /js/start_item.js HTTP/1.1" 200 2183 0.000490
- handler.py: 2022-09-04 19:04:15,441 - INFO - 127.0.0.1 - - [2022-09-04 19:04:15] "GET /js/utils.js HTTP/1.1" 200 413 0.000974
+ app.py: 2022-09-04 19:05:13,015 - INFO - Starting Bot
+ sniffer.py: 2022-09-04 19:05:13,015 - INFO - Local ip = 192.168.249.171
+ sniffer.py: 2022-09-04 19:05:13,015 - INFO - Launching Sniffer
+ handler.py: 2022-09-04 19:05:13,488 - INFO - 127.0.0.1 - - [2022-09-04 19:05:13] "GET /templates/home.html HTTP/1.1" 200 4045 0.003994
+ handler.py: 2022-09-04 19:05:13,516 - INFO - 127.0.0.1 - - [2022-09-04 19:05:13] "GET /css/style.css HTTP/1.1" 200 809 0.001328
+ handler.py: 2022-09-04 19:05:13,518 - INFO - 127.0.0.1 - - [2022-09-04 19:05:13] "GET /eel.js HTTP/1.1" 200 6095 0.000731
+ handler.py: 2022-09-04 19:05:13,521 - INFO - 127.0.0.1 - - [2022-09-04 19:05:13] "GET /js/add_item.js HTTP/1.1" 200 1953 0.000998
+ handler.py: 2022-09-04 19:05:13,542 - INFO - 127.0.0.1 - - [2022-09-04 19:05:13] "GET /js/start_item.js HTTP/1.1" 200 2183 0.000971
+ handler.py: 2022-09-04 19:05:13,545 - INFO - 127.0.0.1 - - [2022-09-04 19:05:13] "GET /js/utils.js HTTP/1.1" 200 413 0.001616
