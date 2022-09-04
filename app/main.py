@@ -1,6 +1,7 @@
 import logging
 from queue import Queue
 from threading import Event, Thread
+import eel
 
 from bot.bot_fm import BotFM
 from network.sniffer import Sniffer
@@ -17,14 +18,18 @@ event_is_playing: Event = Event()
 
 
 if __name__ == "__main__":
+    eel.init('gui')
+
     logger.info("Starting Bot")
 
     bot_fm = BotFM("Ezrealeeuu", queue_actual_item, event_is_playing, event_ready,
                     event_move, queue_target_item)
     sniffer = Sniffer(queue_actual_item, event_ready, event_move, event_is_playing)
 
-    sniffer_thread = Thread(target=sniffer.launch_sniffer)
-    bot_fm_thread = Thread(target=bot_fm.start)
+    sniffer_thread = Thread(target=sniffer.launch_sniffer, daemon=True)
+    bot_fm_thread = Thread(target=bot_fm.start, daemon=True)
 
     sniffer_thread.start()
     bot_fm_thread.start()
+
+    eel.start('templates/home.html', jinja_templates='templates', block=True)
