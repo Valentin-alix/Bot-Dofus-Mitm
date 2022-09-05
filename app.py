@@ -6,10 +6,13 @@ import eel
 from bot.bot_fm import BotFM
 from network.sniffer import Sniffer
 
-logging.basicConfig(level=logging.INFO, filename="logs/bot.log", filemode="w+", format=" %(filename)s: %(asctime)s - %("
-                    "levelname)s - %(message)s")
+logging.basicConfig(
+    level=logging.INFO,
+    filename="logs/bot.log",
+    filemode="w+",
+    format=" %(filename)s: %(asctime)s - %(" "levelname)s - %(message)s",
+)
 logger = logging.getLogger(__name__)
-
 queue_target_item: Queue = Queue()
 queue_actual_item: Queue = Queue()
 event_ready: Event = Event()
@@ -37,12 +40,18 @@ def stop_item() -> None:
 
 
 if __name__ == "__main__":
-    eel.init('gui')
+    eel.init("gui")
 
     logger.info("Starting Bot")
 
-    bot_fm = BotFM("Ezrealeeuu", queue_actual_item, event_is_playing, event_ready,
-                    event_move, queue_target_item)
+    bot_fm = BotFM(
+        "Ezrealeeuu",
+        queue_actual_item,
+        event_is_playing,
+        event_ready,
+        event_move,
+        queue_target_item,
+    )
     sniffer = Sniffer(queue_actual_item, event_ready, event_move, event_is_playing)
 
     sniffer_thread = Thread(target=sniffer.launch_sniffer, daemon=True)
@@ -51,4 +60,6 @@ if __name__ == "__main__":
     sniffer_thread.start()
     bot_fm_thread.start()
 
-    eel.start('templates/home.html', jinja_templates='templates', block=True)
+    eel.start(
+        "templates/home.html", jinja_templates="templates", block=True, size=(1000, 700)
+    )

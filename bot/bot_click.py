@@ -29,20 +29,20 @@ class BotClick:
 
     def click(self, l_param: win32api.MAKELONG) -> None:
         win32gui.SendMessage(
-            self.hwnd, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON, l_param)
+            self.hwnd, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON, l_param
+        )
         win32gui.SendMessage(self.hwnd, win32con.WM_LBUTTONUP, None, l_param)
 
     def click_on_rune(self, num_column, num_line) -> None:
         before_click = time.perf_counter()
-        self.click(win32api.MAKELONG(
-            COLUMNS_POS[num_column], LINES_POS[num_line]))
+        self.click(win32api.MAKELONG(COLUMNS_POS[num_column], LINES_POS[num_line]))
         while self.event_is_playing.is_set() and self.queue_actual_item.empty():
             time.sleep(0.001)
             if time.perf_counter() - before_click > 7.0:
-                logger.info(
-                    f"5 seconds passed, reclicking...{num_column} | {num_line}")
-                self.click(win32api.MAKELONG(
-                    COLUMNS_POS[num_column], LINES_POS[num_line]))
+                logger.info(f"5 seconds passed, reclicking...{num_column} | {num_line}")
+                self.click(
+                    win32api.MAKELONG(COLUMNS_POS[num_column], LINES_POS[num_line])
+                )
                 before_click = time.perf_counter()
 
     def click_exo(self) -> None:
@@ -70,7 +70,9 @@ class BotClick:
 
     def find_windows_name(self) -> None:
         def win_enum_handler(hwnd, ctx):
-            if win32gui.IsWindowVisible(hwnd) and self.nickname in win32gui.GetWindowText(hwnd):
+            if win32gui.IsWindowVisible(
+                hwnd
+            ) and self.nickname in win32gui.GetWindowText(hwnd):
                 self.windows_name = win32gui.GetWindowText(hwnd)
 
         win32gui.EnumWindows(win_enum_handler, None)

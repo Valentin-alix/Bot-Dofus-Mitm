@@ -20,8 +20,7 @@ class BotFM(BotClick):
 
     def start(self) -> None:
         while True:
-            self.target_item = select_target_line_by_name(
-                self.queue_target_item.get())
+            self.target_item = select_target_line_by_name(self.queue_target_item.get())
             logger.info(f"Starting item... : {self.target_item}")
             while self.event_is_playing.is_set():
                 self.actual_item = self.queue_actual_item.get()
@@ -38,16 +37,22 @@ class BotFM(BotClick):
             self.hwnd = win32gui.FindWindow(None, self.windows_name)
 
         priorities: list[dict] = []
-        for i, target_rune, in enumerate(self.target_item):
-            priorities.append({"value": 0, "line": target_rune.get("line"),
-                               "column": target_rune.get("column")})
+        for (i, target_rune) in enumerate(self.target_item):
+            priorities.append(
+                {
+                    "value": 0,
+                    "line": target_rune.get("line"),
+                    "column": target_rune.get("column"),
+                }
+            )
             for rune in self.actual_item:
                 if target_rune.get("rune_name") == rune.get("rune_name"):
-                    priorities[i]["value"] = rune.get(
-                        "value") / target_rune.get("value")
+                    priorities[i]["value"] = rune.get("value") / target_rune.get(
+                        "value"
+                    )
                     priorities[i]["rune_name"] = rune.get("rune_name")
 
-        high_priority = min(priorities, key=itemgetter('value'))
+        high_priority = min(priorities, key=itemgetter("value"))
 
         if high_priority.get("value") >= 1:
             logger.info("Click Exo")
@@ -55,6 +60,6 @@ class BotFM(BotClick):
         else:
             time.sleep(0.15)
             logger.info(
-                f"Click {high_priority.get('column')} {high_priority.get('line')}")
-            self.click_on_rune(high_priority.get("column"),
-                               high_priority.get("line"))
+                f"Click {high_priority.get('column')} {high_priority.get('line')}"
+            )
+            self.click_on_rune(high_priority.get("column"), high_priority.get("line"))

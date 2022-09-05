@@ -4,6 +4,5 @@ function sleep(milliseconds) {
 }
 
 function redirect(page = "home.html") {
-  sleep(180);
   document.location.href = page;
 }
