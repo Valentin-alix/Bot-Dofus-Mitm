@@ -18,7 +18,7 @@ def get_connection():
     try:
         if connections.get(threading.get_ident(), None) is None:
             connections[threading.get_ident()] = sqlite3.connect("sqlite3.db")
-        logger.info("connection done")
+            logger.info("connection done")
         return connections[threading.get_ident()]
     except Exception as e:
         logger.info(f"connection error : {e}")
