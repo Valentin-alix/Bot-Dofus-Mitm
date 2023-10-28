@@ -1,4 +1,8 @@
+import logging
+
 from models.data import Data
+
+logger = logging.getLogger(__name__)
 
 
 class ExchangeObjectAddedMessage:
@@ -7,4 +11,4 @@ class ExchangeObjectAddedMessage:
         return None
 
     def on_receive(message):
-        print(message)
+        logger.info(message)
