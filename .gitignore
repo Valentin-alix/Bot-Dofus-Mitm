@@ -1,6 +1,8 @@
-.vscode
-as_script_resources
-*/logs
+as_scripts
+d2o_json
+logs
 __pycache__/
 *.py[cod]
 .venv
+.env
+sqlite3.db

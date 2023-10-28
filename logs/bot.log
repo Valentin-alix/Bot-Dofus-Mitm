@@ -1,166 +1,310 @@
- app.py: 2022-09-04 20:30:43,943 - INFO - Starting Bot
- sniffer.py: 2022-09-04 20:30:43,943 - INFO - Local ip = 192.168.249.171
- sniffer.py: 2022-09-04 20:30:43,943 - INFO - Launching Sniffer
- handler.py: 2022-09-04 20:30:44,420 - INFO - 127.0.0.1 - - [2022-09-04 20:30:44] "GET /templates/home.html HTTP/1.1" 200 1625 0.003995
- handler.py: 2022-09-04 20:30:44,440 - INFO - 127.0.0.1 - - [2022-09-04 20:30:44] "GET /css/style.css HTTP/1.1" 200 851 0.002552
- handler.py: 2022-09-04 20:30:44,442 - INFO - 127.0.0.1 - - [2022-09-04 20:30:44] "GET /eel.js HTTP/1.1" 200 6102 0.000804
- handler.py: 2022-09-04 20:30:44,460 - INFO - 127.0.0.1 - - [2022-09-04 20:30:44] "GET /js/add_item.js HTTP/1.1" 200 1953 0.002051
- handler.py: 2022-09-04 20:30:44,463 - INFO - 127.0.0.1 - - [2022-09-04 20:30:44] "GET /js/start_item.js HTTP/1.1" 200 1044 0.001088
- handler.py: 2022-09-04 20:30:44,465 - INFO - 127.0.0.1 - - [2022-09-04 20:30:44] "GET /js/utils.js HTTP/1.1" 200 398 0.001077
- handler.py: 2022-09-04 20:30:46,746 - INFO - 127.0.0.1 - - [2022-09-04 20:30:46] "GET /templates/waiting_item.html HTTP/1.1" 200 1698 0.001011
- handler.py: 2022-09-04 20:30:46,761 - INFO - 127.0.0.1 - - [2022-09-04 20:30:46] "GET /css/style.css HTTP/1.1" 200 851 0.000000
- handler.py: 2022-09-04 20:30:46,763 - INFO - 127.0.0.1 - - [2022-09-04 20:30:46] "GET /eel.js HTTP/1.1" 200 6102 0.001001
- handler.py: 2022-09-04 20:30:46,764 - INFO - 127.0.0.1 - - [2022-09-04 20:30:46] "GET /js/add_item.js HTTP/1.1" 200 1953 0.001002
- handler.py: 2022-09-04 20:30:46,765 - INFO - 127.0.0.1 - - [2022-09-04 20:30:46] "GET /js/start_item.js HTTP/1.1" 200 1044 0.000997
- handler.py: 2022-09-04 20:30:46,766 - INFO - 127.0.0.1 - - [2022-09-04 20:30:46] "GET /js/utils.js HTTP/1.1" 200 398 0.001000
- handler.py: 2022-09-04 20:30:48,217 - INFO - 127.0.0.1 - - [2022-09-04 20:30:48] "GET /templates/home.html HTTP/1.1" 200 1625 0.001007
- handler.py: 2022-09-04 20:30:48,231 - INFO - 127.0.0.1 - - [2022-09-04 20:30:48] "GET /css/style.css HTTP/1.1" 200 851 0.000000
- handler.py: 2022-09-04 20:30:48,243 - INFO - 127.0.0.1 - - [2022-09-04 20:30:48] "GET /eel.js HTTP/1.1" 200 6102 0.000000
- handler.py: 2022-09-04 20:30:48,244 - INFO - 127.0.0.1 - - [2022-09-04 20:30:48] "GET /js/add_item.js HTTP/1.1" 200 1953 0.000000
- handler.py: 2022-09-04 20:30:48,245 - INFO - 127.0.0.1 - - [2022-09-04 20:30:48] "GET /js/start_item.js HTTP/1.1" 200 1044 0.000000
- handler.py: 2022-09-04 20:30:48,246 - INFO - 127.0.0.1 - - [2022-09-04 20:30:48] "GET /js/utils.js HTTP/1.1" 200 398 0.001004
- handler.py: 2022-09-04 20:30:48,760 - INFO - 127.0.0.1 - - [2022-09-04 20:30:48] "GET /templates/waiting_item.html HTTP/1.1" 200 1698 0.001003
- handler.py: 2022-09-04 20:30:48,780 - INFO - 127.0.0.1 - - [2022-09-04 20:30:48] "GET /css/style.css HTTP/1.1" 200 851 0.000995
- handler.py: 2022-09-04 20:30:48,793 - INFO - 127.0.0.1 - - [2022-09-04 20:30:48] "GET /eel.js HTTP/1.1" 200 6102 0.001014
- handler.py: 2022-09-04 20:30:48,795 - INFO - 127.0.0.1 - - [2022-09-04 20:30:48] "GET /js/add_item.js HTTP/1.1" 200 1953 0.001002
- handler.py: 2022-09-04 20:30:48,797 - INFO - 127.0.0.1 - - [2022-09-04 20:30:48] "GET /js/start_item.js HTTP/1.1" 200 1044 0.001012
- handler.py: 2022-09-04 20:30:48,797 - INFO - 127.0.0.1 - - [2022-09-04 20:30:48] "GET /js/utils.js HTTP/1.1" 200 398 0.000000
- handler.py: 2022-09-04 20:30:49,217 - INFO - 127.0.0.1 - - [2022-09-04 20:30:49] "GET /templates/start_item.html HTTP/1.1" 200 2386 0.004003
- handler.py: 2022-09-04 20:30:49,238 - INFO - 127.0.0.1 - - [2022-09-04 20:30:49] "GET /css/style.css HTTP/1.1" 200 851 0.000997
- handler.py: 2022-09-04 20:30:49,238 - INFO - 127.0.0.1 - - [2022-09-04 20:30:49] "GET /eel.js HTTP/1.1" 200 6102 0.000000
- handler.py: 2022-09-04 20:30:49,239 - INFO - 127.0.0.1 - - [2022-09-04 20:30:49] "GET /js/add_item.js HTTP/1.1" 200 1953 0.000000
- handler.py: 2022-09-04 20:30:49,240 - INFO - 127.0.0.1 - - [2022-09-04 20:30:49] "GET /js/start_item.js HTTP/1.1" 200 1044 0.000998
- handler.py: 2022-09-04 20:30:49,240 - INFO - 127.0.0.1 - - [2022-09-04 20:30:49] "GET /js/utils.js HTTP/1.1" 200 398 0.000000
- handler.py: 2022-09-04 20:30:50,396 - INFO - 127.0.0.1 - - [2022-09-04 20:30:50] "GET /templates/waiting_item.html HTTP/1.1" 200 1698 0.001001
- handler.py: 2022-09-04 20:30:50,417 - INFO - 127.0.0.1 - - [2022-09-04 20:30:50] "GET /css/style.css HTTP/1.1" 200 851 0.001014
- handler.py: 2022-09-04 20:30:50,419 - INFO - 127.0.0.1 - - [2022-09-04 20:30:50] "GET /eel.js HTTP/1.1" 200 6102 0.000000
- handler.py: 2022-09-04 20:30:50,421 - INFO - 127.0.0.1 - - [2022-09-04 20:30:50] "GET /js/add_item.js HTTP/1.1" 200 1953 0.001941
- handler.py: 2022-09-04 20:30:50,422 - INFO - 127.0.0.1 - - [2022-09-04 20:30:50] "GET /js/start_item.js HTTP/1.1" 200 1044 0.000993
- handler.py: 2022-09-04 20:30:50,423 - INFO - 127.0.0.1 - - [2022-09-04 20:30:50] "GET /js/utils.js HTTP/1.1" 200 398 0.000000
- handler.py: 2022-09-04 20:31:45,719 - INFO - 127.0.0.1 - - [2022-09-04 20:31:45] "GET /templates/home.html HTTP/1.1" 200 1625 0.000000
- handler.py: 2022-09-04 20:31:45,742 - INFO - 127.0.0.1 - - [2022-09-04 20:31:45] "GET /css/style.css HTTP/1.1" 200 820 0.001475
- handler.py: 2022-09-04 20:31:45,744 - INFO - 127.0.0.1 - - [2022-09-04 20:31:45] "GET /eel.js HTTP/1.1" 200 6102 0.001012
- handler.py: 2022-09-04 20:31:45,745 - INFO - 127.0.0.1 - - [2022-09-04 20:31:45] "GET /js/add_item.js HTTP/1.1" 200 1953 0.000506
- handler.py: 2022-09-04 20:31:45,749 - INFO - 127.0.0.1 - - [2022-09-04 20:31:45] "GET /js/start_item.js HTTP/1.1" 200 1044 0.000998
- handler.py: 2022-09-04 20:31:45,750 - INFO - 127.0.0.1 - - [2022-09-04 20:31:45] "GET /js/utils.js HTTP/1.1" 200 398 0.000996
- handler.py: 2022-09-04 20:32:07,839 - INFO - 127.0.0.1 - - [2022-09-04 20:32:07] "GET /templates/home.html HTTP/1.1" 200 1625 0.001018
- handler.py: 2022-09-04 20:32:07,859 - INFO - 127.0.0.1 - - [2022-09-04 20:32:07] "GET /css/style.css HTTP/1.1" 200 819 0.001306
- handler.py: 2022-09-04 20:32:07,860 - INFO - 127.0.0.1 - - [2022-09-04 20:32:07] "GET /eel.js HTTP/1.1" 200 6102 0.000000
- handler.py: 2022-09-04 20:32:07,862 - INFO - 127.0.0.1 - - [2022-09-04 20:32:07] "GET /js/add_item.js HTTP/1.1" 200 1953 0.001151
- handler.py: 2022-09-04 20:32:07,863 - INFO - 127.0.0.1 - - [2022-09-04 20:32:07] "GET /js/start_item.js HTTP/1.1" 200 1044 0.000000
- handler.py: 2022-09-04 20:32:07,865 - INFO - 127.0.0.1 - - [2022-09-04 20:32:07] "GET /js/utils.js HTTP/1.1" 200 398 0.000831
- handler.py: 2022-09-04 20:32:13,661 - INFO - 127.0.0.1 - - [2022-09-04 20:32:13] "GET /templates/home.html HTTP/1.1" 200 1625 0.001074
- handler.py: 2022-09-04 20:32:13,680 - INFO - 127.0.0.1 - - [2022-09-04 20:32:13] "GET /css/style.css HTTP/1.1" 200 819 0.002002
- handler.py: 2022-09-04 20:32:13,681 - INFO - 127.0.0.1 - - [2022-09-04 20:32:13] "GET /eel.js HTTP/1.1" 200 6102 0.001012
- handler.py: 2022-09-04 20:32:13,682 - INFO - 127.0.0.1 - - [2022-09-04 20:32:13] "GET /js/add_item.js HTTP/1.1" 200 1953 0.000000
- handler.py: 2022-09-04 20:32:13,684 - INFO - 127.0.0.1 - - [2022-09-04 20:32:13] "GET /js/start_item.js HTTP/1.1" 200 1044 0.000000
- handler.py: 2022-09-04 20:32:13,685 - INFO - 127.0.0.1 - - [2022-09-04 20:32:13] "GET /js/utils.js HTTP/1.1" 200 398 0.001003
- handler.py: 2022-09-04 20:35:05,084 - INFO - 127.0.0.1 - - [2022-09-04 20:35:05] "GET /templates/home.html HTTP/1.1" 200 1784 0.003134
- handler.py: 2022-09-04 20:35:05,119 - INFO - 127.0.0.1 - - [2022-09-04 20:35:05] "GET /css/style.css HTTP/1.1" 200 819 0.002306
- handler.py: 2022-09-04 20:35:05,123 - INFO - 127.0.0.1 - - [2022-09-04 20:35:05] "GET /eel.js HTTP/1.1" 200 6102 0.001173
- handler.py: 2022-09-04 20:35:05,125 - INFO - 127.0.0.1 - - [2022-09-04 20:35:05] "GET /js/add_item.js HTTP/1.1" 200 1953 0.001212
- handler.py: 2022-09-04 20:35:05,129 - INFO - 127.0.0.1 - - [2022-09-04 20:35:05] "GET /js/start_item.js HTTP/1.1" 200 1044 0.001624
- handler.py: 2022-09-04 20:35:05,132 - INFO - 127.0.0.1 - - [2022-09-04 20:35:05] "GET /js/utils.js HTTP/1.1" 200 398 0.001215
- handler.py: 2022-09-04 20:35:30,817 - INFO - 127.0.0.1 - - [2022-09-04 20:35:30] "GET /templates/waiting_item.html HTTP/1.1" 200 1855 0.003006
- handler.py: 2022-09-04 20:35:30,842 - INFO - 127.0.0.1 - - [2022-09-04 20:35:30] "GET /css/style.css HTTP/1.1" 200 819 0.000496
- handler.py: 2022-09-04 20:35:30,844 - INFO - 127.0.0.1 - - [2022-09-04 20:35:30] "GET /eel.js HTTP/1.1" 200 6102 0.000000
- handler.py: 2022-09-04 20:35:30,846 - INFO - 127.0.0.1 - - [2022-09-04 20:35:30] "GET /js/add_item.js HTTP/1.1" 200 1953 0.001017
- handler.py: 2022-09-04 20:35:30,849 - INFO - 127.0.0.1 - - [2022-09-04 20:35:30] "GET /js/start_item.js HTTP/1.1" 200 1044 0.001986
- handler.py: 2022-09-04 20:35:30,852 - INFO - 127.0.0.1 - - [2022-09-04 20:35:30] "GET /js/utils.js HTTP/1.1" 200 398 0.001999
- handler.py: 2022-09-04 20:35:32,464 - INFO - 127.0.0.1 - - [2022-09-04 20:35:32] "GET /templates/home.html HTTP/1.1" 200 1782 0.000000
- handler.py: 2022-09-04 20:35:32,481 - INFO - 127.0.0.1 - - [2022-09-04 20:35:32] "GET /css/style.css HTTP/1.1" 200 819 0.000000
- handler.py: 2022-09-04 20:35:32,483 - INFO - 127.0.0.1 - - [2022-09-04 20:35:32] "GET /eel.js HTTP/1.1" 200 6102 0.001011
- handler.py: 2022-09-04 20:35:32,484 - INFO - 127.0.0.1 - - [2022-09-04 20:35:32] "GET /js/add_item.js HTTP/1.1" 200 1953 0.000980
- handler.py: 2022-09-04 20:35:32,485 - INFO - 127.0.0.1 - - [2022-09-04 20:35:32] "GET /js/start_item.js HTTP/1.1" 200 1044 0.001013
- handler.py: 2022-09-04 20:35:32,486 - INFO - 127.0.0.1 - - [2022-09-04 20:35:32] "GET /js/utils.js HTTP/1.1" 200 398 0.001003
- handler.py: 2022-09-04 20:35:45,424 - INFO - 127.0.0.1 - - [2022-09-04 20:35:45] "GET /templates/home.html HTTP/1.1" 200 1782 0.000000
- handler.py: 2022-09-04 20:35:45,441 - INFO - 127.0.0.1 - - [2022-09-04 20:35:45] "GET /css/style.css HTTP/1.1" 200 837 0.000505
- handler.py: 2022-09-04 20:35:45,442 - INFO - 127.0.0.1 - - [2022-09-04 20:35:45] "GET /eel.js HTTP/1.1" 200 6102 0.000000
- handler.py: 2022-09-04 20:35:45,444 - INFO - 127.0.0.1 - - [2022-09-04 20:35:45] "GET /js/add_item.js HTTP/1.1" 200 1953 0.000539
- handler.py: 2022-09-04 20:35:45,446 - INFO - 127.0.0.1 - - [2022-09-04 20:35:45] "GET /js/start_item.js HTTP/1.1" 200 1044 0.000917
- handler.py: 2022-09-04 20:35:45,447 - INFO - 127.0.0.1 - - [2022-09-04 20:35:45] "GET /js/utils.js HTTP/1.1" 200 398 0.001018
- handler.py: 2022-09-04 20:35:50,509 - INFO - 127.0.0.1 - - [2022-09-04 20:35:50] "GET /templates/home.html HTTP/1.1" 200 1782 0.001001
- handler.py: 2022-09-04 20:35:50,532 - INFO - 127.0.0.1 - - [2022-09-04 20:35:50] "GET /css/style.css HTTP/1.1" 200 838 0.002029
- handler.py: 2022-09-04 20:35:50,534 - INFO - 127.0.0.1 - - [2022-09-04 20:35:50] "GET /eel.js HTTP/1.1" 200 6102 0.001007
- handler.py: 2022-09-04 20:35:50,535 - INFO - 127.0.0.1 - - [2022-09-04 20:35:50] "GET /js/add_item.js HTTP/1.1" 200 1953 0.000987
- handler.py: 2022-09-04 20:35:50,537 - INFO - 127.0.0.1 - - [2022-09-04 20:35:50] "GET /js/start_item.js HTTP/1.1" 200 1044 0.001009
- handler.py: 2022-09-04 20:35:50,539 - INFO - 127.0.0.1 - - [2022-09-04 20:35:50] "GET /js/utils.js HTTP/1.1" 200 398 0.001004
- handler.py: 2022-09-04 20:36:24,014 - INFO - 127.0.0.1 - - [2022-09-04 20:36:24] "GET /templates/home.html HTTP/1.1" 200 1782 0.001017
- handler.py: 2022-09-04 20:36:24,030 - INFO - 127.0.0.1 - - [2022-09-04 20:36:24] "GET /css/style.css HTTP/1.1" 200 838 0.001006
- handler.py: 2022-09-04 20:36:24,031 - INFO - 127.0.0.1 - - [2022-09-04 20:36:24] "GET /eel.js HTTP/1.1" 200 6102 0.000999
- handler.py: 2022-09-04 20:36:24,032 - INFO - 127.0.0.1 - - [2022-09-04 20:36:24] "GET /js/add_item.js HTTP/1.1" 200 1953 0.001000
- handler.py: 2022-09-04 20:36:24,034 - INFO - 127.0.0.1 - - [2022-09-04 20:36:24] "GET /js/start_item.js HTTP/1.1" 200 1044 0.001024
- handler.py: 2022-09-04 20:36:24,035 - INFO - 127.0.0.1 - - [2022-09-04 20:36:24] "GET /js/utils.js HTTP/1.1" 200 398 0.000990
- handler.py: 2022-09-04 20:36:31,995 - INFO - 127.0.0.1 - - [2022-09-04 20:36:31] "GET /templates/home.html HTTP/1.1" 200 1782 0.001005
- handler.py: 2022-09-04 20:36:32,007 - INFO - 127.0.0.1 - - [2022-09-04 20:36:32] "GET /css/style.css HTTP/1.1" 200 838 0.001002
- handler.py: 2022-09-04 20:36:32,008 - INFO - 127.0.0.1 - - [2022-09-04 20:36:32] "GET /eel.js HTTP/1.1" 200 6102 0.000000
- handler.py: 2022-09-04 20:36:32,009 - INFO - 127.0.0.1 - - [2022-09-04 20:36:32] "GET /js/add_item.js HTTP/1.1" 200 1953 0.001003
- handler.py: 2022-09-04 20:36:32,010 - INFO - 127.0.0.1 - - [2022-09-04 20:36:32] "GET /js/start_item.js HTTP/1.1" 200 1044 0.000999
- handler.py: 2022-09-04 20:36:32,010 - INFO - 127.0.0.1 - - [2022-09-04 20:36:32] "GET /js/utils.js HTTP/1.1" 200 398 0.000000
- handler.py: 2022-09-04 20:36:32,607 - INFO - 127.0.0.1 - - [2022-09-04 20:36:32] "GET /templates/waiting_item.html HTTP/1.1" 200 1855 0.000000
- handler.py: 2022-09-04 20:36:32,624 - INFO - 127.0.0.1 - - [2022-09-04 20:36:32] "GET /css/style.css HTTP/1.1" 200 838 0.000999
- handler.py: 2022-09-04 20:36:32,625 - INFO - 127.0.0.1 - - [2022-09-04 20:36:32] "GET /eel.js HTTP/1.1" 200 6102 0.001005
- handler.py: 2022-09-04 20:36:32,626 - INFO - 127.0.0.1 - - [2022-09-04 20:36:32] "GET /js/add_item.js HTTP/1.1" 200 1953 0.000996
- handler.py: 2022-09-04 20:36:32,627 - INFO - 127.0.0.1 - - [2022-09-04 20:36:32] "GET /js/start_item.js HTTP/1.1" 200 1044 0.001000
- handler.py: 2022-09-04 20:36:32,627 - INFO - 127.0.0.1 - - [2022-09-04 20:36:32] "GET /js/utils.js HTTP/1.1" 200 398 0.000000
- handler.py: 2022-09-04 20:36:33,300 - INFO - 127.0.0.1 - - [2022-09-04 20:36:33] "GET /templates/start_item.html HTTP/1.1" 200 2543 0.000000
- handler.py: 2022-09-04 20:36:33,316 - INFO - 127.0.0.1 - - [2022-09-04 20:36:33] "GET /css/style.css HTTP/1.1" 200 838 0.001009
- handler.py: 2022-09-04 20:36:33,317 - INFO - 127.0.0.1 - - [2022-09-04 20:36:33] "GET /eel.js HTTP/1.1" 200 6102 0.000000
- handler.py: 2022-09-04 20:36:33,318 - INFO - 127.0.0.1 - - [2022-09-04 20:36:33] "GET /js/add_item.js HTTP/1.1" 200 1953 0.001002
- handler.py: 2022-09-04 20:36:33,319 - INFO - 127.0.0.1 - - [2022-09-04 20:36:33] "GET /js/start_item.js HTTP/1.1" 200 1044 0.001001
- handler.py: 2022-09-04 20:36:33,319 - INFO - 127.0.0.1 - - [2022-09-04 20:36:33] "GET /js/utils.js HTTP/1.1" 200 398 0.000000
- handler.py: 2022-09-04 20:36:35,102 - INFO - 127.0.0.1 - - [2022-09-04 20:36:35] "GET /templates/stats.html HTTP/1.1" 200 2623 0.002018
- handler.py: 2022-09-04 20:36:35,117 - INFO - 127.0.0.1 - - [2022-09-04 20:36:35] "GET /css/style.css HTTP/1.1" 200 838 0.000000
- handler.py: 2022-09-04 20:36:35,129 - INFO - 127.0.0.1 - - [2022-09-04 20:36:35] "GET /assets/images/cost_rune_graph.png HTTP/1.1" 200 86294 0.001000
- handler.py: 2022-09-04 20:36:35,152 - INFO - 127.0.0.1 - - [2022-09-04 20:36:35] "GET /eel.js HTTP/1.1" 200 6102 0.001407
- handler.py: 2022-09-04 20:36:35,153 - INFO - 127.0.0.1 - - [2022-09-04 20:36:35] "GET /js/add_item.js HTTP/1.1" 200 1953 0.001023
- handler.py: 2022-09-04 20:36:35,155 - INFO - 127.0.0.1 - - [2022-09-04 20:36:35] "GET /js/start_item.js HTTP/1.1" 200 1044 0.000000
- handler.py: 2022-09-04 20:36:35,156 - INFO - 127.0.0.1 - - [2022-09-04 20:36:35] "GET /js/utils.js HTTP/1.1" 200 398 0.000000
- handler.py: 2022-09-04 20:36:39,443 - INFO - 127.0.0.1 - - [2022-09-04 20:36:39] "GET /templates/home.html HTTP/1.1" 200 1782 0.001009
- handler.py: 2022-09-04 20:36:39,464 - INFO - 127.0.0.1 - - [2022-09-04 20:36:39] "GET /css/style.css HTTP/1.1" 200 838 0.001066
- handler.py: 2022-09-04 20:36:39,466 - INFO - 127.0.0.1 - - [2022-09-04 20:36:39] "GET /eel.js HTTP/1.1" 200 6102 0.001020
- handler.py: 2022-09-04 20:36:39,467 - INFO - 127.0.0.1 - - [2022-09-04 20:36:39] "GET /js/add_item.js HTTP/1.1" 200 1953 0.000000
- handler.py: 2022-09-04 20:36:39,469 - INFO - 127.0.0.1 - - [2022-09-04 20:36:39] "GET /js/start_item.js HTTP/1.1" 200 1044 0.000000
- handler.py: 2022-09-04 20:36:39,470 - INFO - 127.0.0.1 - - [2022-09-04 20:36:39] "GET /js/utils.js HTTP/1.1" 200 398 0.000987
- handler.py: 2022-09-04 20:36:59,471 - INFO - 127.0.0.1 - - [2022-09-04 20:36:59] "GET /templates/home.html HTTP/1.1" 200 1782 0.000000
- handler.py: 2022-09-04 20:36:59,490 - INFO - 127.0.0.1 - - [2022-09-04 20:36:59] "GET /css/style.css HTTP/1.1" 200 838 0.001191
- handler.py: 2022-09-04 20:36:59,490 - INFO - 127.0.0.1 - - [2022-09-04 20:36:59] "GET /eel.js HTTP/1.1" 200 6102 0.000000
- handler.py: 2022-09-04 20:36:59,491 - INFO - 127.0.0.1 - - [2022-09-04 20:36:59] "GET /js/add_item.js HTTP/1.1" 200 1953 0.000000
- handler.py: 2022-09-04 20:36:59,492 - INFO - 127.0.0.1 - - [2022-09-04 20:36:59] "GET /js/start_item.js HTTP/1.1" 200 1044 0.001001
- handler.py: 2022-09-04 20:36:59,493 - INFO - 127.0.0.1 - - [2022-09-04 20:36:59] "GET /js/utils.js HTTP/1.1" 200 398 0.000000
- handler.py: 2022-09-04 20:37:00,841 - INFO - 127.0.0.1 - - [2022-09-04 20:37:00] "GET /templates/waiting_item.html HTTP/1.1" 200 1855 0.001017
- handler.py: 2022-09-04 20:37:00,857 - INFO - 127.0.0.1 - - [2022-09-04 20:37:00] "GET /css/style.css HTTP/1.1" 200 838 0.002002
- handler.py: 2022-09-04 20:37:00,858 - INFO - 127.0.0.1 - - [2022-09-04 20:37:00] "GET /eel.js HTTP/1.1" 200 6102 0.000000
- handler.py: 2022-09-04 20:37:00,859 - INFO - 127.0.0.1 - - [2022-09-04 20:37:00] "GET /js/add_item.js HTTP/1.1" 200 1953 0.000999
- handler.py: 2022-09-04 20:37:00,860 - INFO - 127.0.0.1 - - [2022-09-04 20:37:00] "GET /js/start_item.js HTTP/1.1" 200 1044 0.001011
- handler.py: 2022-09-04 20:37:00,861 - INFO - 127.0.0.1 - - [2022-09-04 20:37:00] "GET /js/utils.js HTTP/1.1" 200 398 0.000988
- handler.py: 2022-09-04 20:37:20,424 - INFO - 127.0.0.1 - - [2022-09-04 20:37:20] "GET /templates/waiting_item.html HTTP/1.1" 200 1855 0.001006
- handler.py: 2022-09-04 20:37:20,446 - INFO - 127.0.0.1 - - [2022-09-04 20:37:20] "GET /css/style.css HTTP/1.1" 200 862 0.000622
- handler.py: 2022-09-04 20:37:20,446 - INFO - 127.0.0.1 - - [2022-09-04 20:37:20] "GET /eel.js HTTP/1.1" 200 6102 0.000000
- handler.py: 2022-09-04 20:37:20,449 - INFO - 127.0.0.1 - - [2022-09-04 20:37:20] "GET /js/add_item.js HTTP/1.1" 200 1953 0.000742
- handler.py: 2022-09-04 20:37:20,451 - INFO - 127.0.0.1 - - [2022-09-04 20:37:20] "GET /js/start_item.js HTTP/1.1" 200 1044 0.002030
- handler.py: 2022-09-04 20:37:20,453 - INFO - 127.0.0.1 - - [2022-09-04 20:37:20] "GET /js/utils.js HTTP/1.1" 200 398 0.001004
- handler.py: 2022-09-04 20:37:59,635 - INFO - 127.0.0.1 - - [2022-09-04 20:37:59] "GET /templates/waiting_item.html HTTP/1.1" 200 1855 0.001000
- handler.py: 2022-09-04 20:37:59,655 - INFO - 127.0.0.1 - - [2022-09-04 20:37:59] "GET /css/style.css HTTP/1.1" 200 968 0.001127
- handler.py: 2022-09-04 20:37:59,656 - INFO - 127.0.0.1 - - [2022-09-04 20:37:59] "GET /eel.js HTTP/1.1" 200 6102 0.000000
- handler.py: 2022-09-04 20:37:59,659 - INFO - 127.0.0.1 - - [2022-09-04 20:37:59] "GET /js/add_item.js HTTP/1.1" 200 1953 0.002010
- handler.py: 2022-09-04 20:37:59,661 - INFO - 127.0.0.1 - - [2022-09-04 20:37:59] "GET /js/start_item.js HTTP/1.1" 200 1044 0.001981
- handler.py: 2022-09-04 20:37:59,663 - INFO - 127.0.0.1 - - [2022-09-04 20:37:59] "GET /js/utils.js HTTP/1.1" 200 398 0.001016
- handler.py: 2022-09-04 20:38:19,382 - INFO - 127.0.0.1 - - [2022-09-04 20:38:19] "GET /templates/home.html HTTP/1.1" 200 1782 0.000551
- handler.py: 2022-09-04 20:38:19,406 - INFO - 127.0.0.1 - - [2022-09-04 20:38:19] "GET /css/style.css HTTP/1.1" 200 836 0.001754
- handler.py: 2022-09-04 20:38:19,409 - INFO - 127.0.0.1 - - [2022-09-04 20:38:19] "GET /eel.js HTTP/1.1" 200 6102 0.000912
- handler.py: 2022-09-04 20:38:19,412 - INFO - 127.0.0.1 - - [2022-09-04 20:38:19] "GET /js/add_item.js HTTP/1.1" 200 1953 0.001715
- handler.py: 2022-09-04 20:38:19,414 - INFO - 127.0.0.1 - - [2022-09-04 20:38:19] "GET /js/start_item.js HTTP/1.1" 200 1044 0.001032
- handler.py: 2022-09-04 20:38:19,415 - INFO - 127.0.0.1 - - [2022-09-04 20:38:19] "GET /js/utils.js HTTP/1.1" 200 398 0.000997
- handler.py: 2022-09-04 20:38:20,031 - INFO - 127.0.0.1 - - [2022-09-04 20:38:20] "GET /templates/waiting_item.html HTTP/1.1" 200 1855 0.001013
- handler.py: 2022-09-04 20:38:20,051 - INFO - 127.0.0.1 - - [2022-09-04 20:38:20] "GET /css/style.css HTTP/1.1" 200 836 0.001011
- handler.py: 2022-09-04 20:38:20,052 - INFO - 127.0.0.1 - - [2022-09-04 20:38:20] "GET /eel.js HTTP/1.1" 200 6102 0.000000
- handler.py: 2022-09-04 20:38:20,053 - INFO - 127.0.0.1 - - [2022-09-04 20:38:20] "GET /js/add_item.js HTTP/1.1" 200 1953 0.001005
- handler.py: 2022-09-04 20:38:20,055 - INFO - 127.0.0.1 - - [2022-09-04 20:38:20] "GET /js/start_item.js HTTP/1.1" 200 1044 0.000787
- handler.py: 2022-09-04 20:38:20,056 - INFO - 127.0.0.1 - - [2022-09-04 20:38:20] "GET /js/utils.js HTTP/1.1" 200 398 0.001030
- handler.py: 2022-09-04 20:38:20,853 - INFO - 127.0.0.1 - - [2022-09-04 20:38:20] "GET /templates/home.html HTTP/1.1" 200 1782 0.000973
- handler.py: 2022-09-04 20:38:20,873 - INFO - 127.0.0.1 - - [2022-09-04 20:38:20] "GET /css/style.css HTTP/1.1" 200 836 0.000000
- handler.py: 2022-09-04 20:38:20,874 - INFO - 127.0.0.1 - - [2022-09-04 20:38:20] "GET /eel.js HTTP/1.1" 200 6102 0.000983
- handler.py: 2022-09-04 20:38:20,875 - INFO - 127.0.0.1 - - [2022-09-04 20:38:20] "GET /js/add_item.js HTTP/1.1" 200 1953 0.000000
- handler.py: 2022-09-04 20:38:20,875 - INFO - 127.0.0.1 - - [2022-09-04 20:38:20] "GET /js/start_item.js HTTP/1.1" 200 1044 0.000000
- handler.py: 2022-09-04 20:38:20,876 - INFO - 127.0.0.1 - - [2022-09-04 20:38:20] "GET /js/utils.js HTTP/1.1" 200 398 0.000988
+ main.py: 2023-10-28 23:16:16,855 - INFO - Starting Bot
+ sniffer.py: 2023-10-28 23:16:16,856 - INFO - Launching Sniffer
+ sniffer.py: 2023-10-28 23:16:17,191 - INFO - Received Packet : Data(bytearray.fromhex('89b15b06002a526563727574652050616e646120706f75722073756363c3a8732073746174757420646a6e206d6f6f6e653d7a2000087a6f336b7064367a4252e7934048c00000105468616e7964616e69782d74656c6c610000058992ad')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:16:17,191 - INFO - len : 91
+ database.py: 2023-10-28 23:16:17,191 - INFO - connection done
+ parser.py: 2023-10-28 23:16:17,192 - INFO - Message: [('ChatServerMessage',)]
+ sniffer.py: 2023-10-28 23:16:19,327 - INFO - Received Packet : Data(bytearray.fromhex('5eed00001c4b0101')) with src IP : 192.168.1.17
+ sniffer.py: 2023-10-28 23:16:19,327 - INFO - len : 0
+ database.py: 2023-10-28 23:16:19,327 - INFO - connection done
+ parser.py: 2023-10-28 23:16:19,328 - INFO - Message: [('BasicPingMessage',)]
+ sniffer.py: 2023-10-28 23:16:19,376 - INFO - Received Packet : Data(bytearray.fromhex('852901019aa904a501bb2f')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:16:19,376 - INFO - len : 1
+ database.py: 2023-10-28 23:16:19,376 - INFO - connection done
+ parser.py: 2023-10-28 23:16:19,377 - INFO - Message: [('BasicPongMessage',)]
+ sniffer.py: 2023-10-28 23:16:19,377 - INFO - len : 4
+ database.py: 2023-10-28 23:16:19,377 - INFO - connection done
+ parser.py: 2023-10-28 23:16:19,377 - INFO - Message: [('BasicAckMessage',)]
+ sniffer.py: 2023-10-28 23:16:19,969 - INFO - Received Packet : Data(bytearray.fromhex('10b900001c4e059fa6e85601')) with src IP : 192.168.1.17
+ sniffer.py: 2023-10-28 23:16:19,969 - INFO - len : 0
+ database.py: 2023-10-28 23:16:19,969 - INFO - connection done
+ parser.py: 2023-10-28 23:16:19,969 - INFO - Message: [('ExchangeObjectMoveMessage',)]
+ sniffer.py: 2023-10-28 23:16:20,018 - INFO - Received Packet : Data(bytearray.fromhex('9aa904a601ae08')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:16:20,018 - INFO - len : 4
+ database.py: 2023-10-28 23:16:20,018 - INFO - connection done
+ parser.py: 2023-10-28 23:16:20,018 - INFO - Message: [('BasicAckMessage',)]
+ sniffer.py: 2023-10-28 23:16:20,018 - INFO - Received Packet : Data(bytearray.fromhex('57811200003f8c970100011d75f301039fa6e85601')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:16:20,018 - INFO - len : 18
+ database.py: 2023-10-28 23:16:20,018 - INFO - connection done
+ parser.py: 2023-10-28 23:16:20,019 - INFO - Message: [('ExchangeObjectAddedMessage',)]
+ sniffer.py: 2023-10-28 23:16:20,049 - INFO - Received Packet : Data(bytearray.fromhex('4bad00001c51020127')) with src IP : 192.168.1.17
+ sniffer.py: 2023-10-28 23:16:20,050 - INFO - len : 0
+ database.py: 2023-10-28 23:16:20,050 - INFO - connection done
+ parser.py: 2023-10-28 23:16:20,050 - INFO - Message: [('ExchangeReadyMessage',)]
+ sniffer.py: 2023-10-28 23:16:20,098 - INFO - Received Packet : Data(bytearray.fromhex('9aa904a701eb25')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:16:20,098 - INFO - len : 4
+ database.py: 2023-10-28 23:16:20,098 - INFO - connection done
+ parser.py: 2023-10-28 23:16:20,098 - INFO - Message: [('BasicAckMessage',)]
+ sniffer.py: 2023-10-28 23:16:20,099 - INFO - Received Packet : Data(bytearray.fromhex('4b5d0a4ac8cbdeed19b0a51800')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:16:20,099 - INFO - len : 10
+ database.py: 2023-10-28 23:16:20,099 - INFO - connection done
+ parser.py: 2023-10-28 23:16:20,099 - INFO - Message: [('JobExperienceUpdateMessage',)]
+ sniffer.py: 2023-10-28 23:16:24,339 - INFO - Received Packet : Data(bytearray.fromhex('4edd05009fa6e856')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:16:24,339 - INFO - len : 5
+ database.py: 2023-10-28 23:16:24,339 - INFO - connection done
+ parser.py: 2023-10-28 23:16:24,339 - INFO - Message: [('ExchangeObjectRemovedMessage',)]
+ sniffer.py: 2023-10-28 23:16:24,339 - INFO - Received Packet : Data(bytearray.fromhex('4f51079fa6e856c10300')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:16:24,339 - INFO - len : 7
+ database.py: 2023-10-28 23:16:24,339 - INFO - connection done
+ parser.py: 2023-10-28 23:16:24,340 - INFO - Message: [('ObjectQuantityMessage',)]
+ sniffer.py: 2023-10-28 23:16:24,340 - INFO - Received Packet : Data(bytearray.fromhex('8bb51602e9910100021d75f301091d759c0304b0a4e8560101')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:16:24,340 - INFO - len : 22
+ database.py: 2023-10-28 23:16:24,340 - INFO - connection done
+ parser.py: 2023-10-28 23:16:24,340 - INFO - Message: [('ExchangeCraftResultMagicWithObjectDescMessage',)]
+ sniffer.py: 2023-10-28 23:16:24,341 - INFO - Received Packet : Data(bytearray.fromhex('89a516003fe9910100021d75f301091d759c0304b0a4e8560113c1068ea601a0a601')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:16:24,341 - INFO - len : 22
+ database.py: 2023-10-28 23:16:24,341 - INFO - connection done
+ parser.py: 2023-10-28 23:16:24,341 - INFO - Message: [('ObjectModifiedMessage',)]
+ sniffer.py: 2023-10-28 23:16:24,341 - INFO - len : 6
+ database.py: 2023-10-28 23:16:24,341 - INFO - connection done
+ parser.py: 2023-10-28 23:16:24,341 - INFO - Message: [('InventoryWeightMessage',)]
+ sniffer.py: 2023-10-28 23:16:24,342 - INFO - Received Packet : Data(bytearray.fromhex('5eed00001c590101')) with src IP : 192.168.1.17
+ sniffer.py: 2023-10-28 23:16:24,342 - INFO - len : 0
+ database.py: 2023-10-28 23:16:24,342 - INFO - connection done
+ parser.py: 2023-10-28 23:16:24,342 - INFO - Message: [('BasicPingMessage',)]
+ sniffer.py: 2023-10-28 23:16:24,387 - INFO - Received Packet : Data(bytearray.fromhex('852901019aa904a801bb2f')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:16:24,387 - INFO - len : 1
+ database.py: 2023-10-28 23:16:24,387 - INFO - connection done
+ parser.py: 2023-10-28 23:16:24,387 - INFO - Message: [('BasicPongMessage',)]
+ sniffer.py: 2023-10-28 23:16:24,387 - INFO - len : 4
+ database.py: 2023-10-28 23:16:24,387 - INFO - connection done
+ parser.py: 2023-10-28 23:16:24,388 - INFO - Message: [('BasicAckMessage',)]
+ sniffer.py: 2023-10-28 23:16:32,884 - INFO - Received Packet : Data(bytearray.fromhex('53ed1c0008017c018b0199019a019b019c019d019e00054246a88880918000')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:16:32,884 - INFO - len : 28
+ database.py: 2023-10-28 23:16:32,884 - INFO - connection done
+ parser.py: 2023-10-28 23:16:32,884 - INFO - Message: [('GameMapMovementMessage',)]
+ sniffer.py: 2023-10-28 23:16:34,412 - INFO - Received Packet : Data(bytearray.fromhex('53ed0e0001019e00054246a88880918000')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:16:34,412 - INFO - len : 14
+ database.py: 2023-10-28 23:16:34,412 - INFO - connection done
+ parser.py: 2023-10-28 23:16:34,412 - INFO - Message: [('GameMapMovementMessage',)]
+ sniffer.py: 2023-10-28 23:16:34,467 - INFO - Received Packet : Data(bytearray.fromhex('53ed120003019e01ac01ab00054246a88880918000')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:16:34,467 - INFO - len : 18
+ database.py: 2023-10-28 23:16:34,467 - INFO - connection done
+ parser.py: 2023-10-28 23:16:34,467 - INFO - Message: [('GameMapMovementMessage',)]
+ sniffer.py: 2023-10-28 23:16:35,220 - INFO - Received Packet : Data(bytearray.fromhex('83c90da38294eba314bce91fb8010001')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:16:35,220 - INFO - len : 13
+ database.py: 2023-10-28 23:16:35,220 - INFO - connection done
+ parser.py: 2023-10-28 23:16:35,220 - INFO - Message: [('InteractiveUsedMessage',)]
+ sniffer.py: 2023-10-28 23:16:35,220 - INFO - Received Packet : Data(bytearray.fromhex('439d08426447aca0246000')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:16:35,220 - INFO - len : 8
+ database.py: 2023-10-28 23:16:35,220 - INFO - connection done
+ parser.py: 2023-10-28 23:16:35,220 - INFO - Message: [('GameContextRemoveElementMessage',)]
+ sniffer.py: 2023-10-28 23:16:38,298 - INFO - Received Packet : Data(bytearray.fromhex('89b16f0600457265637275746520706f757220646a2068656c6c206d696e61203a2920282071756920636861756420706f757220766f63206574206661726d20737563636573203f202920653d7a3600086e35626d6775386242646751602460000009456465656e2d466f750000097eed28')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:16:38,298 - INFO - len : 111
+ database.py: 2023-10-28 23:16:38,298 - INFO - connection done
+ parser.py: 2023-10-28 23:16:38,298 - INFO - Message: [('ChatServerMessage',)]
+ sniffer.py: 2023-10-28 23:16:57,727 - INFO - Received Packet : Data(bytearray.fromhex('691da607be42507280c048c00026d40191030100055beb10c00398094b000701ffc36702e17410037b790004d67207056a410607ffffff08f9000a0001870100010100880200000000000150000000114265617465722d4f6b696e612d686f6e6f245b0008000100040079d237000c426c61636b20426561746572160300f9000a2100ffffff22dc6d0000044e2dc701ffff03ffffffff14980101ce35aa010d0042507280c07a80008fc91301a3828cd09c08000676a601a80171df02a401')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:16:57,727 - INFO - len : 166
+ database.py: 2023-10-28 23:16:57,727 - INFO - connection done
+ parser.py: 2023-10-28 23:16:57,727 - INFO - Message: [('GameRolePlayShowActorMessage',)]
+ sniffer.py: 2023-10-28 23:16:57,727 - INFO - len : 19
+ database.py: 2023-10-28 23:16:57,727 - INFO - connection done
+ parser.py: 2023-10-28 23:16:57,727 - INFO - Message: [('JobMultiCraftAvailableSkillsMessage',)]
+ sniffer.py: 2023-10-28 23:16:58,880 - INFO - Received Packet : Data(bytearray.fromhex('24b90b42507280c048c000000800')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:16:58,880 - INFO - len : 11
+ database.py: 2023-10-28 23:16:58,880 - INFO - connection done
+ parser.py: 2023-10-28 23:16:58,881 - INFO - Message: [('SetCharacterRestrictionsMessage',)]
+ sniffer.py: 2023-10-28 23:16:58,881 - INFO - Received Packet : Data(bytearray.fromhex('4965454246425000918000ec3100000000000000010200020005d519dc19f008ee08981a000701df9640021d1d1d0340958b04f9c14205ffffff0720202008d7d7d800018c010000')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:16:58,881 - INFO - len : 69
+ database.py: 2023-10-28 23:16:58,881 - INFO - connection done
+ parser.py: 2023-10-28 23:16:58,881 - INFO - Message: [('GameContextRefreshEntityLookMessage',)]
+ sniffer.py: 2023-10-28 23:16:58,881 - INFO - Received Packet : Data(bytearray.fromhex('8fc91301a38280a5c805000676a601a80171df02a401')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:16:58,882 - INFO - len : 19
+ database.py: 2023-10-28 23:16:58,882 - INFO - connection done
+ parser.py: 2023-10-28 23:16:58,882 - INFO - Message: [('JobMultiCraftAvailableSkillsMessage',)]
+ sniffer.py: 2023-10-28 23:16:58,882 - INFO - Received Packet : Data(bytearray.fromhex('24b90b4246425000918000000800')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:16:58,882 - INFO - len : 11
+ database.py: 2023-10-28 23:16:58,882 - INFO - connection done
+ parser.py: 2023-10-28 23:16:58,882 - INFO - Message: [('SetCharacterRestrictionsMessage',)]
+ sniffer.py: 2023-10-28 23:16:58,985 - INFO - Received Packet : Data(bytearray.fromhex('49654d4263a5fcc0246000f916000000000000000102000200065be410c00397092ff303000901e5ae5202256783039b8a7504256783052567830775757508bf000009ffffff0a000000000187010000')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:16:58,985 - INFO - len : 77
+ database.py: 2023-10-28 23:16:58,985 - INFO - connection done
+ parser.py: 2023-10-28 23:16:58,986 - INFO - Message: [('GameContextRefreshEntityLookMessage',)]
+ sniffer.py: 2023-10-28 23:16:58,986 - INFO - Received Packet : Data(bytearray.fromhex('8fc91301a38298ffd213000676a601a80171df02a401')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:16:58,986 - INFO - len : 19
+ database.py: 2023-10-28 23:16:58,986 - INFO - connection done
+ parser.py: 2023-10-28 23:16:58,986 - INFO - Message: [('JobMultiCraftAvailableSkillsMessage',)]
+ sniffer.py: 2023-10-28 23:16:58,987 - INFO - Received Packet : Data(bytearray.fromhex('24b90b4263a5fcc0246000000800')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:16:58,987 - INFO - len : 11
+ database.py: 2023-10-28 23:16:58,987 - INFO - connection done
+ parser.py: 2023-10-28 23:16:58,987 - INFO - Message: [('SetCharacterRestrictionsMessage',)]
+ sniffer.py: 2023-10-28 23:16:58,987 - INFO - Received Packet : Data(bytearray.fromhex('49655d4246a888809180009f270000000301a472be03da70d602eab1e800015500010200020007788c11c003c501f813b4209a15000901f7e48e02f7e48e030000000400000005faefbe07e9a3190818180709fcf8d20a0b05080001a0010000')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:16:58,987 - INFO - len : 93
+ database.py: 2023-10-28 23:16:58,987 - INFO - connection done
+ parser.py: 2023-10-28 23:16:58,987 - INFO - Message: [('GameContextRefreshEntityLookMessage',)]
+ sniffer.py: 2023-10-28 23:16:58,988 - INFO - Received Packet : Data(bytearray.fromhex('8fc91301a382c488d505000676a601a80171df02a401')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:16:58,988 - INFO - len : 19
+ database.py: 2023-10-28 23:16:58,988 - INFO - connection done
+ parser.py: 2023-10-28 23:16:58,988 - INFO - Message: [('JobMultiCraftAvailableSkillsMessage',)]
+ sniffer.py: 2023-10-28 23:16:58,989 - INFO - Received Packet : Data(bytearray.fromhex('24b90b4246a88880918000000800')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:16:58,989 - INFO - len : 11
+ database.py: 2023-10-28 23:16:58,989 - INFO - connection done
+ parser.py: 2023-10-28 23:16:58,989 - INFO - Message: [('SetCharacterRestrictionsMessage',)]
+ sniffer.py: 2023-10-28 23:16:58,989 - INFO - Received Packet : Data(bytearray.fromhex('10b900001c6e0590a6e85601')) with src IP : 192.168.1.17
+ sniffer.py: 2023-10-28 23:16:58,989 - INFO - len : 0
+ database.py: 2023-10-28 23:16:58,989 - INFO - connection done
+ parser.py: 2023-10-28 23:16:58,990 - INFO - Message: [('ExchangeObjectMoveMessage',)]
+ sniffer.py: 2023-10-28 23:16:59,033 - INFO - Received Packet : Data(bytearray.fromhex('9aa904a901ae08')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:16:59,033 - INFO - len : 4
+ database.py: 2023-10-28 23:16:59,033 - INFO - connection done
+ parser.py: 2023-10-28 23:16:59,033 - INFO - Message: [('BasicAckMessage',)]
+ sniffer.py: 2023-10-28 23:16:59,034 - INFO - Received Packet : Data(bytearray.fromhex('57811100003ffe5a00011d759a030390a6e85601')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:16:59,034 - INFO - len : 17
+ database.py: 2023-10-28 23:16:59,034 - INFO - connection done
+ parser.py: 2023-10-28 23:16:59,034 - INFO - Message: [('ExchangeObjectAddedMessage',)]
+ sniffer.py: 2023-10-28 23:16:59,577 - INFO - Received Packet : Data(bytearray.fromhex('5eed00001c710101')) with src IP : 192.168.1.17
+ sniffer.py: 2023-10-28 23:16:59,577 - INFO - len : 0
+ database.py: 2023-10-28 23:16:59,577 - INFO - connection done
+ parser.py: 2023-10-28 23:16:59,577 - INFO - Message: [('BasicPingMessage',)]
+ sniffer.py: 2023-10-28 23:16:59,625 - INFO - Received Packet : Data(bytearray.fromhex('852901019aa904aa01bb2f')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:16:59,625 - INFO - len : 1
+ database.py: 2023-10-28 23:16:59,625 - INFO - connection done
+ parser.py: 2023-10-28 23:16:59,625 - INFO - Message: [('BasicPongMessage',)]
+ sniffer.py: 2023-10-28 23:16:59,625 - INFO - len : 4
+ database.py: 2023-10-28 23:16:59,625 - INFO - connection done
+ parser.py: 2023-10-28 23:16:59,626 - INFO - Message: [('BasicAckMessage',)]
+ sniffer.py: 2023-10-28 23:16:59,756 - INFO - Received Packet : Data(bytearray.fromhex('53ed1800060191018301760168015b013f000342507280c048c000')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:16:59,756 - INFO - len : 24
+ database.py: 2023-10-28 23:16:59,756 - INFO - connection done
+ parser.py: 2023-10-28 23:16:59,756 - INFO - Message: [('GameMapMovementMessage',)]
+ sniffer.py: 2023-10-28 23:17:00,108 - INFO - Received Packet : Data(bytearray.fromhex('4bad00001c75020129')) with src IP : 192.168.1.17
+ sniffer.py: 2023-10-28 23:17:00,108 - INFO - len : 0
+ database.py: 2023-10-28 23:17:00,108 - INFO - connection done
+ parser.py: 2023-10-28 23:17:00,108 - INFO - Message: [('ExchangeReadyMessage',)]
+ sniffer.py: 2023-10-28 23:17:00,156 - INFO - Received Packet : Data(bytearray.fromhex('9aa904ab01eb25')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:17:00,156 - INFO - len : 4
+ database.py: 2023-10-28 23:17:00,156 - INFO - connection done
+ parser.py: 2023-10-28 23:17:00,156 - INFO - Message: [('BasicAckMessage',)]
+ sniffer.py: 2023-10-28 23:17:00,725 - INFO - Received Packet : Data(bytearray.fromhex('4edd050090a6e856')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:17:00,725 - INFO - len : 5
+ database.py: 2023-10-28 23:17:00,725 - INFO - connection done
+ parser.py: 2023-10-28 23:17:00,725 - INFO - Message: [('ExchangeObjectRemovedMessage',)]
+ sniffer.py: 2023-10-28 23:17:00,726 - INFO - Received Packet : Data(bytearray.fromhex('4f510790a6e856db05008bb51601e9910100021d75f301091d759c0301b0a4e856010189a516003fe9910100021d75f301091d759c0301b0a4e85601')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:17:00,726 - INFO - len : 7
+ database.py: 2023-10-28 23:17:00,726 - INFO - connection done
+ parser.py: 2023-10-28 23:17:00,726 - INFO - Message: [('ObjectQuantityMessage',)]
+ sniffer.py: 2023-10-28 23:17:00,726 - INFO - len : 22
+ database.py: 2023-10-28 23:17:00,726 - INFO - connection done
+ parser.py: 2023-10-28 23:17:00,726 - INFO - Message: [('ExchangeCraftResultMagicWithObjectDescMessage',)]
+ sniffer.py: 2023-10-28 23:17:00,727 - INFO - len : 22
+ database.py: 2023-10-28 23:17:00,727 - INFO - connection done
+ parser.py: 2023-10-28 23:17:00,727 - INFO - Message: [('ObjectModifiedMessage',)]
+ sniffer.py: 2023-10-28 23:17:00,727 - INFO - Received Packet : Data(bytearray.fromhex('13c1068da601a0a601')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:17:00,727 - INFO - len : 6
+ database.py: 2023-10-28 23:17:00,727 - INFO - connection done
+ parser.py: 2023-10-28 23:17:00,728 - INFO - Message: [('InventoryWeightMessage',)]
+ sniffer.py: 2023-10-28 23:17:00,728 - INFO - Received Packet : Data(bytearray.fromhex('83c90da3828cd09c08c3e91fa6010001')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:17:00,728 - INFO - len : 13
+ database.py: 2023-10-28 23:17:00,728 - INFO - connection done
+ parser.py: 2023-10-28 23:17:00,728 - INFO - Message: [('InteractiveUsedMessage',)]
+ sniffer.py: 2023-10-28 23:17:03,421 - INFO - Received Packet : Data(bytearray.fromhex('10b900001c7d059ca6e85601')) with src IP : 192.168.1.17
+ sniffer.py: 2023-10-28 23:17:03,421 - INFO - len : 0
+ database.py: 2023-10-28 23:17:03,421 - INFO - connection done
+ parser.py: 2023-10-28 23:17:03,421 - INFO - Message: [('ExchangeObjectMoveMessage',)]
+ sniffer.py: 2023-10-28 23:17:03,469 - INFO - Received Packet : Data(bytearray.fromhex('9aa904ac01ae08')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:17:03,469 - INFO - len : 4
+ database.py: 2023-10-28 23:17:03,469 - INFO - connection done
+ parser.py: 2023-10-28 23:17:03,469 - INFO - Message: [('BasicAckMessage',)]
+ sniffer.py: 2023-10-28 23:17:03,470 - INFO - Received Packet : Data(bytearray.fromhex('57811200003fa4920100011d75f715019ca6e85601')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:17:03,470 - INFO - len : 18
+ database.py: 2023-10-28 23:17:03,470 - INFO - connection done
+ parser.py: 2023-10-28 23:17:03,470 - INFO - Message: [('ExchangeObjectAddedMessage',)]
+ sniffer.py: 2023-10-28 23:17:04,158 - INFO - Received Packet : Data(bytearray.fromhex('4bad00001c8002012b')) with src IP : 192.168.1.17
+ sniffer.py: 2023-10-28 23:17:04,158 - INFO - len : 0
+ database.py: 2023-10-28 23:17:04,158 - INFO - connection done
+ parser.py: 2023-10-28 23:17:04,159 - INFO - Message: [('ExchangeReadyMessage',)]
+ sniffer.py: 2023-10-28 23:17:04,206 - INFO - Received Packet : Data(bytearray.fromhex('9aa904ad01eb25')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:17:04,206 - INFO - len : 4
+ database.py: 2023-10-28 23:17:04,206 - INFO - connection done
+ parser.py: 2023-10-28 23:17:04,206 - INFO - Message: [('BasicAckMessage',)]
+ sniffer.py: 2023-10-28 23:17:04,206 - INFO - Received Packet : Data(bytearray.fromhex('4edd05009ca6e856')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:17:04,206 - INFO - len : 5
+ database.py: 2023-10-28 23:17:04,206 - INFO - connection done
+ parser.py: 2023-10-28 23:17:04,207 - INFO - Message: [('ExchangeObjectRemovedMessage',)]
+ sniffer.py: 2023-10-28 23:17:04,580 - INFO - Received Packet : Data(bytearray.fromhex('4f51069ca6e8565200')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:17:04,580 - INFO - len : 6
+ database.py: 2023-10-28 23:17:04,580 - INFO - connection done
+ parser.py: 2023-10-28 23:17:04,580 - INFO - Message: [('ObjectQuantityMessage',)]
+ sniffer.py: 2023-10-28 23:17:04,581 - INFO - Received Packet : Data(bytearray.fromhex('8bb51101e9910100011d75f30107b0a4e856010389a511003fe9910100011d75f30107b0a4e8560113c1068ca601a0a601')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:17:04,581 - INFO - len : 17
+ database.py: 2023-10-28 23:17:04,581 - INFO - connection done
+ parser.py: 2023-10-28 23:17:04,581 - INFO - Message: [('ExchangeCraftResultMagicWithObjectDescMessage',)]
+ sniffer.py: 2023-10-28 23:17:04,582 - INFO - len : 17
+ database.py: 2023-10-28 23:17:04,582 - INFO - connection done
+ parser.py: 2023-10-28 23:17:04,582 - INFO - Message: [('ObjectModifiedMessage',)]
+ sniffer.py: 2023-10-28 23:17:04,582 - INFO - len : 6
+ database.py: 2023-10-28 23:17:04,582 - INFO - connection done
+ parser.py: 2023-10-28 23:17:04,583 - INFO - Message: [('InventoryWeightMessage',)]
+ sniffer.py: 2023-10-28 23:17:04,583 - INFO - Received Packet : Data(bytearray.fromhex('5eed00001c870101')) with src IP : 192.168.1.17
+ sniffer.py: 2023-10-28 23:17:04,583 - INFO - len : 0
+ database.py: 2023-10-28 23:17:04,583 - INFO - connection done
+ parser.py: 2023-10-28 23:17:04,583 - INFO - Message: [('BasicPingMessage',)]
+ sniffer.py: 2023-10-28 23:17:04,629 - INFO - Received Packet : Data(bytearray.fromhex('852901019aa904ae01bb2f')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:17:04,629 - INFO - len : 1
+ database.py: 2023-10-28 23:17:04,629 - INFO - connection done
+ parser.py: 2023-10-28 23:17:04,629 - INFO - Message: [('BasicPongMessage',)]
+ sniffer.py: 2023-10-28 23:17:04,629 - INFO - len : 4
+ database.py: 2023-10-28 23:17:04,629 - INFO - connection done
+ parser.py: 2023-10-28 23:17:04,629 - INFO - Message: [('BasicAckMessage',)]
+ sniffer.py: 2023-10-28 23:17:09,589 - INFO - Received Packet : Data(bytearray.fromhex('5eed00001c8a0101')) with src IP : 192.168.1.17
+ sniffer.py: 2023-10-28 23:17:09,589 - INFO - len : 0
+ database.py: 2023-10-28 23:17:09,589 - INFO - connection done
+ parser.py: 2023-10-28 23:17:09,589 - INFO - Message: [('BasicPingMessage',)]
+ sniffer.py: 2023-10-28 23:17:09,637 - INFO - Received Packet : Data(bytearray.fromhex('852901019aa904af01bb2f')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:17:09,637 - INFO - len : 1
+ database.py: 2023-10-28 23:17:09,637 - INFO - connection done
+ parser.py: 2023-10-28 23:17:09,637 - INFO - Message: [('BasicPongMessage',)]
+ sniffer.py: 2023-10-28 23:17:09,637 - INFO - len : 4
+ database.py: 2023-10-28 23:17:09,637 - INFO - connection done
+ parser.py: 2023-10-28 23:17:09,637 - INFO - Message: [('BasicAckMessage',)]
+ sniffer.py: 2023-10-28 23:17:30,445 - INFO - Received Packet : Data(bytearray.fromhex('19509a5c')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:17:30,445 - INFO - len : 0
+ database.py: 2023-10-28 23:17:30,445 - INFO - connection done
+ parser.py: 2023-10-28 23:17:30,446 - INFO - Message: [('SequenceNumberRequestMessage',)]
+ sniffer.py: 2023-10-28 23:17:30,489 - INFO - Received Packet : Data(bytearray.fromhex('045900001c8f020014')) with src IP : 192.168.1.17
+ sniffer.py: 2023-10-28 23:17:30,489 - INFO - len : 0
+ database.py: 2023-10-28 23:17:30,489 - INFO - connection done
+ parser.py: 2023-10-28 23:17:30,489 - INFO - Message: [('SequenceNumberMessage',)]
+ sniffer.py: 2023-10-28 23:17:30,539 - INFO - Received Packet : Data(bytearray.fromhex('9aa904b0019602')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:17:30,539 - INFO - len : 4
+ database.py: 2023-10-28 23:17:30,539 - INFO - connection done
+ parser.py: 2023-10-28 23:17:30,539 - INFO - Message: [('BasicAckMessage',)]
+ sniffer.py: 2023-10-28 23:17:30,587 - INFO - Received Packet : Data(bytearray.fromhex('28fd00001c900400313232')) with src IP : 192.168.1.17
+ sniffer.py: 2023-10-28 23:17:30,587 - INFO - len : 0
+ database.py: 2023-10-28 23:17:30,587 - INFO - connection done
+ parser.py: 2023-10-28 23:17:30,587 - INFO - Message: [('BasicLatencyStatsMessage',)]
+ sniffer.py: 2023-10-28 23:17:30,588 - INFO - Received Packet : Data(bytearray.fromhex('9aa904b101bf14')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:17:30,588 - INFO - len : 4
+ database.py: 2023-10-28 23:17:30,588 - INFO - connection done
+ parser.py: 2023-10-28 23:17:30,588 - INFO - Message: [('BasicAckMessage',)]
+ sniffer.py: 2023-10-28 23:17:43,743 - INFO - Received Packet : Data(bytearray.fromhex('15bd8805001fefbfbc2041762036306d21205072c3a9636973696f6e2064752062776f726b653d7a770008396d3065657933714259b11fc048c0000009486973686976616e6100000480aedf0001003f996900081d75a203321d756f011d759809d8ae010a0885167900650a0883160000bffc0b1d75ae16000a089709c56101001d75c11600b8e0e25501')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:17:43,743 - INFO - len : 136
+ database.py: 2023-10-28 23:17:43,743 - INFO - connection done
+ parser.py: 2023-10-28 23:17:43,743 - INFO - Message: [('ChatServerWithObjectMessage',)]
+ sniffer.py: 2023-10-28 23:17:44,480 - INFO - Received Packet : Data(bytearray.fromhex('15bd7505001156456e647320efbfbc206d70206d6f6920653d7a780008386a31636164356e426398e1802460000010547269782d416272616b6e6f752d446900000a2743c80001003f8a9f0100071d757dc2031d758a01501d75fc150a1d75f2150a1d75f205141d759b03140a089709e5580100dec54201')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:17:44,480 - INFO - len : 117
+ database.py: 2023-10-28 23:17:44,480 - INFO - connection done
+ parser.py: 2023-10-28 23:17:44,480 - INFO - Message: [('ChatServerWithObjectMessage',)]
+ sniffer.py: 2023-10-28 23:17:50,872 - INFO - Received Packet : Data(bytearray.fromhex('89b1b2060088796f206c657320676172732c2064616e7320646978206d696e75746573206a6520676f206661697265207b63686174616368696576656d656e742c363030367d2073692071716e20766575742076656e69722028706f73736962696c6974c3a9206465206661697265206175737369207b63686174616368696576656d656e742c363233347d2029653d7a7e0008617a65307965376c42639b14602460000009476f6c74726f736f720000094a86ef')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:17:50,872 - INFO - len : 178
+ database.py: 2023-10-28 23:17:50,872 - INFO - connection done
+ parser.py: 2023-10-28 23:17:50,872 - INFO - Message: [('ChatServerMessage',)]
+ sniffer.py: 2023-10-28 23:17:53,905 - INFO - Received Packet : Data(bytearray.fromhex('15be02ac050039efbfbc20efbfbc20efbfbc20efbfbc20efbfbc20efbfbc20efbfbc2050616e6f2032303020546572726520446f204f7074692061762033356d653d7a81000839653075786430754247e67500918000000758616e2d4b7975000001ee4d7d0007003f81c501000e1d75ae01de031d757d8e031d7576461d757c271d75b2010e1d75ae030c1d75a6030c1d75d601071d75d401071d75a001071d75d201031d756f011d7575010f72d907000c50726f2d546563682d546f72eec1d85701003f82c501')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:17:53,905 - INFO - len : 684
+ sniffer.py: 2023-10-28 23:17:57,317 - INFO - Received Packet : Data(bytearray.fromhex('000c1d75ae01a4021d757df9011d75763b1d757c0f1d75a0030e1d75a001091d75ae03071d75a603071d75d201071d75f005071d758001011d75b60101ebc1d85701003f83c50100111d757dde021d7576501d757c1d1d75a003141d75ae030f1d75a6030f1d75a0010c1d75b2010a1d75f0050a1d75d201071d75d401071d7575011d75f4150105c15f121505c15c12150f72d907000a44697376657273696f6e1d75891600e7c1d85701003fbc66000d1d757daa021d75765a1d757c281d75b001141d75ae0312')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:17:57,318 - INFO - Received Packet : Data(bytearray.fromhex('1d75a603121d75f2010f1d75d3010a1d75f005051d7573031d758001011d75f415011d75891600ecc1d85701003fba66000d1d757d8f031d7576631d757c1a1d75ae03121d75a603121d75a4030f1d75f4010e1d7573061d75a101061d7575021d75f415010f72d907000b4461726b2d73616e6469631d75891600eac1d85701003fbb66000a1d757da1021d7576451d757c191d75ae030f1d75a6030f1d75d5010a1d75a101071d75f005041d756f011d757501e9c1d85701003fc77800111d757dd9021d757e45')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:17:57,318 - INFO - Received Packet : Data(bytearray.fromhex('1d7576431d757c231d75ae030f1d75a6030f1d75a8030f1d75d2010a1d75f005091d75d601071d7573031d75d501021d75b601010f72d90700084d65636b616e696b1d75ff08da6e1d758009c6021d75891600edc1d85701')) with src IP : 172.65.245.233
+ database.py: 2023-10-28 23:17:57,318 - INFO - connection done
+ parser.py: 2023-10-28 23:17:57,318 - INFO - Message: [('ChatServerWithObjectMessage',)]
+ sniffer.py: 2023-10-28 23:17:57,319 - INFO - Received Packet : Data(bytearray.fromhex('89b1560600256465757820736173612031393020646973706f20706f7572204e69646173206d70206d6f69653d7a8500087275326f7070386742646186602460000010536869656c642d737461726c6967687400000a6eb8b3')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:17:57,319 - INFO - len : 86
+ database.py: 2023-10-28 23:17:57,319 - INFO - connection done
+ parser.py: 2023-10-28 23:17:57,319 - INFO - Message: [('ChatServerMessage',)]
+ sniffer.py: 2023-10-28 23:18:19,495 - INFO - Received Packet : Data(bytearray.fromhex('439d084263a5fcc0246000')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:18:19,495 - INFO - len : 8
+ database.py: 2023-10-28 23:18:19,495 - INFO - connection done
+ parser.py: 2023-10-28 23:18:19,496 - INFO - Message: [('GameContextRemoveElementMessage',)]
+ sniffer.py: 2023-10-28 23:18:25,780 - INFO - Received Packet : Data(bytearray.fromhex('89b1500600247265637275746520756e206c61737420706f757220736f6e676520657461676520333735653d7aa10008743667717965376b4244726b00918000000b4c696e636f6e2d656c696f000008099044')) with src IP : 172.65.245.233
+ sniffer.py: 2023-10-28 23:18:25,780 - INFO - len : 80
+ database.py: 2023-10-28 23:18:25,780 - INFO - connection done
+ parser.py: 2023-10-28 23:18:25,780 - INFO - Message: [('ChatServerMessage',)]
