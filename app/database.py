@@ -9,7 +9,7 @@ connections = {}
 
 def clear_connections():
     global connections
-    for key, value in connections.items():
+    for _, value in connections.items():
         value.close()
     connections = {}
 
@@ -24,7 +24,7 @@ def get_connection():
         logger.info(f"connection error : {e}")
 
 
-def execute_sql(raw_sql, args=[], is_execute_many=False):
+def execute_sql(raw_sql, args=None, is_execute_many=False):
     connection: sqlite3.Connection = get_connection()
     cursor = connection.cursor()
     if is_execute_many:
@@ -35,5 +35,4 @@ def execute_sql(raw_sql, args=[], is_execute_many=False):
     if "select" in raw_sql.lower():
         results = request.fetchall()
         return results
-    else:
-        connection.commit()
+    connection.commit()

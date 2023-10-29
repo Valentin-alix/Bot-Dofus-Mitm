@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
+import os
 import pickle
 import re
 from pathlib import Path
@@ -172,8 +173,26 @@ if __name__ == "__main__":
     types_from_id = {}
 
     paths = [
-        "as_scripts/scripts/com/ankamagames/dofus/network/types",
-        "as_scripts/scripts/com/ankamagames/dofus/network/messages",
+        os.path.join(
+            Path(__file__).parent.parent.parent.parent,
+            "as_scripts",
+            "scripts",
+            "com",
+            "ankamagames",
+            "dofus",
+            "network",
+            "types",
+        ),
+        os.path.join(
+            Path(__file__).parent.parent.parent.parent,
+            "as_scripts",
+            "scripts",
+            "com",
+            "ankamagames",
+            "dofus",
+            "network",
+            "messages",
+        ),
     ]
 
     for p in paths:
@@ -188,7 +207,7 @@ if __name__ == "__main__":
         if v["type"] and not v["type"] in types
     }
 
-    with open("protocol.pk", "wb") as f:
+    with open(os.path.join(Path(__file__).parent, "protocol.pk"), "wb") as f:
         pickle.dump(types, f)
         pickle.dump(msg_from_id, f)
         pickle.dump(types_from_id, f)

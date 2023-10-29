@@ -32,3 +32,5 @@ zope.interface==6.1
 db-sqlite3==0.0.1
 Jinja2==3.1.2
 python-dotenv==1.0.0
+tqdm==2.2.3
+scapy==2.5.0

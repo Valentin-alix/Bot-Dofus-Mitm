@@ -1,11 +1,8 @@
 import logging
 import os
-import sys
 from pathlib import Path
-from queue import Queue
-from threading import Event, Thread
+from threading import Thread
 
-from bot.bot_fm import BotFM
 from network.sniffer import Sniffer
 
 if not (
@@ -16,7 +13,7 @@ logging.basicConfig(
     level=logging.INFO,
     filename=os.path.join(path_logs, "bot.log"),
     filemode="w+",
-    format=" %(filename)s: %(asctime)s - %(" "levelname)s - %(message)s",
+    format="%(levelname)s-%(funcName)s-%(lineno)d:%(message)s",
 )
 logger = logging.getLogger(__name__)
 

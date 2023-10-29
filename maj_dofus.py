@@ -198,3 +198,6 @@ if __name__ == "__main__":
 
     # TODO Exploit D2O_JSON
     maj_runes_objects()
+
+    # Building protocol pk to parse message network
+    os.system("python app/network/build_protocol.py", shell=True)

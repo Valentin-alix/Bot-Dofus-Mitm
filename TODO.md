@@ -2,8 +2,4 @@
 
 - Database
 
-- Ajouter linter
-
-- Bug parfois apres SequenceNumberRequestMessage (id 1620) : ca vient peux etre de la connection qui peux etre instable ?
-
-- # TODO Build protocol automatic ? 
+- # TODO Avec protocol certaines donnée en bdd sont obsolète
