@@ -1,7 +1,8 @@
 import logging
+from network.utils import get_local_ip
 
 from models.data import Data
-from models.utils import NetworkMessage, UnpackMode
+from network.utils import NetworkMessage, UnpackMode
 from network.parser import MessageRawDataParser
 from scapy.all import Packet, Raw, sniff
 from scapy.layers.inet import IP
@@ -24,6 +25,7 @@ class Sniffer:
         self._splitted_packet_length = None
         self._input_buffer: Data = Data()
         self._input = Data()
+        self._ip_local = get_local_ip()
 
     def launch_sniffer(self) -> None:
         logger.info("Launching Sniffer")
@@ -32,7 +34,7 @@ class Sniffer:
     def on_receive(self, packet: Packet):
         if Raw in packet:
             src_ip = packet[IP].src
-            if src_ip != "192.168.1.17":
+            if src_ip != self._ip_local:
                 data = Data(packet[Raw].load)
                 logger.info(f"Received Packet : Raw : {str(data)} \n src IP : {src_ip}")
                 self.receive(data)

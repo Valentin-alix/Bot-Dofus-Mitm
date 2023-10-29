@@ -4,9 +4,9 @@ import re
 import shutil
 
 from dotenv import load_dotenv
+from PyDofus.pydofus.d2o import D2OReader, InvalidD2OFile
 
 from app.database import execute_sql, get_connection
-from PyDofus.pydofus.d2o import D2OReader, InvalidD2OFile
 
 
 def maj_runes_objects():
@@ -73,14 +73,14 @@ def maj_messages(input_folder):
     execute_sql("delete from message_network")
     rows = []
     for folder, _, files in os.walk(input_folder):
-        for file in files:
-            with open(folder + "\\" + file) as opened_file:
+        for file_ in files:
+            with open(os.path.join(folder, file_)) as opened_file:
                 lines = opened_file.readlines()
                 rows.extend(
                     [
                         (
                             re.findall(r"\d+", line)[0],
-                            file[:-3],
+                            file_[:-3],
                         )
                         for line in lines
                         if "protocolId:uint" in line
@@ -134,10 +134,10 @@ def get_d2o_json(output_d2o_json):
         if os.path.exists(output_d2o_json):
             shutil.rmtree(output_d2o_json)
         os.mkdir(output_d2o_json)
-        for file in os.listdir(os.environ.get("D2O_FOLDER")):
-            if file.endswith(".d2o"):
-                file_name = os.path.basename(file)
-                d2p_file = open(os.path.join(os.environ.get("D2O_FOLDER"), file), "rb")
+        for file_ in os.listdir(os.environ.get("D2O_FOLDER")):
+            if file_.endswith(".d2o"):
+                file_name = os.path.basename(file_)
+                d2p_file = open(os.path.join(os.environ.get("D2O_FOLDER"), file_), "rb")
 
                 print("D2O Unpacker for " + file_name)
 
@@ -200,4 +200,4 @@ if __name__ == "__main__":
     maj_runes_objects()
 
     # Building protocol pk to parse message network
-    os.system("python app/network/build_protocol.py", shell=True)
+    os.system("python app/network/protocol/build_protocol.py")

@@ -2,7 +2,7 @@ import logging
 
 from database import execute_sql
 from models.data import Data
-from models.utils import UnpackMode
+from network.utils import UnpackMode
 from network.handler import handle_message_content
 from network.protocol import protocol
 

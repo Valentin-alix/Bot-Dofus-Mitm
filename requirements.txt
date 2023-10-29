@@ -4,7 +4,6 @@ bottle-websocket==0.2.9
 cffi==1.16.0
 contourpy==1.1.1
 cycler==0.12.1
-Eel==0.16.0
 fonttools==4.43.1
 future==0.18.3
 gevent==23.9.1
@@ -34,3 +33,4 @@ Jinja2==3.1.2
 python-dotenv==1.0.0
 tqdm==2.2.3
 scapy==2.5.0
+black==23.10.1

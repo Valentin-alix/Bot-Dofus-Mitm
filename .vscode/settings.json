@@ -1,4 +1,9 @@
 {
+    "editor.fontSize": 16,
+    "workbench.colorCustomizations": {
+        "activityBar.background": "#07717f",
+        "activityBar.inactiveForeground": "#000000",
+    },
     "[python]": {
         "editor.formatOnSave": true,
         "editor.defaultFormatter": "ms-python.black-formatter",
@@ -6,5 +11,5 @@
             "source.organizeImports": true
         }
     },
-    "pylint.args" : ["--disable=C0116,W1203,W1201,C0115,C0114,E0401"]
+    "pylint.args" : ["--disable=C0116,W1203,W1201,C0115,C0114,E0401,W1514"]
 }
