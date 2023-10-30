@@ -1,11 +1,7 @@
-#!/usr/bin/env python3
-
-import argparse
 import os
 import pickle
 import re
 from pathlib import Path
-from pprint import pprint
 
 from tqdm import tqdm
 

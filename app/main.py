@@ -13,16 +13,13 @@ logging.basicConfig(
     level=logging.INFO,
     filename=os.path.join(path_logs, "bot.log"),
     filemode="w+",
-    format="%(levelname)s-%(funcName)s-%(lineno)d:%(message)s",
+    format="%(levelname)s:%(message)s",
 )
 logger = logging.getLogger(__name__)
 
 
 if __name__ == "__main__":
     logger.info("Starting Bot")
-
     sniffer = Sniffer()
-
     sniffer_thread = Thread(target=sniffer.launch_sniffer, daemon=False)
-
     sniffer_thread.start()

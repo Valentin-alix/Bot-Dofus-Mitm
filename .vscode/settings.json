@@ -11,5 +11,5 @@
             "source.organizeImports": true
         }
     },
-    "pylint.args" : ["--disable=C0116,W1203,W1201,C0115,C0114,E0401,W1514"]
+    "pylint.args" : ["--disable=C0116,W1203,W1201,C0115,C0114,E0401,W1514,E0611"]
 }

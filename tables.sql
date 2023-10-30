@@ -11,18 +11,6 @@ CREATE TABLE `item` (
 );
 
 --
--- Table structure for table `message_network`
---
-
-DROP TABLE IF EXISTS `message_network`;
-
-CREATE TABLE `message_network` (
-  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
-  `protocol_id` INTEGER NOT NULL,
-  `name` TEXT NOT NULL
-);
-
---
 -- Table structure for table `object_network`
 --
 
@@ -64,16 +52,4 @@ CREATE TABLE `target_line` (
   `column` INTEGER NOT NULL,
   FOREIGN KEY(item_id) REFERENCES item(id),
   FOREIGN KEY(rune_id) REFERENCES rune(id)
-);
-
---
--- Table structure for table `info_file`
---
-
-DROP TABLE IF EXISTS `info_file`;
-
-CREATE TABLE `info_file` (
-  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
-  `file_path` TEXT NOT NULL UNIQUE,
-  `last_modified_date` DATE NOT NULL
 );
