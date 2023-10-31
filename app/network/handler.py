@@ -1,5 +1,5 @@
 import logging
-from models.message import Message
+from network.models.message import Message
 import pprint
 
 logger = logging.getLogger(__name__)

@@ -1,5 +1,3 @@
-- Replace EEL with a real gui (Qt for example)
+- # TODO Voir avec fichier D2O ou autre pour récupérer object by object id
 
-- Database
-
-- # TODO Avec protocol certaines donnée en bdd sont obsolète
+- TODO Refactor protocol files & model Data

@@ -3,6 +3,8 @@ Replicate com.ankamagames.jerakine.network.CustomDataWrapper
 """
 import struct
 from bz2 import decompress
+from dataclasses import dataclass
+from typing import Optional
 
 
 class Data:
@@ -205,3 +207,12 @@ class Data:
     def end(self):
         del self.data[: self.pos]
         self.pos = 0
+
+
+@dataclass
+class Buffer:
+    static_header: int | None = None
+    buffer_data: Data = Data()
+    is_splitted_packet: bool = False
+    splitted_packet_id: int | None = None
+    splitted_packet_length: int | None = None

@@ -4,6 +4,8 @@ import socket
 
 logger = logging.getLogger(__name__)
 
+FILTER_DOFUS = "tcp port 5555"
+
 
 def get_local_ip() -> str:
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)

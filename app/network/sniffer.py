@@ -1,141 +1,144 @@
 import logging
-from network.utils import get_local_ip
+from typing import Optional
+from network.utils import FILTER_DOFUS, get_local_ip
 
-from models.data import Data
-from models.message import Message
+from network.models.data import Buffer, Data
+from network.models.message import Message
 from network.utils import NetworkMessage
 from network.parser import MessageRawDataParser
 from scapy.all import Packet, Raw, sniff
-from scapy.layers.inet import IP
+from scapy.layers.inet import IP, TCP
 
 logger = logging.getLogger(__name__)
 
 
-FILTER_DOFUS = "tcp port 5555"
-
-MESSAGE_SIZE_ASYNC_THRESHOLD = 300 * 1024
-
-
 class Sniffer:
-    def __init__(self):
-        self._raw_parser: MessageRawDataParser = MessageRawDataParser()
-        self._splitted_packet = False
-        self._static_header: int
-        self._splitted_packet_id = None
-        self._splitted_packet_length = None
-        self._async_network_data_container_message = Data()
-        self._buffer = Data()
-        self._ip_local = get_local_ip()
+    def __init__(self, capture_path: Optional[str] = None):
+        self.not_completed_message_number: int = 0
+        self.capture_path: str | None = capture_path
+        self.raw_parser: MessageRawDataParser = MessageRawDataParser()
+        self.async_network_data_container_message = Data()
+        self.buffer_infos_from_server = Buffer()
+        self.buffer_infos_from_client = Buffer()
+        self.ip_local = get_local_ip()
 
     def launch_sniffer(self) -> None:
-        logger.info("Launching Sniffer")
-        sniff(prn=self.on_receive, store=False, filter=FILTER_DOFUS)
+        if self.capture_path:
+            sniff(prn=self.on_receive, offline=self.capture_path)
+        else:
+            sniff(prn=self.on_receive, store=False, filter=FILTER_DOFUS)
 
     def on_receive(self, packet: Packet):
         if Raw in packet:
-            src_ip = packet[IP].src
-            # TODO Differentiate from client and not
-            if src_ip != self._ip_local:
-                data = Data(packet[Raw].load)
-                logger.info(f"Received Packet : Raw : {str(data)} \n src IP : {src_ip}")
-                self.receive(data)
+            src_ip: int = packet[IP].src
+            data = Data(packet[Raw].load)
+            logger.info(f"Received Packet : Raw : {str(data)} \n src IP : {src_ip}")
+            self.receive(data, src_ip == self.ip_local)
 
-    def receive(self, data: Data):
-        msg = None
+    def receive(self, data: Data, from_client: bool):
         if data.remaining() > 0:
-            msg = self.low_receive(data)
+            msg = self.low_receive(data, from_client)
             while msg is not None:
-                msg = self.low_receive(data)
+                msg = self.low_receive(data, from_client)
 
-    def low_receive(self, src: Data) -> Message:
-        msg = None
-        static_header = 0
-        message_id = 0
-        message_length = 0
-        if not self._splitted_packet:
+    def low_receive(self, src: Data, from_client: bool) -> Message | None:
+        _buffer_infos = (
+            self.buffer_infos_from_client
+            if from_client
+            else self.buffer_infos_from_server
+        )
+
+        if not _buffer_infos.is_splitted_packet:
             if src.remaining() < 2:
                 return None
 
-            static_header = int(src.readUnsignedShort())
+            header = src.readUnsignedShort()
 
-            # if from_client:
-            #     src.readUnsignedInt()
+            if from_client:
+                src.readUnsignedInt()
 
-            message_id = self.get_message_id(static_header)
-            message_length = self.read_message_length(static_header, src)
+            try:
+                message_length = int.from_bytes(src.read(header & 3), "big")
+                message_id = header >> NetworkMessage.BIT_RIGHT_SHIFT_LEN_PACKET_ID
+            except IndexError:
+                logger.error("Could not get message length or id")
+                self.not_completed_message_number += 1
+                src.pos = 0
+                return None
 
-            if (
-                MessageRawDataParser().get_message_type_from_id(message_id)
-                == "NetworkDataContainerMessage"
-            ):
+            try:
+                message_type = MessageRawDataParser().get_message_type_from_id(
+                    message_id
+                )
+            except (IndexError, KeyError):
+                logger.error(f"Could not get type for id : {message_id}")
+                self.not_completed_message_number += 1
+                src.pos = 0
+                return None
+
+            if message_type == "NetworkDataContainerMessage":
                 logger.info("Received NetworkDataContainerMessage")
                 if src.remaining() >= message_length:
                     content_len = int(src.readVarInt())
                     buffer_network_data_container_message = Data(src.read(content_len))
                     buffer_network_data_container_message.uncompress()
-                    self._async_network_data_container_message = Data()
+                    self.async_network_data_container_message = Data()
                     logger.info("Uncompressing NetworkDataContainerMessage")
-                    return self.low_receive(buffer_network_data_container_message)
-
-                self._async_network_data_container_message += src
+                    return self.low_receive(
+                        buffer_network_data_container_message, from_client
+                    )
+                self.async_network_data_container_message += src
                 return None
 
-            if src.remaining() >= (static_header & NetworkMessage.BIT_MASK):
+            if src.remaining() >= (header & NetworkMessage.BIT_MASK):
                 if src.remaining() >= message_length:
-                    msg = self._raw_parser.parse(src, message_id, message_length)
+                    msg = self.raw_parser.parse(src, message_id, message_length)
                     return msg
 
-                self._static_header = -1
-                self._splitted_packet_length = message_length
-                self._splitted_packet_id = message_id
-                self._splitted_packet = True
-                self._buffer = Data(src.read(src.remaining()))
-                return None
+                _buffer_infos.static_header = None
+                _buffer_infos.buffer_data = Data(src.read(src.remaining()))
+            else:
+                _buffer_infos.static_header = header
 
-            self._static_header = static_header
-            self._splitted_packet_length = message_length
-            self._splitted_packet_id = message_id
-            self._splitted_packet = True
+            _buffer_infos.splitted_packet_length = message_length
+            _buffer_infos.splitted_packet_id = message_id
+            _buffer_infos.is_splitted_packet = True
             return None
 
-        if self._static_header != -1:
-            self._splitted_packet_length = self.read_message_length(
-                self._static_header, src
+        # is splitted packets
+        if _buffer_infos.static_header is not None:
+            _buffer_infos.splitted_packet_length = int.from_bytes(
+                src.read(_buffer_infos.static_header & 3), "big"
             )
-            self._static_header = -1
+            _buffer_infos.static_header = None
 
-        if src.remaining() + len(self._buffer) >= self._splitted_packet_length:
-            self._buffer += src.read(self._splitted_packet_length - len(self._buffer))
-            self._buffer.pos = 0
+        if (
+            _buffer_infos.splitted_packet_length is not None
+            and _buffer_infos.splitted_packet_id is not None
+        ):
+            if (
+                src.remaining() + len(_buffer_infos.buffer_data)
+                >= _buffer_infos.splitted_packet_length
+            ):
+                _buffer_infos.buffer_data += src.read(
+                    _buffer_infos.splitted_packet_length
+                    - len(_buffer_infos.buffer_data)
+                )
+                _buffer_infos.buffer_data.pos = 0
 
-            msg = self._raw_parser.parse(
-                self._buffer,
-                self._splitted_packet_id,
-                self._splitted_packet_length,
+                msg = self.raw_parser.parse(
+                    _buffer_infos.buffer_data,
+                    _buffer_infos.splitted_packet_id,
+                    _buffer_infos.splitted_packet_length,
+                )
+
+                _buffer_infos.is_splitted_packet = False
+                _buffer_infos.buffer_data = Data()
+                return msg
+        else:
+            raise ValueError(
+                "splitted_packet_length and splitted_packet_id should not be None"
             )
 
-            self._splitted_packet = False
-            self._buffer = Data()
-            return msg
-
-        self._buffer += src.read(src.remaining())
+        _buffer_infos.buffer_data += src.read(src.remaining())
         return None
-
-    def get_message_id(self, first_octet):
-        return first_octet >> NetworkMessage.BIT_RIGHT_SHIFT_LEN_PACKET_ID
-
-    def read_message_length(self, static_header, src: Data):
-        byte_len_dynamic_header = int(static_header & NetworkMessage.BIT_MASK)
-        message_length = 0
-
-        if byte_len_dynamic_header == 1:
-            message_length = int(src.readUnsignedByte())
-        elif byte_len_dynamic_header == 2:
-            message_length = int(src.readUnsignedShort())
-        elif byte_len_dynamic_header == 3:
-            message_length = int(
-                ((src.readByte() & 255) << 16)
-                + ((src.readByte() & 255) << 8)
-                + (src.readByte() & 255)
-            )
-        return message_length

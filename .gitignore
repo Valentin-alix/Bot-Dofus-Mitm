@@ -1,6 +1,6 @@
 as_scripts
 d2o_json
-logs
+bot.log
 __pycache__/
 *.py[cod]
 .venv
