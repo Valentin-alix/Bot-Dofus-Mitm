@@ -35,3 +35,4 @@ tqdm==2.2.3
 scapy==2.5.0
 black==23.10.1
 SQLAlchemy==2.0.22
+PyQt5==5.15.10

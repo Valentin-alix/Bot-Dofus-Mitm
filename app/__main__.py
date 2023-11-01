@@ -2,9 +2,12 @@ import logging
 import logging.config
 import os
 from pathlib import Path
-from threading import Thread
+import sys
+from queue import Queue
+from threading import Thread, Event
 
 from sqlalchemy import create_engine
+from gui.app import Application, MainWindow
 from init import update_resources
 from database.models import Base
 from logs.config import LOGGING_CONFIG
@@ -24,6 +27,20 @@ if __name__ == "__main__":
 
     update_resources(engine)
 
-    sniffer = Sniffer()
-    sniffer_thread = Thread(target=sniffer.launch_sniffer, daemon=False)
+    queue_handler_message = Queue()
+    event_play_sniffer = Event()
+    event_play_sniffer.set()
+
+    sniffer = Sniffer(
+        queue_handler_message=queue_handler_message,
+        event_play_sniffer=event_play_sniffer,
+    )
+    sniffer_thread = Thread(target=sniffer.launch_sniffer, daemon=True)
     sniffer_thread.start()
+
+    app = Application(sys.argv)
+    main_window = MainWindow(
+        queue_handler_message=queue_handler_message,
+        event_play_sniffer=event_play_sniffer,
+    )
+    sys.exit(app.exec_())

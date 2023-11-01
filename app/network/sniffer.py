@@ -1,10 +1,16 @@
 import logging
+from queue import Queue
+from threading import Event
 from typing import Optional
-from network.utils import FILTER_DOFUS, get_local_ip
+from network.utils import (
+    BIT_MASK,
+    BIT_RIGHT_SHIFT_LEN_PACKET_ID,
+    FILTER_DOFUS,
+    get_local_ip,
+)
 
 from network.models.data import Buffer, Data
 from network.models.message import Message
-from network.utils import NetworkMessage
 from network.parser import MessageRawDataParser
 from scapy.all import Packet, Raw, sniff
 from scapy.layers.inet import IP, TCP
@@ -13,7 +19,14 @@ logger = logging.getLogger(__name__)
 
 
 class Sniffer:
-    def __init__(self, capture_path: Optional[str] = None):
+    def __init__(
+        self,
+        queue_handler_message: Queue[Message],
+        event_play_sniffer: Event,
+        capture_path: Optional[str] = None,
+    ):
+        self.queue_handler_message = queue_handler_message
+        self.event_play_sniffer = event_play_sniffer
         self.not_completed_message_number: int = 0
         self.capture_path: str | None = capture_path
         self.raw_parser: MessageRawDataParser = MessageRawDataParser()
@@ -26,7 +39,14 @@ class Sniffer:
         if self.capture_path:
             sniff(prn=self.on_receive, offline=self.capture_path)
         else:
-            sniff(prn=self.on_receive, store=False, filter=FILTER_DOFUS)
+            while True:
+                if self.event_play_sniffer.wait():
+                    sniff(
+                        prn=self.on_receive,
+                        store=False,
+                        filter=FILTER_DOFUS,
+                        stop_filter=lambda _: not self.event_play_sniffer.is_set(),
+                    )
 
     def on_receive(self, packet: Packet):
         if Raw in packet:
@@ -51,15 +71,12 @@ class Sniffer:
         if not _buffer_infos.is_splitted_packet:
             if src.remaining() < 2:
                 return None
-
             header = src.readUnsignedShort()
-
             if from_client:
                 src.readUnsignedInt()
-
             try:
                 message_length = int.from_bytes(src.read(header & 3), "big")
-                message_id = header >> NetworkMessage.BIT_RIGHT_SHIFT_LEN_PACKET_ID
+                message_id = header >> BIT_RIGHT_SHIFT_LEN_PACKET_ID
             except IndexError:
                 logger.error("Could not get message length or id")
                 self.not_completed_message_number += 1
@@ -67,9 +84,7 @@ class Sniffer:
                 return None
 
             try:
-                message_type = MessageRawDataParser().get_message_type_from_id(
-                    message_id
-                )
+                message_type = self.raw_parser.get_message_type_from_id(message_id)
             except (IndexError, KeyError):
                 logger.error(f"Could not get type for id : {message_id}")
                 self.not_completed_message_number += 1
@@ -90,9 +105,15 @@ class Sniffer:
                 self.async_network_data_container_message += src
                 return None
 
-            if src.remaining() >= (header & NetworkMessage.BIT_MASK):
+            if src.remaining() >= (header & BIT_MASK):
                 if src.remaining() >= message_length:
-                    msg = self.raw_parser.parse(src, message_id, message_length)
+                    msg = self.raw_parser.parse(
+                        src,
+                        message_id,
+                        message_length,
+                        from_client,
+                        self.queue_handler_message,
+                    )
                     return msg
 
                 _buffer_infos.static_header = None
@@ -130,6 +151,8 @@ class Sniffer:
                     _buffer_infos.buffer_data,
                     _buffer_infos.splitted_packet_id,
                     _buffer_infos.splitted_packet_length,
+                    from_client,
+                    self.queue_handler_message,
                 )
 
                 _buffer_infos.is_splitted_packet = False
