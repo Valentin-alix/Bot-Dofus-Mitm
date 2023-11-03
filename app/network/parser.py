@@ -2,7 +2,7 @@ import logging
 from queue import Queue
 from typing import Callable
 
-from network.handler import handle_message_unpacked
+from network.handler import Handler
 from network.models.message import Message, ParsedMessage
 
 logger = logging.getLogger(__name__)
@@ -19,6 +19,7 @@ class MessageRawDataParser:
     ) -> None:
         self.queue_handler_message = queue_handler_message
         self.on_error_callback = on_error_callback
+        self.handler = Handler()
 
     def parse(self, message: Message, from_client: bool) -> ParsedMessage | None:
         try:
@@ -28,7 +29,8 @@ class MessageRawDataParser:
             )
             if self.queue_handler_message is not None:
                 self.queue_handler_message.put(parsed_message)
-            handle_message_unpacked(parsed_message)
+
+            self.handler.handle_message_unpacked(parsed_message)
             return parsed_message
 
         except (KeyError, IndexError) as err:

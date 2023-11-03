@@ -25,6 +25,8 @@ class InjectorBridgeHandler:
         self.buffer_client: BufferInfos = BufferInfos()
         self.buffer_server: BufferInfos = BufferInfos()
 
+        self.raw_parser = MessageRawDataParser()
+
         self.injected_to_client = 0
         self.injected_to_server = 0
         self.counter = 0
@@ -38,7 +40,7 @@ class InjectorBridgeHandler:
 
         message = Message.from_raw(data, from_client, buffer_infos)
         while message is not None:
-            parsed_message = MessageRawDataParser().parse(message, from_client)
+            parsed_message = self.raw_parser.parse(message, from_client)
             if from_client:
                 if message.count is None:
                     message.count = 0
