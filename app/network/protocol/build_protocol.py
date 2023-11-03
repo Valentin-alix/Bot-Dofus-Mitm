@@ -5,27 +5,27 @@ from pathlib import Path
 
 from tqdm import tqdm
 
-class_pattern = r"\s*public class (?P<name>\w+) (?:extends (?P<parent>\w+) )?implements (?P<interface>\w+)\n"
-id_pattern = r"\s*public static const protocolId:uint = (?P<id>\d+);\n"
-public_var_pattern = r"\s*public var (?P<name>\w+):(?P<type>\S*)( = (?P<init>.*))?;\n"
-vector_type_pattern = r"Vector\.<(?P<type>\w+)>"
+CLASS_PATTERN = r"\s*public class (?P<name>\w+) (?:extends (?P<parent>\w+) )?implements (?P<interface>\w+)\n"
+ID_PATTERN = r"\s*public static const protocolId:uint = (?P<id>\d+);\n"
+PUBLIC_VAR_PATTERN = r"\s*public var (?P<name>\w+):(?P<type>\S*)( = (?P<init>.*))?;\n"
+VECTOR_TYPE_PATTERN = r"Vector\.<(?P<type>\w+)>"
 
-attr_assign_pattern_of_name = r"\s*this\.%s = (?:\w*)\.read(?P<type>\w*)\(\);\n"
-vector_attr_write_pattern_of_name = (
+ATTR_ASSIGN_PATTERN_OF_NAME = r"\s*this\.%s = (?:\w*)\.read(?P<type>\w*)\(\);\n"
+VECTOR_ATTR_WRITE_PATTERN_OF_NAME = (
     r"\s*(?:\w*)\.write(?P<type>\w*)\(this\.%s\[(?:\w+)\]\);\n"
 )
-vector_len_write_pattern_of_name = (
+VECTOR_LEN_WRITE_PATTERN_OF_NAME = (
     r"\s*(?:\w*)\.write(?P<type>\w*)\(this\.%s\.length\);\n"
 )
-vector_const_len_pattern_of_name_and_type = (
+VECTOR_CONST_LEN_PATTERN_OF_NAME_AND_TYPE = (
     r"\s*this\.%s = new Vector\.<%s>\((?P<size>\d+),true\);\n"
 )
-dynamic_type_pattern_of_type = (
+DYNAMIC_TYPE_PATTERN_OF_TYPE = (
     r"\s*(?:this\.)?\w+ = ProtocolTypeManager\.getInstance\(%s,\w*\);\n"
 )
-optional_var_pattern_of_name = r"\s*if\(this\.%s == null\)\n"
-hash_function_pattern = r"\s*HASH_FUNCTION\(data\);\n"
-wrapped_boolean_pattern = r"\s*this.(?P<name>\w+) = BooleanByteWrapper\.getFlag\(.*;\n"
+OPTIONAL_VAR_PATTERN_OF_NAME = r"\s*if\(this\.%s == null\)\n"
+HASH_FUNCTION_PATTERN = r"\s*HASH_FUNCTION\(data\);\n"
+WRAPPED_BOOLEAN_PATTERN = r"\s*this.(?P<name>\w+) = BooleanByteWrapper\.getFlag\(.*;\n"
 
 
 def load_from_path(path):
@@ -37,9 +37,9 @@ def load_from_path(path):
         types[name] = new
 
 
-def lines(t):
-    with t["path"].open() as f:
-        yield from f
+def lines(_type):
+    with _type["path"].open() as file:
+        yield from file
 
 
 def parseVar(name, typename, lines):
@@ -48,13 +48,13 @@ def parseVar(name, typename, lines):
     if typename in types:
         type = typename
 
-    m = re.fullmatch(vector_type_pattern, typename)
+    m = re.fullmatch(VECTOR_TYPE_PATTERN, typename)
     if m:
         return parseVectorVar(name, m.group("type"), lines)
 
-    attr_assign_pattern = attr_assign_pattern_of_name % name
-    dynamic_type_pattern = dynamic_type_pattern_of_type % typename
-    optional_var_pattern = optional_var_pattern_of_name % name
+    attr_assign_pattern = ATTR_ASSIGN_PATTERN_OF_NAME % name
+    dynamic_type_pattern = DYNAMIC_TYPE_PATTERN_OF_TYPE % typename
+    optional_var_pattern = OPTIONAL_VAR_PATTERN_OF_NAME % name
 
     optional = False
 
@@ -78,13 +78,13 @@ def parseVectorVar(name, typename, lines):
     if typename in types:
         type = typename
 
-    vector_attr_write_pattern = vector_attr_write_pattern_of_name % name
-    vector_len_write_pattern = vector_len_write_pattern_of_name % name
-    vector_const_len_pattern = vector_const_len_pattern_of_name_and_type % (
+    vector_attr_write_pattern = VECTOR_ATTR_WRITE_PATTERN_OF_NAME % name
+    vector_len_write_pattern = VECTOR_LEN_WRITE_PATTERN_OF_NAME % name
+    vector_const_len_pattern = VECTOR_CONST_LEN_PATTERN_OF_NAME_AND_TYPE % (
         name,
         typename,
     )
-    dynamic_type_pattern = dynamic_type_pattern_of_type % typename
+    dynamic_type_pattern = DYNAMIC_TYPE_PATTERN_OF_TYPE % typename
 
     for line in lines:
         m = re.fullmatch(vector_attr_write_pattern, line)
@@ -112,7 +112,7 @@ def parse(t):
     wrapped_booleans = set()
 
     for line in lines(t):
-        m = re.fullmatch(class_pattern, line)
+        m = re.fullmatch(CLASS_PATTERN, line)
         if m:
             assert m.group("name") == t["name"]
             parent = m.group("parent")
@@ -120,20 +120,20 @@ def parse(t):
                 parent = None
             t["parent"] = parent
 
-        m = re.fullmatch(id_pattern, line)
+        m = re.fullmatch(ID_PATTERN, line)
         if m:
             protocolId = int(m.group("id"))
 
-        m = re.fullmatch(public_var_pattern, line)
+        m = re.fullmatch(PUBLIC_VAR_PATTERN, line)
         if m:
             var = parseVar(m.group("name"), m.group("type"), lines(t))
             vars.append(var)
 
-        m = re.fullmatch(hash_function_pattern, line)
+        m = re.fullmatch(HASH_FUNCTION_PATTERN, line)
         if m:
             hash_function = True
 
-        m = re.fullmatch(wrapped_boolean_pattern, line)
+        m = re.fullmatch(WRAPPED_BOOLEAN_PATTERN, line)
         if m:
             wrapped_booleans.add(m.group("name"))
 

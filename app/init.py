@@ -1,3 +1,5 @@
+import json
+from pathlib import Path
 from typing import List, Dict
 import os
 import shutil
@@ -5,6 +7,9 @@ from sqlalchemy.orm import sessionmaker
 
 from dotenv import load_dotenv
 from sqlalchemy import Engine
+from PyDofus.d2i_unpack import d2i_unpack
+from PyDofus.d2o_unpack import d2o_unpack
+from PyDofus.pydofus.d2o import D2OReader, InvalidD2OFile
 
 from database.models import Rune
 
@@ -93,17 +98,20 @@ def update_resources(engine: Engine):
     load_dotenv()
 
     if (
-        os.environ.get("DOFUS_INVOKER", None) is not None
+        (dofus_invoker_path := os.environ.get("DOFUS_INVOKER", None)) is not None
         and os.environ.get("FFDECJAR_PATH", None) is not None
+        and os.environ.get("D2O_FOLDER", None) is not None
+        and os.environ.get("D2I_FILE") is not None
     ):
-        output_as_scripts = "as_scripts"
-        if os.path.getmtime(output_as_scripts) <= os.path.getmtime(
-            os.environ.get("DOFUS_INVOKER")
-        ):
+        output_as_scripts = os.path.join(Path(__file__).parent.parent, "as_scripts")
+        if os.path.getmtime(output_as_scripts) <= os.path.getmtime(dofus_invoker_path):
             get_as_scripts(output_as_scripts)
 
             # Building protocol pk to parse message network
             os.system("python app/network/protocol/build_protocol.py")
+
+            d2o_unpack(os.environ.get("D2O_FOLDER"))
+            d2i_unpack(os.environ.get("D2I_FILE"))
 
         # maj_runes_objects(engine)
     else:

@@ -1,55 +1,60 @@
-from typing import Optional, Dict, Type, Callable
-
+from queue import Empty, Queue
 from threading import Event
 from time import sleep
-from queue import Queue, Empty
+from typing import Callable, Dict, Optional, Type
 
-from PyQt5.QtWidgets import (
-    QApplication,
-    QMainWindow,
-    QPushButton,
-    QGroupBox,
-    QVBoxLayout,
-    QHBoxLayout,
-    QSizePolicy,
-    QLabel,
-    QBoxLayout,
-    QDialogButtonBox,
-    QDialog,
-    QMessageBox,
-    QColorDialog,
-    QLayout,
-    QWidget,
-    QFrame,
-    QAction,
-    QListWidget,
-    QStatusBar,
-    QMenu,
-    QStackedWidget,
-    QStackedLayout,
-    QScrollArea,
-    QDockWidget,
-    QSpacerItem,
-)
-from PyQt5.QtCore import Qt, QSize, QObject, pyqtSignal, QRunnable, QThreadPool, QEvent
-from PyQt5.QtGui import QPalette, QColor, QCloseEvent
+from gui.components import HorizontalLayout
 from gui.frames.sniffer_frame import SnifferFrame
+from gui.utils import SideMenu
+from network.models.message import Message, ParsedMessage
+from PyQt5.QtCore import QEvent, QObject, QRunnable, QSize, Qt, QThreadPool, pyqtSignal
+from PyQt5.QtGui import QCloseEvent, QColor, QPalette
+from PyQt5.QtWidgets import (
+    QAction,
+    QApplication,
+    QBoxLayout,
+    QColorDialog,
+    QDialog,
+    QDialogButtonBox,
+    QDockWidget,
+    QFrame,
+    QGroupBox,
+    QHBoxLayout,
+    QLabel,
+    QLayout,
+    QListWidget,
+    QMainWindow,
+    QMenu,
+    QMessageBox,
+    QPushButton,
+    QScrollArea,
+    QSizePolicy,
+    QSpacerItem,
+    QStackedLayout,
+    QStackedWidget,
+    QStatusBar,
+    QVBoxLayout,
+    QWidget,
+)
+from qt_material import apply_stylesheet
 
-from gui.utils import QDarkThemePalette, SideMenu
-from network.models.message import Message
+
+TITLE = "Bot Dofus"
 
 
 class Application(QApplication):
     def __init__(self, argv) -> None:
         super().__init__(argv)
-        palette = QDarkThemePalette()
-        self.setPalette(palette)
-        self.setApplicationName("Bot dofus")
+        apply_stylesheet(self, theme="dark_teal.xml")
+        self.setApplicationName(TITLE)
         self.setStyle("Fusion")
 
 
 class MainWindow(QMainWindow):
-    queue_handler_message: Queue[Message]
+    BASE_WIDTH = 1200
+    BASE_HEIGHT = 900
+
+    queue_handler_message: Queue[ParsedMessage]
     event_play_sniffer: Event
     frame_sniffer: SnifferFrame | None
     side_menu: SideMenu | None
@@ -57,20 +62,20 @@ class MainWindow(QMainWindow):
 
     def __init__(
         self,
-        queue_handler_message: Queue[Message],
+        queue_handler_message: Queue[ParsedMessage],
         event_play_sniffer: Event,
     ) -> None:
         super().__init__()
         self.event_play_sniffer = event_play_sniffer
         self.queue_handler_message = queue_handler_message
-        self.setWindowTitle("Bot Dofus")
-        self.resize(800, 500)
+
+        self.setWindowTitle(TITLE)
+        self.resize(self.BASE_WIDTH, self.BASE_HEIGHT)
         self.show()
 
         self.all_content = QWidget()
-        self.layout_all_content = QHBoxLayout()
+        self.layout_all_content = HorizontalLayout()
         self.layout_all_content.setSpacing(0)
-        self.layout_all_content.setContentsMargins(0, 0, 0, 0)
 
         self.stacked_frames = QStackedWidget()
 
@@ -83,8 +88,9 @@ class MainWindow(QMainWindow):
         self.set_up_listener()
 
     def set_menu(self):
-        self.side_menu = SideMenu(
-            parent=self.all_content, on_change_page=self.stacked_frames.setCurrentIndex
+        self.side_menu = SideMenu(parent=self.all_content)
+        self.side_menu.on_change_page_signal.connect(
+            self.stacked_frames.setCurrentIndex
         )
         self.layout_all_content.addWidget(self.side_menu)
 
@@ -112,7 +118,7 @@ class MainWindow(QMainWindow):
 
 
 class NetworkSignals(QObject):
-    new_message = pyqtSignal(Message)
+    new_message = pyqtSignal(ParsedMessage)
 
 
 class MessageListener(QRunnable):

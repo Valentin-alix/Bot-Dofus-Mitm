@@ -4,7 +4,7 @@ Replicate com.ankamagames.jerakine.network.CustomDataWrapper
 import struct
 from bz2 import decompress
 from dataclasses import dataclass
-from typing import Optional
+from typing import TypedDict
 
 
 class Data:
@@ -42,8 +42,8 @@ class Data:
         return self.data.hex()
 
     @classmethod
-    def fromhex(cls, hex):
-        return cls(bytearray.fromhex(hex))
+    def fromhex(cls, _hex):
+        return cls(bytearray.fromhex(_hex))
 
     def verif(self, l):
         if len(self) < self.pos + l:
@@ -154,7 +154,7 @@ class Data:
             ans += (b & 0b01111111) << i
             if not b & 0b10000000:
                 return ans
-        raise Exception("Too much data")
+        raise ValueError("Too much data")
 
     def writeVarInt(self, i):
         assert i.bit_length() <= 32
@@ -173,7 +173,7 @@ class Data:
             ans += (b & 0b01111111) << i
             if not b & 0b10000000:
                 return ans
-        raise Exception("Too much data")
+        raise ValueError("Too much data")
 
     def writeVarLong(self, i):
         assert i.bit_length() <= 64
@@ -192,7 +192,7 @@ class Data:
             ans += (b & 0b01111111) << i
             if not b & 0b10000000:
                 return ans
-        raise Exception("Too much data")
+        raise ValueError("Too much data")
 
     def writeVarShort(self, i):
         assert i.bit_length() <= 16
@@ -209,10 +209,14 @@ class Data:
         self.pos = 0
 
 
+class SplittedPacket(TypedDict):
+    id: int
+    length: int
+    count: int | None
+
+
 @dataclass
-class Buffer:
-    static_header: int | None = None
-    buffer_data: Data = Data()
-    is_splitted_packet: bool = False
-    splitted_packet_id: int | None = None
-    splitted_packet_length: int | None = None
+class BufferInfos:
+    header: int | None = None
+    data: Data = Data()
+    splitted_packet: SplittedPacket | None = None

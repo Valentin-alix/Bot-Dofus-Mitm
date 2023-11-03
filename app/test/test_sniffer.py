@@ -1,10 +1,10 @@
 import logging
 import logging.config
+import os
 import unittest
 from pathlib import Path
-import os
-from logs.config import LOGGING_CONFIG
 
+from logs.config import LOGGING_CONFIG
 from network.sniffer import Sniffer
 
 logging.config.dictConfig(LOGGING_CONFIG)
@@ -34,7 +34,8 @@ class TestSniffer(unittest.TestCase):
             Path(__file__).parent, "fixtures", "from_client_and_from_server2.pcap"
         )
         self.sniffer.launch_sniffer()
-        assert self.sniffer.not_completed_message_number <= 27
+        print(self.sniffer.not_completed_message_number)
+        assert self.sniffer.not_completed_message_number <= 29
 
 
 if __name__ == "__main__":

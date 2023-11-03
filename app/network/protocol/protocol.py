@@ -3,7 +3,7 @@ import random
 from functools import reduce
 
 from network.models.data import Data
-from network.protocol.protocol_load import primitives, types, types_from_id
+from network.protocol.protocol_load import msg_from_id, primitives, types, types_from_id
 
 logger = logging.getLogger("labot")
 
@@ -13,10 +13,10 @@ primitives = {
 }
 
 
-def readBooleans(boolVars, data):
+def readBooleans(boolean_vars, data):
     ans = {}
-    bvars = iter(boolVars)
-    for _ in range(0, len(boolVars), 8):
+    bvars = iter(boolean_vars)
+    for _ in range(0, len(boolean_vars), 8):
         bits = format(data.readByte(), "08b")[::-1]
         for val, var in zip(bits, bvars):
             # be careful, you have to
@@ -28,37 +28,37 @@ def readBooleans(boolVars, data):
 def readVec(var, data):
     assert var["length"] is not None
     if isinstance(var["length"], int):
-        n = var["length"]
+        length: int = var["length"]
     else:
-        n = read(var["length"], data)
+        length = read(var["length"], data)
     ans = []
-    for _ in range(n):
+    for _ in range(length):
         ans.append(read(var["type"], data))
     return ans
 
 
-def read(type, data: Data):
-    if type is False:
-        type = types_from_id[data.readUnsignedShort()]
-    elif isinstance(type, str):
-        if type in primitives:
-            return primitives[type][0](data)
-        type = types[type]
+def read(_type, data: Data):
+    if _type is False:
+        _type = types_from_id[data.readUnsignedShort()]
+    elif isinstance(_type, str):
+        if _type in primitives:
+            return primitives[_type][0](data)
+        _type = types[_type]
     logger.debug("reading data %s", data)
-    logger.debug("with type %s", type)
+    logger.debug("with type %s", _type)
 
-    if type["parent"] is not None:
-        logger.debug("calling parent %s", type["parent"])
-        ans = read(type["parent"], data)
-        ans["__type__"] = type["name"]
+    if _type["parent"] is not None:
+        logger.debug("calling parent %s", _type["parent"])
+        ans = read(_type["parent"], data)
+        ans["__type__"] = _type["name"]
     else:
-        ans = dict(__type__=type["name"])
+        ans = {"__type__": _type["name"]}
 
     logger.debug("reading boolean variables")
-    ans.update(readBooleans(type["boolVars"], data))
+    ans.update(readBooleans(_type["boolVars"], data))
     logger.debug("remaining data: %s", data.data[data.pos :])
 
-    for var in type["vars"]:
+    for var in _type["vars"]:
         logger.debug("reading %s", var)
         if var["optional"]:
             if not data.readByte():
@@ -68,15 +68,15 @@ def read(type, data: Data):
         else:
             ans[var["name"]] = read(var["type"], data)
         logger.debug("remaining data: %s", data.data[data.pos :])
-    if type["hash_function"] and data.remaining() == 48:
+    if _type["hash_function"] and data.remaining() == 48:
         ans["hash_function"] = data.read(48)
     return ans
 
 
-def writeBooleans(boolVars, el, data):
+def writeBooleans(bool_vars, values: dict, data: Data):
     bits = []
-    for var in boolVars:
-        bits.append(el[var["name"]])
+    for bool_var in bool_vars:
+        bits.append(values[bool_var["name"]])
         if len(bits) == 8:
             data.writeByte(reduce(lambda a, b: 2 * a + b, bits[::-1]))
             bits = []
@@ -84,46 +84,46 @@ def writeBooleans(boolVars, el, data):
         data.writeByte(reduce(lambda a, b: 2 * a + b, bits[::-1]))
 
 
-def writeVec(var, el, data):
+def writeVec(var, values: dict, data: Data):
     assert var["length"] is not None
-    n = len(el)
+    n = len(values)
     if isinstance(var["length"], int):
         assert n == var["length"]
     else:
         write(var["length"], n, data)
-    for it in el:
+    for it in values:
         write(var["type"], it, data)
 
 
-def write(type, json, data=None, random_hash=True) -> Data:
+def write(_type, values: dict, data: Data | None = None, random_hash=True) -> Data:
     if data is None:
         data = Data()
-    if type is False:
-        type = types[json["__type__"]]
-        data.writeUnsignedShort(type["protocolId"])
-    elif isinstance(type, str):
-        if type in primitives:
-            primitives[type][1](data, json)
+    if _type is False:
+        _type = types[values["__type__"]]
+        data.writeUnsignedShort(_type["protocolId"])
+    elif isinstance(_type, str):
+        if _type in primitives:
+            primitives[_type][1](data, values)
             return data
-        type = types[type]
-    parent = type["parent"]
+        _type = types[_type]
+    parent = _type["parent"]
     if parent is not None:
-        write(parent, json, data)
-    writeBooleans(type["boolVars"], json, data)
-    for var in type["vars"]:
+        write(parent, values, data)
+    writeBooleans(_type["boolVars"], values, data)
+    for var in _type["vars"]:
         if var["optional"]:
-            if var["name"] in json:
+            if var["name"] in values:
                 data.writeByte(1)
             else:
                 data.writeByte(0)
                 continue
         if var["length"] is not None:
-            writeVec(var, json[var["name"]], data)
+            writeVec(var, values[var["name"]], data)
         else:
-            write(var["type"], json[var["name"]], data)
-    if "hash_function" in json:
-        data.write(json["hash_function"])
-    elif type["hash_function"] and random_hash:
-        hash = bytes(random.getrandbits(8) for _ in range(48))
-        data.write(hash)
+            write(var["type"], values[var["name"]], data)
+    if "hash_function" in values:
+        data.write(values["hash_function"])
+    elif _type["hash_function"] and random_hash:
+        _hash = bytes(random.getrandbits(8) for _ in range(48))
+        data.write(_hash)
     return data

@@ -1,75 +1,70 @@
-from typing import Optional, Dict, Type, Callable
-
+from typing import Callable, Dict, Optional, Type
+from functools import partial
+from gui.components import ListWidgetItem, PushButtonUtils, VerticalLayout
+from PyQt5.QtCore import Qt, pyqtSignal
+from PyQt5.QtGui import QColor, QPalette
 from PyQt5.QtWidgets import (
-    QApplication,
-    QMainWindow,
-    QPushButton,
-    QGroupBox,
-    QVBoxLayout,
-    QHBoxLayout,
-    QSizePolicy,
-    QLabel,
-    QBoxLayout,
-    QDialogButtonBox,
-    QDialog,
-    QMessageBox,
-    QColorDialog,
-    QLayout,
-    QWidget,
-    QFrame,
     QAction,
-    QListWidget,
-    QStatusBar,
-    QMenu,
-    QStackedWidget,
-    QStackedLayout,
-    QScrollArea,
+    QApplication,
+    QBoxLayout,
+    QColorDialog,
+    QDialog,
+    QDialogButtonBox,
     QDockWidget,
+    QFrame,
+    QGroupBox,
+    QHBoxLayout,
+    QLabel,
+    QLayout,
+    QListWidget,
+    QMainWindow,
+    QMenu,
+    QMessageBox,
+    QPushButton,
+    QScrollArea,
+    QSizePolicy,
     QSpacerItem,
+    QStackedLayout,
+    QStackedWidget,
+    QStatusBar,
+    QVBoxLayout,
+    QWidget,
 )
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QPalette, QColor
-
-from gui.components import ListWidgetItem
-
-
-class QDarkThemePalette(QPalette):
-    def __init__(self) -> None:
-        super().__init__()
-        self.setColor(QPalette.Window, QColor(53, 53, 53))
-        self.setColor(QPalette.WindowText, QColor(255, 255, 255))
-        self.setColor(QPalette.Base, QColor(25, 25, 25))
-        self.setColor(QPalette.AlternateBase, QColor(53, 53, 53))
-        self.setColor(QPalette.ToolTipBase, QColor(0, 0, 0))
-        self.setColor(QPalette.ToolTipText, QColor(255, 255, 255))
-        self.setColor(QPalette.Text, QColor(255, 255, 255))
-        self.setColor(QPalette.Button, QColor(53, 53, 53))
-        self.setColor(QPalette.ButtonText, QColor(255, 255, 255))
-        self.setColor(QPalette.BrightText, QColor(255, 0, 0))
-        self.setColor(QPalette.Link, QColor(42, 130, 218))
-        self.setColor(QPalette.Highlight, QColor(42, 130, 218))
-        self.setColor(QPalette.HighlightedText, QColor(0, 0, 0))
 
 
 class SideMenu(QWidget):
     PAGES = ["Sniffer", "BotFM"]
+    WIDTH = 100
 
-    def __init__(self, parent, on_change_page: Callable[[int], None]) -> None:
+    on_change_page_signal = pyqtSignal(int)
+
+    def __init__(self, parent) -> None:
         super().__init__(parent)
-        self.setFixedWidth(100)
 
-        v_layout = QVBoxLayout()
-        v_layout.setContentsMargins(0, 0, 0, 0)
-        self.setLayout(v_layout)
+        self.setFixedWidth(self.WIDTH)
 
-        list_widget = QListWidget(parent=self)
+        self.side_menu_layout = VerticalLayout()
+        self.side_menu_layout.addStretch()
+        self.side_menu_layout.setDirection(QBoxLayout.Direction.BottomToTop)
+        self.side_menu_layout.setSpacing(0)
+        self.setLayout(self.side_menu_layout)
 
-        for index, page_name in enumerate(self.PAGES):
-            page_link = ListWidgetItem()
-            page_link.setText(page_name)
-            list_widget.addItem(page_link)
-            if index == 0:
-                page_link.setSelected(True)
+        for page_name in reversed(self.PAGES):
+            button = PushButtonUtils(text=page_name)
+            button.setFixedHeight(100)
+            self.side_menu_layout.addWidget(button)
+            if self.PAGES.index(page_name) == 0:
+                button.set_active_button()
+            button.clicked.connect(partial(self.on_change_page, page_name))
 
-        list_widget.currentRowChanged.connect(on_change_page)
-        v_layout.addWidget(list_widget)
+    def on_change_page(self, page_name: str):
+        for index in range(self.side_menu_layout.count()):
+            child = self.side_menu_layout.itemAt(index)
+            if child is not None:
+                child_widget = child.widget()
+                if isinstance(child_widget, PushButtonUtils):
+                    if child_widget.text() == page_name:
+                        child_widget.set_active_button()
+                    else:
+                        child_widget.set_inactive_button()
+        self.on_change_page_signal.emit(self.PAGES.index(page_name))

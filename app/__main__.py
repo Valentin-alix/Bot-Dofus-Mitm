@@ -18,6 +18,7 @@ from network.sniffer import Sniffer
 logging.config.dictConfig(LOGGING_CONFIG)
 logger = logging.getLogger(__name__)
 
+
 if __name__ == "__main__":
     engine = create_engine(
         f"sqlite:///{os.path.join(Path(__file__).parent, 'database', 'sqlite3.db')}",
