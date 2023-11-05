@@ -3,7 +3,9 @@ import os
 import pprint
 from pathlib import Path
 
-from network.models.message import Message, ParsedMessage
+from types_ import ParsedMessage
+
+from network.models.message import Message
 from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtGui import QIcon, QPalette
 from PyQt5.QtWidgets import (

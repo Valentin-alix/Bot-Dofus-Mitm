@@ -6,7 +6,7 @@ from typing import Callable, Dict, Optional, Type
 from gui.components import HorizontalLayout
 from gui.frames.sniffer_frame import SnifferFrame
 from gui.utils import SideMenu
-from network.models.message import Message, ParsedMessage
+from network.models.message import Message
 from PyQt5.QtCore import QEvent, QObject, QRunnable, QSize, Qt, QThreadPool, pyqtSignal
 from PyQt5.QtGui import QCloseEvent, QColor, QPalette
 from PyQt5.QtWidgets import (
@@ -38,6 +38,8 @@ from PyQt5.QtWidgets import (
 )
 from qt_material import apply_stylesheet
 
+from types_ import ThreadsInfos, ParsedMessage
+
 
 TITLE = "Bot Dofus"
 
@@ -54,20 +56,15 @@ class MainWindow(QMainWindow):
     BASE_WIDTH = 1200
     BASE_HEIGHT = 900
 
-    queue_handler_message: Queue[ParsedMessage]
-    event_play_sniffer: Event
-    frame_sniffer: SnifferFrame | None
-    side_menu: SideMenu | None
-    is_active: bool = True
+    frame_sniffer: SnifferFrame
+    side_menu: SideMenu
 
     def __init__(
         self,
-        queue_handler_message: Queue[ParsedMessage],
-        event_play_sniffer: Event,
+        threads_infos: ThreadsInfos,
     ) -> None:
         super().__init__()
-        self.event_play_sniffer = event_play_sniffer
-        self.queue_handler_message = queue_handler_message
+        self.threads_infos = threads_infos
 
         self.setWindowTitle(TITLE)
         self.resize(self.BASE_WIDTH, self.BASE_HEIGHT)
@@ -96,7 +93,7 @@ class MainWindow(QMainWindow):
 
     def set_pages(self):
         self.frame_sniffer = SnifferFrame(
-            parent=self.all_content, event_play_sniffer=self.event_play_sniffer
+            parent=self.all_content, threads_infos=self.threads_infos
         )
         self.frame_bot_fm = QFrame()
         self.stacked_frames.addWidget(self.frame_sniffer)
@@ -104,17 +101,14 @@ class MainWindow(QMainWindow):
         self.layout_all_content.addWidget(self.stacked_frames)
 
     def set_up_listener(self):
-        if self.queue_handler_message is not None and self.frame_sniffer is not None:
-            msg_listener = MessageListener(
-                queue_handler_message=self.queue_handler_message, parent=self
-            )
+        if self.threads_infos is not None:
+            msg_listener = MessageListener(parent=self)
             if (global_instance := QThreadPool.globalInstance()) is not None:
                 global_instance.start(msg_listener)
-
             msg_listener.signals.new_message.connect(self.frame_sniffer.on_get_message)
 
     def closeEvent(self, _: QCloseEvent):
-        self.is_active = False
+        self.threads_infos["event_close"].set()
 
 
 class NetworkSignals(QObject):
@@ -122,17 +116,18 @@ class NetworkSignals(QObject):
 
 
 class MessageListener(QRunnable):
-    def __init__(self, queue_handler_message: Queue, parent: MainWindow):
+    def __init__(self, parent: MainWindow):
         super().__init__()
         self.parent = parent
-        self.queue_handler_message = queue_handler_message
         self.signals = NetworkSignals()
 
     def run(self):
-        while self.parent.is_active:
+        while not self.parent.threads_infos["event_close"].is_set():
             try:
-                message = self.queue_handler_message.get(timeout=1)
-                if self.parent.is_active:
+                message = self.parent.threads_infos["queue_handler_message"].get(
+                    timeout=1
+                )
+                if not self.parent.threads_infos["event_close"].is_set():
                     self.signals.new_message.emit(message)
             except Empty:
                 continue

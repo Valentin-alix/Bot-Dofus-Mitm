@@ -6,7 +6,7 @@ from pprint import pformat
 
 from network.models.data import BufferInfos, Data
 from network.protocol import protocol, protocol_load
-from network.utils import BIT_RIGHT_SHIFT_LEN_PACKET_ID
+from types_ import BIT_RIGHT_SHIFT_LEN_PACKET_ID
 
 logger = logging.getLogger(__name__)
 
@@ -44,88 +44,56 @@ class Message:
 
     @staticmethod
     def from_raw(
-        data: Data,
         from_client: bool,
         buffer_infos: BufferInfos,
         on_error_callback: Callable | None = None,
     ) -> Message | None:
-        if not buffer_infos.splitted_packet:
-            if data.remaining() < 2:
-                return None
-            header = data.readUnsignedShort()
+        if buffer_infos.data.remaining() == 0:
+            return None
+        try:
+            header = buffer_infos.data.readUnsignedShort()
             if from_client:
-                count = data.readUnsignedInt()
+                count = buffer_infos.data.readUnsignedInt()
             else:
                 count = None
-            try:
-                message_length = Message.get_message_length(data, header)
-                message_id = Message.get_message_id(header=header)
-                message_type = Message.get_message_type_from_id(message_id)
-            except (IndexError, KeyError) as err:
-                logger.error(f"Could not get base info of message, error : {err}")
-                if on_error_callback is not None:
-                    on_error_callback(err)
-                data.pos = 0
-                return None
-
-            if message_type == "NetworkDataContainerMessage":
-                return Message.unpack_network_data_container_message(
-                    data, message_length, from_client, buffer_infos
-                )
-
-            if data.remaining() >= message_length:
-                msg = Message(
-                    data=Data(data.read(message_length)),
-                    count=count,
-                    message_id=message_id,
-                )
-                return msg
-
-            buffer_infos.data = Data(data.read(data.remaining()))
-
-            buffer_infos.splitted_packet = {
-                "id": message_id,
-                "length": message_length,
-                "count": count,
-            }
+            len_data = int.from_bytes(buffer_infos.data.read(header & 3), "big")
+            _id = header >> 2
+            data = Data(buffer_infos.data.read(len_data))
+        except IndexError:
+            buffer_infos.data.pos = 0
+            logger.info("Could not parse message: Not complete")
+            return None
+        if _id == 2:
+            logger.info("Message is NetworkDataContainerMessage! Uncompressing...")
+            new_buffer = BufferInfos(data=Data(data.readByteArray()))
+            new_buffer.data.uncompress()
+            msg = Message.from_raw(from_client, new_buffer)
+            assert msg is not None and not new_buffer.data.remaining()
+            return msg
+        try:
+            logger.debug("Parsed %s", protocol.msg_from_id[_id]["name"])
+        except (KeyError, IndexError) as err:
+            if on_error_callback is not None:
+                on_error_callback(err)
+            logger.error(f"Could not parse message, err: {err}")
+            buffer_infos.reset()
             return None
 
-        # Splitted packet
-        if data.remaining() + len(
-            buffer_infos.data
-        ) >= buffer_infos.splitted_packet.get("length"):
-            buffer_infos.data += data.read(
-                buffer_infos.splitted_packet.get("length") - len(buffer_infos.data)
-            )
-            # Message is ready to be parsed
-            msg = Message(
-                data=Data(
-                    buffer_infos.data.read(buffer_infos.splitted_packet.get("length"))
-                ),
-                message_id=buffer_infos.splitted_packet.get("id"),
-                count=buffer_infos.splitted_packet.get("count"),
-            )
-
-            buffer_infos.splitted_packet = None
-            buffer_infos.data = Data()
-            return msg
-
-        buffer_infos.data += data.read(data.remaining())
-        return None
+        buffer_infos.data.end()
+        return Message(_id, data, count)
 
     @staticmethod
     def unpack_network_data_container_message(
-        data: Data, message_length, from_client, buffer_infos
+        message_length, from_client, buffer_infos: BufferInfos
     ):
         logger.info("Received NetworkDataContainerMessage")
-        if data.remaining() >= message_length:
-            content_len = int(data.readVarInt())
-            buffer_network_data_container_message = Data(data.read(content_len))
-            buffer_network_data_container_message.uncompress()
-            logger.info("Uncompressing NetworkDataContainerMessage")
-            return Message.from_raw(
-                buffer_network_data_container_message, from_client, buffer_infos
+        if buffer_infos.data.remaining() >= message_length:
+            buffer_network_data_container_message = BufferInfos(
+                data=Data(buffer_infos.data.readByteArray())
             )
+            buffer_network_data_container_message.data.uncompress()
+            logger.info("Uncompressing NetworkDataContainerMessage")
+            return Message.from_raw(from_client, buffer_network_data_container_message)
         return None
 
     def len_len_data(self):
@@ -146,14 +114,3 @@ class Message:
         data += len(self.data).to_bytes(self.len_len_data(), "big")
         data += self.data
         return data.data
-
-
-class ParsedMessage:
-    def __init__(self, from_client: bool, __type__: str, **kwargs) -> None:
-        self.from_client = from_client
-        self.__type__ = __type__
-        for key, value in kwargs.items():
-            self.__setattr__(key, value)
-
-    def __str__(self) -> str:
-        return pformat(vars(self))

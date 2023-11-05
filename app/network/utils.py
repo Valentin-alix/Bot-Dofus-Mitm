@@ -3,11 +3,6 @@ import socket
 
 logger = logging.getLogger(__name__)
 
-FILTER_DOFUS = "tcp port 5555"
-
-BIT_RIGHT_SHIFT_LEN_PACKET_ID = 2
-BIT_MASK = 3
-
 
 def get_local_ip() -> str:
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)

@@ -1,57 +1,51 @@
-import json
 import logging
-import os
-from pathlib import Path
-import pprint
-from time import perf_counter
-
-from network.models.message import ParsedMessage
-from network.models.parsed_messages import (
+from blinker import signal
+from copy import deepcopy
+from modules.hdv import Hdv
+from types_ import (
+    ParsedMessage,
+    DialogType,
+    ExchangeLeaveMessage,
     ExchangeStartedBidBuyerMessage,
     ExchangeTypesExchangerDescriptionForUserMessage,
     ExchangeTypesItemsExchangerDescriptionForUserMessage,
+    ThreadsInfos,
 )
 
 logger = logging.getLogger(__name__)
 
 
 class Handler:
-    def __init__(self) -> None:
-        d2o_item_file_path = os.path.join(
-            Path(__file__).parent.parent, "PyDofus", "output", "d2o", "Items.json"
-        )
-        with open(d2o_item_file_path, encoding="utf8") as d2o_file:
-            self.d2o_items = json.load(d2o_file)
+    hdv: Hdv | None = None
 
-        d2i_file_path = os.path.join(
-            Path(__file__).parent.parent, "PyDofus", "output", "i18n_fr.json"
-        )
-        with open(d2i_file_path, encoding="utf8") as d2i_file:
-            self.d2i_texts = json.load(d2i_file)["texts"]
+    def __init__(self, threads_infos: ThreadsInfos | None) -> None:
+        self.threads_infos = threads_infos
 
-    def get_name_by_id(self, _id: int) -> str:
-        name_id = next(
-            item for item in self.d2o_items if item.get("id", None) == _id
-        ).get("nameId")
-        name = self.d2i_texts.get(str(name_id))
-        return name
+    def handle_message_unpacked(self, parsed_message: ParsedMessage):
+        if self.threads_infos is not None:
+            self.threads_infos["queue_handler_message"].put(deepcopy(parsed_message))
 
-    def handle_message_unpacked(self, msg: ParsedMessage):
-        match msg.__type__:
+        match parsed_message.__type__:
             case "ExchangeStartedBidBuyerMessage":
-                # Received hdv categories
-                msg = ExchangeStartedBidBuyerMessage(**vars(msg))
-                # print(msg.buyerDescriptor)
+                parsed_message = ExchangeStartedBidBuyerMessage(**vars(parsed_message))
+                self.hdv = Hdv(parsed_message.buyerDescriptor)
+            case "ExchangeLeaveMessage":
+                parsed_message = ExchangeLeaveMessage(**vars(parsed_message))
+                if parsed_message.dialogType == DialogType.DIALOG_EXCHANGE:
+                    self.hdv = None
             case "ExchangeTypesExchangerDescriptionForUserMessage":
-                # Received hdv item categories
-                msg = ExchangeTypesExchangerDescriptionForUserMessage(**vars(msg))
-                # print(msg.typeDescription)
+                parsed_message = ExchangeTypesExchangerDescriptionForUserMessage(
+                    **vars(parsed_message)
+                )
+                if self.hdv is not None:
+                    self.hdv.on_received_opened_category(parsed_message)
             case "ExchangeTypesItemsExchangerDescriptionForUserMessage":
-                msg = ExchangeTypesItemsExchangerDescriptionForUserMessage(**vars(msg))
-                print(self.get_name_by_id(msg.objectGID))
-                for elem in msg.itemTypeDescriptions:
-                    print(elem.get("prices"))
+                parsed_message = ExchangeTypesItemsExchangerDescriptionForUserMessage(
+                    **vars(parsed_message)
+                )
+                if self.hdv is not None:
+                    self.hdv.on_receive_get_prices_gid(parsed_message)
             case "ExchangeCraftResultMagicWithObjectDescMessage":
-                print(msg)
+                ...
             case "ExchangeObjectAddedMessage":
-                print(msg)
+                ...

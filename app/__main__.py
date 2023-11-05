@@ -1,16 +1,16 @@
 import logging
 import logging.config
-import os
-from pathlib import Path
+import argparse
 import sys
 from queue import Queue
 from threading import Thread, Event
+from network.mitm import Mitm
 
-from sqlalchemy import create_engine
 from gui.app import Application, MainWindow
 from init import update_resources
-from database.models import Base
+from database.models import Base, get_engine
 from logs.config import LOGGING_CONFIG
+from types_ import ThreadsInfos
 
 from network.sniffer import Sniffer
 
@@ -20,28 +20,33 @@ logger = logging.getLogger(__name__)
 
 
 if __name__ == "__main__":
-    engine = create_engine(
-        f"sqlite:///{os.path.join(Path(__file__).parent, 'database', 'sqlite3.db')}",
-        echo=False,
+    arg_parsed = argparse.ArgumentParser()
+    arg_parsed.add_argument(
+        "-s", "--sniffer", required=False, help="y/n to use sniffer", default="n"
     )
+    args = vars(arg_parsed.parse_args())
+
+    engine = get_engine()
     Base.metadata.create_all(engine)
 
     update_resources(engine)
 
-    queue_handler_message = Queue()
-    event_play_sniffer = Event()
-    event_play_sniffer.set()
+    threads_infos: ThreadsInfos = {
+        "queue_handler_message": Queue(),
+        "event_play_sniffer": Event(),
+        "event_close": Event(),
+    }
+    threads_infos["event_play_sniffer"].set()
 
-    sniffer = Sniffer(
-        queue_handler_message=queue_handler_message,
-        event_play_sniffer=event_play_sniffer,
-    )
-    sniffer_thread = Thread(target=sniffer.launch_sniffer, daemon=True)
-    sniffer_thread.start()
+    if args["sniffer"] == "y":
+        sniffer = Sniffer(threads_infos=threads_infos)
+        sniffer_thread = Thread(target=sniffer.launch_sniffer, daemon=True)
+        sniffer_thread.start()
+    else:
+        mitm = Mitm(threads_infos)
+        mitm_thread = Thread(target=mitm.launch, daemon=True)
+        mitm_thread.start()
 
     app = Application(sys.argv)
-    main_window = MainWindow(
-        queue_handler_message=queue_handler_message,
-        event_play_sniffer=event_play_sniffer,
-    )
+    main_window = MainWindow(threads_infos)
     sys.exit(app.exec_())

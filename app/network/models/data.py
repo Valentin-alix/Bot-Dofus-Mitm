@@ -220,3 +220,8 @@ class BufferInfos:
     header: int | None = None
     data: Data = Data()
     splitted_packet: SplittedPacket | None = None
+
+    def reset(self):
+        self.header = None
+        self.data = Data()
+        self.splitted_packet = None

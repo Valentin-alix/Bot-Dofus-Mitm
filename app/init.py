@@ -6,12 +6,11 @@ import shutil
 from sqlalchemy.orm import sessionmaker
 
 from dotenv import load_dotenv
-from sqlalchemy import Engine
+from sqlalchemy import Engine, exists
 from PyDofus.d2i_unpack import d2i_unpack
 from PyDofus.d2o_unpack import d2o_unpack
-from PyDofus.pydofus.d2o import D2OReader, InvalidD2OFile
 
-from database.models import Rune
+from database.models import Object, Rune
 
 
 def maj_runes_objects(engine: Engine):
@@ -113,6 +112,38 @@ def update_resources(engine: Engine):
             d2o_unpack(os.environ.get("D2O_FOLDER"))
             d2i_unpack(os.environ.get("D2I_FILE"))
 
+            init_objects(engine)
+
         # maj_runes_objects(engine)
     else:
         raise KeyError(".env file not valid")
+
+
+def init_objects(engine: Engine):
+    session = sessionmaker(bind=engine)()
+
+    d2o_item_file_path = os.path.join(
+        Path(__file__).parent, "PyDofus", "output", "d2o", "Items.json"
+    )
+    d2i_file_path = os.path.join(
+        Path(__file__).parent, "PyDofus", "output", "i18n_fr.json"
+    )
+
+    with open(d2o_item_file_path, encoding="utf8") as d2o_file, open(
+        d2i_file_path, encoding="utf8"
+    ) as d2i_file:
+        d2o_items = json.load(d2o_file)
+        d2i_texts = json.load(d2i_file)["texts"]
+
+        objects = (
+            Object(object_gid=object_gid, name=name)
+            for d2o_item in d2o_items
+            if (object_gid := d2o_item.get("id", None)) is not None
+            and (name := d2i_texts.get(str(d2o_item.get("nameId")), None)) is not None
+            and not session.query(
+                exists().where(Object.object_gid == object_gid or Object.name == name)
+            ).scalar()
+        )
+        session.add_all(objects)
+
+        session.commit()

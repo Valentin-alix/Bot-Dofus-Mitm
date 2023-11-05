@@ -10,7 +10,7 @@ from gui.components import (
     HorizontalLayout,
     VerticalLayout,
 )
-from network.models.message import Message, ParsedMessage
+from network.models.message import Message
 from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import (
@@ -41,12 +41,13 @@ from PyQt5.QtWidgets import (
     QWidget,
 )
 
+from types_ import ThreadsInfos, ParsedMessage
+
 
 class SnifferFrame(QFrame):
-    def __init__(self, parent, event_play_sniffer: Event) -> None:
+    def __init__(self, parent, threads_infos: ThreadsInfos) -> None:
         super().__init__(parent)
-        self.event_play_sniffer = event_play_sniffer
-
+        self.threads_infos = threads_infos
         self.sniffer_frame_layout = VerticalLayout()
         self.sniffer_frame_layout.setSpacing(0)
 
@@ -59,7 +60,7 @@ class SnifferFrame(QFrame):
         self.layout_messages.clear_list()
 
     def update_state_buttons(self):
-        if self.event_play_sniffer.is_set():
+        if self.threads_infos["event_play_sniffer"].is_set():
             self.button_play.set_active_button()
             self.button_stop.set_inactive_button()
         else:
@@ -67,11 +68,11 @@ class SnifferFrame(QFrame):
             self.button_stop.set_active_button()
 
     def on_play(self):
-        self.event_play_sniffer.set()
+        self.threads_infos["event_play_sniffer"].set()
         self.update_state_buttons()
 
     def on_stop(self):
-        self.event_play_sniffer.clear()
+        self.threads_infos["event_play_sniffer"].clear()
         self.update_state_buttons()
 
     def set_header_sniffer(self):
