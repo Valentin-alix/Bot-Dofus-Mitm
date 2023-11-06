@@ -1,17 +1,20 @@
 import os
 from pathlib import Path
+from pprint import pformat
+from queue import Empty
 from threading import Event
 from typing import Callable, Dict, Optional, Type
 
 from gui.components import (
     ButtonIcon,
     DetailMessageDialog,
+    Frame,
     GroupBox,
     HorizontalLayout,
     VerticalLayout,
 )
 from network.models.message import Message
-from PyQt5.QtCore import QSize, Qt
+from PyQt5.QtCore import QSize, Qt, QTimer
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import (
     QAction,
@@ -44,9 +47,9 @@ from PyQt5.QtWidgets import (
 from types_ import ThreadsInfos, ParsedMessage
 
 
-class SnifferFrame(QFrame):
-    def __init__(self, parent, threads_infos: ThreadsInfos) -> None:
-        super().__init__(parent)
+class SnifferFrame(Frame):
+    def __init__(self, threads_infos: ThreadsInfos, name: str) -> None:
+        super().__init__(name)
         self.threads_infos = threads_infos
         self.sniffer_frame_layout = VerticalLayout()
         self.sniffer_frame_layout.setSpacing(0)
@@ -55,6 +58,18 @@ class SnifferFrame(QFrame):
         self.set_list_message()
 
         self.setLayout(self.sniffer_frame_layout)
+
+        self.timer_check_new_msg = QTimer(self)
+        self.timer_check_new_msg.timeout.connect(self.check_new_msg)
+        self.timer_check_new_msg.start(100)
+
+    def check_new_msg(self):
+        try:
+            while True:
+                parsed_msg = self.threads_infos["queue_handler_message"].get_nowait()
+                self.on_get_message(parsed_msg)
+        except Empty:
+            pass
 
     def on_reset(self):
         self.layout_messages.clear_list()
@@ -81,6 +96,7 @@ class SnifferFrame(QFrame):
         self.header_layout = HorizontalLayout()
         self.header_layout.setSpacing(8)
         self.box_header.setLayout(self.header_layout)
+        self.box_header.setFixedHeight(80)
 
         # Buttons
         self.button_reset = ButtonIcon("restart.svg")
@@ -123,5 +139,5 @@ class SnifferFrame(QFrame):
         button.clicked.connect(lambda: self.show_info_message_dialog(message))
 
     def show_info_message_dialog(self, message):
-        dialog = DetailMessageDialog(self, message=message)
+        dialog = DetailMessageDialog(self, parsed_msg=message)
         dialog.exec()

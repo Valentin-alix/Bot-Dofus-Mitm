@@ -20,11 +20,21 @@ class Price(Base):
     object_id: Mapped[int] = mapped_column(ForeignKey("object.id"), nullable=False)
 
 
+class TypeObject(Base):
+    __tablename__ = "type_object"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(nullable=False, unique=True)
+    type_id: Mapped[str] = mapped_column(nullable=False, unique=True)
+
+
 class Object(Base):
     __tablename__ = "object"
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(nullable=False, unique=True)
     object_gid: Mapped[int] = mapped_column(nullable=False, unique=True)
+    type_object_id: Mapped[int] = mapped_column(
+        ForeignKey("type_object.id"), nullable=False
+    )
 
 
 # For forgemagie

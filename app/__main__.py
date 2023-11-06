@@ -34,7 +34,11 @@ if __name__ == "__main__":
     threads_infos: ThreadsInfos = {
         "queue_handler_message": Queue(),
         "event_play_sniffer": Event(),
+        "event_play_hdv": Event(),
         "event_close": Event(),
+        "event_connected": Event(),
+        "queue_current_hdv": Queue(),
+        "queue_msg_to_send": Queue(),
     }
     threads_infos["event_play_sniffer"].set()
 

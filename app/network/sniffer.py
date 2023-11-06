@@ -3,9 +3,8 @@ from typing import Optional
 
 from network.models.data import BufferInfos, Data
 from network.models.message import Message
-from types_.interface import ThreadsInfos
 from network.parser import MessageRawDataParser
-from types_ import FILTER_DOFUS
+from types_ import FILTER_DOFUS, ThreadsInfos
 from network.utils import get_local_ip
 from scapy.all import Packet, Raw, sniff
 from scapy.layers.inet import IP

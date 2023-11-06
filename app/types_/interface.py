@@ -1,3 +1,5 @@
+from abc import ABC
+from dataclasses import dataclass
 from pprint import pformat
 from queue import Queue
 from threading import Event
@@ -15,10 +17,19 @@ class ParsedMessage:
         return pformat(vars(self))
 
 
+class CurrentHdv(TypedDict):
+    objects_remaining: int
+    categories_remaining: int
+
+
 class ThreadsInfos(TypedDict):
     queue_handler_message: Queue[ParsedMessage]
     event_play_sniffer: Event
+    event_play_hdv: Event
     event_close: Event
+    event_connected: Event
+    queue_current_hdv: Queue[CurrentHdv | None]
+    queue_msg_to_send: Queue[dict]
 
 
 class SellerBuyerDescriptor(TypedDict):
@@ -86,7 +97,6 @@ class ExchangeBidHouseSearchMessage(ParsedMessage):
     objectGID: int
 
 
-#
 class ExchangeBidHouseTypeMessage(ParsedMessage):
     """When checking category hdv"""
 

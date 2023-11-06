@@ -36,7 +36,7 @@ class Message:
         return protocol.read(message_type, message_data)
 
     @staticmethod
-    def get_message_from_json(json, count=None, random_hash=False) -> Message:
+    def get_message_from_json(json: dict, count=None, random_hash=False) -> Message:
         type_name: str = json["__type__"]
         type_id: int = protocol.types[type_name]["protocolId"]
         data = protocol.write(type_name, json, random_hash=random_hash)

@@ -34,6 +34,12 @@ from PyQt5.QtWidgets import (
 )
 
 
+class Frame(QFrame):
+    def __init__(self, name: str) -> None:
+        super().__init__()
+        self.name = name
+
+
 class ListWidgetItem(QListWidgetItem):
     def __init__(self) -> None:
         super().__init__()
@@ -58,7 +64,7 @@ class LayoutUtils(QLayout):
             if (item_child_layout := self.itemAt(i)) is not None and (
                 child_layout := item_child_layout.widget()
             ) is not None:
-                child_layout.setParent(None)
+                child_layout.deleteLater()
 
 
 class VerticalLayout(QVBoxLayout, LayoutUtils):
@@ -103,15 +109,15 @@ class ButtonIcon(PushButtonUtils):
 
 
 class DetailMessageDialog(QDialog):
-    def __init__(self, parent, message: ParsedMessage) -> None:
+    def __init__(self, parent, parsed_msg: ParsedMessage) -> None:
         super().__init__(parent)
         self.setFixedSize(500, 300)
-        self.setWindowTitle(f"{message.__type__}")
+        self.setWindowTitle(f"{parsed_msg.__type__}")
 
         main_layout = QVBoxLayout()
 
         text_edit = QTextEdit(self)
-        text_edit.setPlainText(str(message))
+        text_edit.setPlainText(str(parsed_msg))
         text_edit.setReadOnly(True)
         main_layout.addWidget(text_edit)
 
