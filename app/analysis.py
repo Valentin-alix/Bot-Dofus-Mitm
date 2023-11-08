@@ -31,6 +31,9 @@ class Analaysis:
             .statement,
             self.engine,
         )
+
+        session.close()
+
         if len(prices_potion_df) > 0:
             prices_potion_df[["1", "10", "100"]] = (
                 prices_potion_df["list_prices"]
@@ -44,7 +47,7 @@ class Analaysis:
     def generate_graph_by_quantity(
         self, df_infos: pd.DataFrame, quantity: int = 100
     ) -> None:
-        plt.figure(figsize=(8, 6))
+        plt.figure(figsize=(10, 8))
         plt.xlabel("Date de création")
         plt.ylabel(f"Prix par {quantity}")
 

@@ -1,6 +1,6 @@
 import logging
 from queue import Empty
-from threading import Timer
+from threading import Thread
 import select
 import random
 from time import perf_counter
@@ -11,9 +11,8 @@ import psutil
 import fritm
 from network.models.data import BufferInfos
 from network.models.message import Message
-from types_ import ThreadsInfos, ParsedMessage
+from types_ import ThreadsInfos, GAME_SERVER
 from network.parser import MessageRawDataParser
-from types_.constants import GAME_SERVER
 
 logger = logging.getLogger(__name__)
 
@@ -78,13 +77,18 @@ class InjectorBridgeHandler:
 
         self.msgs_to_send: list[dict] = []
 
-        Timer(5, self.send_basic_ping_recurrent).start()
-        Timer(
-            random.uniform(*self.TIME_BETWEEN_SEND), self.check_send_msg_recurrent
-        ).start()
+        send_basic_ping_recurrent_thread = Thread(
+            target=self.send_basic_ping_recurrent, daemon=True
+        )
+        send_basic_ping_recurrent_thread.start()
+
+        check_send_msg_recurrent_thread = Thread(
+            target=self.check_send_msg_recurrent, daemon=True
+        )
+        check_send_msg_recurrent_thread.start()
 
     def send_basic_ping_recurrent(self):
-        if (
+        while (
             not self.threads_infos["event_close"].is_set()
             and not self.is_server_closed()
         ):
@@ -93,10 +97,10 @@ class InjectorBridgeHandler:
                     {"__type__": "BasicPingMessage", "from_client": True, "quiet": True}
                 )
             )
-            Timer(5, self.send_basic_ping_recurrent).start()
+            sleep(5)
 
     def check_send_msg_recurrent(self):
-        if (
+        while (
             not self.threads_infos["event_close"].is_set()
             and not self.is_server_closed()
         ):
@@ -106,9 +110,7 @@ class InjectorBridgeHandler:
                 self.send_to_server(message)
             except Empty:
                 pass
-            Timer(
-                random.uniform(*self.TIME_BETWEEN_SEND), self.check_send_msg_recurrent
-            ).start()
+            sleep(random.uniform(*self.TIME_BETWEEN_SEND))
 
     def is_server_closed(self):
         return self.connection_server.fileno() == -1

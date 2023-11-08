@@ -3,9 +3,9 @@ import logging.config
 import argparse
 import sys
 from queue import Queue
-from threading import Thread, Event
-from network.mitm import Mitm
+from threading import Thread, Event, Lock
 
+from network.mitm import Mitm
 from gui.app import Application, MainWindow
 from init import update_resources
 from database.models import Base, get_engine
@@ -32,18 +32,21 @@ if __name__ == "__main__":
     update_resources(engine)
 
     threads_infos: ThreadsInfos = {
-        "queue_handler_message": Queue(),
         "event_play_sniffer": Event(),
-        "event_play_hdv": Event(),
+        "event_play_hdv_scrapping": Event(),
+        "event_play_hdv_selling": Event(),
         "event_close": Event(),
         "event_connected": Event(),
-        "queue_current_hdv": Queue(),
         "queue_msg_to_send": Queue(),
+        "queue_handler_message": Queue(),
+        "character_with_lock": {"lock": Lock(), "character": None},
+        "buying_hdv_with_lock": {"lock": Lock(), "buying_hdv": None},
+        "selling_hdv_with_lock": {"lock": Lock(), "selling_hdv": None},
     }
     threads_infos["event_play_sniffer"].set()
 
     if args["sniffer"] == "y":
-        sniffer = Sniffer(threads_infos=threads_infos)
+        sniffer = Sniffer(threads_infos)
         sniffer_thread = Thread(target=sniffer.launch_sniffer, daemon=True)
         sniffer_thread.start()
     else:

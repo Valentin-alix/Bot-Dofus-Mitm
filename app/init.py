@@ -4,11 +4,12 @@ from typing import List, Dict
 import os
 import shutil
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy import or_
 
 from dotenv import load_dotenv
 from sqlalchemy import Engine, exists
-from PyDofus.d2i_unpack import d2i_unpack
-from PyDofus.d2o_unpack import d2o_unpack
+from d2o_d2i_reader.d2i_unpack import d2i_unpack
+from d2o_d2i_reader.d2o_unpack import d2o_unpack
 
 from database.models import Object, Rune, TypeObject
 
@@ -83,13 +84,10 @@ def maj_runes_objects(engine: Engine):
 
 
 def get_as_scripts(output_as_scripts: str):
-    selected_classes = "com.ankamagames.dofus.BuildInfos,com.ankamagames.dofus.network.++,com.ankamagames.jerakine.network.++"
     if os.path.exists(output_as_scripts):
         shutil.rmtree(output_as_scripts)
     os.system(
-        f'java -Xmx10512m  -jar "{os.environ.get("FFDECJAR_PATH")}"\
-        -config=parallelSpeedUp=0 -selectclass={selected_classes}\
-        -export script "{output_as_scripts}" "{os.environ.get("DOFUS_INVOKER")}"'
+        f'java -Xmx10512m  -jar  "{os.environ.get("FFDECJAR_PATH")}" -export script "{output_as_scripts}" "{os.environ.get("DOFUS_INVOKER")}"'
     )
 
 
@@ -102,8 +100,10 @@ def update_resources(engine: Engine):
         and os.environ.get("D2O_FOLDER", None) is not None
         and os.environ.get("D2I_FILE") is not None
     ):
-        output_as_scripts = os.path.join(Path(__file__).parent.parent, "as_scripts")
-        if os.path.getmtime(output_as_scripts) <= os.path.getmtime(dofus_invoker_path):
+        output_as_scripts = os.path.join(Path(__file__).parent.parent, "code_source")
+        if not os.path.exists(output_as_scripts) or os.path.getmtime(
+            output_as_scripts
+        ) <= os.path.getmtime(dofus_invoker_path):
             get_as_scripts(output_as_scripts)
 
             # Building protocol pk to parse message network
@@ -123,13 +123,13 @@ def init_objects_with_type(engine: Engine):
     session = sessionmaker(bind=engine)()
 
     d2o_item_file_path = os.path.join(
-        Path(__file__).parent, "PyDofus", "output", "d2o", "Items.json"
+        Path(__file__).parent, "d2o_d2i_reader", "d2o_output", "Items.json"
     )
     d2o_type_file_path = os.path.join(
-        Path(__file__).parent, "PyDofus", "output", "d2o", "ItemTypes.json"
+        Path(__file__).parent, "d2o_d2i_reader", "d2o_output", "ItemTypes.json"
     )
     d2i_file_path = os.path.join(
-        Path(__file__).parent, "PyDofus", "output", "i18n_fr.json"
+        Path(__file__).parent, "d2o_d2i_reader", "i18n_fr.json"
     )
 
     with open(d2o_item_file_path, encoding="utf8") as d2o_items_file, open(
@@ -145,7 +145,7 @@ def init_objects_with_type(engine: Engine):
             if (type_id := d2o_type.get("id", None)) is not None
             and (name := d2i_texts.get(str(d2o_type.get("nameId")), None)) is not None
             and not session.query(
-                exists().where(TypeObject.type_id == type_id or Object.name == name)
+                exists().where(or_(TypeObject.type_id == type_id, Object.name == name))
             ).scalar()
         )
 
@@ -158,7 +158,7 @@ def init_objects_with_type(engine: Engine):
             if (type_id := d2o_item.get("id", None)) is not None
             and (name := d2i_texts.get(str(d2o_item.get("nameId")), None)) is not None
             and not session.query(
-                exists().where(Object.object_gid == type_id or Object.name == name)
+                exists().where(or_(Object.object_gid == type_id, Object.name == name))
             ).scalar()
             and (
                 type_object := session.query(TypeObject)
@@ -169,3 +169,5 @@ def init_objects_with_type(engine: Engine):
         )
         session.add_all(objects)
         session.commit()
+
+    session.close()

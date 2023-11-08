@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import logging
 import logging.config
 import os
@@ -5,7 +7,7 @@ import unittest
 from pathlib import Path
 
 from logs.config import LOGGING_CONFIG
-from network.sniffer import Sniffer
+import network.sniffer as sniffer
 
 logging.config.dictConfig(LOGGING_CONFIG)
 logger = logging.getLogger(__name__)
@@ -13,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 class TestSniffer(unittest.TestCase):
     def setUp(self) -> None:
-        self.sniffer = Sniffer()
+        self.sniffer = sniffer.Sniffer()
 
     def test_from_server(self):
         self.sniffer.capture_path = os.path.join(

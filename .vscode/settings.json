@@ -19,5 +19,6 @@
         // for good imports suggesting
         "./app"
     ],
-    "python.analysis.typeCheckingMode": "basic"
+    "python.analysis.typeCheckingMode": "basic",
+    "python.defaultInterpreterPath": ".\\.venv\\Scripts\\python.exe"
 }

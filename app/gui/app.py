@@ -4,7 +4,8 @@ from time import sleep
 from typing import Callable, Dict, Optional, Type
 
 from gui.components import HorizontalLayout
-from gui.frames.hdv_frame import HDVFrame
+from gui.frames.scrapping_frame import ScrappingFrame
+from gui.frames.seller_frame import SellerFrame
 from gui.frames.sniffer_frame import SnifferFrame
 from gui.fragments import SideMenu
 from network.models.message import Message
@@ -48,8 +49,7 @@ from PyQt5.QtWidgets import (
 )
 from qt_material import apply_stylesheet
 
-from types_ import ThreadsInfos, ParsedMessage
-from types_.constants import GAME_SERVER
+from types_ import ThreadsInfos, GAME_SERVER
 
 
 TITLE = "Bot Dofus"
@@ -71,7 +71,8 @@ class MainWindow(QMainWindow):
     BASE_WIDTH = 1200
     BASE_HEIGHT = 900
 
-    frame_bot_hdv: HDVFrame
+    frame_bot_scrapping: ScrappingFrame
+    frame_bot_seller: SellerFrame
 
     def __init__(
         self,
@@ -105,10 +106,14 @@ class MainWindow(QMainWindow):
     def on_connection_server(self):
         try:
             if self.threads_infos.get("event_connected").is_set():
-                self.frame_bot_hdv = HDVFrame(
-                    threads_infos=self.threads_infos, name="Bot HDV"
+                self.frame_bot_scrapping = ScrappingFrame(
+                    threads_infos=self.threads_infos, name="Bot Scrapping"
                 )
-                self.stacked_frames.addWidget(self.frame_bot_hdv)
+                self.stacked_frames.addWidget(self.frame_bot_scrapping)
+                self.frame_bot_seller = SellerFrame(
+                    threads_infos=self.threads_infos, name="Bot Vendeur"
+                )
+                self.stacked_frames.addWidget(self.frame_bot_seller)
                 self.signals.on_change_frame.emit()
                 self.timer_check_is_connected.stop()
         except Empty:

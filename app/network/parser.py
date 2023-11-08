@@ -3,7 +3,8 @@ from typing import Callable
 
 from network.handler import Handler
 from network.models.message import Message
-from types_ import ThreadsInfos, ParsedMessage
+from network.parsed_message.parsed_message import ParsedMessage
+from types_ import ThreadsInfos
 
 logger = logging.getLogger(__name__)
 
@@ -16,7 +17,8 @@ class MessageRawDataParser:
     ) -> None:
         self.threads_infos = threads_infos
         self.on_error_callback = on_error_callback
-        self.handler = Handler(threads_infos)
+        if self.threads_infos is not None:
+            self.handler = Handler(self.threads_infos)
 
     def parse(self, message: Message, from_client: bool) -> ParsedMessage | None:
         try:
@@ -25,7 +27,8 @@ class MessageRawDataParser:
             parsed_message = ParsedMessage(
                 from_client, **Message.get_json_from_message(message_type, message.data)
             )
-            self.handler.handle_message_unpacked(parsed_message)
+            if self.handler is not None:
+                self.handler.handle_message_unpacked(parsed_message)
             return parsed_message
         except (KeyError, IndexError, UnicodeDecodeError) as err:
             if self.on_error_callback is not None:

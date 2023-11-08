@@ -10,6 +10,7 @@ from gui.components import (
     DetailMessageDialog,
     Frame,
     GroupBox,
+    Header,
     HorizontalLayout,
     VerticalLayout,
 )
@@ -43,8 +44,9 @@ from PyQt5.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
+from network.parsed_message.parsed_message import ParsedMessage
 
-from types_ import ThreadsInfos, ParsedMessage
+from types_ import ThreadsInfos
 
 
 class SnifferFrame(Frame):
@@ -61,7 +63,7 @@ class SnifferFrame(Frame):
 
         self.timer_check_new_msg = QTimer(self)
         self.timer_check_new_msg.timeout.connect(self.check_new_msg)
-        self.timer_check_new_msg.start(100)
+        self.timer_check_new_msg.start(300)
 
     def check_new_msg(self):
         try:
@@ -74,46 +76,26 @@ class SnifferFrame(Frame):
     def on_reset(self):
         self.layout_messages.clear_list()
 
-    def update_state_buttons(self):
-        if self.threads_infos["event_play_sniffer"].is_set():
-            self.button_play.set_active_button()
-            self.button_stop.set_inactive_button()
-        else:
-            self.button_play.set_inactive_button()
-            self.button_stop.set_active_button()
-
     def on_play(self):
         self.threads_infos["event_play_sniffer"].set()
-        self.update_state_buttons()
+        self.header_sniffer.do_play(self.threads_infos["event_play_sniffer"].is_set())
 
     def on_stop(self):
         self.threads_infos["event_play_sniffer"].clear()
-        self.update_state_buttons()
+        self.header_sniffer.do_play(self.threads_infos["event_play_sniffer"].is_set())
 
     def set_header_sniffer(self):
-        self.box_header = GroupBox(with_title=False)
+        self.header_sniffer = Header()
+        self.header_sniffer.setTitle("Sniffeur")
 
-        self.header_layout = HorizontalLayout()
-        self.header_layout.setSpacing(8)
-        self.box_header.setLayout(self.header_layout)
-        self.box_header.setFixedHeight(80)
+        self.header_sniffer.button_reset = ButtonIcon("restart.svg")
+        self.header_sniffer.button_reset.clicked.connect(self.on_reset)
+        self.header_sniffer.h_layout.insertWidget(0, self.header_sniffer.button_reset)
 
-        # Buttons
-        self.button_reset = ButtonIcon("restart.svg")
-        self.button_reset.clicked.connect(self.on_reset)
-        self.header_layout.addWidget(self.button_reset)
-
-        self.button_play = ButtonIcon("play.svg")
-        self.button_play.clicked.connect(self.on_play)
-        self.header_layout.addWidget(self.button_play)
-
-        self.button_stop = ButtonIcon("stop")
-        self.button_stop.clicked.connect(self.on_stop)
-        self.header_layout.addWidget(self.button_stop)
-
-        self.update_state_buttons()
-
-        self.sniffer_frame_layout.addWidget(self.box_header)
+        self.header_sniffer.button_play.clicked.connect(self.on_play)
+        self.header_sniffer.button_stop.clicked.connect(self.on_stop)
+        self.header_sniffer.do_play(self.threads_infos["event_play_sniffer"].is_set())
+        self.sniffer_frame_layout.addWidget(self.header_sniffer)
 
     def set_list_message(self):
         self.box_messages = GroupBox()
@@ -133,10 +115,13 @@ class SnifferFrame(Frame):
         self.sniffer_frame_layout.addWidget(scroll_area)
 
     def on_get_message(self, message: ParsedMessage):
-        button = QPushButton(text=message.__type__)
-        button.setFixedHeight(35)
-        self.layout_messages.addWidget(button)
-        button.clicked.connect(lambda: self.show_info_message_dialog(message))
+        if self.threads_infos.get("event_play_sniffer").is_set():
+            button = QPushButton(text=message.__type__)
+            button.setFixedHeight(35)
+            self.layout_messages.addWidget(button)
+            button.clicked.connect(lambda: self.show_info_message_dialog(message))
+            if self.layout_messages.count() >= 200:
+                self.layout_messages.clear_list(0.1)
 
     def show_info_message_dialog(self, message):
         dialog = DetailMessageDialog(self, parsed_msg=message)

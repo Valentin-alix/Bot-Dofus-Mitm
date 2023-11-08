@@ -171,7 +171,7 @@ if __name__ == "__main__":
     paths = [
         os.path.join(
             Path(__file__).parent.parent.parent.parent,
-            "as_scripts",
+            "code_source",
             "scripts",
             "com",
             "ankamagames",
@@ -190,7 +190,7 @@ if __name__ == "__main__":
             "messages",
         ),
     ]
-
+    print(paths)
     for p in paths:
         load_from_path(p)
 

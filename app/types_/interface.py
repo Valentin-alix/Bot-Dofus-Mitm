@@ -1,104 +1,40 @@
-from abc import ABC
-from dataclasses import dataclass
-from pprint import pformat
 from queue import Queue
-from threading import Event
+from threading import Event, Lock
 from typing import TypedDict
 
+from modules.character import Character
+from modules.hdv.buying_hdv import BuyingHdv
+from modules.hdv.selling_hdv import SellingHdv
 
-class ParsedMessage:
-    def __init__(self, from_client: bool, __type__: str, **kwargs) -> None:
-        self.from_client = from_client
-        self.__type__ = __type__
-        for key, value in kwargs.items():
-            self.__setattr__(key, value)
-
-    def __str__(self) -> str:
-        return pformat(vars(self))
+from network.parsed_message.parsed_message import ParsedMessage
 
 
-class CurrentHdv(TypedDict):
-    objects_remaining: int
-    categories_remaining: int
+class WithLock(TypedDict):
+    lock: Lock
+
+
+class CharacterWithLock(WithLock, TypedDict):
+    character: Character | None
+
+
+class BuyingHdvWithLock(WithLock, TypedDict):
+    buying_hdv: BuyingHdv | None
+
+
+class SellingHdvWithLock(WithLock, TypedDict):
+    selling_hdv: SellingHdv | None
 
 
 class ThreadsInfos(TypedDict):
-    queue_handler_message: Queue[ParsedMessage]
     event_play_sniffer: Event
-    event_play_hdv: Event
+    event_play_hdv_scrapping: Event
+    event_play_hdv_selling: Event
     event_close: Event
     event_connected: Event
-    queue_current_hdv: Queue[CurrentHdv | None]
+
+    character_with_lock: CharacterWithLock
+    buying_hdv_with_lock: BuyingHdvWithLock
+    selling_hdv_with_lock: SellingHdvWithLock
+
     queue_msg_to_send: Queue[dict]
-
-
-class SellerBuyerDescriptor(TypedDict):
-    maxItemLevel: int
-    maxItemPerAccount: int
-    npcContextualId: int
-    quantities: list[int]
-    taxModificationPercentage: float
-    taxPercentage: float
-    types: list[int]
-    unsoldDelay: int
-
-
-class ObjectEffectInteger(TypedDict):
-    actionId: int
-    value: int
-
-
-class BidExchangerObjectInfo(TypedDict):
-    effects: list[ObjectEffectInteger]
-    objectGID: int
-    objectType: int
-    objectUID: int
-    prices: list[int]
-
-
-# Messages from server
-
-
-class ExchangeStartedBidBuyerMessage(ParsedMessage):
-    """Received hdv infos"""
-
-    buyerDescriptor: SellerBuyerDescriptor
-
-
-class ExchangeTypesExchangerDescriptionForUserMessage(ParsedMessage):
-    """Received hdv object types"""
-
-    objectType: int
-    typeDescription: list[int]
-
-
-class ExchangeTypesItemsExchangerDescriptionForUserMessage(ParsedMessage):
-    """Receivied hdv object prices"""
-
-    itemTypeDescriptions: list[BidExchangerObjectInfo]
-    objectGID: int
-    objectType: int
-
-
-# Messages from client
-
-
-class ExchangeLeaveMessage(ParsedMessage):
-    """When leaving modal"""
-
-    dialogType: int
-    success: bool
-
-
-class ExchangeBidHouseSearchMessage(ParsedMessage):
-    """When clicking object hdv"""
-
-    follow: bool
-    objectGID: int
-
-
-class ExchangeBidHouseTypeMessage(ParsedMessage):
-    """When checking category hdv"""
-
-    follow: bool
-    type: int
+    queue_handler_message: Queue[ParsedMessage]

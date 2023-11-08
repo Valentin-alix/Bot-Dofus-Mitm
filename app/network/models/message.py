@@ -6,7 +6,6 @@ from pprint import pformat
 
 from network.models.data import BufferInfos, Data
 from network.protocol import protocol, protocol_load
-from types_ import BIT_RIGHT_SHIFT_LEN_PACKET_ID
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +20,7 @@ class Message:
 
     @staticmethod
     def get_message_id(header: int) -> int:
-        return header >> BIT_RIGHT_SHIFT_LEN_PACKET_ID
+        return header >> 2
 
     @staticmethod
     def get_message_length(src: Data, header: int) -> int:

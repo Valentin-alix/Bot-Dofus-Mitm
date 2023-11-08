@@ -33,7 +33,7 @@ from PyQt5.QtWidgets import (
 
 
 class SideMenu(QWidget):
-    WIDTH = 100
+    WIDTH = 150
 
     def __init__(self, parent) -> None:
         super().__init__(parent.all_content)

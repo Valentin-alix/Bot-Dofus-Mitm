@@ -3,8 +3,6 @@ import os
 import pprint
 from pathlib import Path
 
-from types_ import ParsedMessage
-
 from network.models.message import Message
 from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtGui import QIcon, QPalette
@@ -33,6 +31,8 @@ from PyQt5.QtWidgets import (
     QWidget,
 )
 
+from network.parsed_message.parsed_message import ParsedMessage
+
 
 class Frame(QFrame):
     def __init__(self, name: str) -> None:
@@ -59,8 +59,8 @@ class LayoutUtils(QLayout):
     def set_not_margins(self):
         self.setContentsMargins(0, 0, 0, 0)
 
-    def clear_list(self):
-        for i in reversed(range(self.count())):
+    def clear_list(self, proportion: float = 1):
+        for i in reversed(range(int(self.count() * proportion))):
             if (item_child_layout := self.itemAt(i)) is not None and (
                 child_layout := item_child_layout.widget()
             ) is not None:
@@ -122,3 +122,26 @@ class DetailMessageDialog(QDialog):
         main_layout.addWidget(text_edit)
 
         self.setLayout(main_layout)
+
+
+class Header(GroupBox):
+    button_reset: PushButtonUtils | None = None
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.h_layout = HorizontalLayout()
+        self.setLayout(self.h_layout)
+
+        self.button_play = ButtonIcon("play.svg")
+        self.h_layout.addWidget(self.button_play)
+
+        self.button_stop = ButtonIcon("stop")
+        self.h_layout.addWidget(self.button_stop)
+
+    def do_play(self, is_playing: bool):
+        if is_playing:
+            self.button_play.set_active_button()
+            self.button_stop.set_inactive_button()
+        else:
+            self.button_play.set_inactive_button()
+            self.button_stop.set_active_button()

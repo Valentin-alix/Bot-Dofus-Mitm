@@ -1,11 +1,13 @@
 as_scripts
 d2o_json
-bot.log
+*.json
 __pycache__/
 *.py[cod]
 .venv
 .env
 sqlite3.db
 protocol.pk
-PyDofus/
 .mypy_cache
+code_source
+bot.log
+.idea
