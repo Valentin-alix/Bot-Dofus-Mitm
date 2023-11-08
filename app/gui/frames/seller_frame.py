@@ -1,53 +1,17 @@
-from queue import Empty
-from modules.hdv.buying_hdv import BuyingHdv
-from types_ import ThreadsInfos
 from gui.components import (
-    ButtonIcon,
-    DetailMessageDialog,
     Frame,
     GroupBox,
     Header,
-    HorizontalLayout,
     VerticalLayout,
 )
-from PyQt5.QtWidgets import (
-    QAction,
-    QApplication,
-    QBoxLayout,
-    QColorDialog,
-    QDialog,
-    QDialogButtonBox,
-    QDockWidget,
-    QFrame,
-    QGroupBox,
-    QHBoxLayout,
-    QLabel,
-    QLayout,
-    QListWidget,
-    QMainWindow,
-    QMenu,
-    QMessageBox,
-    QPushButton,
-    QScrollArea,
-    QSizePolicy,
-    QSpacerItem,
-    QStackedLayout,
-    QStackedWidget,
-    QStatusBar,
-    QVBoxLayout,
-    QWidget,
-)
 from PyQt5.QtCore import (
-    QEvent,
-    QObject,
-    QRunnable,
-    QSize,
-    QTimer,
     Qt,
-    QThreadPool,
-    pyqtSignal,
 )
-from PyQt5.QtGui import QCloseEvent, QColor, QPalette, QFont
+from PyQt5.QtWidgets import (
+    QBoxLayout,
+    QLabel,
+)
+from types_ import ThreadsInfos
 
 
 class SellerFrame(Frame):

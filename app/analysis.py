@@ -63,5 +63,5 @@ class Analaysis:
 
 if __name__ == "__main__":
     anal = Analaysis()
-    df = anal.get_infos_by_type_or_object(type_name="Bois")
+    df = anal.get_infos_by_type_or_object(object_name="Goujon")
     anal.generate_graph_by_quantity(df)

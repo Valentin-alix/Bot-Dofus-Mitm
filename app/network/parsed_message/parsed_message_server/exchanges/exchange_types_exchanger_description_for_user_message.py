@@ -1,10 +1,9 @@
-from __future__ import annotations
 import logging
 
+import types_
 from network.parsed_message.parsed_message_server.parsed_message_server import (
     ParsedMessageServer,
 )
-import types_
 
 logger = logging.getLogger(__name__)
 

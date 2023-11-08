@@ -1,33 +1,7 @@
-from typing import Callable, Dict, Optional, Type
 from functools import partial
-from gui.components import Frame, ListWidgetItem, PushButtonUtils, VerticalLayout
-from PyQt5.QtCore import Qt, pyqtSignal
-from PyQt5.QtGui import QColor, QPalette
+from gui.components import PushButtonUtils, VerticalLayout
 from PyQt5.QtWidgets import (
-    QAction,
-    QApplication,
     QBoxLayout,
-    QColorDialog,
-    QDialog,
-    QDialogButtonBox,
-    QDockWidget,
-    QFrame,
-    QGroupBox,
-    QHBoxLayout,
-    QLabel,
-    QLayout,
-    QListWidget,
-    QMainWindow,
-    QMenu,
-    QMessageBox,
-    QPushButton,
-    QScrollArea,
-    QSizePolicy,
-    QSpacerItem,
-    QStackedLayout,
-    QStackedWidget,
-    QStatusBar,
-    QVBoxLayout,
     QWidget,
 )
 

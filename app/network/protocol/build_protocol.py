@@ -181,7 +181,7 @@ if __name__ == "__main__":
         ),
         os.path.join(
             Path(__file__).parent.parent.parent.parent,
-            "as_scripts",
+            "code_source",
             "scripts",
             "com",
             "ankamagames",
@@ -193,8 +193,6 @@ if __name__ == "__main__":
     print(paths)
     for p in paths:
         load_from_path(p)
-
-    build()
 
     primitives = {
         v["type"]

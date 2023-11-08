@@ -1,18 +1,18 @@
 import logging
-from queue import Empty
-from threading import Thread
-import select
 import random
-from time import perf_counter
+import select
 from datetime import datetime, timedelta
+from queue import Empty
 from socket import socket as Socket
-from time import sleep
-import psutil
+from threading import Thread
+from time import perf_counter, sleep
+
 import fritm
+import psutil
 from network.models.data import BufferInfos
 from network.models.message import Message
-from types_ import ThreadsInfos, GAME_SERVER
 from network.parser import MessageRawDataParser
+from types_ import GAME_SERVER, ThreadsInfos
 
 logger = logging.getLogger(__name__)
 

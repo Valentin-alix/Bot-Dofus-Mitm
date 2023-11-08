@@ -1,13 +1,11 @@
-from __future__ import annotations
-
 import logging
 import logging.config
 import os
 import unittest
 from pathlib import Path
 
-from logs.config import LOGGING_CONFIG
 import network.sniffer as sniffer
+from logs.config import LOGGING_CONFIG
 
 logging.config.dictConfig(LOGGING_CONFIG)
 logger = logging.getLogger(__name__)

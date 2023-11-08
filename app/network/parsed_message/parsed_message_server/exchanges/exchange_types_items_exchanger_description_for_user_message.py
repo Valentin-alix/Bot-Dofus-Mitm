@@ -1,14 +1,13 @@
-from __future__ import annotations
-
-from datetime import datetime
 import logging
+from datetime import datetime
+
+import types_
 from database.models import Object, Price, get_engine
 from network.parsed_message.dicts import BidExchangerObjectInfo
-from sqlalchemy.orm import sessionmaker
 from network.parsed_message.parsed_message_server.parsed_message_server import (
     ParsedMessageServer,
 )
-import types_
+from sqlalchemy.orm import sessionmaker
 
 logger = logging.getLogger(__name__)
 

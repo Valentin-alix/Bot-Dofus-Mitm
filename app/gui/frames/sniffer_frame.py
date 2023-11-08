@@ -1,9 +1,4 @@
-import os
-from pathlib import Path
-from pprint import pformat
 from queue import Empty
-from threading import Event
-from typing import Callable, Dict, Optional, Type
 
 from gui.components import (
     ButtonIcon,
@@ -11,38 +6,13 @@ from gui.components import (
     Frame,
     GroupBox,
     Header,
-    HorizontalLayout,
     VerticalLayout,
 )
-from network.models.message import Message
-from PyQt5.QtCore import QSize, Qt, QTimer
-from PyQt5.QtGui import QIcon
+from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtWidgets import (
-    QAction,
-    QApplication,
     QBoxLayout,
-    QColorDialog,
-    QDialog,
-    QDialogButtonBox,
-    QDockWidget,
-    QFrame,
-    QGroupBox,
-    QHBoxLayout,
-    QLabel,
-    QLayout,
-    QListWidget,
-    QMainWindow,
-    QMenu,
-    QMessageBox,
     QPushButton,
     QScrollArea,
-    QSizePolicy,
-    QSpacerItem,
-    QStackedLayout,
-    QStackedWidget,
-    QStatusBar,
-    QVBoxLayout,
-    QWidget,
 )
 from network.parsed_message.parsed_message import ParsedMessage
 

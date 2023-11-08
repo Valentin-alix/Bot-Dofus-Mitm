@@ -84,10 +84,13 @@ def maj_runes_objects(engine: Engine):
 
 
 def get_as_scripts(output_as_scripts: str):
+    selected_classes = "com.ankamagames.dofus.BuildInfos,com.ankamagames.dofus.network.++,com.ankamagames.jerakine.network.++"
     if os.path.exists(output_as_scripts):
         shutil.rmtree(output_as_scripts)
     os.system(
-        f'java -Xmx10512m  -jar  "{os.environ.get("FFDECJAR_PATH")}" -export script "{output_as_scripts}" "{os.environ.get("DOFUS_INVOKER")}"'
+        f'java -Xmx10512m  -jar "{os.environ.get("FFDECJAR_PATH")}"\
+        -config parallelSpeedUp=0 -selectclass {selected_classes}\
+        -export script "{output_as_scripts}" "{os.environ.get("DOFUS_INVOKER")}"'
     )
 
 

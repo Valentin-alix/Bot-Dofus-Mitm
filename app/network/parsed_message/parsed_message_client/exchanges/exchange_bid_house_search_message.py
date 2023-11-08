@@ -1,9 +1,9 @@
-from __future__ import annotations
+from network.parsed_message.parsed_message_client.parsed_message_client import (
+    ParsedMessageClient,
+)
 
-import network.parsed_message.parsed_message_client.parsed_message_client as parsed_message_client
 
-
-class ExchangeBidHouseSearchMessage(parsed_message_client.ParsedMessageClient):
+class ExchangeBidHouseSearchMessage(ParsedMessageClient):
     """When clicking object hdv, from client"""
 
     follow: bool

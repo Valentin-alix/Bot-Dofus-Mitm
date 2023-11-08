@@ -1,29 +1,28 @@
 import logging
-from typing import Type
-from copy import deepcopy
+
 from modules.character import Character
 from modules.hdv.buying_hdv import BuyingHdv
 from modules.hdv.selling_hdv import SellingHdv
-from network.parsed_message.parsed_message_server.exchanges.exchange_bid_house_item_add_ok_message import (
-    ExchangeBidHouseItemAddOkMessage,
-)
 from network.parsed_message.parsed_message_client.exchanges.exchange_bid_house_price_message import (
     ExchangeBidHousePriceMessage,
+)
+from network.parsed_message.parsed_message_client.exchanges.exchange_bid_house_search_message import (
+    ExchangeBidHouseSearchMessage,
 )
 from network.parsed_message.parsed_message_client.exchanges.exchange_bid_house_type_message import (
     ExchangeBidHouseTypeMessage,
 )
-from network.parsed_message.parsed_message_client.exchanges.exchange_bid_house_search_message import (
-    ExchangeBidHouseSearchMessage,
+from network.parsed_message.parsed_message_client.exchanges.exchange_object_move_priced_message import (
+    ExchangeObjectMovePricedMessage,
+)
+from network.parsed_message.parsed_message_server.exchanges.exchange_bid_house_item_add_ok_message import (
+    ExchangeBidHouseItemAddOkMessage,
 )
 from network.parsed_message.parsed_message_server.exchanges.exchange_bid_price_for_seller_message import (
     ExchangeBidPriceForSellerMessage,
 )
 from network.parsed_message.parsed_message_server.exchanges.exchange_leave_message import (
     ExchangeLeaveMessage,
-)
-from network.parsed_message.parsed_message_client.exchanges.exchange_object_move_priced_message import (
-    ExchangeObjectMovePricedMessage,
 )
 from network.parsed_message.parsed_message_server.exchanges.exchange_started_bid_buyer_message import (
     ExchangeStartedBidBuyerMessage,

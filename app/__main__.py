@@ -1,19 +1,16 @@
-import logging
-import logging.config
 import argparse
+import logging.config
 import sys
 from queue import Queue
-from threading import Thread, Event, Lock
+from threading import Event, Lock, Thread
 
-from network.mitm import Mitm
+from database.models import Base, get_engine
 from gui.app import Application, MainWindow
 from init import update_resources
-from database.models import Base, get_engine
 from logs.config import LOGGING_CONFIG
-from types_ import ThreadsInfos
-
+from network.mitm import Mitm
 from network.sniffer import Sniffer
-
+from types_ import ThreadsInfos
 
 logging.config.dictConfig(LOGGING_CONFIG)
 logger = logging.getLogger(__name__)

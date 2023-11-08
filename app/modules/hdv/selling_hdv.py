@@ -1,19 +1,19 @@
-from __future__ import annotations
 import logging
 from typing import Tuple, TypedDict
+
 from database.models import Object, TypeObject, get_engine
 from network.parsed_message.dicts import ObjectItem, SellerBuyerDescriptor
-from network.parsed_message.parsed_message_client.exchanges.exchange_bid_house_search_message import (
-    ExchangeBidHouseSearchMessage,
-)
 from network.parsed_message.parsed_message_client.exchanges.exchange_bid_house_price_message import (
     ExchangeBidHousePriceMessage,
+)
+from network.parsed_message.parsed_message_client.exchanges.exchange_bid_house_search_message import (
+    ExchangeBidHouseSearchMessage,
 )
 from network.parsed_message.parsed_message_client.exchanges.exchange_object_move_priced_message import (
     ExchangeObjectMovePricedMessage,
 )
-import types_
 from sqlalchemy.orm import sessionmaker
+from types_.interface import ThreadsInfos
 
 logger = logging.getLogger(__name__)
 
@@ -29,7 +29,7 @@ class SellingHdv:
     def __init__(
         self,
         seller_buyer_descriptor: SellerBuyerDescriptor,
-        threads_infos: types_.ThreadsInfos,
+        threads_infos: ThreadsInfos,
     ) -> None:
         self.engine = get_engine()
         self.threads_infos = threads_infos

@@ -1,56 +1,25 @@
-from queue import Empty, Queue
-from threading import Event
-from time import sleep
-from typing import Callable, Dict, Optional, Type
+from queue import Empty
 
 from gui.components import HorizontalLayout
+from gui.fragments import SideMenu
 from gui.frames.scrapping_frame import ScrappingFrame
 from gui.frames.seller_frame import SellerFrame
 from gui.frames.sniffer_frame import SnifferFrame
-from gui.fragments import SideMenu
-from network.models.message import Message
 from PyQt5.QtCore import (
-    QEvent,
     QObject,
-    QRunnable,
-    QSize,
     QTimer,
-    Qt,
-    QThreadPool,
     pyqtSignal,
 )
-from PyQt5.QtGui import QCloseEvent, QColor, QPalette
+from PyQt5.QtGui import QCloseEvent
 from PyQt5.QtWidgets import (
-    QAction,
     QApplication,
     QBoxLayout,
-    QColorDialog,
-    QDialog,
-    QDialogButtonBox,
-    QDockWidget,
-    QFrame,
-    QGroupBox,
-    QHBoxLayout,
-    QLabel,
-    QLayout,
-    QListWidget,
     QMainWindow,
-    QMenu,
-    QMessageBox,
-    QPushButton,
-    QScrollArea,
-    QSizePolicy,
-    QSpacerItem,
-    QStackedLayout,
     QStackedWidget,
-    QStatusBar,
-    QVBoxLayout,
     QWidget,
 )
 from qt_material import apply_stylesheet
-
-from types_ import ThreadsInfos, GAME_SERVER
-
+from types_ import ThreadsInfos
 
 TITLE = "Bot Dofus"
 

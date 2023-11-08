@@ -1,8 +1,7 @@
-from __future__ import annotations
 import logging
 from threading import Thread
 from time import sleep
-from sqlalchemy.orm import sessionmaker
+from typing import TYPE_CHECKING
 
 from database.models import TypeObject, get_engine
 from network.parsed_message.parsed_message_client.exchanges.exchange_bid_house_search_message import (
@@ -11,15 +10,16 @@ from network.parsed_message.parsed_message_client.exchanges.exchange_bid_house_s
 from network.parsed_message.parsed_message_client.exchanges.exchange_bid_house_type_message import (
     ExchangeBidHouseTypeMessage,
 )
-import types_
+from sqlalchemy.orm import sessionmaker
+
+if TYPE_CHECKING:
+    from types_.interface import ThreadsInfos
 
 logger = logging.getLogger(__name__)
 
 
 class BuyingHdv:
-    def __init__(
-        self, categories: list[int], threads_infos: types_.ThreadsInfos
-    ) -> None:
+    def __init__(self, categories: list[int], threads_infos: "ThreadsInfos") -> None:
         self.engine = get_engine()
         self.categories = self.get_consistent_categories(categories)
         self.types_object: list[dict] = []

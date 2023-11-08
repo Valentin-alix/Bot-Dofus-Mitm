@@ -1,34 +1,18 @@
-from abc import ABC
 import os
-import pprint
 from pathlib import Path
 
-from network.models.message import Message
 from PyQt5.QtCore import QSize, Qt
-from PyQt5.QtGui import QIcon, QPalette
+from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import (
-    QAction,
-    QApplication,
-    QBoxLayout,
-    QColorDialog,
     QDialog,
-    QDialogButtonBox,
     QFrame,
     QGroupBox,
     QHBoxLayout,
-    QLabel,
     QLayout,
-    QListWidget,
     QListWidgetItem,
-    QMainWindow,
-    QMenu,
-    QMessageBox,
     QPushButton,
-    QSizePolicy,
-    QStatusBar,
     QTextEdit,
     QVBoxLayout,
-    QWidget,
 )
 
 from network.parsed_message.parsed_message import ParsedMessage

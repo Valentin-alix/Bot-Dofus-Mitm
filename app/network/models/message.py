@@ -1,8 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Callable, Dict
-from pprint import pformat
+from typing import Callable
 
 from network.models.data import BufferInfos, Data
 from network.protocol import protocol, protocol_load
