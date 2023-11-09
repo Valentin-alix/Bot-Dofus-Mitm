@@ -1,15 +1,16 @@
 import logging
 import random
 import select
-from datetime import datetime, timedelta
+from datetime import datetime
 from queue import Empty
 from socket import socket as Socket
 from threading import Thread
-from time import perf_counter, sleep
+from time import sleep
+from copy import deepcopy
 
 import fritm
 import psutil
-from network.models.data import BufferInfos
+from network.models.data import BufferInfos, Data
 from network.models.message import Message
 from network.parser import MessageRawDataParser
 from types_ import GAME_SERVER, ThreadsInfos
@@ -169,6 +170,7 @@ class InjectorBridgeHandler:
 
     def send_to_client(self, data):
         if isinstance(data, Message):
+            self.raw_parser.parse(deepcopy(data), False)
             data = data.bytes()
         self.injected_to_client += 1
         self.connection_game.sendall(data)
@@ -177,6 +179,7 @@ class InjectorBridgeHandler:
         if not self.is_server_closed():
             if isinstance(data, Message):
                 data.count = self.counter + 1
+                self.raw_parser.parse(deepcopy(data), True)
                 data = data.bytes()
             self.injected_to_server += 1
             self.connection_server.sendall(data)

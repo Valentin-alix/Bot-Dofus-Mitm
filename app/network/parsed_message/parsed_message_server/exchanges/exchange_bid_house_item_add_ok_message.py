@@ -26,5 +26,9 @@ class ExchangeBidHouseItemAddOkMessage(ParsedMessageServer):
                         "selling_hdv"
                     )
                 ) is not None:
+                    if selling_hdv.selected_object is not None:
+                        threads_infos["queue_for_sale_object"].put(
+                            selling_hdv.selected_object
+                        )
                     logger.info("Item was selled")
                     selling_hdv.process()

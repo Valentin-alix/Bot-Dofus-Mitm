@@ -7,9 +7,9 @@
     },
 
     "python.languageServer": "Pylance",
-    "python.analysis.fixAll": [
-        "source.unusedImports"
-    ],
+    // "python.analysis.fixAll": [
+    //     "source.unusedImports"
+    // ],
     "[python]": {
         "editor.formatOnSave": true,
         "editor.defaultFormatter": "charliermarsh.ruff",

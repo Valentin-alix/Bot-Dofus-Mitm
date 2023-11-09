@@ -1,7 +1,7 @@
 import logging
-from typing import Tuple, TypedDict
+from typing import Tuple
 
-from database.models import Object, TypeObject, get_engine
+from database.models import Item, TypeItem, get_engine
 from network.parsed_message.dicts import ObjectItem, SellerBuyerDescriptor
 from network.parsed_message.parsed_message_client.exchanges.exchange_bid_house_price_message import (
     ExchangeBidHousePriceMessage,
@@ -13,16 +13,9 @@ from network.parsed_message.parsed_message_client.exchanges.exchange_object_move
     ExchangeObjectMovePricedMessage,
 )
 from sqlalchemy.orm import sessionmaker
-from types_.interface import ThreadsInfos
+from types_.interface import SelectedObject, ThreadsInfos
 
 logger = logging.getLogger(__name__)
-
-
-class SelectedObject(TypedDict):
-    all_identical: bool
-    generic_id: int
-    minimal_prices: list[int]
-    is_placed: bool
 
 
 class SellingHdv:
@@ -110,12 +103,16 @@ class SellingHdv:
                     if self.selected_object is not None:
                         self.selected_object["is_placed"] = False
                     # TODO Price is not parsed correctly <!>
-                    return
                     exchange_object_move_priced_message.send(self.threads_infos)
                     return
         self.selected_object = None
 
     # Utils
+    def get_name_by_generic_id(self, generic_id: int) -> str | None:
+        session = sessionmaker(bind=self.engine)()
+        object_ = session.query(Item).filter(Item.id == generic_id).first()
+        return object_.name if object_ is not None else None
+
     def get_object_by_generic_id(self, generic_id: int) -> ObjectItem | None:
         if (accepted_objects := self.get_accepted_objects_in_inventory()) is not None:
             return next(
@@ -130,10 +127,10 @@ class SellingHdv:
     def get_accepted_objects(self):
         session = sessionmaker(bind=self.engine)()
         self.accepted_objects = (
-            session.query(Object, TypeObject)
-            .join(TypeObject, Object.type_object_id == TypeObject.id)
-            .filter(TypeObject.type_id.in_(self.accepted_categories))
-            .with_entities(Object)
+            session.query(Item, TypeItem)
+            .join(TypeItem, Item.type_item_id == TypeItem.id)
+            .filter(TypeItem.id.in_(self.accepted_categories))
+            .with_entities(Item)
             .all()
         )
         session.close()
@@ -149,10 +146,7 @@ class SellingHdv:
                     object_
                     for object_ in character.objects
                     if object_.get("objectGID")
-                    in (
-                        accepted_object.object_gid
-                        for accepted_object in self.accepted_objects
-                    )
+                    in (accepted_object.id for accepted_object in self.accepted_objects)
                 ]
                 logger.info(
                     f"Get accepted objects in inventory : {accepted_objects_inventory} "

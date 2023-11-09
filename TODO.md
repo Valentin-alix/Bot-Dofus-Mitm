@@ -1,3 +1,5 @@
-- # TODO Voir avec fichier D2O ou autre pour récupérer object by object id
+ajouter heure dans interface sniffer
 
-- TODO Refactor protocol files & model Data
+transform json to python class file ?
+
+ajouter migrations tool pour sqlalchemy

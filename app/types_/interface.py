@@ -29,6 +29,18 @@ class SellingHdvWithLock(WithLock, TypedDict):
     selling_hdv: SellingHdv | None
 
 
+class ServerIdWithLock(WithLock, TypedDict):
+    server_id: int | None
+
+
+class SelectedObject(TypedDict):
+    all_identical: bool
+    generic_id: int
+    minimal_prices: list[int]
+    is_placed: bool
+    name: str | None
+
+
 class ThreadsInfos(TypedDict):
     event_play_sniffer: Event
     event_play_hdv_scrapping: Event
@@ -39,6 +51,8 @@ class ThreadsInfos(TypedDict):
     character_with_lock: CharacterWithLock
     buying_hdv_with_lock: BuyingHdvWithLock
     selling_hdv_with_lock: SellingHdvWithLock
+    server_id_with_lock: ServerIdWithLock
 
+    queue_for_sale_object: Queue[SelectedObject]
     queue_msg_to_send: Queue[dict]
     queue_handler_message: Queue[ParsedMessage]

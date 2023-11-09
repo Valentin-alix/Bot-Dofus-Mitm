@@ -26,7 +26,6 @@ class SideMenu(QWidget):
         self.side_menu_layout = VerticalLayout()
         self.side_menu_layout.addStretch()
         self.side_menu_layout.setDirection(QBoxLayout.Direction.BottomToTop)
-        self.side_menu_layout.setSpacing(0)
         self.setLayout(self.side_menu_layout)
 
     def show_menu(self):

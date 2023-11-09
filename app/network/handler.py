@@ -15,6 +15,9 @@ from network.parsed_message.parsed_message_client.exchanges.exchange_bid_house_t
 from network.parsed_message.parsed_message_client.exchanges.exchange_object_move_priced_message import (
     ExchangeObjectMovePricedMessage,
 )
+from network.parsed_message.parsed_message_server.connections.selected_server_data_message import (
+    SelectedServerDataMessage,
+)
 from network.parsed_message.parsed_message_server.exchanges.exchange_bid_house_item_add_ok_message import (
     ExchangeBidHouseItemAddOkMessage,
 )
@@ -73,6 +76,7 @@ class Handler:
         "ObjectDeletedMessage": ObjectDeletedMessage,
         "ObjectQuantityMessage": ObjectQuantityMessage,
         "ExchangeBidHouseItemAddOkMessage": ExchangeBidHouseItemAddOkMessage,
+        "SelectedServerDataMessage": SelectedServerDataMessage,
     }
 
     def __init__(self, threads_infos: ThreadsInfos) -> None:

@@ -20,7 +20,6 @@ class SellerFrame(Frame):
         self.threads_infos = threads_infos
 
         self.main_frame_layout = VerticalLayout()
-        self.main_frame_layout.setSpacing(0)
 
         self.set_header()
         self.setup_content()
@@ -29,7 +28,6 @@ class SellerFrame(Frame):
 
     def set_header(self):
         self.header = Header()
-        self.header.setTitle("Hdv pour vendre")
         self.header.button_play.clicked.connect(lambda: self.on_update_do_play(True))
         self.header.button_stop.clicked.connect(lambda: self.on_update_do_play(False))
         self.main_frame_layout.addWidget(self.header)
@@ -37,7 +35,7 @@ class SellerFrame(Frame):
 
     def setup_content(self):
         self.box_content = GroupBox()
-        self.box_content.setTitle("Informations")
+        self.box_content.setTitle("Objects mis en vente")
         self.box_content.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.layout_content = VerticalLayout()
@@ -46,12 +44,13 @@ class SellerFrame(Frame):
         self.layout_content.setDirection(QBoxLayout.Direction.BottomToTop)
         self.box_content.setLayout(self.layout_content)
 
-        self.label_sellable_objects = QLabel()
-        self.label_sellable_objects.setText("bientot")
-        self.label_sellable_objects.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.layout_content.addWidget(self.label_sellable_objects)
-
         self.main_frame_layout.addWidget(self.box_content)
+
+    def on_new_object_for_sale(self):
+        label_sellable_objects = QLabel()
+        label_sellable_objects.setText("bientot")
+        label_sellable_objects.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.layout_content.addWidget(self.label_sellable_objects)
 
     def update_state_buttons(self):
         self.header.do_play(self.threads_infos.get("event_play_hdv_selling").is_set())

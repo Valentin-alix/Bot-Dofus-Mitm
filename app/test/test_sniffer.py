@@ -39,13 +39,6 @@ class TestSniffer(unittest.TestCase):
         logger.warning(f"not_completed: {self.sniffer.not_completed_message_number}")
         assert self.sniffer.not_completed_message_number <= 3
 
-    # def test_from_client_and_from_server3(self):
-    #     self.sniffer.capture_path = os.path.join(
-    #         Path(__file__).parent, "fixtures", "from_all_4.pcap"
-    #     )
-    #     self.sniffer.launch_sniffer()
-    #     print(self.sniffer.not_completed_message_number)
-
 
 if __name__ == "__main__":
     unittest.main()

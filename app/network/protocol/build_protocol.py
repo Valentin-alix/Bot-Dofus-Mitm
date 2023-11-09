@@ -1,9 +1,11 @@
+import json
 import os
 import pickle
 import re
 from pathlib import Path
 
 from tqdm import tqdm
+
 
 CLASS_PATTERN = r"\s*public class (?P<name>\w+) (?:extends (?P<parent>\w+) )?implements (?P<interface>\w+)\n"
 ID_PATTERN = r"\s*public static const protocolId:uint = (?P<id>\d+);\n"
@@ -28,55 +30,41 @@ HASH_FUNCTION_PATTERN = r"\s*HASH_FUNCTION\(data\);\n"
 WRAPPED_BOOLEAN_PATTERN = r"\s*this.(?P<name>\w+) = BooleanByteWrapper\.getFlag\(.*;\n"
 
 
-def load_from_path(path):
-    if isinstance(path, str):
-        path = Path(path)
-    for p in path.glob("**/*.as"):
-        name = p.name[:-3]
-        new = dict(name=name, path=p)
-        types[name] = new
+def parseVar(name: str, type_name: str, lines, types: dict):
+    if type_name in ["Boolean", "ByteArray"]:
+        return dict(name=name, length=None, type=type_name, optional=False)
+    if type_name in types:
+        _type = type_name
 
-
-def lines(_type):
-    with _type["path"].open() as file:
-        yield from file
-
-
-def parseVar(name, typename, lines):
-    if typename in ["Boolean", "ByteArray"]:
-        return dict(name=name, length=None, type=typename, optional=False)
-    if typename in types:
-        type = typename
-
-    m = re.fullmatch(VECTOR_TYPE_PATTERN, typename)
-    if m:
-        return parseVectorVar(name, m.group("type"), lines)
+    _vector_matching = re.fullmatch(VECTOR_TYPE_PATTERN, type_name)
+    if _vector_matching:
+        return parseVectorVar(name, _vector_matching.group("type"), lines, types)
 
     attr_assign_pattern = ATTR_ASSIGN_PATTERN_OF_NAME % name
-    dynamic_type_pattern = DYNAMIC_TYPE_PATTERN_OF_TYPE % typename
+    dynamic_type_pattern = DYNAMIC_TYPE_PATTERN_OF_TYPE % type_name
     optional_var_pattern = OPTIONAL_VAR_PATTERN_OF_NAME % name
 
     optional = False
 
     for line in lines:
-        m = re.fullmatch(attr_assign_pattern, line)
-        if m:
-            type = m.group("type")
+        _attr_matching = re.fullmatch(attr_assign_pattern, line)
+        if _attr_matching:
+            _type = _attr_matching.group("type")
 
-        m = re.fullmatch(dynamic_type_pattern, line)
-        if m:
-            type = False
+        _dynamic_type_matching = re.fullmatch(dynamic_type_pattern, line)
+        if _dynamic_type_matching:
+            _type = False
 
-        m = re.fullmatch(optional_var_pattern, line)
-        if m:
+        _optional_var_matching = re.fullmatch(optional_var_pattern, line)
+        if _optional_var_matching:
             optional = True
+    assert "_type" in locals()
+    return {"name": name, "length": None, "type": _type, "optional": optional}
 
-    return dict(name=name, length=None, type=type, optional=optional)
 
-
-def parseVectorVar(name, typename, lines):
+def parseVectorVar(name, typename, lines, types: dict):
     if typename in types:
-        type = typename
+        _type = typename
 
     vector_attr_write_pattern = VECTOR_ATTR_WRITE_PATTERN_OF_NAME % name
     vector_len_write_pattern = VECTOR_LEN_WRITE_PATTERN_OF_NAME % name
@@ -87,64 +75,87 @@ def parseVectorVar(name, typename, lines):
     dynamic_type_pattern = DYNAMIC_TYPE_PATTERN_OF_TYPE % typename
 
     for line in lines:
-        m = re.fullmatch(vector_attr_write_pattern, line)
-        if m:
-            type = m.group("type")
+        _vector_attr_write_matching = re.fullmatch(vector_attr_write_pattern, line)
+        if _vector_attr_write_matching:
+            _type = _vector_attr_write_matching.group("type")
 
-        m = re.fullmatch(dynamic_type_pattern, line)
-        if m:
-            type = False
+        _dynamic_type_matching = re.fullmatch(dynamic_type_pattern, line)
+        if _dynamic_type_matching:
+            _type = False
 
-        m = re.fullmatch(vector_len_write_pattern, line)
-        if m:
-            length = m.group("type")
+        _vector_len_write_matching = re.fullmatch(vector_len_write_pattern, line)
+        if _vector_len_write_matching:
+            length = _vector_len_write_matching.group("type")
 
-        m = re.fullmatch(vector_const_len_pattern, line)
-        if m:
-            length = int(m.group("size"))
+        _vector_const_len_matching = re.fullmatch(vector_const_len_pattern, line)
+        if _vector_const_len_matching:
+            length = int(_vector_const_len_matching.group("size"))
+    assert "_type" in locals()
+    assert "length" in locals()
+    return {
+        "name": name,
+        "length": length,
+        "type": _type,
+        "optional": False,
+    }
 
-    return dict(name=name, length=length, type=type, optional=False)
+
+def generator_lines_from_path(_type):
+    with _type["path"].open() as file:
+        yield from file
 
 
-def parse(t):
+def parse(_type: dict, msg_from_id: dict, types_from_id: dict, types: dict):
     vars = []
     hash_function = False
     wrapped_booleans = set()
+    protocolId = None
 
-    for line in lines(t):
-        m = re.fullmatch(CLASS_PATTERN, line)
-        if m:
-            assert m.group("name") == t["name"]
-            parent = m.group("parent")
+    for line in generator_lines_from_path(_type):
+        # iterate through line in file
+        _class_matching = re.fullmatch(CLASS_PATTERN, line)
+        if _class_matching:
+            assert _class_matching.group("name") == _type["name"]
+            parent = _class_matching.group("parent")
             if not parent in types:
+                # check if parent is in interesting class
                 parent = None
-            t["parent"] = parent
+            _type["parent"] = parent
 
-        m = re.fullmatch(ID_PATTERN, line)
-        if m:
-            protocolId = int(m.group("id"))
+        _id_matching = re.fullmatch(ID_PATTERN, line)
+        if _id_matching:
+            protocolId = int(_id_matching.group("id"))
 
-        m = re.fullmatch(PUBLIC_VAR_PATTERN, line)
-        if m:
-            var = parseVar(m.group("name"), m.group("type"), lines(t))
+        _var_matching = re.fullmatch(PUBLIC_VAR_PATTERN, line)
+        if _var_matching:
+            var = parseVar(
+                _var_matching.group("name"),
+                _var_matching.group("type"),
+                generator_lines_from_path(_type),
+                types,
+            )
             vars.append(var)
 
-        m = re.fullmatch(HASH_FUNCTION_PATTERN, line)
-        if m:
+        _hash_function_matching = re.fullmatch(HASH_FUNCTION_PATTERN, line)
+        if _hash_function_matching:
             hash_function = True
 
-        m = re.fullmatch(WRAPPED_BOOLEAN_PATTERN, line)
-        if m:
-            wrapped_booleans.add(m.group("name"))
+        _wrapped_boolean_matching = re.fullmatch(WRAPPED_BOOLEAN_PATTERN, line)
+        if _wrapped_boolean_matching:
+            wrapped_booleans.add(_wrapped_boolean_matching.group("name"))
 
-    t["protocolId"] = protocolId
+    assert protocolId is not None
+    _type["protocolId"] = protocolId
 
-    if "messages" in str(t["path"]):
-        # assert protocolId not in msg_from_id
-        msg_from_id[protocolId] = t
-    elif "types" in str(t["path"]):
-        # assert protocolId not in types_from_id
-        types_from_id[protocolId] = t
+    if (
+        "messages" in str(_type["path"])
+        and _type["name"] != "AddTaxCollectorPresetSpellMessage"
+    ):  # check if messages class
+        assert protocolId not in msg_from_id
+        msg_from_id[protocolId] = _type
+    elif "types" in str(_type["path"]):  # check if types class
+        assert protocolId not in types_from_id
+        types_from_id[protocolId] = _type
 
     if sum(var["type"] == "Boolean" for var in vars) > 1:
         boolVars = [var for var in vars if var["name"] in wrapped_booleans]
@@ -152,15 +163,20 @@ def parse(t):
     else:
         boolVars = []
 
-    t["vars"] = vars
-    t["boolVars"] = boolVars
-    t["hash_function"] = hash_function
-    del t["path"]
+    _type["vars"] = vars
+    _type["boolVars"] = boolVars
+    _type["hash_function"] = hash_function
+    del _type["path"]
 
 
-def build():
-    for t in tqdm(types.values()):
-        parse(t)
+def load_from_path(path, types: dict):
+    """Put class message name with their path in types"""
+    if isinstance(path, str):
+        path = Path(path)
+    for _path in path.glob("**/*.as"):
+        name = _path.name[:-3]
+        name_with_path = dict(name=name, path=_path)
+        types[name] = name_with_path
 
 
 if __name__ == "__main__":
@@ -171,6 +187,7 @@ if __name__ == "__main__":
     paths = [
         os.path.join(
             Path(__file__).parent.parent.parent.parent,
+            "resources",
             "code_source",
             "scripts",
             "com",
@@ -181,6 +198,7 @@ if __name__ == "__main__":
         ),
         os.path.join(
             Path(__file__).parent.parent.parent.parent,
+            "resources",
             "code_source",
             "scripts",
             "com",
@@ -190,19 +208,28 @@ if __name__ == "__main__":
             "messages",
         ),
     ]
-    print(paths)
-    for p in paths:
-        load_from_path(p)
+    for _path in paths:
+        load_from_path(_path, types)
+
+    for _type in tqdm(types.values()):
+        parse(_type, msg_from_id, types_from_id, types)
 
     primitives = {
-        v["type"]
-        for t in types.values()
-        for v in t["vars"]
-        if v["type"] and not v["type"] in types
-    }
+        _var["type"]
+        for _type in types.values()
+        for _var in _type["vars"]
+        if _var["type"] and not _var["type"] in types
+    }  # Get all types of data (UnsignedShort, UTF, VarUhInt etc...)
 
-    with open(os.path.join(Path(__file__).parent, "protocol.pk"), "wb") as f:
-        pickle.dump(types, f)
-        pickle.dump(msg_from_id, f)
-        pickle.dump(types_from_id, f)
-        pickle.dump(primitives, f)
+    with open(os.path.join(Path(__file__).parent, "protocol.pk"), "wb") as file:
+        # write with pickle for better performance
+        pickle.dump(types, file)
+        pickle.dump(msg_from_id, file)
+        pickle.dump(types_from_id, file)
+        pickle.dump(primitives, file)
+
+    with open(os.path.join(Path(__file__).parent, "protocol.json"), "w") as file:
+        # write in json for human readable
+        json.dump(types, file, indent=4)
+        json.dump(msg_from_id, file, indent=4)
+        json.dump(types_from_id, file, indent=4)

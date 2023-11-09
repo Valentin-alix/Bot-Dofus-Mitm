@@ -1,9 +1,8 @@
 import logging
 from threading import Thread
 from time import sleep
-from typing import TYPE_CHECKING
 
-from database.models import TypeObject, get_engine
+from database.models import TypeItem, get_engine
 from network.parsed_message.parsed_message_client.exchanges.exchange_bid_house_search_message import (
     ExchangeBidHouseSearchMessage,
 )
@@ -12,14 +11,13 @@ from network.parsed_message.parsed_message_client.exchanges.exchange_bid_house_t
 )
 from sqlalchemy.orm import sessionmaker
 
-if TYPE_CHECKING:
-    from types_.interface import ThreadsInfos
+from types_.interface import ThreadsInfos
 
 logger = logging.getLogger(__name__)
 
 
 class BuyingHdv:
-    def __init__(self, categories: list[int], threads_infos: "ThreadsInfos") -> None:
+    def __init__(self, categories: list[int], threads_infos: ThreadsInfos) -> None:
         self.engine = get_engine()
         self.categories = self.get_consistent_categories(categories)
         self.types_object: list[dict] = []
@@ -55,17 +53,11 @@ class BuyingHdv:
         _consistent_types_category = [
             int(_type[0])
             for _type in (
-                session.query(TypeObject.type_id)
-                .filter(TypeObject.type_id.in_(categories))
-                .all()
+                session.query(TypeItem.id).filter(TypeItem.id.in_(categories)).all()
             )
         ]
         session.close()
-        return [
-            category
-            for category in categories
-            if category in _consistent_types_category
-        ]
+        return _consistent_types_category
 
     def get_available_objects_gid(self):
         if len(self.types_object) > 0:

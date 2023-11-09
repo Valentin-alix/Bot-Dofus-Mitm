@@ -23,7 +23,6 @@ class ScrappingFrame(Frame):
         self.threads_infos = threads_infos
 
         self.main_frame_layout = VerticalLayout()
-        self.main_frame_layout.setSpacing(0)
 
         self.set_header()
         self.setup_content()
@@ -36,7 +35,6 @@ class ScrappingFrame(Frame):
 
     def set_header(self):
         self.header = Header()
-        self.header.setTitle("Hdv pour acheter")
         self.header.do_play(self.threads_infos.get("event_play_hdv_scrapping").is_set())
         self.header.button_play.clicked.connect(
             lambda: self.on_update_do_play_scrapping(True)

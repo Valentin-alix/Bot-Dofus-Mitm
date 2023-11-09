@@ -25,11 +25,15 @@ class ExchangeBidPriceForSellerMessage(ParsedMessageServer):
                 )
             ) is not None:
                 logger.info("get selected object")
+                name_selected_object = selling_hdv.get_name_by_generic_id(
+                    self.genericId
+                )
                 selling_hdv.selected_object = {
                     "all_identical": self.allIdentical,
                     "generic_id": self.genericId,
                     "is_placed": True,
                     "minimal_prices": self.minimalPrices,
+                    "name": name_selected_object,
                 }
                 if threads_infos.get("event_play_hdv_selling").is_set():
                     selling_hdv.process()

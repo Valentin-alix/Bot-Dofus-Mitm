@@ -2,7 +2,7 @@ import logging
 from datetime import datetime
 
 import types_
-from database.models import Object, Price, get_engine
+from database.models import Item, Price, get_engine
 from network.parsed_message.dicts import BidExchangerObjectInfo
 from network.parsed_message.parsed_message_server.parsed_message_server import (
     ParsedMessageServer,
@@ -25,20 +25,22 @@ class ExchangeTypesItemsExchangerDescriptionForUserMessage(ParsedMessageServer):
             engine = get_engine()
             session = sessionmaker(bind=engine)()
             # Saving prices in database
-            _object = session.query(Object).filter_by(object_gid=self.objectGID).first()
-            if _object is not None:
-                prices_values = ",".join(
-                    str(price) for price in self.itemTypeDescriptions[0].get("prices")
-                )
-                price = Price(
-                    creation_date=datetime.now(),
-                    object_id=_object.id,
-                    list_prices=prices_values,
-                )
-                session.add(price)
-                session.commit()
+            item = session.query(Item).filter_by(id=self.objectGID).first()
+            with threads_infos["server_id_with_lock"]["lock"]:
+                if item is not None:
+                    prices_values = self.itemTypeDescriptions[0].get("prices")
+                    price = Price(
+                        creation_date=datetime.now(),
+                        item_id=item.id,
+                        one=prices_values[0],
+                        ten=prices_values[1],
+                        hundred=prices_values[2],
+                        server_id=threads_infos["server_id_with_lock"]["server_id"],
+                    )
+                    session.add(price)
+                    session.commit()
 
-                session.close()
+                    session.close()
 
         with threads_infos.get("buying_hdv_with_lock").get("lock"):
             if (

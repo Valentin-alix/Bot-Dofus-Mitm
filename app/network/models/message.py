@@ -4,7 +4,7 @@ import logging
 from typing import Callable
 
 from network.models.data import BufferInfos, Data
-from network.protocol import protocol, protocol_load
+from network.protocol import protocol
 
 logger = logging.getLogger(__name__)
 
@@ -27,7 +27,7 @@ class Message:
 
     @staticmethod
     def get_message_type_from_id(message_id: int) -> str:
-        return protocol_load.msg_from_id[message_id]["name"]
+        return protocol.msg_from_id[message_id]["name"]
 
     @staticmethod
     def get_json_from_message(message_type: str, message_data: Data) -> dict:
@@ -73,7 +73,7 @@ class Message:
         except (KeyError, IndexError) as err:
             if on_error_callback is not None:
                 on_error_callback(err)
-            logger.error(f"Could not parse message, err: {err}")
+            logger.error(f"Could not parse message, err: {str(err)}")
             buffer_infos.reset()
             return None
 

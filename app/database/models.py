@@ -1,8 +1,12 @@
+from __future__ import annotations
+
+from pprint import pformat
+from enum import Enum
 import os
 from pathlib import Path
-from sqlalchemy import ForeignKey, create_engine
-from sqlalchemy import String
-from sqlalchemy.orm import DeclarativeBase
+from typing import List
+from sqlalchemy import Column, ForeignKey, Table, create_engine
+from sqlalchemy.orm import DeclarativeBase, relationship
 from sqlalchemy.orm import Mapped, mapped_column
 from datetime import datetime
 
@@ -11,62 +15,99 @@ class Base(DeclarativeBase):
     pass
 
 
+class CategoryEnum(Enum):
+    ALL = -1
+    EQUIPMENT = 0
+    CONSUMABLES = 1
+    RESOURCES = 2
+    QUEST = 3
+    OTHER = 4
+    COSMETICS = 5
+    ECAFLIP_CARD = 238
+
+
+sub_area_association = Table(
+    "item_sub_area_association",
+    Base.metadata,
+    Column("item_id", ForeignKey("item.id")),
+    Column("sub_area_id", ForeignKey("sub_area.id")),
+)
+
+
+class Item(Base):
+    __tablename__ = "item"
+    id: Mapped[int] = mapped_column(
+        primary_key=True, autoincrement=False, comment="generic id"
+    )
+    name: Mapped[str] = mapped_column(nullable=False)
+    type_item_id: Mapped[int] = mapped_column(
+        ForeignKey("type_item.id"), nullable=False
+    )
+    level: Mapped[int] = mapped_column(nullable=False)
+    weight: Mapped[int] = mapped_column(nullable=False)
+    recycling_nuggets: Mapped[float] = mapped_column(nullable=False)
+    favorite_recycling_sub_areas: Mapped[List[SubArea]] = relationship(
+        secondary=sub_area_association
+    )
+
+    def __str__(self) -> str:
+        return pformat(vars(self))
+
+
+class SubArea(Base):
+    __tablename__ = "sub_area"
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=False)
+    name: Mapped[str] = mapped_column(nullable=False)
+
+    def __str__(self) -> str:
+        return pformat(vars(self))
+
+
+class TypeItem(Base):
+    __tablename__ = "type_item"
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=False)
+    name: Mapped[str] = mapped_column(nullable=False)
+    category: Mapped[CategoryEnum] = mapped_column(nullable=False)
+
+    def __str__(self) -> str:
+        return pformat(vars(self))
+
+
+class Recipe(Base):
+    __tablename__ = "recipe"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    result_item_id: Mapped[int] = mapped_column(
+        ForeignKey("item.id"), nullable=False, unique=True
+    )
+
+    def __str__(self) -> str:
+        return pformat(vars(self))
+
+
+class Ingredient(Base):
+    __tablename__ = "ingredient"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    item_id: Mapped[int] = mapped_column(ForeignKey("item.id"), nullable=False)
+    quantity: Mapped[int] = mapped_column(nullable=False)
+    recipe_id: Mapped[int] = mapped_column(ForeignKey("recipe.id"))
+
+    def __str__(self) -> str:
+        return pformat(vars(self))
+
+
 # For hdv scrapping
 class Price(Base):
     __tablename__ = "price"
     id: Mapped[int] = mapped_column(primary_key=True)
     creation_date: Mapped[datetime] = mapped_column(nullable=False)
-    list_prices: Mapped[str] = mapped_column(nullable=False)
-    object_id: Mapped[int] = mapped_column(ForeignKey("object.id"), nullable=False)
-
-
-class TypeObject(Base):
-    __tablename__ = "type_object"
-    id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(nullable=False, unique=True)
-    type_id: Mapped[str] = mapped_column(nullable=False, unique=True)
-
-
-class Object(Base):
-    __tablename__ = "object"
-    id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(nullable=False, unique=True)
-    object_gid: Mapped[int] = mapped_column(nullable=False, unique=True)
-    type_object_id: Mapped[int] = mapped_column(
-        ForeignKey("type_object.id"), nullable=False
-    )
-
-
-# For forgemagie
-class Item(Base):
-    __tablename__ = "item"
-    id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(String(255), nullable=False)
-    attempts: Mapped[int]
-
-    def __repr__(self) -> str:
-        return f"{self.name}"
-
-
-class Rune(Base):
-    __tablename__ = "rune"
-    id: Mapped[int] = mapped_column(primary_key=True)
-    rune_id: Mapped[int] = mapped_column(nullable=False)
-    name: Mapped[int] = mapped_column(nullable=False)
-    reliquat_weight: Mapped[int] = mapped_column(nullable=False)
-
-    def __repr__(self) -> str:
-        return f"{self.name}"
-
-
-class TargetLine(Base):
-    __tablename__ = "target_line"
-    id: Mapped[int] = mapped_column(primary_key=True)
-    value: Mapped[int] = mapped_column(nullable=False)
     item_id: Mapped[int] = mapped_column(ForeignKey("item.id"), nullable=False)
-    rune_id: Mapped[int] = mapped_column(ForeignKey("item.id"), nullable=False)
-    line: Mapped[int] = mapped_column(nullable=False)
-    column: Mapped[int] = mapped_column(nullable=False)
+    hundred: Mapped[int] = mapped_column(nullable=False)
+    ten: Mapped[int] = mapped_column(nullable=False)
+    one: Mapped[int] = mapped_column(nullable=False)
+    server_id: Mapped[int] = mapped_column(nullable=False)
+
+    def __str__(self) -> str:
+        return pformat(vars(self))
 
 
 def get_engine():

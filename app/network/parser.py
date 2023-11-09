@@ -17,8 +17,9 @@ class MessageRawDataParser:
     ) -> None:
         self.threads_infos = threads_infos
         self.on_error_callback = on_error_callback
-        if self.threads_infos is not None:
-            self.handler = Handler(self.threads_infos)
+        self.handler = (
+            Handler(self.threads_infos) if self.threads_infos is not None else None
+        )
 
     def parse(self, message: Message, from_client: bool) -> ParsedMessage | None:
         try:
@@ -33,5 +34,4 @@ class MessageRawDataParser:
         except (KeyError, IndexError, UnicodeDecodeError) as err:
             if self.on_error_callback is not None:
                 self.on_error_callback(err)
-            logger.error(f"Could not parse {message.id}, err: {str(err)}")
             return None

@@ -10,7 +10,7 @@ from PyQt5.QtCore import (
     QTimer,
     pyqtSignal,
 )
-from PyQt5.QtGui import QCloseEvent
+from PyQt5.QtGui import QCloseEvent, QColor
 from PyQt5.QtWidgets import (
     QApplication,
     QBoxLayout,
@@ -18,7 +18,6 @@ from PyQt5.QtWidgets import (
     QStackedWidget,
     QWidget,
 )
-from qt_material import apply_stylesheet
 from types_ import ThreadsInfos
 
 TITLE = "Bot Dofus"
@@ -27,7 +26,7 @@ TITLE = "Bot Dofus"
 class Application(QApplication):
     def __init__(self, argv) -> None:
         super().__init__(argv)
-        apply_stylesheet(self, theme="dark_teal.xml")
+        # apply_stylesheet(self, theme="dark_cyan.xml")
         self.setApplicationName(TITLE)
         self.setStyle("Fusion")
 
@@ -37,7 +36,7 @@ class Signals(QObject):
 
 
 class MainWindow(QMainWindow):
-    BASE_WIDTH = 1200
+    BASE_WIDTH = 1600
     BASE_HEIGHT = 900
 
     frame_bot_scrapping: ScrappingFrame
@@ -57,15 +56,14 @@ class MainWindow(QMainWindow):
 
         self.all_content = QWidget()
         self.layout_all_content = HorizontalLayout()
-        self.layout_all_content.setSpacing(0)
         self.layout_all_content.setDirection(QBoxLayout.Direction.RightToLeft)
+        self.all_content.setLayout(self.layout_all_content)
 
         self.stacked_frames = QStackedWidget()
 
         self.set_pages()
         self.set_menu()
 
-        self.all_content.setLayout(self.layout_all_content)
         self.setCentralWidget(self.all_content)
 
         self.timer_check_is_connected = QTimer(self)

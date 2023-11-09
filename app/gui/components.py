@@ -13,6 +13,8 @@ from PyQt5.QtWidgets import (
     QPushButton,
     QTextEdit,
     QVBoxLayout,
+    QWidget,
+    QLabel,
 )
 
 from network.parsed_message.parsed_message import ParsedMessage
@@ -54,6 +56,7 @@ class LayoutUtils(QLayout):
 class VerticalLayout(QVBoxLayout, LayoutUtils):
     def __init__(self, without_margins: bool = True):
         super().__init__()
+        self.setSpacing(0)
         if without_margins:
             self.set_not_margins()
 
@@ -61,16 +64,17 @@ class VerticalLayout(QVBoxLayout, LayoutUtils):
 class HorizontalLayout(QHBoxLayout, LayoutUtils):
     def __init__(self, without_margins: bool = True):
         super().__init__()
+        self.setSpacing(0)
         if without_margins:
             self.set_not_margins()
 
 
 class PushButtonUtils(QPushButton):
     def set_active_button(self):
-        self.setStyleSheet("background-color: green")
+        self.setStyleSheet("background-color: grey")
 
     def set_inactive_button(self):
-        self.setStyleSheet("background-color: rgb(53, 53, 53)")
+        self.setStyleSheet("background-color: white")
 
 
 class ButtonIcon(PushButtonUtils):
@@ -108,7 +112,7 @@ class DetailMessageDialog(QDialog):
         self.setLayout(main_layout)
 
 
-class Header(GroupBox):
+class Header(QWidget):
     button_reset: PushButtonUtils | None = None
 
     def __init__(self) -> None:
@@ -129,3 +133,21 @@ class Header(GroupBox):
         else:
             self.button_play.set_inactive_button()
             self.button_stop.set_active_button()
+
+
+class MessageButton(PushButtonUtils):
+    def __init__(self, parsed_message: ParsedMessage) -> None:
+        super().__init__()
+        self.setFixedHeight(30)
+        self.parsed_message_dict = vars(parsed_message)
+        self.main_layout = HorizontalLayout()
+        self.setLayout(self.main_layout)
+
+        from_client = self.parsed_message_dict.pop("from_client")
+        label = QLabel(text=str(from_client))
+        label.setAlignment(Qt.AlignCenter)
+        self.main_layout.addWidget(label)
+
+        label2 = QLabel(text=str(self.parsed_message_dict.get("__type__")))
+        label2.setAlignment(Qt.AlignCenter)
+        self.main_layout.addWidget(label2)
