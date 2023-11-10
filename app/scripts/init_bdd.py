@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session, sessionmaker
 from tqdm import tqdm
 
 
-from database.models import (
+from app.database.models import (
     CategoryEnum,
     Ingredient,
     Item,

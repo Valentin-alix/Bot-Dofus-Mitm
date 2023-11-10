@@ -1,9 +1,10 @@
 import logging
-import types_
-from types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidHouseItemAddOkMessage import (
+
+from app.types_ import ThreadsInfos
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidHouseItemAddOkMessage import (
     ExchangeBidHouseItemAddOkMessage,
 )
-from types_.parsed_message import ParsedMessageHandler
+from app.types_.parsed_message import ParsedMessageHandler
 
 logger = logging.getLogger(__name__)
 
@@ -11,7 +12,7 @@ logger = logging.getLogger(__name__)
 class ExchangeBidHouseItemAddOkMessageHandler(
     ParsedMessageHandler, ExchangeBidHouseItemAddOkMessage
 ):
-    def handle(self, threads_infos: types_.ThreadsInfos) -> None:
+    def handle(self, threads_infos: ThreadsInfos) -> None:
         if threads_infos.get("event_play_hdv_selling").is_set():
             with threads_infos.get("selling_hdv_with_lock").get("lock"):
                 if (

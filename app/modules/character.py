@@ -1,4 +1,4 @@
-from types_.dofus.scripts.com.ankamagames.dofus.network.types.game.data.items.ObjectItem import (
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.data.items.ObjectItem import (
     ObjectItem,
 )
 

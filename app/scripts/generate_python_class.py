@@ -1,13 +1,14 @@
 import json
 import os
 import shutil
+import sys
 from pathlib import Path
 
 from tqdm import tqdm
-import sys
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-from network.utils import get_classes_in_path
+
+from app.network.utils import get_classes_in_path
 
 
 def convert_byte_type_python(byte_type: str):
@@ -19,19 +20,19 @@ def convert_byte_type_python(byte_type: str):
         case "Float" | "Double":
             return "float"
         case (
-            "Byte"
-            | "Int"
-            | "Short"
-            | "VarUhShort"
-            | "VarUhLong"
-            | "VarUhInt"
-            | "UnsignedByte"
-            | "UnsignedInt"
-            | "UnsignedShort"
-            | "VarInt"
-            | "VarShort"
-            | "VarLong"
-            | "Uuid"
+        "Byte"
+        | "Int"
+        | "Short"
+        | "VarUhShort"
+        | "VarUhLong"
+        | "VarUhInt"
+        | "UnsignedByte"
+        | "UnsignedInt"
+        | "UnsignedShort"
+        | "VarInt"
+        | "VarShort"
+        | "VarLong"
+        | "Uuid"
         ):
             return "int"
         case "ByteArray":
@@ -41,7 +42,7 @@ def convert_byte_type_python(byte_type: str):
 
 
 def find_import_path_by_class_name(
-    class_name: str, protocol_json: dict, base_path_imports: str
+        class_name: str, protocol_json: dict, base_path_imports: str
 ) -> str:
     class_data = protocol_json.get(class_name)
     if class_data is not None:
@@ -57,13 +58,7 @@ def find_import_path_by_class_name(
 
 
 def create_python_class_dofus_file(base_path_output):
-    BASE_PATH_IMPORTS = os.path.relpath(
-        os.path.join(
-            os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
-            "types_",
-            "dofus",
-        )
-    )
+    BASE_PATH_IMPORTS = os.path.join("app", "types_", "dofus")
     PROTOCOL_JSON_PATH = os.path.join(
         Path(__file__).parent.parent, "network", "protocol", "protocol_type.json"
     )
@@ -96,13 +91,13 @@ def create_python_class_dofus_file(base_path_output):
                 import_lines += find_import_path_by_class_name(
                     parent, protocol_json, BASE_PATH_IMPORTS
                 )
-                init_vars_init += f"\n\t\tsuper().__init__(*args)"
+                init_vars_init += f"\n\t\tsuper().__init__(*args, **kwargs)"
 
-            consistent_vars = [
-                _var for _var in class_data["vars"] if _var.get("type") is not False
-            ]
-            if len(consistent_vars) > 0:
-                for _var in consistent_vars:
+            if len(class_data["vars"]) > 0:
+                for _var in class_data["vars"]:
+                    if (var_spe := (_var.get('extra_type', None))) is not None:
+                        _var['length'] = var_spe.get('length')
+                        _var['type'] = var_spe.get('type')
                     python_type = convert_byte_type_python(_var.get("type"))
                     if not python_type:
                         import_class_name = find_import_path_by_class_name(
@@ -140,16 +135,16 @@ def create_python_class_dofus_file(base_path_output):
                 import_class_line += "\t...\n"
 
             if parent is not None:
-                init_method_name += f", *args"
+                init_method_name += f", *args, **kwargs"
             init_method_name_optional += "):"
 
             python_code = (
-                import_lines
-                + import_class_line
-                + class_line
-                + init_method_name
-                + init_method_name_optional
-                + init_vars_init
+                    import_lines
+                    + import_class_line
+                    + class_line
+                    + init_method_name
+                    + init_method_name_optional
+                    + init_vars_init
             )
 
             class_path = os.path.dirname(
@@ -160,8 +155,8 @@ def create_python_class_dofus_file(base_path_output):
             ).replace("global", "_global")
             os.makedirs(class_path, exist_ok=True)
             with open(
-                os.path.join(class_path, class_name + ".py"),
-                "w",
+                    os.path.join(class_path, class_name + ".py"),
+                    "w",
             ) as python_file:
                 python_file.write(python_code)
 

@@ -1,9 +1,9 @@
 import argparse
 import logging.config
+import os.path
 import sys
 from queue import Queue
 from threading import Event, Lock, Thread
-
 
 from gui.app import Application, MainWindow
 from logs.config import LOGGING_CONFIG
@@ -14,6 +14,7 @@ from types_ import ThreadsInfos
 logging.config.dictConfig(LOGGING_CONFIG)
 logger = logging.getLogger(__name__)
 
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 if __name__ == "__main__":
     arg_parsed = argparse.ArgumentParser()

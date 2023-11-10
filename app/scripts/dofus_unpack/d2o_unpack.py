@@ -1,6 +1,6 @@
 import os, json
 
-from dofus_unpack.pydofus.d2o import D2OReader, InvalidD2OFile
+from app.scripts.dofus_unpack.pydofus.d2o import D2OReader, InvalidD2OFile
 
 # python d2o_unpack.py (all files in input folder)
 # folder output: ./output/{all files}

@@ -1,7 +1,7 @@
 from abc import abstractmethod
 from pprint import pformat
 
-from types_.interface import ThreadsInfos
+from app.types_.interface import ThreadsInfos
 
 
 class ParsedMessage:

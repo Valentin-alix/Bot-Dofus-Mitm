@@ -1,9 +1,10 @@
-from importlib import import_module
 import logging
 import os
 import socket
+from importlib import import_module
 
-from types_.interface import ThreadsInfos
+from app.types_.dofus.utils import CLASSES_BY_NAME
+from app.types_.interface import ThreadsInfos
 
 logger = logging.getLogger(__name__)
 
@@ -39,10 +40,28 @@ def convert_snake_case_to_camel_case(snake_case_str: str):
     return camel_case_str
 
 
+def deep_dict_to_object(from_client: bool | None = None, **kwargs):
+    props = kwargs
+    for key, value in kwargs.items():
+        if isinstance(value, dict):
+            value = deep_dict_to_object(**value)
+            props[key] = value
+        elif isinstance(value, list) and len(value) > 0 and isinstance(value[0], dict):
+            value = [deep_dict_to_object(**_value) for _value in value]
+            props[key] = value
+    if kwargs.get('__type__') is not None:
+        class_type = CLASSES_BY_NAME.get(kwargs.pop('__type__'))
+        if class_type is not None:
+            return class_type(**props)
+    return props
+
+
 def get_classes_in_path(path, condition_end_file: str) -> list:
     class_handlers = []
     for folder, sub_folder, files in os.walk(path):
-        folder = os.path.relpath(folder).replace("app\\", "").replace("\\", ".")
+
+        app_folder_position = str(folder).find('app')
+        folder = folder[app_folder_position:].replace('\\', '.')
 
         for file in files:
             if file.endswith(condition_end_file) and not file.startswith("__init__"):

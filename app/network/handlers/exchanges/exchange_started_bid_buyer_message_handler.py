@@ -1,11 +1,11 @@
 import logging
 
-import types_
-from modules.hdv.buying_hdv import BuyingHdv
-from types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeStartedBidBuyerMessage import (
+from app.modules.hdv.buying_hdv import BuyingHdv
+from app.types_ import ThreadsInfos
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeStartedBidBuyerMessage import (
     ExchangeStartedBidBuyerMessage,
 )
-from types_.parsed_message import ParsedMessageHandler
+from app.types_.parsed_message import ParsedMessageHandler
 
 logger = logging.getLogger(__name__)
 
@@ -15,7 +15,7 @@ class ExchangeStartedBidBuyerMessageHandler(
 ):
     """Received hdv infos buyer"""
 
-    def handle(self, threads_infos: types_.ThreadsInfos) -> None:
+    def handle(self, threads_infos: ThreadsInfos) -> None:
         with threads_infos.get("buying_hdv_with_lock").get("lock"):
             threads_infos["buying_hdv_with_lock"]["buying_hdv"] = BuyingHdv(
                 self.buyerDescriptor.types, threads_infos

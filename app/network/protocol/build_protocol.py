@@ -1,12 +1,11 @@
-from copy import deepcopy
 import json
 import os
 import pickle
 import re
+from copy import deepcopy
 from pathlib import Path
 
 from tqdm import tqdm
-
 
 CLASS_PATTERN = r"\s*public class (?P<name>\w+) (?:extends (?P<parent>\w+) )?implements (?P<interface>\w+)\n"
 ID_PATTERN = r"\s*public static const protocolId:uint = (?P<id>\d+);\n"
@@ -54,14 +53,22 @@ def parseVar(name: str, type_name: str, lines, types: dict):
 
         _dynamic_type_matching = re.fullmatch(dynamic_type_pattern, line)
         if _dynamic_type_matching:
-            # TODO non pris en compte ? no comprende
             _type = False
+            _extra_type = {'type': type_name, 'length': None}
 
         _optional_var_matching = re.fullmatch(optional_var_pattern, line)
         if _optional_var_matching:
             optional = True
     assert "_type" in locals()
-    return {"name": name, "length": None, "type": _type, "optional": optional}
+    _var = {"name": name,
+            "length": None,
+            "type": _type,
+            "optional": optional,
+            }
+    if '_extra_type' in locals():
+        _var['extra_type'] = _extra_type
+
+    return _var
 
 
 def parseVectorVar(name, typename, lines, types: dict):
@@ -84,6 +91,7 @@ def parseVectorVar(name, typename, lines, types: dict):
         _dynamic_type_matching = re.fullmatch(dynamic_type_pattern, line)
         if _dynamic_type_matching:
             _type = False
+            _extra_type = {'type': typename, 'length': 'Short'}
 
         _vector_len_write_matching = re.fullmatch(vector_len_write_pattern, line)
         if _vector_len_write_matching:
@@ -94,12 +102,16 @@ def parseVectorVar(name, typename, lines, types: dict):
             length = int(_vector_const_len_matching.group("size"))
     assert "_type" in locals()
     assert "length" in locals()
-    return {
+
+    vector_var = {
         "name": name,
         "length": length,
         "type": _type,
         "optional": False,
     }
+    if '_extra_type' in locals():
+        vector_var['extra_type'] = _extra_type
+    return vector_var
 
 
 def generator_lines_from_path(_type):
@@ -150,8 +162,8 @@ def parse(_type: dict, msg_from_id: dict, types_from_id: dict, types: dict):
     _type["protocolId"] = protocolId
 
     if (
-        "messages" in str(_type["path"])
-        and _type["name"] != "AddTaxCollectorPresetSpellMessage"
+            "messages" in str(_type["path"])
+            and _type["name"] != "AddTaxCollectorPresetSpellMessage"
     ):  # check if messages class
         assert protocolId not in msg_from_id
         msg_from_id[protocolId] = _type
@@ -227,6 +239,8 @@ if __name__ == "__main__":
         for _var in _type["vars"]
         if _var["type"] and not _var["type"] in types
     }  # Get all types of data (UnsignedShort, UTF, VarUhInt etc...)
+
+    print(types_from_id[9326])
 
     with open(os.path.join(Path(__file__).parent, "protocol.pk"), "wb") as file:
         # write with pickle for better performance

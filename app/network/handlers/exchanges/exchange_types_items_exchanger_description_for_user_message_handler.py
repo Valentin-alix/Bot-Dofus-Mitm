@@ -1,14 +1,14 @@
 import logging
 from datetime import datetime
 
-import types_
-from database.models import Item, Price, get_engine
+from app.database.models import Item, Price, get_engine
 from sqlalchemy.orm import sessionmaker
 
-from types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeTypesItemsExchangerDescriptionForUserMessage import (
+from app.types_ import ThreadsInfos
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeTypesItemsExchangerDescriptionForUserMessage import (
     ExchangeTypesItemsExchangerDescriptionForUserMessage,
 )
-from types_.parsed_message import ParsedMessageHandler
+from app.types_.parsed_message import ParsedMessageHandler
 
 logger = logging.getLogger(__name__)
 
@@ -18,7 +18,7 @@ class ExchangeTypesItemsExchangerDescriptionForUserMessageHandler(
 ):
     """Receivied hdv object prices after clicking in objects"""
 
-    def handle(self, threads_infos: types_.ThreadsInfos) -> None:
+    def handle(self, threads_infos: ThreadsInfos) -> None:
         logger.info("Got prices of objects")
         if len(self.itemTypeDescriptions) == 1:
             engine = get_engine()

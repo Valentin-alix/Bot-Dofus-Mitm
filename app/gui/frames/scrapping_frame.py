@@ -1,10 +1,10 @@
-from gui.components import (
+from app.gui.components import (
     Frame,
     GroupBox,
     Header,
     VerticalLayout,
 )
-from modules.hdv.buying_hdv import BuyingHdv
+from app.modules.hdv.buying_hdv import BuyingHdv
 from PyQt5.QtCore import (
     Qt,
     QTimer,
@@ -13,7 +13,7 @@ from PyQt5.QtWidgets import (
     QBoxLayout,
     QLabel,
 )
-from types_.interface import ThreadsInfos
+from app.types_.interface import ThreadsInfos
 
 
 class ScrappingFrame(Frame):

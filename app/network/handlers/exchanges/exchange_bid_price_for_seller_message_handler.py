@@ -1,10 +1,10 @@
 import logging
 
-import types_
-from types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidPriceForSellerMessage import (
+from app.types_ import ThreadsInfos
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidPriceForSellerMessage import (
     ExchangeBidPriceForSellerMessage,
 )
-from types_.parsed_message import ParsedMessageHandler
+from app.types_.parsed_message import ParsedMessageHandler
 
 logger = logging.getLogger(__name__)
 
@@ -14,7 +14,7 @@ class ExchangeBidPriceForSellerMessageHandler(
 ):
     """When selecting object for sells"""
 
-    def handle(self, threads_infos: types_.ThreadsInfos) -> None:
+    def handle(self, threads_infos: ThreadsInfos) -> None:
         with threads_infos.get("selling_hdv_with_lock").get("lock"):
             if (
                 selling_hdv := threads_infos.get("selling_hdv_with_lock").get(

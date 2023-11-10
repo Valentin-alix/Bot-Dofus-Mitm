@@ -10,10 +10,10 @@ from copy import deepcopy
 
 import fritm
 import psutil
-from network.models.data import BufferInfos, Data
-from network.models.message import Message
-from network.parser import MessageRawDataParser
-from types_ import GAME_SERVER, ThreadsInfos
+from app.network.models.data import BufferInfos, Data
+from app.network.models.message import Message
+from app.network.parser import MessageRawDataParser
+from app.types_ import GAME_SERVER, ThreadsInfos
 
 logger = logging.getLogger(__name__)
 

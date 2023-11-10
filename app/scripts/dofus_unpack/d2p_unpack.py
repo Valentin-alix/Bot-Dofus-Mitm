@@ -1,6 +1,6 @@
 import io, os, json
-from dofus_unpack.pydofus.d2p import D2PReader, InvalidD2PFile
-from dofus_unpack.pydofus.swl import SWLReader
+from app.scripts.dofus_unpack.pydofus.d2p import D2PReader, InvalidD2PFile
+from app.scripts.dofus_unpack.pydofus.swl import SWLReader
 
 
 def d2p_unpack(input_folder, output_folder):

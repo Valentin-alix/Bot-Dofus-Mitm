@@ -1,9 +1,9 @@
 import logging
 from typing import Callable
 
-from network.handler import Handler
-from network.models.message import Message
-from types_ import ThreadsInfos, ParsedMessage
+from app.network.handler import Handler
+from app.network.models.message import Message
+from app.types_ import ThreadsInfos, ParsedMessage
 
 logger = logging.getLogger(__name__)
 

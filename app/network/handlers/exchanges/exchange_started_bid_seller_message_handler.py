@@ -1,11 +1,11 @@
 import logging
 
-from modules.hdv.selling_hdv import SellingHdv
-from types_ import ThreadsInfos
-from types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeStartedBidSellerMessage import (
+from app.modules.hdv.selling_hdv import SellingHdv
+from app.types_ import ThreadsInfos
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeStartedBidSellerMessage import (
     ExchangeStartedBidSellerMessage,
 )
-from types_.parsed_message import ParsedMessageHandler
+from app.types_.parsed_message import ParsedMessageHandler
 
 logger = logging.getLogger(__name__)
 

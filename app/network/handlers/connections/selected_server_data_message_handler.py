@@ -1,8 +1,8 @@
-from types_.dofus.scripts.com.ankamagames.dofus.network.messages.connection.SelectedServerDataMessage import (
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.connection.SelectedServerDataMessage import (
     SelectedServerDataMessage,
 )
-from types_.interface import ThreadsInfos
-from types_.parsed_message import ParsedMessageHandler
+from app.types_.interface import ThreadsInfos
+from app.types_.parsed_message import ParsedMessageHandler
 
 
 class SelectedServerDataMessageHandler(ParsedMessageHandler, SelectedServerDataMessage):

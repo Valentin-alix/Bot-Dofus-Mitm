@@ -1,5 +1,5 @@
 from functools import partial
-from gui.components import PushButtonUtils, VerticalLayout
+from app.gui.components import PushButtonUtils, VerticalLayout
 from PyQt5.QtWidgets import (
     QBoxLayout,
     QWidget,

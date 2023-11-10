@@ -1,10 +1,10 @@
 from queue import Empty
 
-from gui.components import HorizontalLayout
-from gui.fragments import SideMenu
-from gui.frames.scrapping_frame import ScrappingFrame
-from gui.frames.seller_frame import SellerFrame
-from gui.frames.sniffer_frame import SnifferFrame
+from app.gui.components import HorizontalLayout
+from app.gui.fragments import SideMenu
+from app.gui.frames.scrapping_frame import ScrappingFrame
+from app.gui.frames.seller_frame import SellerFrame
+from app.gui.frames.sniffer_frame import SnifferFrame
 from PyQt5.QtCore import (
     QObject,
     QTimer,
@@ -18,7 +18,7 @@ from PyQt5.QtWidgets import (
     QStackedWidget,
     QWidget,
 )
-from types_ import ThreadsInfos
+from app.types_ import ThreadsInfos
 
 TITLE = "Bot Dofus"
 

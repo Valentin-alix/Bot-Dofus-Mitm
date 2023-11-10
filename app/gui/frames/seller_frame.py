@@ -1,4 +1,4 @@
-from gui.components import (
+from app.gui.components import (
     Frame,
     GroupBox,
     Header,
@@ -11,7 +11,7 @@ from PyQt5.QtWidgets import (
     QBoxLayout,
     QLabel,
 )
-from types_ import ThreadsInfos
+from app.types_ import ThreadsInfos
 
 
 class SellerFrame(Frame):

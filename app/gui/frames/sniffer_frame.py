@@ -1,7 +1,7 @@
 from queue import Empty
 
 
-from gui.components import (
+from app.gui.components import (
     ButtonIcon,
     Frame,
     Header,
@@ -20,7 +20,7 @@ from PyQt5.QtWidgets import (
 )
 from PyQt5.QtGui import QColor
 
-from types_ import ThreadsInfos
+from app.types_ import ThreadsInfos
 
 
 class SnifferFrame(Frame):

@@ -17,7 +17,7 @@ from PyQt5.QtWidgets import (
     QLabel,
 )
 
-from types_.parsed_message import ParsedMessage
+from app.types_.parsed_message import ParsedMessage
 
 
 class Frame(QFrame):

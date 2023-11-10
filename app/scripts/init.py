@@ -4,7 +4,7 @@ from pathlib import Path
 
 from decompile_code_source import get_as_scripts
 from dotenv import load_dotenv
-from scripts.generate_python_class import (
+from app.scripts.generate_python_class import (
     launch_generator,
 )
 

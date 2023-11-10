@@ -2,17 +2,17 @@ import logging
 from threading import Thread
 from time import sleep
 
-from database.models import TypeItem, get_engine
+from app.database.models import TypeItem, get_engine
 from sqlalchemy.orm import sessionmaker
-from network.utils import send_parsed_msg
-from types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidHouseSearchMessage import (
+from app.network.utils import send_parsed_msg
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidHouseSearchMessage import (
     ExchangeBidHouseSearchMessage,
 )
-from types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidHouseTypeMessage import (
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidHouseTypeMessage import (
     ExchangeBidHouseTypeMessage,
 )
 
-from types_.interface import ThreadsInfos
+from app.types_.interface import ThreadsInfos
 
 logger = logging.getLogger(__name__)
 

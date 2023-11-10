@@ -2,8 +2,8 @@ import logging
 import random
 from functools import reduce
 
-from network.models.data import Data
-from network.protocol.protocol_load import msg_from_id, primitives, types, types_from_id
+from app.network.models.data import Data
+from app.network.protocol.protocol_load import msg_from_id, primitives, types, types_from_id
 
 logger = logging.getLogger("labot")
 

@@ -1,10 +1,10 @@
 import logging
 
-import types_
-from types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeLeaveMessage import (
+from app.types_ import DialogType, ThreadsInfos
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeLeaveMessage import (
     ExchangeLeaveMessage,
 )
-from types_.parsed_message import ParsedMessageHandler
+from app.types_.parsed_message import ParsedMessageHandler
 
 logger = logging.getLogger(__name__)
 
@@ -12,8 +12,8 @@ logger = logging.getLogger(__name__)
 class ExchangeLeaveMessageHandler(ParsedMessageHandler, ExchangeLeaveMessage):
     """When leaving modal"""
 
-    def handle(self, threads_infos: types_.ThreadsInfos) -> None:
-        if self.dialogType == types_.DialogType.DIALOG_EXCHANGE:
+    def handle(self, threads_infos: ThreadsInfos) -> None:
+        if self.dialogType == DialogType.DIALOG_EXCHANGE:
             with threads_infos.get("buying_hdv_with_lock").get("lock"):
                 if (
                     buying_hdv := threads_infos.get("buying_hdv_with_lock").get(
