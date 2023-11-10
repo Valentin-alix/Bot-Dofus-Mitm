@@ -10,6 +10,7 @@ logger = logging.getLogger(__name__)
 
 
 class ExchangeBidHouseItemAddOkMessage(ParsedMessageServer):
+    # Bizzard ca correspond pas ?
     from_client: bool
     itemInfo: ObjectItemToSellInBid
     objectGID: int

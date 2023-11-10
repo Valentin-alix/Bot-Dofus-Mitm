@@ -1,3 +1,4 @@
+from copy import deepcopy
 import json
 import os
 import pickle
@@ -53,6 +54,7 @@ def parseVar(name: str, type_name: str, lines, types: dict):
 
         _dynamic_type_matching = re.fullmatch(dynamic_type_pattern, line)
         if _dynamic_type_matching:
+            # TODO non pris en compte ? no comprende
             _type = False
 
         _optional_var_matching = re.fullmatch(optional_var_pattern, line)
@@ -166,7 +168,7 @@ def parse(_type: dict, msg_from_id: dict, types_from_id: dict, types: dict):
     _type["vars"] = vars
     _type["boolVars"] = boolVars
     _type["hash_function"] = hash_function
-    del _type["path"]
+    _type["path"] = str(_type["path"])
 
 
 def load_from_path(path, types: dict):
@@ -214,6 +216,11 @@ if __name__ == "__main__":
     for _type in tqdm(types.values()):
         parse(_type, msg_from_id, types_from_id, types)
 
+    types_with_path = deepcopy(types)
+    for _type in types.values():
+        if "path" in _type:
+            del _type["path"]
+
     primitives = {
         _var["type"]
         for _type in types.values()
@@ -228,8 +235,6 @@ if __name__ == "__main__":
         pickle.dump(types_from_id, file)
         pickle.dump(primitives, file)
 
-    with open(os.path.join(Path(__file__).parent, "protocol.json"), "w") as file:
+    with open(os.path.join(Path(__file__).parent, "protocol_type.json"), "w") as file:
         # write in json for human readable
-        json.dump(types, file, indent=4)
-        json.dump(msg_from_id, file, indent=4)
-        json.dump(types_from_id, file, indent=4)
+        json.dump(types_with_path, file, indent=4)
