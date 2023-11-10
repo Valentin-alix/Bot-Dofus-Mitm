@@ -1,5 +1,3 @@
-as_scripts
-d2o_json
 *.json
 __pycache__/
 *.py[cod]
@@ -11,4 +9,4 @@ protocol.pk
 code_source
 bot.log
 .idea
-com
+dofus

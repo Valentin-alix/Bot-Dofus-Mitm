@@ -1,24 +1,16 @@
 import logging
-
 import types_
-from network.parsed_message.dicts import ObjectItemToSellInBid
-from network.parsed_message.parsed_message_server.parsed_message_server import (
-    ParsedMessageServer,
+from types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidHouseItemAddOkMessage import (
+    ExchangeBidHouseItemAddOkMessage,
 )
+from types_.parsed_message import ParsedMessageHandler
 
 logger = logging.getLogger(__name__)
 
 
-class ExchangeBidHouseItemAddOkMessage(ParsedMessageServer):
-    # Bizzard ca correspond pas ?
-    from_client: bool
-    itemInfo: ObjectItemToSellInBid
-    objectGID: int
-    objectPrice: int
-    objectUID: int
-    quantity: int
-    unsoldDelay: int
-
+class ExchangeBidHouseItemAddOkMessageHandler(
+    ParsedMessageHandler, ExchangeBidHouseItemAddOkMessage
+):
     def handle(self, threads_infos: types_.ThreadsInfos) -> None:
         if threads_infos.get("event_play_hdv_selling").is_set():
             with threads_infos.get("selling_hdv_with_lock").get("lock"):

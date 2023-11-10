@@ -1,19 +1,16 @@
 import logging
 
 import types_
-from network.parsed_message.parsed_message_server.parsed_message_server import (
-    ParsedMessageServer,
+from types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.ObjectsQuantityMessage import (
+    ObjectsQuantityMessage,
 )
+from types_.parsed_message import ParsedMessageHandler
 
 logger = logging.getLogger(__name__)
 
 
-class ObjectQuantityMessage(ParsedMessageServer):
+class ObjectsQuantityMessageHandler(ParsedMessageHandler, ObjectsQuantityMessage):
     """When receiving new quantity of object"""
-
-    objectUID: int
-    origin: int
-    quantity: int
 
     def handle(self, threads_infos: types_.ThreadsInfos) -> None:
         with threads_infos.get("character_with_lock").get("lock"):
@@ -24,7 +21,7 @@ class ObjectQuantityMessage(ParsedMessageServer):
                     (
                         object_
                         for object_ in character.objects
-                        if object_.get("objectUID") == self.objectUID
+                        if object_.objectUID == self.objectUID
                     ),
                     None,
                 )

@@ -3,13 +3,14 @@ from threading import Thread
 from time import sleep
 
 from database.models import TypeItem, get_engine
-from network.parsed_message.parsed_message_client.exchanges.exchange_bid_house_search_message import (
+from sqlalchemy.orm import sessionmaker
+from network.utils import send_parsed_msg
+from types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidHouseSearchMessage import (
     ExchangeBidHouseSearchMessage,
 )
-from network.parsed_message.parsed_message_client.exchanges.exchange_bid_house_type_message import (
+from types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidHouseTypeMessage import (
     ExchangeBidHouseTypeMessage,
 )
-from sqlalchemy.orm import sessionmaker
 
 from types_.interface import ThreadsInfos
 
@@ -73,28 +74,26 @@ class BuyingHdv:
     def send_get_category(self):
         if len(self.categories) > 0:
             category = self.categories.pop()
-            exchange_bid_house_type_message_exchange_bid_house_type_message = (
+            send_parsed_msg(
+                self.threads_infos,
                 ExchangeBidHouseTypeMessage(
-                    __type__="ExchangeBidHouseTypeMessage",
-                    from_client=True,
                     follow=True,
                     type=category,
-                )
-            )
-            exchange_bid_house_type_message_exchange_bid_house_type_message.send(
-                self.threads_infos
+                ),
+                from_client=True,
             )
             logger.info(f"Sending check category {category}")
 
     def send_get_prices(self, type_object):
         logger.info(f"Sending get prices {type_object.get('object_gid')}")
-        exchange_bid_house_search_message = ExchangeBidHouseSearchMessage(
-            __type__="ExchangeBidHouseSearchMessage",
-            from_client=True,
-            objectGID=type_object.get("object_gid"),
-            follow=not type_object.get("is_opened"),
+        send_parsed_msg(
+            self.threads_infos,
+            ExchangeBidHouseSearchMessage(
+                objectGID=type_object.get("object_gid"),
+                follow=not type_object.get("is_opened"),
+            ),
+            True,
         )
-        exchange_bid_house_search_message.send(self.threads_infos)
 
     def process(self):
         if len(self.types_object) > 0:

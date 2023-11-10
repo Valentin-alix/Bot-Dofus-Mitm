@@ -1,16 +1,15 @@
 import logging
 
 import types_
-from network.parsed_message.parsed_message_server.parsed_message_server import (
-    ParsedMessageServer,
+from types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.ObjectDeletedMessage import (
+    ObjectDeletedMessage,
 )
+from types_.parsed_message import ParsedMessageHandler
 
 logger = logging.getLogger(__name__)
 
 
-class ObjectDeletedMessage(ParsedMessageServer):
-    objectUID: int
-
+class ObjectDeletedMessageHandler(ParsedMessageHandler, ObjectDeletedMessage):
     def handle(self, threads_infos: types_.ThreadsInfos) -> None:
         with threads_infos.get("character_with_lock").get("lock"):
             if (

@@ -1,7 +1,5 @@
-from functools import partial
 from queue import Empty
 
-from numpy import var
 
 from gui.components import (
     ButtonIcon,
@@ -20,8 +18,7 @@ from PyQt5.QtWidgets import (
     QTreeWidgetItem,
     QAbstractItemView,
 )
-from PyQt5.QtGui import QCloseEvent, QColor
-from network.parsed_message.parsed_message import ParsedMessage
+from PyQt5.QtGui import QColor
 
 from types_ import ThreadsInfos
 

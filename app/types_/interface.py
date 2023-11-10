@@ -4,13 +4,12 @@ from queue import Queue
 from threading import Event, Lock
 from typing import TYPE_CHECKING, TypedDict
 
-from network.parsed_message.parsed_message import ParsedMessage
-
 if TYPE_CHECKING:
     # To avoid annoying circular import
     from modules.character import Character
     from modules.hdv.buying_hdv import BuyingHdv
     from modules.hdv.selling_hdv import SellingHdv
+    from types_.parsed_message import ParsedMessage
 
 
 class WithLock(TypedDict):

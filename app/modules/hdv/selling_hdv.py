@@ -2,17 +2,23 @@ import logging
 from typing import Tuple
 
 from database.models import Item, TypeItem, get_engine
-from network.parsed_message.dicts import ObjectItem, SellerBuyerDescriptor
-from network.parsed_message.parsed_message_client.exchanges.exchange_bid_house_price_message import (
+from sqlalchemy.orm import sessionmaker
+from network.utils import send_parsed_msg
+from types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidHousePriceMessage import (
     ExchangeBidHousePriceMessage,
 )
-from network.parsed_message.parsed_message_client.exchanges.exchange_bid_house_search_message import (
+from types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidHouseSearchMessage import (
     ExchangeBidHouseSearchMessage,
 )
-from network.parsed_message.parsed_message_client.exchanges.exchange_object_move_priced_message import (
+from types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeObjectMovePricedMessage import (
     ExchangeObjectMovePricedMessage,
 )
-from sqlalchemy.orm import sessionmaker
+from types_.dofus.scripts.com.ankamagames.dofus.network.types.game.data.items.ObjectItem import (
+    ObjectItem,
+)
+from types_.dofus.scripts.com.ankamagames.dofus.network.types.game.data.items.SellerBuyerDescriptor import (
+    SellerBuyerDescriptor,
+)
 from types_.interface import SelectedObject, ThreadsInfos
 
 logger = logging.getLogger(__name__)
@@ -26,7 +32,7 @@ class SellingHdv:
     ) -> None:
         self.engine = get_engine()
         self.threads_infos = threads_infos
-        self.accepted_categories = seller_buyer_descriptor.get("types")
+        self.accepted_categories = seller_buyer_descriptor.types
 
         self.selected_object: SelectedObject | None = None
 
@@ -41,32 +47,32 @@ class SellingHdv:
         elif (
             accepted_objects := self.get_accepted_objects_in_inventory()
         ) is not None and len(accepted_objects) > 0:
-            self.place_object(accepted_objects[-1].get("objectGID"))
+            self.place_object(accepted_objects[-1].objectGID)
         else:
             logger.info("no objects to sell")
 
     def place_object(self, object_gid: int, do_exchange_bid_house_search: bool = True):
         if do_exchange_bid_house_search:
-            exchange_bid_house_search_message = ExchangeBidHouseSearchMessage(
-                __type__="ExchangeBidHouseSearchMessage",
-                from_client=True,
-                follow=True,
-                objectGID=object_gid,
+            send_parsed_msg(
+                self.threads_infos,
+                ExchangeBidHouseSearchMessage(
+                    follow=True,
+                    objectGID=object_gid,
+                ),
             )
             logger.info(
                 f"sending ExchangeBidHouseSearchMessage with objectGID : {object_gid}"
             )
-            exchange_bid_house_search_message.send(self.threads_infos)
-        exchange_bid_house_price_message = ExchangeBidHousePriceMessage(
-            __type__="ExchangeBidHousePriceMessage",
-            from_client=True,
-            objectGID=object_gid,
+        send_parsed_msg(
+            self.threads_infos,
+            ExchangeBidHousePriceMessage(
+                objectGID=object_gid,
+            ),
         )
 
         logger.info(
             f"sending ExchangeBidHousePriceMessage with objectGID : {object_gid}"
         )
-        exchange_bid_house_price_message.send(self.threads_infos)
 
     def sell_selected_object(self):
         if (
@@ -76,8 +82,7 @@ class SellingHdv:
                 (
                     object_
                     for object_ in objects_in_inventory
-                    if object_.get("objectGID")
-                    == self.selected_object.get("generic_id")
+                    if object_.objectGID == self.selected_object.get("generic_id")
                 ),
                 None,
             )
@@ -88,22 +93,17 @@ class SellingHdv:
                 )
                 logger.info(f"get price_and_quantity : {results}")
                 if results is not None:
-                    exchange_object_move_priced_message = (
+                    send_parsed_msg(
+                        self.threads_infos,
                         ExchangeObjectMovePricedMessage(
-                            __type__="ExchangeObjectMovePricedMessage",
-                            from_client=True,
-                            objectUID=object_.get("objectUID"),
+                            objectUID=object_.objectUID,
                             price=results[1],
                             quantity=results[0],
-                        )
-                    )
-                    logger.info(
-                        f"sending ExchangeObjectMovePricedMessage {str(exchange_object_move_priced_message)}"
+                        ),
                     )
                     if self.selected_object is not None:
                         self.selected_object["is_placed"] = False
                     # TODO Price is not parsed correctly <!>
-                    exchange_object_move_priced_message.send(self.threads_infos)
                     return
         self.selected_object = None
 
@@ -119,7 +119,7 @@ class SellingHdv:
                 (
                     object_
                     for object_ in accepted_objects
-                    if object_.get("objectGID") == generic_id
+                    if object_.objectGID == generic_id
                 ),
                 None,
             )
@@ -145,7 +145,7 @@ class SellingHdv:
                 accepted_objects_inventory = [
                     object_
                     for object_ in character.objects
-                    if object_.get("objectGID")
+                    if object_.objectGID
                     in (accepted_object.id for accepted_object in self.accepted_objects)
                 ]
                 logger.info(
@@ -156,7 +156,7 @@ class SellingHdv:
     def get_price_and_quantity(
         self, _object: ObjectItem, minimal_prices: list[int]
     ) -> Tuple[int, int] | None:
-        if _object.get("quantity") >= 100:
+        if _object.quantity >= 100:
             quantity = 100
             if minimal_prices[2] != 0:
                 price = minimal_prices[2] - 1
@@ -167,7 +167,7 @@ class SellingHdv:
             else:
                 return None
             return quantity, price
-        elif _object.get("quantity") >= 10:
+        elif _object.quantity >= 10:
             quantity = 10
             if minimal_prices[1] != 0:
                 price = minimal_prices[1] - 1
@@ -176,7 +176,7 @@ class SellingHdv:
             else:
                 return None
             return quantity, price
-        elif _object.get("quantity") >= 1:
+        elif _object.quantity >= 1:
             quantity = 1
             if minimal_prices[0] != 0:
                 price = minimal_prices[0] - 1

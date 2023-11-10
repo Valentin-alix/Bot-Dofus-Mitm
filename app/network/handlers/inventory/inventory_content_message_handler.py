@@ -2,18 +2,15 @@ import logging
 
 import types_
 from modules.character import Character
-from network.parsed_message.dicts import ObjectItem
-from network.parsed_message.parsed_message_server.parsed_message_server import (
-    ParsedMessageServer,
+from types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.InventoryContentMessage import (
+    InventoryContentMessage,
 )
+from types_.parsed_message import ParsedMessageHandler
 
 logger = logging.getLogger(__name__)
 
 
-class InventoryContentMessage(ParsedMessageServer):
-    kamas: int
-    objects: list[ObjectItem]
-
+class InventoryContentMessageHandler(ParsedMessageHandler, InventoryContentMessage):
     def handle(self, threads_infos: types_.ThreadsInfos) -> None:
         with threads_infos.get("character_with_lock").get("lock"):
             logger.info(f"Creating character with objects: {self.objects}")

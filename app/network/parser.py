@@ -3,8 +3,7 @@ from typing import Callable
 
 from network.handler import Handler
 from network.models.message import Message
-from network.parsed_message.parsed_message import ParsedMessage
-from types_ import ThreadsInfos
+from types_ import ThreadsInfos, ParsedMessage
 
 logger = logging.getLogger(__name__)
 

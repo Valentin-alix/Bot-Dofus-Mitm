@@ -1,4 +1,6 @@
-from network.parsed_message.dicts import ObjectItem
+from types_.dofus.scripts.com.ankamagames.dofus.network.types.game.data.items.ObjectItem import (
+    ObjectItem,
+)
 
 
 class Character:
@@ -10,7 +12,5 @@ class Character:
 
     def on_object_deleted_msg(self, object_uid: int) -> None:
         self.objects = [
-            _object
-            for _object in self.objects
-            if _object.get("objectUID") != object_uid
+            _object for _object in self.objects if _object.objectUID != object_uid
         ]

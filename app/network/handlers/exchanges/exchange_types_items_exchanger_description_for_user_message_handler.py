@@ -3,21 +3,20 @@ from datetime import datetime
 
 import types_
 from database.models import Item, Price, get_engine
-from network.parsed_message.dicts import BidExchangerObjectInfo
-from network.parsed_message.parsed_message_server.parsed_message_server import (
-    ParsedMessageServer,
-)
 from sqlalchemy.orm import sessionmaker
+
+from types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeTypesItemsExchangerDescriptionForUserMessage import (
+    ExchangeTypesItemsExchangerDescriptionForUserMessage,
+)
+from types_.parsed_message import ParsedMessageHandler
 
 logger = logging.getLogger(__name__)
 
 
-class ExchangeTypesItemsExchangerDescriptionForUserMessage(ParsedMessageServer):
+class ExchangeTypesItemsExchangerDescriptionForUserMessageHandler(
+    ParsedMessageHandler, ExchangeTypesItemsExchangerDescriptionForUserMessage
+):
     """Receivied hdv object prices after clicking in objects"""
-
-    itemTypeDescriptions: list[BidExchangerObjectInfo]
-    objectGID: int
-    objectType: int
 
     def handle(self, threads_infos: types_.ThreadsInfos) -> None:
         logger.info("Got prices of objects")
@@ -28,7 +27,7 @@ class ExchangeTypesItemsExchangerDescriptionForUserMessage(ParsedMessageServer):
             item = session.query(Item).filter_by(id=self.objectGID).first()
             with threads_infos["server_id_with_lock"]["lock"]:
                 if item is not None:
-                    prices_values = self.itemTypeDescriptions[0].get("prices")
+                    prices_values = self.itemTypeDescriptions[0].prices
                     price = Price(
                         creation_date=datetime.now(),
                         item_id=item.id,

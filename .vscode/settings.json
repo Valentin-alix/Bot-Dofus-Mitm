@@ -29,10 +29,10 @@
     "ruff.enable": true,
     "ruff.fixAll": true,
     "ruff.lint.run": "onType",
-    "ruff.lint.args" : [
-        // "--disable=C0116,W1203,W1201,C0115,C0114,E0401,W1514,E0611,C0412,W0611",
-        "--ignore-paths=.venv/, code_source/"],
-
+    "ruff.lint.args": ["--disable=E402"],
+    // "ruff.lint.args" : [
+    //     "--ignore-paths=.venv/, code_source/"],
+    // "--disable=C0116,W1203,W1201,C0115,C0114,E0401,W1514,E0611,C0412,W0611"
 
     // For better vscode performance
     "editor.codeLens": false,
@@ -43,7 +43,6 @@
         "**/CVS": true,
         "**/.DS_Store": true,
         "**/Thumbs.db": true,
-        "**/.venv": true,
         "**/.mypy_cache": true,
         "**/.idea": true
     },

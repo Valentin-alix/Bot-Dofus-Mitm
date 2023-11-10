@@ -1,18 +1,16 @@
 import logging
 
 import types_
-from network.parsed_message.parsed_message_server.parsed_message_server import (
-    ParsedMessageServer,
+from types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeLeaveMessage import (
+    ExchangeLeaveMessage,
 )
+from types_.parsed_message import ParsedMessageHandler
 
 logger = logging.getLogger(__name__)
 
 
-class ExchangeLeaveMessage(ParsedMessageServer):
+class ExchangeLeaveMessageHandler(ParsedMessageHandler, ExchangeLeaveMessage):
     """When leaving modal"""
-
-    dialogType: int
-    success: bool
 
     def handle(self, threads_infos: types_.ThreadsInfos) -> None:
         if self.dialogType == types_.DialogType.DIALOG_EXCHANGE:

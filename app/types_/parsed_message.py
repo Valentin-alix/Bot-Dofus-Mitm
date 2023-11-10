@@ -1,4 +1,7 @@
+from abc import abstractmethod
 from pprint import pformat
+
+from types_.interface import ThreadsInfos
 
 
 class ParsedMessage:
@@ -10,3 +13,9 @@ class ParsedMessage:
 
     def __str__(self) -> str:
         return pformat(vars(self))
+
+
+class ParsedMessageHandler(ParsedMessage):
+    @abstractmethod
+    def handle(self, threads_infos: ThreadsInfos) -> None:
+        ...
