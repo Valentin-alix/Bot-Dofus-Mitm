@@ -15,7 +15,7 @@ class ParsedMessage:
         return pformat(vars(self))
 
 
-class ParsedMessageHandler(ParsedMessage):
+class ParsedMessageHandler:
     @abstractmethod
     def handle(self, threads_infos: ThreadsInfos) -> None:
         ...

@@ -3,8 +3,12 @@ import os
 import socket
 from importlib import import_module
 
-from app.types_.dofus.utils import CLASSES_BY_NAME
 from app.types_.interface import ThreadsInfos
+
+try:
+    from app.types_.dofus.utils import CLASSES_BY_NAME
+except ModuleNotFoundError:
+    CLASSES_BY_NAME = {}
 
 logger = logging.getLogger(__name__)
 
@@ -24,11 +28,11 @@ def get_local_ip() -> str:
     return ip_local
 
 
-def send_parsed_msg(threads_infos: ThreadsInfos, parsed_message, from_client=True):
+def send_parsed_msg(threads_infos: ThreadsInfos, parsed_message: type, from_client=True):
     msg_to_send = {
-        **parsed_message,
+        **vars(parsed_message),
         "from_client": from_client,
-        "type": f"__{parsed_message.__class__.__name__}__",
+        "__type__": f"{parsed_message.__class__.__name__}",
     }
     threads_infos["queue_msg_to_send"].put(msg_to_send)
 
@@ -49,11 +53,9 @@ def deep_dict_to_object(from_client: bool | None = None, **kwargs):
         elif isinstance(value, list) and len(value) > 0 and isinstance(value[0], dict):
             value = [deep_dict_to_object(**_value) for _value in value]
             props[key] = value
-    if kwargs.get('__type__') is not None:
-        class_type = CLASSES_BY_NAME.get(kwargs.pop('__type__'))
-        if class_type is not None:
-            return class_type(**props)
-    return props
+    if kwargs.get('__type__') is not None and (class_type := CLASSES_BY_NAME.get(kwargs.pop('__type__'))) is not None:
+        return class_type(**props)
+    raise ValueError('object must contains valid __type__ key')
 
 
 def get_classes_in_path(path, condition_end_file: str) -> list:

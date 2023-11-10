@@ -3,9 +3,8 @@
     "editor.fontSize": 16,
     "workbench.colorCustomizations": {
         "activityBar.background": "#07717f",
-        "activityBar.inactiveForeground": "#000000",
+        "activityBar.inactiveForeground": "#000000"
     },
-
     "python.languageServer": "Pylance",
     // "python.analysis.fixAll": [
     //     "source.unusedImports"
@@ -16,20 +15,17 @@
         "editor.codeActionsOnSave": {
             "source.organizeImports": true,
             "source.fixAll": true
-        },
+        }
     },
-    "python.analysis.extraPaths": [
-        // for good imports suggesting
-        "./app"
-    ],
     "python.analysis.autoImportCompletions": true,
     "python.analysis.typeCheckingMode": "basic",
     "python.defaultInterpreterPath": ".\\.venv\\Scripts\\python.exe",
-
     "ruff.enable": true,
     "ruff.fixAll": true,
     "ruff.lint.run": "onType",
-    "ruff.lint.args": ["--disable=E402"],
+    "ruff.lint.args": [
+        "--disable=E402"
+    ],
     // "ruff.lint.args" : [
     //     "--ignore-paths=.venv/, code_source/"],
     // "--disable=C0116,W1203,W1201,C0115,C0114,E0401,W1514,E0611,C0412,W0611"
