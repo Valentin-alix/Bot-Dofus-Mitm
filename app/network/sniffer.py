@@ -1,26 +1,27 @@
 import logging
 from typing import Optional
 
+from scapy.all import Packet, Raw, sniff
+from scapy.layers.inet import IP
+
 from app.network.models.data import BufferInfos, Data
 from app.network.models.message import Message
 from app.network.parser import MessageRawDataParser
 from app.network.utils import get_local_ip
-from scapy.all import Packet, Raw, sniff
-from scapy.layers.inet import IP
-from app.types_ import FILTER_DOFUS, ThreadsInfos
+from app.types_ import FILTER_DOFUS, BotInfo
 
 logger = logging.getLogger(__name__)
 
 
 class Sniffer:
     def __init__(
-        self,
-        threads_infos: ThreadsInfos | None = None,
-        capture_path: Optional[str] = None,
+            self,
+            bot_info: BotInfo | None = None,
+            capture_path: Optional[str] = None,
     ):
-        self.threads_infos = threads_infos
+        self.bot_info = bot_info
         self.raw_parser = MessageRawDataParser(
-            threads_infos=threads_infos,
+            bot_info=bot_info,
             on_error_callback=self.on_error,
         )
         self.not_completed_message_number: int = 0
@@ -35,15 +36,15 @@ class Sniffer:
         else:
             while True:
                 if (
-                    self.threads_infos is None
-                    or self.threads_infos["event_play_sniffer"].wait()
+                        self.bot_info is None
+                        or self.bot_info.sniffer_info.is_playing_event.wait()
                 ):
                     sniff(
                         prn=self.on_receive,
                         store=False,
                         filter=FILTER_DOFUS,
-                        stop_filter=lambda _: self.threads_infos is None
-                        or not self.threads_infos["event_play_sniffer"].is_set(),
+                        stop_filter=lambda _: self.bot_info is None
+                                              or not self.bot_info.sniffer_info.is_playing_event.is_set(),
                     )
 
     def on_receive(self, packet: Packet):

@@ -3,7 +3,7 @@ import os
 import socket
 from importlib import import_module
 
-from app.types_.interface import ThreadsInfos
+from app.types_.interface import BotInfo
 
 try:
     from app.types_.dofus.utils import CLASSES_BY_NAME
@@ -28,13 +28,13 @@ def get_local_ip() -> str:
     return ip_local
 
 
-def send_parsed_msg(threads_infos: ThreadsInfos, parsed_message: type, from_client=True):
+def send_parsed_msg(bot_info: BotInfo, parsed_message, from_client=True):
     msg_to_send = {
         **vars(parsed_message),
         "from_client": from_client,
         "__type__": f"{parsed_message.__class__.__name__}",
     }
-    threads_infos["queue_msg_to_send"].put(msg_to_send)
+    bot_info.common_info.message_to_send_queue.put(msg_to_send)
 
 
 def convert_snake_case_to_camel_case(snake_case_str: str):

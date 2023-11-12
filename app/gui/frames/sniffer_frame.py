@@ -1,14 +1,7 @@
 from queue import Empty
 
-
-from app.gui.components import (
-    ButtonIcon,
-    Frame,
-    Header,
-    HorizontalLayout,
-    VerticalLayout,
-)
-from PyQt5.QtCore import QTimer, Qt
+from PyQt5.QtCore import QTimer
+from PyQt5.QtGui import QColor
 from PyQt5.QtWidgets import (
     QScrollArea,
     QWidget,
@@ -18,15 +11,24 @@ from PyQt5.QtWidgets import (
     QTreeWidgetItem,
     QAbstractItemView,
 )
-from PyQt5.QtGui import QColor
 
-from app.types_ import ThreadsInfos
+from app.gui.components.common import (
+    ButtonIcon,
+    Header,
+    Frame,
+)
+from app.gui.components.organization import (
+    VerticalLayout,
+    HorizontalLayout,
+    AlignDelegate,
+)
+from app.types_ import BotInfo
 
 
 class SnifferFrame(Frame):
-    def __init__(self, threads_infos: ThreadsInfos, name: str) -> None:
-        super().__init__(name)
-        self.threads_infos = threads_infos
+    def __init__(self, bot_info: BotInfo, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+        self.bot_info = bot_info
         self.main_layout = VerticalLayout()
         self.info_message_widget: QWidget | None = None
 
@@ -42,7 +44,9 @@ class SnifferFrame(Frame):
     def check_new_msg(self):
         try:
             while True:
-                parsed_msg = self.threads_infos["queue_handler_message"].get_nowait()
+                parsed_msg = (
+                    self.bot_info.sniffer_info.parsed_message_queue.get_nowait()
+                )
                 self.on_get_message(vars(parsed_msg))
         except Empty:
             pass
@@ -52,12 +56,16 @@ class SnifferFrame(Frame):
         self.table_messages.setRowCount(0)
 
     def on_play(self):
-        self.threads_infos["event_play_sniffer"].set()
-        self.header_sniffer.do_play(self.threads_infos["event_play_sniffer"].is_set())
+        self.bot_info.sniffer_info.is_playing_event.set()
+        self.header_sniffer.do_play(
+            self.bot_info.sniffer_info.is_playing_event.is_set()
+        )
 
     def on_stop(self):
-        self.threads_infos["event_play_sniffer"].clear()
-        self.header_sniffer.do_play(self.threads_infos["event_play_sniffer"].is_set())
+        self.bot_info.sniffer_info.is_playing_event.clear()
+        self.header_sniffer.do_play(
+            self.bot_info.sniffer_info.is_playing_event.is_set()
+        )
 
     def set_header_sniffer(self):
         self.header_sniffer = Header()
@@ -68,7 +76,9 @@ class SnifferFrame(Frame):
 
         self.header_sniffer.button_play.clicked.connect(self.on_play)
         self.header_sniffer.button_stop.clicked.connect(self.on_stop)
-        self.header_sniffer.do_play(self.threads_infos["event_play_sniffer"].is_set())
+        self.header_sniffer.do_play(
+            self.bot_info.sniffer_info.is_playing_event.is_set()
+        )
 
         self.main_layout.addWidget(self.header_sniffer)
 
@@ -86,6 +96,11 @@ class SnifferFrame(Frame):
         self.table_messages.setColumnCount(3)
         self.table_messages.setColumnHidden(2, True)
         self.table_messages.setHorizontalHeaderLabels(["Origine", "Message"])
+
+        delegate = AlignDelegate(self.table_messages)
+        for column_index in range(2):
+            self.table_messages.setItemDelegateForColumn(column_index, delegate)
+
         self.table_messages.horizontalHeader().setStretchLastSection(True)
         self.table_messages.verticalHeader().hide()
         self.table_messages.setSelectionBehavior(QAbstractItemView.SelectRows)
@@ -98,7 +113,7 @@ class SnifferFrame(Frame):
         self.content_layout.addWidget(scroll_area)
 
     def on_get_message(self, parsed_message_json: dict):
-        if self.threads_infos.get("event_play_sniffer").is_set():
+        if self.bot_info.sniffer_info.is_playing_event.is_set():
             background_color = (
                 "red" if parsed_message_json.get("from_client") else "green"
             )
@@ -111,8 +126,6 @@ class SnifferFrame(Frame):
             origin_col.setBackground(QColor(background_color))
             parsed_message_json.pop("from_client")
 
-            origin_col.setTextAlignment(Qt.AlignCenter)
-
             self.table_messages.setItem(
                 row_position,
                 0,
@@ -121,7 +134,6 @@ class SnifferFrame(Frame):
 
             message_col = QTableWidgetItem(str(parsed_message_json.get("__type__")))
             message_col.setBackground(QColor(background_color))
-            message_col.setTextAlignment(Qt.AlignCenter)
             self.table_messages.setItem(row_position, 1, message_col)
 
             parsed_message_json.pop("__type__")

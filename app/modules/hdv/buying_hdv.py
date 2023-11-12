@@ -2,8 +2,9 @@ import logging
 from threading import Thread
 from time import sleep
 
-from app.database.models import TypeItem, get_engine
 from sqlalchemy.orm import sessionmaker
+
+from app.database.models import TypeItem, get_engine
 from app.network.utils import send_parsed_msg
 from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidHouseSearchMessage import (
     ExchangeBidHouseSearchMessage,
@@ -11,21 +12,20 @@ from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.invent
 from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidHouseTypeMessage import (
     ExchangeBidHouseTypeMessage,
 )
-
-from app.types_.interface import ThreadsInfos
+from app.types_.interface import BotInfo
 
 logger = logging.getLogger(__name__)
 
 
 class BuyingHdv:
-    def __init__(self, categories: list[int], threads_infos: ThreadsInfos) -> None:
+    def __init__(self, categories: list[int], bot_info: BotInfo) -> None:
         self.engine = get_engine()
         self.categories = self.get_consistent_categories(categories)
         self.types_object: list[dict] = []
 
-        self.threads_infos = threads_infos
+        self.bot_info = bot_info
 
-        self.is_playing = self.threads_infos.get("event_play_hdv_scrapping").is_set()
+        self.is_playing = self.bot_info.scraping_info.is_playing_event.is_set()
         self.stop_timer = False
 
         check_event_play_thread = Thread(target=self.check_event_play, daemon=True)
@@ -34,18 +34,16 @@ class BuyingHdv:
     def check_event_play(self):
         """continuously check if event play has changed to true"""
         while (
-            not self.threads_infos.get("event_close").is_set() and not self.stop_timer
+                not self.bot_info.common_info.is_closed_event.is_set() and not self.stop_timer
         ):
             if (
-                not self.is_playing
-                and self.threads_infos.get("event_play_hdv_scrapping").is_set()
+                    not self.is_playing
+                    and self.bot_info.scraping_info.is_playing_event.is_set()
             ):
                 logger.info("launching hdv bot after manual start")
                 self.is_playing = True
                 self.process()
-            self.is_playing = self.threads_infos.get(
-                "event_play_hdv_scrapping"
-            ).is_set()
+            self.is_playing = self.bot_info.scraping_info.is_playing_event.is_set()
             sleep(2)
 
     def get_consistent_categories(self, categories: list[int]) -> list[int]:
@@ -75,7 +73,7 @@ class BuyingHdv:
         if len(self.categories) > 0:
             category = self.categories.pop()
             send_parsed_msg(
-                self.threads_infos,
+                self.bot_info,
                 ExchangeBidHouseTypeMessage(
                     follow=True,
                     type=category,
@@ -87,7 +85,7 @@ class BuyingHdv:
     def send_get_prices(self, type_object):
         logger.info(f"Sending get prices {type_object.get('object_gid')}")
         send_parsed_msg(
-            self.threads_infos,
+            self.bot_info,
             ExchangeBidHouseSearchMessage(
                 objectGID=type_object.get("object_gid"),
                 follow=not type_object.get("is_opened"),

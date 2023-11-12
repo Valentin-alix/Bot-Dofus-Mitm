@@ -1,7 +1,7 @@
 from abc import abstractmethod
 from pprint import pformat
 
-from app.types_.interface import ThreadsInfos
+from app.types_.interface import BotInfo
 
 
 class ParsedMessage:
@@ -17,5 +17,5 @@ class ParsedMessage:
 
 class ParsedMessageHandler:
     @abstractmethod
-    def handle(self, threads_infos: ThreadsInfos) -> None:
+    def handle(self, bot_info: BotInfo) -> None:
         ...

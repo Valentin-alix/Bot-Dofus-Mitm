@@ -1,33 +1,34 @@
 import logging
 import random
-import select
+from copy import deepcopy
 from datetime import datetime
 from queue import Empty
 from socket import socket as Socket
 from threading import Thread
 from time import sleep
-from copy import deepcopy
 
 import fritm
 import psutil
-from app.network.models.data import BufferInfos, Data
+import select
+
+from app.network.models.data import BufferInfos
 from app.network.models.message import Message
 from app.network.parser import MessageRawDataParser
-from app.types_ import GAME_SERVER, ThreadsInfos
+from app.types_ import GAME_SERVER, BotInfo
 
 logger = logging.getLogger(__name__)
 
 
 class Mitm:
-    def __init__(self, threads_infos: ThreadsInfos) -> None:
+    def __init__(self, bot_info: BotInfo) -> None:
         self.bridges: list[InjectorBridgeHandler] = []
-        self.threads_infos = threads_infos
+        self.bot_info = bot_info
 
     def on_connection_callback(
-        self, connection_game: fritm.proxy.ConnectionWrapper, connection_server: Socket
+            self, connection_game: fritm.proxy.ConnectionWrapper, connection_server: Socket
     ):
         bridge = InjectorBridgeHandler(
-            connection_game, connection_server, self.threads_infos
+            connection_game, connection_server, self.bot_info
         )
         self.bridges.append(bridge)
 
@@ -47,10 +48,10 @@ class InjectorBridgeHandler:
     TIME_BETWEEN_SEND = [0.1, 0.2]
 
     def __init__(
-        self,
-        connection_game: fritm.proxy.ConnectionWrapper,
-        connection_server: Socket,
-        threads_infos: ThreadsInfos,
+            self,
+            connection_game: fritm.proxy.ConnectionWrapper,
+            connection_server: Socket,
+            bot_info: BotInfo,
     ):
         self.connection_game = connection_game
         self.connection_server = connection_server
@@ -69,12 +70,12 @@ class InjectorBridgeHandler:
         self.injected_to_server = 0
         self.counter = 0
 
-        self.threads_infos = threads_infos
+        self.bot_info = bot_info
         self.last_message_send_date: datetime | None = None
-        self.raw_parser = MessageRawDataParser(self.threads_infos)
+        self.raw_parser = MessageRawDataParser(self.bot_info)
 
         if self.connection_server.getpeername()[0] == GAME_SERVER:
-            self.threads_infos["event_connected"].set()
+            self.bot_info.common_info.is_connected_event.set()
 
         self.msgs_to_send: list[dict] = []
 
@@ -90,8 +91,8 @@ class InjectorBridgeHandler:
 
     def send_basic_ping_recurrent(self):
         while (
-            not self.threads_infos["event_close"].is_set()
-            and not self.is_server_closed()
+                not self.bot_info.common_info.is_closed_event.is_set()
+                and not self.is_server_closed()
         ):
             self.send_to_server(
                 Message.get_message_from_json(
@@ -102,11 +103,11 @@ class InjectorBridgeHandler:
 
     def check_send_msg_recurrent(self):
         while (
-            not self.threads_infos["event_close"].is_set()
-            and not self.is_server_closed()
+                not self.bot_info.common_info.is_closed_event.is_set()
+                and not self.is_server_closed()
         ):
             try:
-                parsed_msg = self.threads_infos.get("queue_msg_to_send").get_nowait()
+                parsed_msg = self.bot_info.common_info.message_to_send_queue.get_nowait()
                 message = Message.get_message_from_json(parsed_msg)
                 self.send_to_server(message)
             except Empty:
@@ -130,11 +131,11 @@ class InjectorBridgeHandler:
         bridge_handler.loop()
 
     def handle(self, _bytes: bytes, origin):
-        buffer_infos = self.buffers[origin]
+        buffer_info = self.buffers[origin]
         from_client = origin == self.connection_game
-        buffer_infos.data += _bytes
+        buffer_info.data += _bytes
 
-        message = Message.from_raw(from_client, buffer_infos)
+        message = Message.from_raw(from_client, buffer_info)
         while message is not None:
             self.raw_parser.parse(message, from_client)
             if from_client:
@@ -146,13 +147,13 @@ class InjectorBridgeHandler:
                 self.counter += 1
             self.opposite_connection[origin].sendall(message.bytes())
 
-            message = Message.from_raw(from_client, buffer_infos)
+            message = Message.from_raw(from_client, buffer_info)
 
     def loop(self):
         conns = self.connections
         is_active = True
         try:
-            while is_active and not self.threads_infos["event_close"].is_set():
+            while is_active and not self.bot_info.common_info.is_closed_event.is_set():
                 # Waiting for datas
                 read_list, write_list, error_list = select.select(conns, [], conns)
                 if error_list or not read_list:

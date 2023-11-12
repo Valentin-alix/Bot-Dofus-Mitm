@@ -6,24 +6,24 @@ from app.modules.character import Character
 from app.modules.hdv.buying_hdv import BuyingHdv
 from app.modules.hdv.selling_hdv import SellingHdv
 from app.network.utils import deep_dict_to_object, get_classes_in_path
-from app.types_ import ParsedMessage, ThreadsInfos, ParsedMessageHandler
+from app.types_ import ParsedMessage, ParsedMessageHandler, BotInfo
 
 logger = logging.getLogger(__name__)
 
 
 class Handler:
-    def __init__(self, thread_infos: ThreadsInfos) -> None:
+    def __init__(self, bot_info: BotInfo) -> None:
         self.buying_hdv: BuyingHdv | None = None
         self.selling_hdv: SellingHdv | None = None
         self.character: Character | None = None
-        self.thread_infos = thread_infos
+        self.bot_info = bot_info
         self.classes_handler = get_classes_in_path(
             os.path.join(Path(__file__).parent, "handlers"), "handler.py"
         )
 
     def handle_message_unpacked(self, parsed_message: ParsedMessage):
-        if self.thread_infos.get("event_play_sniffer").is_set():
-            self.thread_infos.get("queue_handler_message").put(parsed_message)
+        if self.bot_info.sniffer_info.is_playing_event.is_set():
+            self.bot_info.sniffer_info.parsed_message_queue.put(parsed_message)
         class_handler = next(
             (
                 class_handler
@@ -36,6 +36,6 @@ class Handler:
             class_instance = deep_dict_to_object(**vars(parsed_message))
             class_handler = class_handler(**vars(class_instance))
             if isinstance(class_handler, ParsedMessageHandler):
-                class_handler.handle(self.thread_infos)
+                class_handler.handle(self.bot_info)
             else:
                 raise ValueError("class handler is not of type ParsedMessageHandler")

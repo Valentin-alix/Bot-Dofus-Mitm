@@ -1,16 +1,27 @@
+from __future__ import annotations
+
 from functools import partial
-from app.gui.components import PushButtonUtils, VerticalLayout
+from typing import TYPE_CHECKING
+
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QPalette, QColor
 from PyQt5.QtWidgets import (
     QBoxLayout,
     QWidget,
 )
 
+from app.gui.components.common import PushButtonUtils
+from app.gui.components.organization import VerticalLayout
+
+if TYPE_CHECKING:
+    from app.gui.app import MainWindow
+
 
 class SideMenu(QWidget):
-    WIDTH = 150
+    WIDTH = 110
 
-    def __init__(self, parent) -> None:
-        super().__init__(parent.all_content)
+    def __init__(self, parent: MainWindow, *args, **kwargs) -> None:
+        super().__init__(parent, *args, **kwargs)
         self.parent_ = parent
         self.setFixedWidth(self.WIDTH)
         self.setup_menu()
@@ -32,7 +43,7 @@ class SideMenu(QWidget):
         for index_widget in reversed(range(self.parent_.stacked_frames.count())):
             current_widget = self.parent_.stacked_frames.widget(index_widget)
             if (name := getattr(current_widget, "name", None)) is not None:
-                button = PushButtonUtils(text=name)
+                button = PushButtonUtils(parent=self, text=name)
                 button.setFixedHeight(100)
                 self.side_menu_layout.addWidget(button)
                 if index_widget == 0:
@@ -57,3 +68,21 @@ class SideMenu(QWidget):
     def on_switch_frame(self, index_widget):
         self.update_state_button(index_widget)
         self.parent_.stacked_frames.setCurrentIndex(index_widget)
+
+
+class DarkThemePalette(QPalette):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.setColor(QPalette.Window, QColor(53, 53, 53))
+        self.setColor(QPalette.WindowText, Qt.white)
+        self.setColor(QPalette.Base, QColor(25, 25, 25))
+        self.setColor(QPalette.AlternateBase, QColor(53, 53, 53))
+        self.setColor(QPalette.ToolTipBase, Qt.black)
+        self.setColor(QPalette.ToolTipText, Qt.white)
+        self.setColor(QPalette.Text, Qt.white)
+        self.setColor(QPalette.Button, QColor(53, 53, 53))
+        self.setColor(QPalette.ButtonText, Qt.white)
+        self.setColor(QPalette.BrightText, Qt.red)
+        self.setColor(QPalette.Link, QColor(42, 130, 218))
+        self.setColor(QPalette.Highlight, QColor(42, 130, 218))
+        self.setColor(QPalette.HighlightedText, Qt.black)

@@ -1,9 +1,3 @@
-from app.gui.components import (
-    Frame,
-    GroupBox,
-    Header,
-    VerticalLayout,
-)
 from PyQt5.QtCore import (
     Qt,
 )
@@ -11,13 +5,21 @@ from PyQt5.QtWidgets import (
     QBoxLayout,
     QLabel,
 )
-from app.types_ import ThreadsInfos
+
+from app.gui.components.common import (
+    GroupBox,
+    Header,
+    Frame,
+)
+from app.gui.components.organization import VerticalLayout
+from app.types_ import BotInfo
 
 
 class SellerFrame(Frame):
-    def __init__(self, threads_infos: ThreadsInfos, name: str) -> None:
-        super().__init__(name)
-        self.threads_infos = threads_infos
+    def __init__(self, bot_info: BotInfo, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+
+        self.bot_info = bot_info
 
         self.main_frame_layout = VerticalLayout()
 
@@ -27,15 +29,15 @@ class SellerFrame(Frame):
         self.setLayout(self.main_frame_layout)
 
     def set_header(self):
-        self.header = Header()
+        self.header = Header(parent=self)
         self.header.button_play.clicked.connect(lambda: self.on_update_do_play(True))
         self.header.button_stop.clicked.connect(lambda: self.on_update_do_play(False))
         self.main_frame_layout.addWidget(self.header)
         self.update_state_buttons()
 
     def setup_content(self):
-        self.box_content = GroupBox()
-        self.box_content.setTitle("Objects mis en vente")
+        self.box_content = GroupBox(parent=self)
+        self.box_content.setTitle("Objets mis en vente")
         self.box_content.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.layout_content = VerticalLayout()
@@ -47,18 +49,18 @@ class SellerFrame(Frame):
         self.main_frame_layout.addWidget(self.box_content)
 
     def on_new_object_for_sale(self):
-        label_sellable_objects = QLabel()
-        label_sellable_objects.setText("bientot")
-        label_sellable_objects.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.label_sellable_objects = QLabel(parent=self.box_content)
+        self.label_sellable_objects.setText("bientot")
+        self.label_sellable_objects.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.layout_content.addWidget(self.label_sellable_objects)
 
     def update_state_buttons(self):
-        self.header.do_play(self.threads_infos.get("event_play_hdv_selling").is_set())
+        self.header.do_play(self.bot_info.selling_info.is_playing_event.is_set())
 
     def on_update_do_play(self, do_play: bool):
         if do_play:
-            self.threads_infos["event_play_hdv_selling"].set()
-            self.update_state_buttons()
+            ...
+            # self.bot_info.selling_info.is_playing_event.set()
         else:
-            self.threads_infos["event_play_hdv_selling"].clear()
-            self.update_state_buttons()
+            self.bot_info.selling_info.is_playing_event.clear()
+        self.update_state_buttons()

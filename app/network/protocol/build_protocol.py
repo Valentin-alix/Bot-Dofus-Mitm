@@ -240,8 +240,6 @@ if __name__ == "__main__":
         if _var["type"] and not _var["type"] in types
     }  # Get all types of data (UnsignedShort, UTF, VarUhInt etc...)
 
-    print(types_from_id[9326])
-
     with open(os.path.join(Path(__file__).parent, "protocol.pk"), "wb") as file:
         # write with pickle for better performance
         pickle.dump(types, file)

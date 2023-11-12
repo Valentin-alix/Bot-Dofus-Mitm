@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from dataclasses import dataclass, field
 from queue import Queue
 from threading import Event, Lock
 from typing import TYPE_CHECKING, TypedDict
@@ -40,18 +41,39 @@ class SelectedObject(TypedDict):
     name: str | None
 
 
-class ThreadsInfos(TypedDict):
-    event_play_sniffer: Event
-    event_play_hdv_scrapping: Event
-    event_play_hdv_selling: Event
-    event_close: Event
-    event_connected: Event
+# Tread shared datas
+@dataclass
+class SnifferInfo:
+    is_playing_event: Event = Event()
+    parsed_message_queue: Queue[ParsedMessage] = Queue()
 
-    character_with_lock: CharacterWithLock
-    buying_hdv_with_lock: BuyingHdvWithLock
-    selling_hdv_with_lock: SellingHdvWithLock
-    server_id_with_lock: ServerIdWithLock
 
-    queue_for_sale_object: Queue[SelectedObject]
-    queue_msg_to_send: Queue[dict]
-    queue_handler_message: Queue[ParsedMessage]
+@dataclass
+class ScrapingInfo:
+    is_playing_event: Event = Event()
+    buying_hdv_with_lock: BuyingHdvWithLock = field(default_factory=lambda: {"lock": Lock(), "buying_hdv": None})
+
+
+@dataclass
+class SellingInfo:
+    is_playing_event: Event = Event()
+    # TODO Type
+    item_for_sale_queue: Queue = Queue()
+    selling_hdv_with_lock: SellingHdvWithLock = field(default_factory=lambda: {"lock": Lock(), "selling_hdv": None})
+
+
+@dataclass
+class CommonInfo:
+    is_closed_event: Event = Event()
+    is_connected_event: Event = Event()
+    message_to_send_queue: Queue[dict] = Queue()
+    server_id_with_lock: ServerIdWithLock = field(default_factory=lambda: {"lock": Lock(), "server_id": None})
+    character_with_lock: CharacterWithLock = field(default_factory=lambda: {"lock": Lock(), "character": None})
+
+
+@dataclass
+class BotInfo:
+    common_info: CommonInfo = field(default_factory=CommonInfo)
+    sniffer_info: SnifferInfo = field(default_factory=SnifferInfo)
+    scraping_info: ScrapingInfo = field(default_factory=ScrapingInfo)
+    selling_info: SellingInfo = field(default_factory=SellingInfo)
