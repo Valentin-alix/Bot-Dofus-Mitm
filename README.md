@@ -24,10 +24,25 @@
 
 Sniffer &#8594; done
 
-We can go to a hdv and launch bot to automatically retreive all prices from hdv and put it in the database.
+- Scrapping hdv
+    - Chart on prices by item
+    - Top 10 of best benefits item in nuggets
+    - Top 10 of most important price drop
 
-Currently working for automatically sell all objects in hdv.
+- Automate FM &#8594; WIP
+- Automate sells resource in hdv &#8594; WIP
 
 # Technology
 
-➡️ 🐍 [Python](#-python)
+➡️ 🐍 Python
+
+- SQLAlchemy
+- PyQt5
+
+## Bot hdv scrapping :
+
+![scrapping bot](./resources/scrapping_bot.png)
+
+## Sniffer :
+
+![sniffer](./resources/sniffer.png)
