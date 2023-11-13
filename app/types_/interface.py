@@ -5,6 +5,8 @@ from queue import Queue
 from threading import Event, Lock
 from typing import TYPE_CHECKING, TypedDict
 
+from app.modules.fm import Fm
+
 if TYPE_CHECKING:
     # To avoid annoying circular import
     from app.modules.character import Character
@@ -33,6 +35,10 @@ class ServerIdWithLock(WithLock, TypedDict):
     server_id: int | None
 
 
+class FmWithLock(WithLock, TypedDict):
+    fm: Fm | None
+
+
 class SelectedObject(TypedDict):
     all_identical: bool
     generic_id: int
@@ -46,6 +52,12 @@ class SelectedObject(TypedDict):
 class SnifferInfo:
     is_playing_event: Event = Event()
     parsed_message_queue: Queue[ParsedMessage] = Queue()
+
+
+@dataclass
+class FmInfo:
+    is_playing_event: Event = Event()
+    fm_with_lock: FmWithLock = field(default_factory=lambda: {"lock": Lock(), "fm": None})
 
 
 @dataclass
@@ -76,4 +88,5 @@ class BotInfo:
     common_info: CommonInfo = field(default_factory=CommonInfo)
     sniffer_info: SnifferInfo = field(default_factory=SnifferInfo)
     scraping_info: ScrapingInfo = field(default_factory=ScrapingInfo)
+    fm_info: FmInfo = field(default_factory=FmInfo)
     selling_info: SellingInfo = field(default_factory=SellingInfo)

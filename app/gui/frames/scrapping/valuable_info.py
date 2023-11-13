@@ -3,12 +3,14 @@ from PyQt5.QtWidgets import QWidget, QTableWidget, QScrollArea, QTableWidgetItem
 from sqlalchemy import Engine
 
 from app.gui.components.organization import HorizontalLayout, VerticalLayout, AlignDelegate
+from app.types_ import BotInfo
 from app.utils import get_difference_on_all_prices, get_benefit_nugget
 
 
 class ValuableInfo(QWidget):
-    def __init__(self, engine: Engine, *args, **kwargs) -> None:
+    def __init__(self, engine: Engine, bot_info: BotInfo, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
+        self.bot_info = bot_info
         self.engine = engine
         self.main_layout = HorizontalLayout(without_space=False)
 
@@ -91,8 +93,9 @@ class ValuableInfo(QWidget):
         self.table_price_drop.clearContents()
         self.table_price_drop.setRowCount(0)
 
-        items = get_difference_on_all_prices(self.engine)
-
+        with self.bot_info.common_info.server_id_with_lock.get("lock"):
+            items = get_difference_on_all_prices(self.engine,
+                                                 self.bot_info.common_info.server_id_with_lock["server_id"])
         self.table_price_drop.setRowCount(10)
 
         for index, (name, row) in enumerate(items.iterrows()):
@@ -106,9 +109,11 @@ class ValuableInfo(QWidget):
     def get_benefit_recycling(self):
         self.table_benefit_recycling.clearContents()
         self.table_benefit_recycling.setRowCount(0)
-
-        items_for_nugget = get_benefit_nugget(self.engine)
-
+        with self.bot_info.common_info.server_id_with_lock.get("lock"):
+            items_for_nugget = get_benefit_nugget(self.engine,
+                                                  self.bot_info.common_info.server_id_with_lock["server_id"])
+        if items_for_nugget is None:
+            return
         self.table_benefit_recycling.setRowCount(10)
         for index, item_for_nugget in enumerate(items_for_nugget):
             name_col = QTableWidgetItem(item_for_nugget[1].name)

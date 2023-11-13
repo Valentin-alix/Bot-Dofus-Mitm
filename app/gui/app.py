@@ -82,11 +82,11 @@ class MainWindow(QMainWindow):
         try:
             if self.bot_info.common_info.is_connected_event.is_set():
                 self.frame_bot_scrapping = ScrappingFrame(
-                    bot_info=self.bot_info, name="Bot Scrapping"
+                    parent=self, bot_info=self.bot_info, name="Bot Scrapping"
                 )
                 self.stacked_frames.addWidget(self.frame_bot_scrapping)
                 self.frame_bot_seller = SellerFrame(
-                    bot_info=self.bot_info, name="Bot Vendeur"
+                    parent=self, bot_info=self.bot_info, name="Bot Vendeur"
                 )
                 self.stacked_frames.addWidget(self.frame_bot_seller)
                 self.signals.on_change_frame.emit()

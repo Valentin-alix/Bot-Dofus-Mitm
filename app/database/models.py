@@ -1,18 +1,20 @@
 from __future__ import annotations
 
-from pprint import pformat
-from enum import Enum
 import os
+from datetime import datetime
+from enum import Enum
 from pathlib import Path
+from pprint import pformat
 from typing import List
+
 from sqlalchemy import Column, ForeignKey, Table, create_engine
 from sqlalchemy.orm import DeclarativeBase, relationship
 from sqlalchemy.orm import Mapped, mapped_column
-from datetime import datetime
 
 
 class Base(DeclarativeBase):
-    pass
+    def __str__(self) -> str:
+        return pformat(vars(self))
 
 
 class CategoryEnum(Enum):
@@ -49,9 +51,9 @@ class Item(Base):
     favorite_recycling_sub_areas: Mapped[List[SubArea]] = relationship(
         secondary=sub_area_association
     )
-
-    def __str__(self) -> str:
-        return pformat(vars(self))
+    rune_id: Mapped[int] = mapped_column(
+        ForeignKey("rune.id"), nullable=True
+    )
 
 
 class SubArea(Base):
@@ -59,18 +61,12 @@ class SubArea(Base):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=False)
     name: Mapped[str] = mapped_column(nullable=False)
 
-    def __str__(self) -> str:
-        return pformat(vars(self))
-
 
 class TypeItem(Base):
     __tablename__ = "type_item"
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=False)
     name: Mapped[str] = mapped_column(nullable=False)
     category: Mapped[CategoryEnum] = mapped_column(nullable=False)
-
-    def __str__(self) -> str:
-        return pformat(vars(self))
 
 
 class Recipe(Base):
@@ -80,9 +76,6 @@ class Recipe(Base):
         ForeignKey("item.id"), nullable=False, unique=True
     )
 
-    def __str__(self) -> str:
-        return pformat(vars(self))
-
 
 class Ingredient(Base):
     __tablename__ = "ingredient"
@@ -90,9 +83,6 @@ class Ingredient(Base):
     item_id: Mapped[int] = mapped_column(ForeignKey("item.id"), nullable=False)
     quantity: Mapped[int] = mapped_column(nullable=False)
     recipe_id: Mapped[int] = mapped_column(ForeignKey("recipe.id"))
-
-    def __str__(self) -> str:
-        return pformat(vars(self))
 
 
 # For hdv scrapping
@@ -106,8 +96,12 @@ class Price(Base):
     one: Mapped[int] = mapped_column(nullable=False)
     server_id: Mapped[int] = mapped_column(nullable=False)
 
-    def __str__(self) -> str:
-        return pformat(vars(self))
+
+# For fm
+class Rune(Base):
+    __tablename__ = "rune"
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=False, comment="actionId")
+    weight: Mapped[float] = mapped_column(nullable=False)
 
 
 def get_engine():

@@ -1,6 +1,12 @@
 from enum import IntEnum
 
 
+class MagicPoolStatus(IntEnum):
+    NEUTRAL = 1
+    POSITIVE = 2
+    NEGATIVE = 3
+
+
 class DialogType(IntEnum):
     DIALOG_BOOK = 0
     DIALOG_DIALOG = 1

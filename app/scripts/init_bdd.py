@@ -1,9 +1,9 @@
 import json
 import os
 from pathlib import Path
+
 from sqlalchemy.orm import Session, sessionmaker
 from tqdm import tqdm
-
 
 from app.database.models import (
     CategoryEnum,
@@ -13,7 +13,7 @@ from app.database.models import (
     SubArea,
     TypeItem,
     get_engine,
-    Base,
+    Base, Rune,
 )
 
 BASE_PATH_OUTPUT = os.path.join(Path(__file__).parent.parent.parent, "resources")
@@ -63,8 +63,8 @@ def init_item(session: Session, d2i_texts: dict):
         items_entities = []
         for item in tqdm(items):
             if (
-                item["isSaleable"] is True
-                and session.query(Item).get(item["id"]) is None
+                    item["isSaleable"] is True
+                    and session.query(Item).get(item["id"]) is None
             ):
                 item_object = Item(
                     id=item["id"],
@@ -93,10 +93,10 @@ def init_recipes(session: Session):
         ingredients_entites = []
         for recipe in tqdm(recipes):
             if (
-                session.query(Recipe.id)
-                .filter_by(result_item_id=recipe["resultId"])
-                .first()
-                is None
+                    session.query(Recipe.id)
+                            .filter_by(result_item_id=recipe["resultId"])
+                            .first()
+                    is None
             ):
                 recipe_object = Recipe(result_item_id=recipe["resultId"])
                 session.add(recipe_object)
@@ -115,6 +115,26 @@ def init_recipes(session: Session):
         session.flush()
 
 
+def maj_runes_objects(session: Session):
+    with open(os.path.join(Path(__file__).parent.parent.parent, "resources", "runes.json")) as rune_file:
+        runes = json.load(rune_file)
+        runes_entities = []
+        for rune in runes:
+            if session.query(Rune).filter_by(id=rune["positive_effect_Id"]).first() is None:
+                positive_rune = Rune(id=rune["positive_effect_Id"], weight=rune["weight"])
+                runes_entities.append(positive_rune)
+                session.flush()
+                session.query(Item).filter(Item.id.in_(_item["id"] for _item in rune['runes'])).update(
+                    {Item.rune_id: positive_rune.id})
+
+            if (negative_rune_id := rune.get("negative_effect_Id", None)) is not None and session.query(Rune).filter_by(
+                    id=negative_rune_id).first() is None:
+                runes_entities.append(Rune(id=negative_rune_id, weight=rune["weight"] / 2))
+
+    session.add_all(runes_entities)
+    session.flush()
+
+
 def init_bdd():
     engine = get_engine()
     Base.metadata.create_all(engine)
@@ -128,75 +148,7 @@ def init_bdd():
         init_type(session, d2i_texts)
         init_item(session, d2i_texts)
         init_recipes(session)
+        maj_runes_objects(session)
 
     session.commit()
     session.close()
-
-
-# def maj_runes_objects(engine: Engine):
-#     list_rune: Dict[int, str] = {
-#         111: "PA",
-#         112: "Dommages",
-#         115: "%Critique",
-#         117: "Portée",
-#         118: "Force",
-#         119: "Agilité",
-#         123: "Chance",
-#         124: "Sagesse",
-#         125: "Vitalité",
-#         126: "Intelligence",
-#         128: "PM",
-#         138: "Puissance",
-#         158: "Pods",
-#         160: "EsquivePA",
-#         161: "EsquivePM",
-#         174: "Initiative",
-#         176: "Prospection",
-#         178: "Soins",
-#         182: "Invocations",
-#         210: "%RésistanceTerre",
-#         211: "%RésistanceEau",
-#         212: "%RésistanceAir",
-#         213: "%RésistanceFeu",
-#         214: "%RésistanceNeutre",
-#         220: "Renvoiedommages",
-#         225: "DommagesPièges",
-#         226: "Puissance(pièges)",
-#         240: "RésistanceTerre",
-#         241: "RésistanceEau",
-#         242: "RésistanceAir",
-#         243: "RésistanceFeu",
-#         244: "RésistanceNeutre",
-#         410: "RetraitPA",
-#         412: "RetraitPM",
-#         414: "DommagesPoussée",
-#         416: "RésistancePoussée",
-#         418: "DommagesCritiques",
-#         420: "RésistanceCritiques",
-#         422: "DommagesTerre",
-#         424: "DommagesFeu",
-#         426: "DommagesEau",
-#         428: "DommagesAir",
-#         430: "DommagesNeutre",
-#         752: "Fuite",
-#         753: "Tacle",
-#         795: "Armedechasse",
-#         2800: "%Dommagesmêlée",
-#         2803: "%Résistancemêlée",
-#         2804: "%Dommagesdistance",
-#         2807: "%Résistancedistance",
-#         2808: "%Dommagesd'armes",
-#         2812: "%Dommagesauxsorts",
-#     }
-#     session = sessionmaker(bind=engine)()
-
-#     session.query(Rune).delete()
-#     session.commit()
-
-#     runes: List[Rune] = []
-#     for key, value in list_rune.items():
-#         runes.append(Rune(rune_id=key, name=value))
-
-#     session.add_all(runes)
-#     session.commit()
-#     session.close()

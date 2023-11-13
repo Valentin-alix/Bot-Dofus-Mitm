@@ -14,7 +14,7 @@ import select
 from app.network.models.data import BufferInfos
 from app.network.models.message import Message
 from app.network.parser import MessageRawDataParser
-from app.types_ import GAME_SERVER, BotInfo
+from app.types_ import BotInfo, AUTH_SERVER
 
 logger = logging.getLogger(__name__)
 
@@ -74,7 +74,7 @@ class InjectorBridgeHandler:
         self.last_message_send_date: datetime | None = None
         self.raw_parser = MessageRawDataParser(self.bot_info)
 
-        if self.connection_server.getpeername()[0] == GAME_SERVER:
+        if self.connection_server.getpeername()[0] not in AUTH_SERVER:
             self.bot_info.common_info.is_connected_event.set()
 
         self.msgs_to_send: list[dict] = []

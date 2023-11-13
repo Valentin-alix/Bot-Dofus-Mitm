@@ -13,7 +13,7 @@
 - Launch init.py for
     - Extract DofusInvoker.swf file into action script code
     - Build protocol.pk to get json from network message
-    - Create all python class from dofus file with type hint for good autocompetion
+    - Create all python class from dofus file with type hint for good autocompletion
     - Unpack d2o and d2i files to translate id to real name
     - Initialize database with d2o and d2i files
 

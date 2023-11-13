@@ -78,7 +78,7 @@ class ScrappingFrame(Frame):
 
         self.set_remaining_content()
 
-        self.valuable_info = ValuableInfo(parent=self.box_content, engine=self.engine)
+        self.valuable_info = ValuableInfo(parent=self.box_content, engine=self.engine, bot_info=self.bot_info)
         self.layout_content.addWidget(self.valuable_info)
 
         self.chart = ChartItems(parent=self.box_content, engine=self.engine)

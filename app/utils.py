@@ -46,14 +46,15 @@ def get_info_by_type_or_object(
     return df_prices
 
 
-def get_difference_on_all_prices(engine: Engine, quantity: str = "ten", limit: int = 10) -> pd.DataFrame:
+def get_difference_on_all_prices(engine: Engine, server_id: int, quantity: str = "ten",
+                                 limit: int = 10) -> pd.DataFrame:
     session = sessionmaker(bind=engine)()
 
     df_prices = pd.read_sql(
         session.query(Item, Price, TypeItem)
         .join(Price, Item.id == Price.item_id)
         .join(TypeItem, Item.type_item_id == TypeItem.id)
-        .filter(TypeItem.category == CategoryEnum.RESOURCES)
+        .filter(TypeItem.category == CategoryEnum.RESOURCES, Price.server_id == server_id)
         .statement,
         engine,
     )
@@ -71,18 +72,22 @@ def get_difference_on_all_prices(engine: Engine, quantity: str = "ten", limit: i
     return result
 
 
-def get_benefit_nugget(engine: Engine, limit: int = 10):
+def get_benefit_nugget(engine: Engine, server_id: int, limit: int = 10):
     session = sessionmaker(bind=engine)()
 
-    price_for_100_nugget = session.query(Price.hundred).join(Item, Price.item_id == Item.id).order_by(
+    price_for_100_nugget = session.query(Price.hundred).filter(Price.server_id == server_id).join(Item,
+                                                                                                  Price.item_id == Item.id).order_by(
         Price.creation_date).filter(
         Item.name == "Pépite").first()
+    if price_for_100_nugget is None:
+        return None
 
     benefits_nugget = session.query(
         Price, Item,
         func.max(Price.creation_date).label('maxdate'),
         func.round(Item.recycling_nuggets * price_for_100_nugget[0] - Price.hundred, 0).label("benefits")
-    ).options(joinedload(Item.favorite_recycling_sub_areas)).join(Item, Item.id == Price.item_id).group_by(
+    ).filter(Price.server_id == server_id).options(joinedload(Item.favorite_recycling_sub_areas)).join(Item,
+                                                                                                       Item.id == Price.item_id).group_by(
         Price.item_id).having(Price.hundred != 0).order_by(
         desc(Item.recycling_nuggets * price_for_100_nugget[0] - Price.hundred)).limit(limit)
 
