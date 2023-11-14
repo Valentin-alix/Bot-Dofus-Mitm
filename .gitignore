@@ -1,4 +1,6 @@
-*.json
+protocol_type.json
+from_d2i.json
+from_d2o
 __pycache__/
 *.py[cod]
 .venv

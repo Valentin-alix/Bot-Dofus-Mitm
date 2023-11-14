@@ -1,0 +1,970 @@
+[
+  {
+    "name": "PA",
+    "weight": 100.0,
+    "positive_effect_Id": 111,
+    "negative_effect_Id": 168,
+    "runes": [
+      {
+        "id": 1557,
+        "name": "Rune Ga Pa",
+        "quantity": 1,
+        "weight": 100.0
+      }
+    ]
+  },
+  {
+    "name": "Dommages",
+    "weight": 20.0,
+    "positive_effect_Id": 112,
+    "negative_effect_Id": 145,
+    "runes": [
+      {
+        "id": 7435,
+        "name": "Rune Do",
+        "quantity": 1,
+        "weight": 20.0
+      }
+    ]
+  },
+  {
+    "name": "% Critique",
+    "weight": 10.0,
+    "positive_effect_Id": 115,
+    "negative_effect_Id": 171,
+    "runes": [
+      {
+        "id": 7433,
+        "name": "Rune Cri",
+        "quantity": 1,
+        "weight": 10.0
+      }
+    ]
+  },
+  {
+    "name": "Portée",
+    "weight": 51.0,
+    "positive_effect_Id": 117,
+    "negative_effect_Id": 116,
+    "runes": [
+      {
+        "id": 7438,
+        "name": "Rune Po",
+        "quantity": 1,
+        "weight": 51.0
+      }
+    ]
+  },
+  {
+    "name": "Force",
+    "weight": 1.0,
+    "positive_effect_Id": 118,
+    "negative_effect_Id": 157,
+    "runes": [
+      {
+        "id": 1519,
+        "name": "Rune Fo",
+        "quantity": 1,
+        "weight": 1.0
+      },
+      {
+        "id": 1545,
+        "name": "Rune Pa Fo",
+        "quantity": 3,
+        "weight": 3.0
+      },
+      {
+        "id": 1551,
+        "name": "Rune Ra Fo",
+        "quantity": 1,
+        "weight": 10.0
+      }
+    ]
+  },
+  {
+    "name": "Agilité",
+    "weight": 1.0,
+    "positive_effect_Id": 119,
+    "negative_effect_Id": 154,
+    "runes": [
+      {
+        "id": 1524,
+        "name": "Rune Age",
+        "quantity": 1,
+        "weight": 1.0
+      },
+      {
+        "id": 1549,
+        "name": "Rune Pa Age",
+        "quantity": 3,
+        "weight": 3.0
+      },
+      {
+        "id": 1555,
+        "name": "Rune Ra Age",
+        "quantity": 10,
+        "weight": 10.0
+      }
+    ]
+  },
+  {
+    "name": "Chance",
+    "weight": 1.0,
+    "positive_effect_Id": 123,
+    "negative_effect_Id": 152,
+    "runes": [
+      {
+        "id": 1525,
+        "name": "Rune Cha",
+        "quantity": 1,
+        "weight": 1.0
+      },
+      {
+        "id": 1550,
+        "name": "Rune Pa Cha",
+        "quantity": 3,
+        "weight": 3.0
+      },
+      {
+        "id": 1556,
+        "name": "Rune Ra Cha",
+        "quantity": 10,
+        "weight": 10.0
+      }
+    ]
+  },
+  {
+    "name": "Sagesse",
+    "weight": 3.0,
+    "positive_effect_Id": 124,
+    "negative_effect_Id": 156,
+    "runes": [
+      {
+        "id": 1521,
+        "name": "Rune Sa",
+        "quantity": 1,
+        "weight": 3.0
+      },
+      {
+        "id": 1546,
+        "name": "Rune Pa Sa",
+        "quantity": 3,
+        "weight": 9.0
+      },
+      {
+        "id": 1552,
+        "name": "Rune Ra Sa",
+        "quantity": 10,
+        "weight": 30.0
+      }
+    ]
+  },
+  {
+    "name": "Vitalité",
+    "weight": 0.2,
+    "positive_effect_Id": 125,
+    "negative_effect_Id": 153,
+    "runes": [
+      {
+        "id": 1523,
+        "name": "Rune Vi",
+        "quantity": 5,
+        "weight": 1.0
+      },
+      {
+        "id": 1548,
+        "name": "Rune Pa Vi",
+        "quantity": 15,
+        "weight": 3.0
+      },
+      {
+        "id": 1554,
+        "name": "Rune Ra Vi",
+        "quantity": 50,
+        "weight": 10.0
+      }
+    ]
+  },
+  {
+    "name": "Intelligence",
+    "weight": 1.0,
+    "positive_effect_Id": 126,
+    "negative_effect_Id": 155,
+    "runes": [
+      {
+        "id": 1522,
+        "name": "Rune Ine",
+        "quantity": 1,
+        "weight": 1.0
+      },
+      {
+        "id": 1547,
+        "name": "Rune Pa Ine",
+        "quantity": 3,
+        "weight": 3.0
+      },
+      {
+        "id": 1553,
+        "name": "Rune Ra Ine",
+        "quantity": 10,
+        "weight": 10.0
+      }
+    ]
+  },
+  {
+    "name": "PM",
+    "weight": 90.0,
+    "positive_effect_Id": 128,
+    "negative_effect_Id": 169,
+    "runes": [
+      {
+        "id": 1558,
+        "name": "Rune Ga Pme",
+        "quantity": 1,
+        "weight": 90.0
+      }
+    ]
+  },
+  {
+    "name": "Puissance",
+    "weight": 2.0,
+    "positive_effect_Id": 138,
+    "negative_effect_Id": 186,
+    "runes": [
+      {
+        "id": 7436,
+        "name": "Rune Pui",
+        "quantity": 1,
+        "weight": 2.0
+      },
+      {
+        "id": 10618,
+        "name": "Rune Pa Pui",
+        "quantity": 3,
+        "weight": 6.0
+      },
+      {
+        "id": 10619,
+        "name": "Rune Ra Pui",
+        "quantity": 10,
+        "weight": 20.0
+      }
+    ]
+  },
+  {
+    "name": "Pods",
+    "weight": 0.25,
+    "positive_effect_Id": 158,
+    "negative_effect_Id": 159,
+    "runes": [
+      {
+        "id": 7443,
+        "name": "Rune Pod",
+        "quantity": 10,
+        "weight": 1.0
+      },
+      {
+        "id": 7444,
+        "name": "Rune Pa Pod",
+        "quantity": 30,
+        "weight": 7.5
+      },
+      {
+        "id": 7445,
+        "name": "Rune Ra Pod",
+        "quantity": 100,
+        "weight": 25.0
+      }
+    ]
+  },
+  {
+    "name": "Esquive PA",
+    "weight": 7.0,
+    "positive_effect_Id": 160,
+    "negative_effect_Id": 162,
+    "runes": [
+      {
+        "id": 11641,
+        "name": "Rune Ré Pa",
+        "quantity": 1,
+        "weight": 7.0
+      },
+      {
+        "id": 11642,
+        "name": "Rune Pa Ré Pa",
+        "quantity": 3,
+        "weight": 21.0
+      }
+    ]
+  },
+  {
+    "name": "Esquive PM",
+    "weight": 7.0,
+    "positive_effect_Id": 161,
+    "negative_effect_Id": 163,
+    "runes": [
+      {
+        "id": 11643,
+        "name": "Rune Ré Pm",
+        "quantity": 1,
+        "weight": 7.0
+      },
+      {
+        "id": 11644,
+        "name": "Rune Pa Ré Pm",
+        "quantity": 3,
+        "weight": 21.0
+      }
+    ]
+  },
+  {
+    "name": "Initiative",
+    "weight": 0.1,
+    "positive_effect_Id": 174,
+    "negative_effect_Id": 175,
+    "runes": [
+      {
+        "id": 7448,
+        "name": "Rune Ini",
+        "quantity": 10,
+        "weight": 1.0
+      },
+      {
+        "id": 7449,
+        "name": "Rune Pa Ini",
+        "quantity": 30,
+        "weight": 3.0
+      },
+      {
+        "id": 7450,
+        "name": "Rune Ra Ini",
+        "quantity": 100,
+        "weight": 10.0
+      }
+    ]
+  },
+  {
+    "name": "Prospection",
+    "weight": 3.0,
+    "positive_effect_Id": 176,
+    "negative_effect_Id": 177,
+    "runes": [
+      {
+        "id": 7451,
+        "name": "Rune Prospe",
+        "quantity": 1,
+        "weight": 3.0
+      },
+      {
+        "id": 10662,
+        "name": "Rune Pa Prospe",
+        "quantity": 3,
+        "weight": 9.0
+      }
+    ]
+  },
+  {
+    "name": "Soins",
+    "weight": 10.0,
+    "positive_effect_Id": 178,
+    "negative_effect_Id": 179,
+    "runes": [
+      {
+        "id": 7434,
+        "name": "Rune So",
+        "quantity": 1,
+        "weight": 10.0
+      },
+      {
+        "id": 19337,
+        "name": "Rune Pa So",
+        "quantity": 3,
+        "weight": 30.0
+      }
+    ]
+  },
+  {
+    "name": "Invocations",
+    "weight": 30.0,
+    "positive_effect_Id": 182,
+    "runes": [
+      {
+        "id": 7442,
+        "name": "Rune Invo",
+        "quantity": 1,
+        "weight": 30.0
+      }
+    ]
+  },
+  {
+    "name": "% Résistance Terre",
+    "weight": 6.0,
+    "positive_effect_Id": 210,
+    "negative_effect_Id": 215,
+    "runes": [
+      {
+        "id": 7459,
+        "name": "Rune Ré Per Terre",
+        "quantity": 1,
+        "weight": 6.0
+      }
+    ]
+  },
+  {
+    "name": "% Résistance Eau",
+    "weight": 6.0,
+    "positive_effect_Id": 211,
+    "negative_effect_Id": 216,
+    "runes": [
+      {
+        "id": 7560,
+        "name": "Rune Ré Per Eau",
+        "quantity": 1,
+        "weight": 6.0
+      }
+    ]
+  },
+  {
+    "name": "% Résistance Air",
+    "weight": 6.0,
+    "positive_effect_Id": 212,
+    "negative_effect_Id": 217,
+    "runes": [
+      {
+        "id": 7458,
+        "name": "Rune Ré Per Air",
+        "quantity": 1,
+        "weight": 6.0
+      }
+    ]
+  },
+  {
+    "name": "% Résistance Feu",
+    "weight": 6.0,
+    "positive_effect_Id": 213,
+    "negative_effect_Id": 218,
+    "runes": [
+      {
+        "id": 7457,
+        "name": "Rune Ré Per Feu",
+        "quantity": 1,
+        "weight": 6.0
+      }
+    ]
+  },
+  {
+    "name": "% Résistance Neutre",
+    "weight": 6.0,
+    "positive_effect_Id": 214,
+    "negative_effect_Id": 219,
+    "runes": [
+      {
+        "id": 7460,
+        "name": "Rune Ré Per Neutre",
+        "quantity": 1,
+        "weight": 6.0
+      }
+    ]
+  },
+  {
+    "name": "Dommages Pièges",
+    "weight": 5.0,
+    "positive_effect_Id": 225,
+    "runes": [
+      {
+        "id": 7446,
+        "name": "Rune Pi",
+        "quantity": 1,
+        "weight": 5.0
+      },
+      {
+        "id": 10613,
+        "name": "Rune Pa Pi",
+        "quantity": 3,
+        "weight": 15.0
+      }
+    ]
+  },
+  {
+    "name": "Puissance (pièges)",
+    "weight": 2.0,
+    "positive_effect_Id": 226,
+    "runes": [
+      {
+        "id": 7447,
+        "name": "Rune Pi Per",
+        "quantity": 1,
+        "weight": 2.0
+      },
+      {
+        "id": 10615,
+        "name": "Rune Pa Pi Per",
+        "quantity": 3,
+        "weight": 6.0
+      },
+      {
+        "id": 10616,
+        "name": "Rune Ra Pi Per",
+        "quantity": 10,
+        "weight": 20.0
+      }
+    ]
+  },
+  {
+    "name": "Résistance Terre",
+    "weight": 2.0,
+    "positive_effect_Id": 240,
+    "negative_effect_Id": 245,
+    "runes": [
+      {
+        "id": 7455,
+        "name": "Rune Ré Terre",
+        "quantity": 1,
+        "weight": 5.0
+      },
+      {
+        "id": 19342,
+        "name": "Rune Pa Ré Terre",
+        "quantity": 3,
+        "weight": 6.0
+      }
+    ]
+  },
+  {
+    "name": "Résistance Eau",
+    "weight": 2.0,
+    "positive_effect_Id": 241,
+    "negative_effect_Id": 246,
+    "runes": [
+      {
+        "id": 7454,
+        "name": "Rune Ré Eau",
+        "quantity": 1,
+        "weight": 5.0
+      },
+      {
+        "id": 19339,
+        "name": "Rune Pa Ré Eau",
+        "quantity": 3,
+        "weight": 6.0
+      }
+    ]
+  },
+  {
+    "name": "Résistance Air",
+    "weight": 2.0,
+    "positive_effect_Id": 242,
+    "negative_effect_Id": 247,
+    "runes": [
+      {
+        "id": 7453,
+        "name": "Rune Ré Air",
+        "quantity": 1,
+        "weight": 5.0
+      },
+      {
+        "id": 19338,
+        "name": "Rune Pa Ré Air",
+        "quantity": 3,
+        "weight": 6.0
+      }
+    ]
+  },
+  {
+    "name": "Résistance Feu",
+    "weight": 2.0,
+    "positive_effect_Id": 248,
+    "negative_effect_Id": 243,
+    "runes": [
+      {
+        "id": 7452,
+        "name": "Rune Ré Feu",
+        "quantity": 1,
+        "weight": 5.0
+      },
+      {
+        "id": 19340,
+        "name": "Rune Pa Ré Feu",
+        "quantity": 3,
+        "weight": 6.0
+      }
+    ]
+  },
+  {
+    "name": "Résistance Neutre",
+    "weight": 2.0,
+    "positive_effect_Id": 244,
+    "negative_effect_Id": 249,
+    "runes": [
+      {
+        "id": 7456,
+        "name": "Rune Ré Neutre",
+        "quantity": 1,
+        "weight": 5.0
+      },
+      {
+        "id": 19341,
+        "name": "Rune Pa Ré Neutre",
+        "quantity": 3,
+        "weight": 6.0
+      }
+    ]
+  },
+  {
+    "name": "Retrait PA",
+    "weight": 7.0,
+    "positive_effect_Id": 410,
+    "negative_effect_Id": 411,
+    "runes": [
+      {
+        "id": 11645,
+        "name": "Rune Ret Pa",
+        "quantity": 1,
+        "weight": 7.0
+      },
+      {
+        "id": 11646,
+        "name": "Rune Pa Ret Pa",
+        "quantity": 3,
+        "weight": 21.0
+      }
+    ]
+  },
+  {
+    "name": "Retrait PM",
+    "weight": 7.0,
+    "positive_effect_Id": 412,
+    "negative_effect_Id": 413,
+    "runes": [
+      {
+        "id": 11647,
+        "name": "Rune Ret Pm",
+        "quantity": 1,
+        "weight": 7.0
+      },
+      {
+        "id": 11648,
+        "name": "Rune Pa Ret Pm",
+        "quantity": 3,
+        "weight": 21.0
+      }
+    ]
+  },
+  {
+    "name": "Dommages Poussée",
+    "weight": 5.0,
+    "positive_effect_Id": 414,
+    "negative_effect_Id": 415,
+    "runes": [
+      {
+        "id": 11649,
+        "name": "Rune Do Pou",
+        "quantity": 1,
+        "weight": 5.0
+      },
+      {
+        "id": 11650,
+        "name": "Rune Pa Do Pou",
+        "quantity": 3,
+        "weight": 15.0
+      }
+    ]
+  },
+  {
+    "name": "Résistance Poussée",
+    "weight": 2.0,
+    "positive_effect_Id": 416,
+    "negative_effect_Id": 417,
+    "runes": [
+      {
+        "id": 11651,
+        "name": "Rune Ré Pou",
+        "quantity": 1,
+        "weight": 2.0
+      },
+      {
+        "id": 11652,
+        "name": "Rune Pa Ré Pou",
+        "quantity": 3,
+        "weight": 6.0
+      }
+    ]
+  },
+  {
+    "name": "Dommages Critiques",
+    "weight": 5.0,
+    "positive_effect_Id": 418,
+    "negative_effect_Id": 419,
+    "runes": [
+      {
+        "id": 11653,
+        "name": "Rune Do Cri",
+        "quantity": 1,
+        "weight": 5.0
+      },
+      {
+        "id": 11654,
+        "name": "Rune Pa Do Cri",
+        "quantity": 3,
+        "weight": 15.0
+      }
+    ]
+  },
+  {
+    "name": "Résistance Critiques",
+    "weight": 2.0,
+    "positive_effect_Id": 420,
+    "negative_effect_Id": 421,
+    "runes": [
+      {
+        "id": 11655,
+        "name": "Rune Ré Cri",
+        "quantity": 1,
+        "weight": 2.0
+      },
+      {
+        "id": 11656,
+        "name": "Rune Pa Ré Cri",
+        "quantity": 3,
+        "weight": 6.0
+      }
+    ]
+  },
+  {
+    "name": "Dommages Terre",
+    "weight": 5.0,
+    "positive_effect_Id": 422,
+    "negative_effect_Id": 423,
+    "runes": [
+      {
+        "id": 11657,
+        "name": "Rune Do Terre",
+        "quantity": 1,
+        "weight": 5.0
+      },
+      {
+        "id": 11658,
+        "name": "Rune Pa Do Terre",
+        "quantity": 3,
+        "weight": 15.0
+      }
+    ]
+  },
+  {
+    "name": "Dommages Feu",
+    "weight": 5.0,
+    "positive_effect_Id": 424,
+    "negative_effect_Id": 425,
+    "runes": [
+      {
+        "id": 11659,
+        "name": "Rune Do Feu",
+        "quantity": 1,
+        "weight": 5.0
+      },
+      {
+        "id": 11660,
+        "name": "Rune Pa Do Feu",
+        "quantity": 3,
+        "weight": 15.0
+      }
+    ]
+  },
+  {
+    "name": "Dommages Eau",
+    "weight": 5.0,
+    "positive_effect_Id": 426,
+    "negative_effect_Id": 427,
+    "runes": [
+      {
+        "id": 11661,
+        "name": "Rune Do Eau",
+        "quantity": 1,
+        "weight": 5.0
+      },
+      {
+        "id": 11662,
+        "name": "Rune Pa Do Eau",
+        "quantity": 3,
+        "weight": 15.0
+      }
+    ]
+  },
+  {
+    "name": "Dommages Air",
+    "weight": 5.0,
+    "positive_effect_Id": 428,
+    "negative_effect_Id": 429,
+    "runes": [
+      {
+        "id": 11663,
+        "name": "Rune Do Air",
+        "quantity": 1,
+        "weight": 5.0
+      },
+      {
+        "id": 11664,
+        "name": "Rune Pa Do Air",
+        "quantity": 3,
+        "weight": 15.0
+      }
+    ]
+  },
+  {
+    "name": "Dommages Neutre",
+    "weight": 5.0,
+    "positive_effect_Id": 430,
+    "negative_effect_Id": 431,
+    "runes": [
+      {
+        "id": 11665,
+        "name": "Rune Do Neutre",
+        "quantity": 1,
+        "weight": 5.0
+      },
+      {
+        "id": 11666,
+        "name": "Rune Pa Do Neutre",
+        "quantity": 3,
+        "weight": 15.0
+      }
+    ]
+  },
+  {
+    "name": "Fuite",
+    "weight": 4.0,
+    "positive_effect_Id": 752,
+    "negative_effect_Id": 754,
+    "runes": [
+      {
+        "id": 11637,
+        "name": "Rune Fui",
+        "quantity": 1,
+        "weight": 4.0
+      },
+      {
+        "id": 11638,
+        "name": "Rune Pa Fui",
+        "quantity": 3,
+        "weight": 12.0
+      }
+    ]
+  },
+  {
+    "name": "Tacle",
+    "weight": 4.0,
+    "positive_effect_Id": 753,
+    "negative_effect_Id": 755,
+    "runes": [
+      {
+        "id": 11639,
+        "name": "Rune Tac",
+        "quantity": 1,
+        "weight": 4.0
+      },
+      {
+        "id": 11639,
+        "name": "Rune Pa Tac",
+        "quantity": 3,
+        "weight": 12.0
+      }
+    ]
+  },
+  {
+    "name": "Arme de chasse",
+    "weight": 5.0,
+    "positive_effect_Id": 795,
+    "runes": [
+      {
+        "id": 10057,
+        "name": "Rune de chasse",
+        "quantity": 1,
+        "weight": 5.0
+      }
+    ]
+  },
+  {
+    "name": "% Dommages mêlée",
+    "weight": 15.0,
+    "positive_effect_Id": 2800,
+    "negative_effect_Id": 2801,
+    "runes": [
+      {
+        "id": 18719,
+        "name": "Rune Do Per Mé",
+        "quantity": 1,
+        "weight": 15.0
+      }
+    ]
+  },
+  {
+    "name": "% Résistance mêlée",
+    "weight": 15.0,
+    "positive_effect_Id": 2803,
+    "negative_effect_Id": 2802,
+    "runes": [
+      {
+        "id": 18723,
+        "name": "Rune Ré Per Mé",
+        "quantity": 1,
+        "weight": 15.0
+      }
+    ]
+  },
+  {
+    "name": "% Dommages distance",
+    "weight": 15.0,
+    "positive_effect_Id": 2804,
+    "negative_effect_Id": 2805,
+    "runes": [
+      {
+        "id": 18720,
+        "name": "Rune Do Per Di",
+        "quantity": 1,
+        "weight": 15.0
+      }
+    ]
+  },
+  {
+    "name": "% Résistance distance",
+    "weight": 15.0,
+    "positive_effect_Id": 2807,
+    "negative_effect_Id": 2806,
+    "runes": [
+      {
+        "id": 18724,
+        "name": "Rune Ré Per Di",
+        "quantity": 1,
+        "weight": 15.0
+      }
+    ]
+  },
+  {
+    "name": "% Dommages d'armes",
+    "weight": 15.0,
+    "positive_effect_Id": 2808,
+    "negative_effect_Id": 2809,
+    "runes": [
+      {
+        "id": 18721,
+        "name": "Rune Do Per Ar",
+        "quantity": 1,
+        "weight": 15.0
+      }
+    ]
+  },
+  {
+    "name": "% Dommages aux sorts",
+    "weight": 15.0,
+    "positive_effect_Id": 2812,
+    "negative_effect_Id": 2813,
+    "runes": [
+      {
+        "id": 18722,
+        "name": "Rune Do Per So",
+        "quantity": 1,
+        "weight": 15.0
+      }
+    ]
+  }
+]
