@@ -63,8 +63,8 @@ def init_item(session: Session, d2i_texts: dict):
         items_entities = []
         for item in tqdm(items):
             if (
-                    item["isSaleable"] is True
-                    and session.query(Item).get(item["id"]) is None
+                    item["isSaleable"] is True and item.get("exchangeable", None) is True
+                    and (_item_db := session.query(Item).get(item["id"])) is None
             ):
                 item_object = Item(
                     id=item["id"],
@@ -80,6 +80,9 @@ def init_item(session: Session, d2i_texts: dict):
                     )
                 )
                 items_entities.append(item_object)
+            else:
+                if _item_db is not None:
+                    session.delete(_item_db)
         session.add_all(items_entities)
         session.flush()
 
@@ -115,7 +118,7 @@ def init_recipes(session: Session):
         session.flush()
 
 
-def maj_runes_objects(session: Session):
+def init_runes(session: Session):
     with open(os.path.join(Path(__file__).parent.parent.parent, "resources", "runes.json")) as rune_file:
         runes = json.load(rune_file)
         runes_entities = []
@@ -148,7 +151,7 @@ def init_bdd():
         init_type(session, d2i_texts)
         init_item(session, d2i_texts)
         init_recipes(session)
-        maj_runes_objects(session)
+        init_runes(session)
 
     session.commit()
     session.close()

@@ -9,3 +9,7 @@ ajouter migrations tool pour sqlalchemy
 voir SimpleNamespace
 
 clean exit mitm when quit gui
+
+bugs:
+write exchange object move message
+write exchange object move priced message

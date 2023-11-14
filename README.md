@@ -1,15 +1,17 @@
 # Setup :
 
 - Install Jpexs-decompiler to decompile DofusInvoker.swf : https://github.com/jindrapetrik/jpexs-decompiler
-- Launch init.bat to setup environment
 - Create .env file
-    - example of .env :
-      ```
-      D2O_FOLDER="C:\\Users\\valen\\AppData\\Local\\Ankama\\Dofus\\data\\common"
-      D2I_FILE="C:\\Users\\valen\\AppData\\Local\\Ankama\\Dofus\\data\\i18n\\i18n_fr.d2i"
-      DOFUS_INVOKER="C:\\Users\\valen\\AppData\\Local\\Ankama\\Dofus\\DofusInvoker.swf"
-      FFDECJAR_PATH="C:\\Program Files (x86)\\FFDec\\ffdec.jar"
-      ```
+  - example of .env :
+  ```
+  D2O_FOLDER="C:\\Users\\valen\\AppData\\Local\\Ankama\\Dofus\\data\\common"
+  D2P_FOLDER="C:\\Users\\valen\\AppData\\Local\\Ankama\\Dofus\\content\\gfx\\items"
+  D2P_FOLDER2="C:\\Users\\valen\\AppData\\Local\\Ankama\\Dofus\\content\\gfx\\sprites"
+  D2I_FILE="C:\\Users\\valen\\AppData\\Local\\Ankama\\Dofus\\data\\i18n\\i18n_fr.d2i"
+  DOFUS_INVOKER="C:\\Users\\valen\\AppData\\Local\\Ankama\\Dofus\\DofusInvoker.swf"
+  FFDECJAR_PATH="C:\\Program Files (x86)\\FFDec\\ffdec.jar"
+  ```
+- Launch init.bat to setup environment
 - Launch init.py for
     - Extract DofusInvoker.swf file into action script code
     - Build protocol.pk to get json from network message

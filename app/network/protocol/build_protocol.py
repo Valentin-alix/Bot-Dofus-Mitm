@@ -161,6 +161,7 @@ def parse(_type: dict, msg_from_id: dict, types_from_id: dict, types: dict):
     assert protocolId is not None
     _type["protocolId"] = protocolId
 
+    # TODO Check if protocolId in protocolTypeManager ?
     if (
             "messages" in str(_type["path"])
             and _type["name"] != "AddTaxCollectorPresetSpellMessage"
@@ -171,6 +172,7 @@ def parse(_type: dict, msg_from_id: dict, types_from_id: dict, types: dict):
         assert protocolId not in types_from_id
         types_from_id[protocolId] = _type
 
+    # separing boolvars and vars ?
     if sum(var["type"] == "Boolean" for var in vars) > 1:
         boolVars = [var for var in vars if var["name"] in wrapped_booleans]
         vars = [var for var in vars if var["name"] not in wrapped_booleans]

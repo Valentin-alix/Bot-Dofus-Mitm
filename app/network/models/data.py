@@ -56,7 +56,7 @@ class Data:
         self.verif(l)
         pos = self.pos
         self.pos += l
-        return self.data[pos : pos + l]
+        return self.data[pos: pos + l]
 
     def write(self, l):
         self.data += l

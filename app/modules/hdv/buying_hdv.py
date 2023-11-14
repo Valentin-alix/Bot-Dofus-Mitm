@@ -77,8 +77,7 @@ class BuyingHdv:
                 ExchangeBidHouseTypeMessage(
                     follow=True,
                     type=category,
-                ),
-                from_client=True,
+                )
             )
             logger.info(f"Sending check category {category}")
 
@@ -89,8 +88,7 @@ class BuyingHdv:
             ExchangeBidHouseSearchMessage(
                 objectGID=type_object.get("object_gid"),
                 follow=not type_object.get("is_opened"),
-            ),
-            True,
+            )
         )
 
     def process(self):

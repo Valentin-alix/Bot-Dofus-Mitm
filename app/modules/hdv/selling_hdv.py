@@ -1,4 +1,7 @@
 import logging
+import math
+from threading import Thread
+from time import sleep
 from typing import Tuple
 
 from sqlalchemy.orm import sessionmaker
@@ -11,9 +14,8 @@ from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.invent
 from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidHouseSearchMessage import (
     ExchangeBidHouseSearchMessage,
 )
-from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeObjectMovePricedMessage import (
-    ExchangeObjectMovePricedMessage,
-)
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeObjectMovePricedMessage import \
+    ExchangeObjectMovePricedMessage
 from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.data.items.ObjectItem import (
     ObjectItem,
 )
@@ -38,6 +40,26 @@ class SellingHdv:
         self.selected_object: SelectedObject | None = None
 
         self.get_accepted_objects()
+
+        self.is_playing = self.bot_info.selling_info.is_playing_event.is_set()
+        self.stop_timer = False
+        check_event_play_thread = Thread(target=self.check_event_play, daemon=True)
+        check_event_play_thread.start()
+
+    def check_event_play(self):
+        """continuously check if event play has changed to true"""
+        while (
+                not self.bot_info.common_info.is_closed_event.is_set() and not self.stop_timer
+        ):
+            if (
+                    not self.is_playing
+                    and self.bot_info.selling_info.is_playing_event.is_set()
+            ):
+                logger.info("launching selling hdv bot after manual start")
+                self.is_playing = True
+                self.process()
+            self.is_playing = self.bot_info.selling_info.is_playing_event.is_set()
+            sleep(2)
 
     def process(self) -> None:
         if self.selected_object is not None:
@@ -89,7 +111,7 @@ class SellingHdv:
             )
             if object_ is not None:
                 results = self.get_price_and_quantity(
-                    object_,
+                    object_.quantity,
                     self.selected_object.get("minimal_prices"),
                 )
                 logger.info(f"get price_and_quantity : {results}")
@@ -104,9 +126,13 @@ class SellingHdv:
                     )
                     if self.selected_object is not None:
                         self.selected_object["is_placed"] = False
-                    # TODO Price is not parsed correctly <!>
                     return
-        self.selected_object = None
+                else:
+                    # TODO Remove in inventory
+                    self.selected_object = None
+                    self.process()
+        else:
+            self.selected_object = None
 
     # Utils
     def get_name_by_generic_id(self, generic_id: int) -> str | None:
@@ -115,6 +141,7 @@ class SellingHdv:
         return object_.name if object_ is not None else None
 
     def get_object_by_generic_id(self, generic_id: int) -> ObjectItem | None:
+        # todo voir si vendable
         if (accepted_objects := self.get_accepted_objects_in_inventory()) is not None:
             return next(
                 (
@@ -150,37 +177,32 @@ class SellingHdv:
                        in (accepted_object.id for accepted_object in self.accepted_objects)
                 ]
                 logger.info(
-                    f"Get accepted objects in inventory : {accepted_objects_inventory} "
+                    f"Get accepted objects in inventory : {[_object.objectGID for _object in accepted_objects_inventory]} "
                 )
                 return accepted_objects_inventory
 
+    @staticmethod
     def get_price_and_quantity(
-            self, _object: ObjectItem, minimal_prices: list[int]
+            _object_quantity: int, minimal_prices: list[int]
     ) -> Tuple[int, int] | None:
-        if _object.quantity >= 100:
+        if _object_quantity >= 100:
             quantity = 100
-            if minimal_prices[2] != 0:
-                price = minimal_prices[2] - 1
-            elif minimal_prices[1] != 0:
-                price = (minimal_prices[1] * 10) - 1
-            elif minimal_prices[0] != 0:
-                price = (minimal_prices[0] * 100) - 1
-            else:
-                return None
-            return quantity, price
-        elif _object.quantity >= 10:
+        elif _object_quantity >= 10:
             quantity = 10
-            if minimal_prices[1] != 0:
-                price = minimal_prices[1] - 1
-            elif minimal_prices[0] != 0:
-                price = (minimal_prices[0] * 10) - 1
-            else:
-                return None
-            return quantity, price
-        elif _object.quantity >= 1:
+        elif _object_quantity >= 1:
             quantity = 1
-            if minimal_prices[0] != 0:
-                price = minimal_prices[0] - 1
-                return quantity, price
+        else:
             return None
-        return None
+
+        price = None
+        for index, _price in enumerate(minimal_prices):
+            if _price != 0:
+                current_quantity = int(f"1{str(0) * index}")
+                price = _price / current_quantity
+                if current_quantity == quantity:
+                    break
+        if price is None:
+            return None
+        price_for_quantity = math.ceil(price * quantity)
+
+        return quantity, price_for_quantity

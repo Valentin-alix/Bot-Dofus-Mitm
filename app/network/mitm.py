@@ -96,7 +96,7 @@ class InjectorBridgeHandler:
         ):
             self.send_to_server(
                 Message.get_message_from_json(
-                    {"__type__": "BasicPingMessage", "from_client": True, "quiet": True}
+                    {"__type__": "BasicPingMessage", "quiet": True}
                 )
             )
             sleep(5)

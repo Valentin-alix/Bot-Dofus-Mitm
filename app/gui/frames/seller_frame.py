@@ -59,8 +59,7 @@ class SellerFrame(Frame):
 
     def on_update_do_play(self, do_play: bool):
         if do_play:
-            ...
-            # self.bot_info.selling_info.is_playing_event.set()
+            self.bot_info.selling_info.is_playing_event.set()
         else:
             self.bot_info.selling_info.is_playing_event.clear()
         self.update_state_buttons()

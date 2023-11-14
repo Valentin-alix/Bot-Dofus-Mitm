@@ -3,7 +3,7 @@ import random
 from functools import reduce
 
 from app.network.models.data import Data
-from app.network.protocol.protocol_load import msg_from_id, primitives, types, types_from_id
+from app.network.protocol.protocol_load import primitives, types, types_from_id
 
 logger = logging.getLogger("labot")
 
@@ -56,7 +56,7 @@ def read(_type, data: Data):
 
     logger.debug("reading boolean variables")
     ans.update(readBooleans(_type["boolVars"], data))
-    logger.debug("remaining data: %s", data.data[data.pos :])
+    logger.debug("remaining data: %s", data.data[data.pos:])
 
     for var in _type["vars"]:
         logger.debug("reading %s", var)
@@ -67,7 +67,7 @@ def read(_type, data: Data):
             ans[var["name"]] = readVec(var, data)
         else:
             ans[var["name"]] = read(var["type"], data)
-        logger.debug("remaining data: %s", data.data[data.pos :])
+        logger.debug("remaining data: %s", data.data[data.pos:])
     if _type["hash_function"] and data.remaining() == 48:
         ans["hash_function"] = data.read(48)
     return ans
@@ -95,35 +95,40 @@ def writeVec(var, values: dict, data: Data):
         write(var["type"], it, data)
 
 
-def write(_type, values: dict, data: Data | None = None, random_hash=True) -> Data:
+def write(_type, _json: dict, data: Data | None = None, random_hash=True) -> Data:
     if data is None:
         data = Data()
     if _type is False:
-        _type = types[values["__type__"]]
+        _type = types[_json["__type__"]]
         data.writeUnsignedShort(_type["protocolId"])
     elif isinstance(_type, str):
         if _type in primitives:
-            primitives[_type][1](data, values)
+            primitives[_type][1](data, _json)
             return data
         _type = types[_type]
+
     parent = _type["parent"]
     if parent is not None:
-        write(parent, values, data)
-    writeBooleans(_type["boolVars"], values, data)
+        write(parent, _json, data, random_hash)
+
+    writeBooleans(_type["boolVars"], _json, data)
     for var in _type["vars"]:
         if var["optional"]:
-            if var["name"] in values:
+            if var["name"] in _json:
                 data.writeByte(1)
             else:
                 data.writeByte(0)
                 continue
+
         if var["length"] is not None:
-            writeVec(var, values[var["name"]], data)
+            writeVec(var, _json[var["name"]], data)
         else:
-            write(var["type"], values[var["name"]], data)
-    if "hash_function" in values:
-        data.write(values["hash_function"])
+            write(var["type"], _json[var["name"]], data)
+
+    if "hash_function" in _json:
+        data.write(_json["hash_function"])
     elif _type["hash_function"] and random_hash:
         _hash = bytes(random.getrandbits(8) for _ in range(48))
         data.write(_hash)
+
     return data

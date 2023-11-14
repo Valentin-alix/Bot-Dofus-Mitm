@@ -28,10 +28,9 @@ def get_local_ip() -> str:
     return ip_local
 
 
-def send_parsed_msg(bot_info: BotInfo, parsed_message, from_client=True):
+def send_parsed_msg(bot_info: BotInfo, parsed_message):
     msg_to_send = {
         **vars(parsed_message),
-        "from_client": from_client,
         "__type__": f"{parsed_message.__class__.__name__}",
     }
     bot_info.common_info.message_to_send_queue.put(msg_to_send)

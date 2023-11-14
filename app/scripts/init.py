@@ -2,8 +2,9 @@ import os
 import sys
 from pathlib import Path
 
-from decompile_code_source import get_as_scripts
 from dotenv import load_dotenv
+
+from app.scripts.decompile_code_source import get_as_scripts
 from app.scripts.generate_python_class import (
     launch_generator,
 )
@@ -19,7 +20,7 @@ if __name__ == "__main__":
     load_dotenv()
 
     get_as_scripts()
-    os.system("python app/network/protocol/build_protocol.py")
+    os.system(f"python {os.path.join(Path(__file__).parent.parent, 'network', 'protocol', 'build_protocol.py')}")
     launch_generator()
 
     resources_path = os.path.join(Path(__file__).parent.parent.parent, "resources")

@@ -34,3 +34,5 @@ class ExchangeBidPriceForSellerMessageHandler(
                 }
                 if bot_info.selling_info.is_playing_event.is_set():
                     selling_hdv.process()
+            else:
+                raise ValueError("SellerHdv should not be None")
