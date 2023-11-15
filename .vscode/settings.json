@@ -17,6 +17,11 @@
             "source.fixAll": true
         }
     },
+    "python.analysis.extraPaths": [
+        // for good imports suggesting
+        "./app"
+    ],
+
     "python.analysis.autoImportCompletions": true,
     "python.analysis.typeCheckingMode": "basic",
     "python.defaultInterpreterPath": ".\\.venv\\Scripts\\python.exe",

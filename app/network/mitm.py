@@ -4,7 +4,7 @@ from copy import deepcopy
 from datetime import datetime
 from queue import Empty
 from socket import socket as Socket
-from threading import Thread
+from threading import Thread, Lock
 from time import sleep
 
 import fritm
@@ -14,7 +14,7 @@ import select
 from app.network.models.data import BufferInfos
 from app.network.models.message import Message
 from app.network.parser import MessageRawDataParser
-from app.types_ import BotInfo, AUTH_SERVER
+from app.types_ import BotInfo, AUTH_SERVERS
 
 logger = logging.getLogger(__name__)
 
@@ -27,6 +27,7 @@ class Mitm:
     def on_connection_callback(
             self, connection_game: fritm.proxy.ConnectionWrapper, connection_server: Socket
     ):
+        print("get connected")
         bridge = InjectorBridgeHandler(
             connection_game, connection_server, self.bot_info
         )
@@ -66,15 +67,20 @@ class InjectorBridgeHandler:
             connection_server: BufferInfos(),
         }
 
+        self.lock_injected_to_client = Lock()
         self.injected_to_client = 0
+
+        self.lock_injected_to_server = Lock()
         self.injected_to_server = 0
+
+        self.lock_counter = Lock()
         self.counter = 0
 
         self.bot_info = bot_info
         self.last_message_send_date: datetime | None = None
         self.raw_parser = MessageRawDataParser(self.bot_info)
 
-        if self.connection_server.getpeername()[0] not in AUTH_SERVER:
+        if self.connection_server.getpeername()[0] not in AUTH_SERVERS:
             self.bot_info.common_info.is_connected_event.set()
 
         self.msgs_to_send: list[dict] = []
@@ -99,7 +105,7 @@ class InjectorBridgeHandler:
                     {"__type__": "BasicPingMessage", "quiet": True}
                 )
             )
-            sleep(5)
+            sleep(random.uniform(7, 10))
 
     def check_send_msg_recurrent(self):
         while (
@@ -138,13 +144,14 @@ class InjectorBridgeHandler:
         message = Message.from_raw(from_client, buffer_info)
         while message is not None:
             self.raw_parser.parse(message, from_client)
-            if from_client:
-                if message.count is None:
-                    message.count = 0
-                message.count += self.injected_to_server - self.injected_to_client
-                self.counter = message.count
-            else:
-                self.counter += 1
+            with self.lock_injected_to_server, self.lock_counter, self.lock_injected_to_client:
+                if from_client:
+                    if message.count is None:
+                        message.count = 0
+                    message.count += self.injected_to_server - self.injected_to_client
+                    self.counter = message.count
+                else:
+                    self.counter += 1
             self.opposite_connection[origin].sendall(message.bytes())
 
             message = Message.from_raw(from_client, buffer_info)
@@ -170,19 +177,21 @@ class InjectorBridgeHandler:
                 connection.close()
 
     def send_to_client(self, data):
-        if isinstance(data, Message):
-            self.raw_parser.parse(deepcopy(data), False)
-            data = data.bytes()
-        self.injected_to_client += 1
+        with self.lock_injected_to_client:
+            if isinstance(data, Message):
+                self.raw_parser.parse(deepcopy(data), False)
+                data = data.bytes()
+            self.injected_to_client += 1
         self.connection_game.sendall(data)
 
     def send_to_server(self, data):
         if not self.is_server_closed():
-            if isinstance(data, Message):
-                data.count = self.counter + 1
-                self.raw_parser.parse(deepcopy(data), True)
-                data = data.bytes()
-            self.injected_to_server += 1
+            with self.lock_injected_to_server, self.lock_counter:
+                if isinstance(data, Message):
+                    data.count = self.counter + 1
+                    self.raw_parser.parse(deepcopy(data), True)
+                    data = data.bytes()
+                self.injected_to_server += 1
             self.connection_server.sendall(data)
 
     def send_message(self, content: str):

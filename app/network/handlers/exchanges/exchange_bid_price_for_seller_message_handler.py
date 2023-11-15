@@ -17,21 +17,32 @@ class ExchangeBidPriceForSellerMessageHandler(
     def handle(self, bot_info: BotInfo) -> None:
         with bot_info.selling_info.selling_hdv_with_lock.get("lock"):
             if (
-                    selling_hdv := bot_info.selling_info.selling_hdv_with_lock.get(
-                        "selling_hdv"
-                    )
+                selling_hdv := bot_info.selling_info.selling_hdv_with_lock.get(
+                    "selling_hdv"
+                )
             ) is not None:
                 logger.info("get selected object")
-                name_selected_object = selling_hdv.get_name_by_generic_id(
-                    self.genericId
-                )
-                selling_hdv.selected_object = {
-                    "all_identical": self.allIdentical,
-                    "generic_id": self.genericId,
-                    "is_placed": True,
-                    "minimal_prices": self.minimalPrices,
-                    "name": name_selected_object
-                }
+
+                with bot_info.common_info.character_with_lock.get("lock"):
+                    _object_in_inventory = next(
+                        (
+                            _object
+                            for _object in bot_info.common_info.character_with_lock[
+                                "character"
+                            ].objects
+                            if _object.objectGID == self.genericId
+                        ),
+                        None,
+                    )
+                    if _object_in_inventory is not None:
+                        selling_hdv.selected_object = {
+                            "quantity": _object_in_inventory.quantity,
+                            "all_identical": self.allIdentical,
+                            "object_gid": self.genericId,
+                            "object_uid": _object_in_inventory.objectUID,
+                            "is_placed": True,
+                            "minimal_prices": self.minimalPrices,
+                        }
                 if bot_info.selling_info.is_playing_event.is_set():
                     selling_hdv.process()
             else:

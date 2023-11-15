@@ -8,10 +8,10 @@ from threading import Thread
 from alembic import command
 from alembic.config import Config
 
-from app.database.models import get_engine
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
+from app.database.models import get_engine
 from app.types_ import BotInfo
 from gui.app import Application, MainWindow
 from logs.config import LOGGING_CONFIG

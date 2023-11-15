@@ -1,5 +1,5 @@
 from PyQt5.QtCore import (
-    Qt,
+    Qt, QTimer,
 )
 from PyQt5.QtWidgets import (
     QBoxLayout,
@@ -19,6 +19,8 @@ class SellerFrame(Frame):
     def __init__(self, bot_info: BotInfo, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
 
+        self.number_on_sale = 0
+        self.sum_price_on_sale = 0
         self.bot_info = bot_info
 
         self.main_frame_layout = VerticalLayout()
@@ -27,6 +29,16 @@ class SellerFrame(Frame):
         self.setup_content()
 
         self.setLayout(self.main_frame_layout)
+
+        self.timer = QTimer(parent=self)
+        self.timer.timeout.connect(self.check_item_on_sale)
+        self.timer.start(300)
+
+    def check_item_on_sale(self):
+        with self.bot_info.selling_info.on_sale_info_with_lock.get("lock"):
+            self.number_on_sale = self.bot_info.selling_info.on_sale_info_with_lock["number"]
+            self.sum_price_on_sale = self.bot_info.selling_info.on_sale_info_with_lock["sum_price"]
+        self.update_content_selling()
 
     def set_header(self):
         self.header = Header(parent=self)
@@ -40,19 +52,29 @@ class SellerFrame(Frame):
         self.box_content.setTitle("Objets mis en vente")
         self.box_content.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.layout_content = VerticalLayout()
-        self.layout_content.setContentsMargins(0, 0, 0, 0)
+        self.layout_content = VerticalLayout(without_space=False, without_margins=False)
         self.layout_content.addStretch()
         self.layout_content.setDirection(QBoxLayout.Direction.BottomToTop)
         self.box_content.setLayout(self.layout_content)
 
+        self.set_content_selling()
+
         self.main_frame_layout.addWidget(self.box_content)
 
-    def on_new_object_for_sale(self):
-        self.label_sellable_objects = QLabel(parent=self.box_content)
-        self.label_sellable_objects.setText("bientot")
-        self.label_sellable_objects.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.layout_content.addWidget(self.label_sellable_objects)
+    def set_content_selling(self):
+        self.label_number_on_sale = QLabel(parent=self.box_content)
+        self.label_number_on_sale.setText(f"Nombre de slot utilisé : {self.number_on_sale}")
+        self.label_number_on_sale.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.layout_content.addWidget(self.label_number_on_sale)
+
+        self.label_sum_on_sale = QLabel(parent=self.box_content)
+        self.label_sum_on_sale.setText(f"Valeur estimé mis en vente : {self.sum_price_on_sale}")
+        self.label_sum_on_sale.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.layout_content.addWidget(self.label_sum_on_sale)
+
+    def update_content_selling(self):
+        self.label_number_on_sale.setText(f"Nombre de slot utilisé : {self.number_on_sale}")
+        self.label_sum_on_sale.setText(f"Valeur estimé mis en vente : {self.sum_price_on_sale}")
 
     def update_state_buttons(self):
         self.header.do_play(self.bot_info.selling_info.is_playing_event.is_set())

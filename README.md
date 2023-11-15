@@ -2,7 +2,7 @@
 
 - Install Jpexs-decompiler to decompile DofusInvoker.swf : https://github.com/jindrapetrik/jpexs-decompiler
 - Create .env file
-  - example of .env :
+    - example of .env :
   ```
   D2O_FOLDER="C:\\Users\\valen\\AppData\\Local\\Ankama\\Dofus\\data\\common"
   D2P_FOLDER="C:\\Users\\valen\\AppData\\Local\\Ankama\\Dofus\\content\\gfx\\items"
@@ -44,6 +44,10 @@ Sniffer &#8594; done
 ## Bot hdv scrapping :
 
 ![scrapping bot](./resources/scrapping_bot.png)
+
+## Bot hdv selling :
+
+![selling bot](./resources/selling_bot.gif)
 
 ## Sniffer :
 

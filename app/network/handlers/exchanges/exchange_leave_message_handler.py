@@ -25,7 +25,8 @@ class ExchangeLeaveMessageHandler(ParsedMessageHandler, ExchangeLeaveMessage):
                     bot_info.scraping_info.buying_hdv_with_lock["buying_hdv"] = None
             with bot_info.selling_info.selling_hdv_with_lock.get("lock"):
                 if (
-                        bot_info.selling_info.selling_hdv_with_lock.get("selling_hdv")
+                        (selling_hdv := bot_info.selling_info.selling_hdv_with_lock.get("selling_hdv"))
                 ) is not None:
                     logger.info("deleting selling hdv")
+                    selling_hdv.stop_timer = True
                     bot_info.selling_info.selling_hdv_with_lock["selling_hdv"] = None

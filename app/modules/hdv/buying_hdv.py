@@ -34,11 +34,12 @@ class BuyingHdv:
     def check_event_play(self):
         """continuously check if event play has changed to true"""
         while (
-                not self.bot_info.common_info.is_closed_event.is_set() and not self.stop_timer
+            not self.bot_info.common_info.is_closed_event.is_set()
+            and not self.stop_timer
         ):
             if (
-                    not self.is_playing
-                    and self.bot_info.scraping_info.is_playing_event.is_set()
+                not self.is_playing
+                and self.bot_info.scraping_info.is_playing_event.is_set()
             ):
                 logger.info("launching hdv bot after manual start")
                 self.is_playing = True
@@ -48,14 +49,13 @@ class BuyingHdv:
 
     def get_consistent_categories(self, categories: list[int]) -> list[int]:
         """filter type category to be in database"""
-        session = sessionmaker(bind=self.engine)()
-        _consistent_types_category = [
-            int(_type[0])
-            for _type in (
-                session.query(TypeItem.id).filter(TypeItem.id.in_(categories)).all()
-            )
-        ]
-        session.close()
+        with sessionmaker(bind=self.engine)() as session:
+            _consistent_types_category = [
+                int(_type[0])
+                for _type in (
+                    session.query(TypeItem.id).filter(TypeItem.id.in_(categories)).all()
+                )
+            ]
         return _consistent_types_category
 
     def get_available_objects_gid(self):
@@ -77,7 +77,7 @@ class BuyingHdv:
                 ExchangeBidHouseTypeMessage(
                     follow=True,
                     type=category,
-                )
+                ),
             )
             logger.info(f"Sending check category {category}")
 
@@ -88,7 +88,7 @@ class BuyingHdv:
             ExchangeBidHouseSearchMessage(
                 objectGID=type_object.get("object_gid"),
                 follow=not type_object.get("is_opened"),
-            )
+            ),
         )
 
     def process(self):

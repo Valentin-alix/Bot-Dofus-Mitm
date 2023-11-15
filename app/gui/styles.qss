@@ -2,7 +2,7 @@ QLabel {
     font-size: 14px;
 }
 
-QGroupBox{
+QGroupBox#not-title{
     padding-top:0x;
 }
 

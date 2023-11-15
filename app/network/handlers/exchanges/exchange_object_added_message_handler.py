@@ -16,6 +16,7 @@ class ExchangeObjectAddedMessageHandler(ParsedMessageHandler, ExchangeObjectAdde
         with bot_info.fm_info.fm_with_lock["lock"]:
             engine = get_engine()
             session = sessionmaker(bind=engine)()
+
             item_with_category = session.query(Item.id, TypeItem.name, TypeItem.category).join(TypeItem,
                                                                                                TypeItem.id == Item.type_item_id).filter(
                 Item.id == self.object.objectGID).first()

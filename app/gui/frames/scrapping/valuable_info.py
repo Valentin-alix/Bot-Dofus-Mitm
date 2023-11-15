@@ -42,7 +42,7 @@ class ValuableInfo(QWidget):
             self.table_benefit_recycling.setItemDelegateForColumn(column_index, delegate)
 
         self.table_benefit_recycling.setHorizontalHeaderLabels(
-            ["Nom", "Prix par 100", "Bénéfices", "Zone favorite"]
+            ["Type", "Nom", "Bénéfices", "Zone favorite"]
         )
 
         self.table_benefit_recycling.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
@@ -76,7 +76,7 @@ class ValuableInfo(QWidget):
         for column_index in range(3):
             self.table_price_drop.setItemDelegateForColumn(column_index, delegate)
 
-        self.table_price_drop.setHorizontalHeaderLabels(["Nom", "Prix avant", "Prix après"])
+        self.table_price_drop.setHorizontalHeaderLabels(["Type", "Nom", "Différence"])
 
         self.table_price_drop.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.table_price_drop.verticalHeader().hide()
@@ -98,13 +98,13 @@ class ValuableInfo(QWidget):
                                                  self.bot_info.common_info.server_id_with_lock["server_id"])
         self.table_price_drop.setRowCount(10)
 
-        for index, (name, row) in enumerate(items.iterrows()):
+        for index, (_type, name, benefit) in enumerate(items):
+            type_col = QTableWidgetItem(_type)
             name_col = QTableWidgetItem(name)
-            price_before_col = QTableWidgetItem(str(row["first"]))
-            price_after_col = QTableWidgetItem(str(row["last"]))
-            self.table_price_drop.setItem(int(index), 0, name_col)
-            self.table_price_drop.setItem(int(index), 1, price_before_col)
-            self.table_price_drop.setItem(int(index), 2, price_after_col)
+            difference_col = QTableWidgetItem(str(benefit))
+            self.table_price_drop.setItem(int(index), 0, type_col)
+            self.table_price_drop.setItem(int(index), 1, name_col)
+            self.table_price_drop.setItem(int(index), 2, difference_col)
 
     def get_benefit_recycling(self):
         self.table_benefit_recycling.clearContents()
@@ -115,14 +115,14 @@ class ValuableInfo(QWidget):
         if items_for_nugget is None:
             return
         self.table_benefit_recycling.setRowCount(10)
-        for index, item_for_nugget in enumerate(items_for_nugget):
-            name_col = QTableWidgetItem(item_for_nugget[1].name)
-            price_col = QTableWidgetItem(str(item_for_nugget[0].hundred))
-            benefit_col = QTableWidgetItem(str(item_for_nugget[3]))
+        for index, (_type, item, benefit) in enumerate(items_for_nugget):
+            type_col = QTableWidgetItem(_type)
+            name_col = QTableWidgetItem(item.name)
+            benefit_col = QTableWidgetItem(str(benefit))
             favorite_zone_col = QTableWidgetItem(
-                str(", ".join(sub_area.name for sub_area in item_for_nugget[1].favorite_recycling_sub_areas)))
+                str(", ".join(sub_area.name for sub_area in item.favorite_recycling_sub_areas)))
 
-            self.table_benefit_recycling.setItem(index, 0, name_col)
-            self.table_benefit_recycling.setItem(index, 1, price_col)
+            self.table_benefit_recycling.setItem(index, 0, type_col)
+            self.table_benefit_recycling.setItem(index, 1, name_col)
             self.table_benefit_recycling.setItem(index, 2, benefit_col)
             self.table_benefit_recycling.setItem(index, 3, favorite_zone_col)

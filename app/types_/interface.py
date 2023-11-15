@@ -5,10 +5,9 @@ from queue import Queue
 from threading import Event, Lock
 from typing import TYPE_CHECKING, TypedDict
 
-from app.modules.fm import Fm
-
 if TYPE_CHECKING:
     # To avoid annoying circular import
+    from app.modules.fm import Fm
     from app.modules.character import Character
     from app.modules.hdv.buying_hdv import BuyingHdv
     from app.modules.hdv.selling_hdv import SellingHdv
@@ -17,6 +16,11 @@ if TYPE_CHECKING:
 
 class WithLock(TypedDict):
     lock: Lock
+
+
+class OnSaleInfoWithLock(WithLock, TypedDict):
+    number: int
+    sum_price: int
 
 
 class CharacterWithLock(WithLock, TypedDict):
@@ -40,11 +44,12 @@ class FmWithLock(WithLock, TypedDict):
 
 
 class SelectedObject(TypedDict):
+    quantity: int
     all_identical: bool
-    generic_id: int
+    object_gid: int
+    object_uid: int
     minimal_prices: list[int]
     is_placed: bool
-    name: str | None
 
 
 # Tread shared datas
@@ -69,8 +74,8 @@ class ScrapingInfo:
 @dataclass
 class SellingInfo:
     is_playing_event: Event = Event()
-    # TODO Type
-    item_for_sale_queue: Queue = Queue()
+    on_sale_info_with_lock: OnSaleInfoWithLock = field(
+        default_factory=lambda: {"lock": Lock(), "number": 0, "sum_price": 0})
     selling_hdv_with_lock: SellingHdvWithLock = field(default_factory=lambda: {"lock": Lock(), "selling_hdv": None})
 
 

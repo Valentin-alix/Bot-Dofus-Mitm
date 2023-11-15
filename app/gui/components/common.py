@@ -1,17 +1,14 @@
 import os
 from pathlib import Path
 
-from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import (
     QDialog,
     QGroupBox,
-    QListWidgetItem,
     QPushButton,
     QTextEdit,
     QVBoxLayout,
     QWidget,
-    QLabel,
     QFrame,
 )
 
@@ -23,19 +20,22 @@ class GroupBox(QGroupBox):
     def __init__(self, with_title: bool = True, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         if not with_title:
-            self.setStyleSheet("QGroupBox{padding-top:0x;}")
+            self.setObjectName("not-title")
+            self.style().unpolish(self)
+            self.style().polish(self)
 
 
 class PushButtonUtils(QPushButton):
     def set_active_button(self):
         self.setObjectName("active")
-        self.update_update_style()
+        self.update_style()
 
     def set_inactive_button(self):
         self.setObjectName("inactive")
-        self.update_update_style()
+        self.update_style()
 
-    def update_update_style(self):
+    def update_style(self):
+        self.style().unpolish(self)
         self.style().polish(self)
 
 

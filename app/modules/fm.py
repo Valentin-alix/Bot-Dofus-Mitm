@@ -31,7 +31,7 @@ class Fm:
         self._remainder = value
 
     def process(self):
-        logger.info("processing")
+        logger.info("fm gonna process")
         self.place_rune()
         # find what to move
         ...
