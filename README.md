@@ -24,15 +24,16 @@
 
 # Current state :
 
-Sniffer &#8594; done
+- Sniffer
 
 - Scrapping hdv
     - Chart on prices by item
     - Top 10 of best benefits item in nuggets
     - Top 10 of most important price drop
 
+- Automate sells resource in hdv
+
 - Automate FM &#8594; WIP
-- Automate sells resource in hdv &#8594; WIP
 
 # Technology
 
