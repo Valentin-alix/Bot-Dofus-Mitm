@@ -14,5 +14,9 @@ if __name__ == "__main__":
 
     session = sessionmaker(engine)()
 
-    print(session.query(SubArea.name).join(Item.favorite_recycling_sub_areas).filter(
-        Item.name == "Sachet d'Oignons").all())
+    print(
+        session.query(SubArea.name)
+        .join(Item.favorite_recycling_sub_areas)
+        .filter(Item.name == "Sachet d'Oignons")
+        .all()
+    )

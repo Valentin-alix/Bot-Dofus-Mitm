@@ -17,9 +17,9 @@ class ExchangeTypesExchangerDescriptionForUserMessageHandler(
     def handle(self, bot_info: BotInfo) -> None:
         with bot_info.scraping_info.buying_hdv_with_lock.get("lock"):
             if (
-                    buying_hdv := bot_info.scraping_info.buying_hdv_with_lock.get(
-                        "buying_hdv"
-                    )
+                buying_hdv := bot_info.scraping_info.buying_hdv_with_lock.get(
+                    "buying_hdv"
+                )
             ) is not None:
                 buying_hdv.types_object = [
                     {"object_gid": type_description, "is_opened": False}

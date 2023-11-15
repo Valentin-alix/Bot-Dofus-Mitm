@@ -1,5 +1,6 @@
 import json
 import os
+
 from app.scripts.dofus_unpack.pydofus.d2i import D2I
 
 

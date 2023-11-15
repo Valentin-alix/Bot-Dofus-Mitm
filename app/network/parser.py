@@ -10,15 +10,13 @@ logger = logging.getLogger(__name__)
 
 class MessageRawDataParser:
     def __init__(
-            self,
-            bot_info: BotInfo | None,
-            on_error_callback: Callable | None = None,
+        self,
+        bot_info: BotInfo | None,
+        on_error_callback: Callable | None = None,
     ) -> None:
         self.bot_info = bot_info
         self.on_error_callback = on_error_callback
-        self.handler = (
-            Handler(self.bot_info) if self.bot_info is not None else None
-        )
+        self.handler = Handler(self.bot_info) if self.bot_info is not None else None
 
     def parse(self, message: Message, from_client: bool) -> ParsedMessage | None:
         try:

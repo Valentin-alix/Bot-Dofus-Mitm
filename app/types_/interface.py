@@ -62,21 +62,28 @@ class SnifferInfo:
 @dataclass
 class FmInfo:
     is_playing_event: Event = Event()
-    fm_with_lock: FmWithLock = field(default_factory=lambda: {"lock": Lock(), "fm": None})
+    fm_with_lock: FmWithLock = field(
+        default_factory=lambda: {"lock": Lock(), "fm": None}
+    )
 
 
 @dataclass
 class ScrapingInfo:
     is_playing_event: Event = Event()
-    buying_hdv_with_lock: BuyingHdvWithLock = field(default_factory=lambda: {"lock": Lock(), "buying_hdv": None})
+    buying_hdv_with_lock: BuyingHdvWithLock = field(
+        default_factory=lambda: {"lock": Lock(), "buying_hdv": None}
+    )
 
 
 @dataclass
 class SellingInfo:
     is_playing_event: Event = Event()
     on_sale_info_with_lock: OnSaleInfoWithLock = field(
-        default_factory=lambda: {"lock": Lock(), "number": 0, "sum_price": 0})
-    selling_hdv_with_lock: SellingHdvWithLock = field(default_factory=lambda: {"lock": Lock(), "selling_hdv": None})
+        default_factory=lambda: {"lock": Lock(), "number": 0, "sum_price": 0}
+    )
+    selling_hdv_with_lock: SellingHdvWithLock = field(
+        default_factory=lambda: {"lock": Lock(), "selling_hdv": None}
+    )
 
 
 @dataclass
@@ -84,8 +91,12 @@ class CommonInfo:
     is_closed_event: Event = Event()
     is_connected_event: Event = Event()
     message_to_send_queue: Queue[dict] = Queue()
-    server_id_with_lock: ServerIdWithLock = field(default_factory=lambda: {"lock": Lock(), "server_id": None})
-    character_with_lock: CharacterWithLock = field(default_factory=lambda: {"lock": Lock(), "character": None})
+    server_id_with_lock: ServerIdWithLock = field(
+        default_factory=lambda: {"lock": Lock(), "server_id": None}
+    )
+    character_with_lock: CharacterWithLock = field(
+        default_factory=lambda: {"lock": Lock(), "character": None}
+    )
 
 
 @dataclass

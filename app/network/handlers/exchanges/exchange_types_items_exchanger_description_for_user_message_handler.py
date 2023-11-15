@@ -23,7 +23,9 @@ class ExchangeTypesItemsExchangerDescriptionForUserMessageHandler(
         if len(self.itemTypeDescriptions) == 1:
             engine = get_engine()
 
-            with sessionmaker(bind=engine)() as session, bot_info.common_info.server_id_with_lock["lock"]:
+            with sessionmaker(
+                bind=engine
+            )() as session, bot_info.common_info.server_id_with_lock["lock"]:
                 price = Price(
                     creation_date=datetime.now(),
                     item_id=self.objectGID,
@@ -37,8 +39,8 @@ class ExchangeTypesItemsExchangerDescriptionForUserMessageHandler(
 
         with bot_info.scraping_info.buying_hdv_with_lock.get("lock"):
             if (
-                    buying_hdv := bot_info.scraping_info.buying_hdv_with_lock.get(
-                        "buying_hdv"
-                    )
+                buying_hdv := bot_info.scraping_info.buying_hdv_with_lock.get(
+                    "buying_hdv"
+                )
             ) is not None and bot_info.scraping_info.is_playing_event.is_set():
                 buying_hdv.process()

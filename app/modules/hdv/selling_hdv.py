@@ -2,7 +2,7 @@ import logging
 import math
 from threading import Thread
 from time import sleep
-from typing import Tuple, Type
+from typing import Tuple
 
 from sqlalchemy.orm import sessionmaker
 

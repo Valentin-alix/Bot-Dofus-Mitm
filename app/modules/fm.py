@@ -5,11 +5,15 @@ from sqlalchemy.orm import sessionmaker
 
 from app.database.models import get_engine, Rune
 from app.types_ import MagicPoolStatus
-from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.data.items.ObjectItem import ObjectItem
-from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.data.items.effects.ObjectEffect import \
-    ObjectEffect
-from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.data.items.effects.ObjectEffectInteger import \
-    ObjectEffectInteger
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.data.items.ObjectItem import (
+    ObjectItem,
+)
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.data.items.effects.ObjectEffect import (
+    ObjectEffect,
+)
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.data.items.effects.ObjectEffectInteger import (
+    ObjectEffectInteger,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -46,7 +50,9 @@ class Fm:
         # send ExchangeReadyMessage
         ...
 
-    def get_remainder(self, new_item_effects: list[ObjectEffect], magic_pool_status: MagicPoolStatus):
+    def get_remainder(
+        self, new_item_effects: list[ObjectEffect], magic_pool_status: MagicPoolStatus
+    ):
         def get_weight_item(effects: list[ObjectEffect]):
             weight_item = 0
             for effect in effects:
@@ -70,11 +76,22 @@ class Fm:
 
             if len(self.selected_rune.effects) != 1:
                 raise ValueError("selected rune effects len should be one")
-            current_effect_item = next((_effect for _effect in self.current_item.effects if
-                                        _effect.actionId == self.selected_rune.effects[0].actionId), None)
+            current_effect_item = next(
+                (
+                    _effect
+                    for _effect in self.current_item.effects
+                    if _effect.actionId == self.selected_rune.effects[0].actionId
+                ),
+                None,
+            )
             next_effect_item = next(
-                (_effect for _effect in new_item_effects if _effect.actionId == self.selected_rune.effects[0].actionId),
-                None)
+                (
+                    _effect
+                    for _effect in new_item_effects
+                    if _effect.actionId == self.selected_rune.effects[0].actionId
+                ),
+                None,
+            )
             if current_effect_item == next_effect_item:
                 remainder += get_weight_item(self.selected_rune.effects)
 

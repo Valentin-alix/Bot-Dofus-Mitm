@@ -1,8 +1,10 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-from ._binarystream import _BinaryStream
 from collections import OrderedDict
+
+from ._binarystream import _BinaryStream
+
 
 # Exceptions
 
@@ -12,11 +14,13 @@ class InvalidD2OFile(Exception):
         super(InvalidD2OFile, self).__init__(message)
         self.message = message
 
+
 # Class itself
 
 
 class D2OReader:
     """Read D2O files"""
+
     def __init__(self, stream):
         """Init the class with the informations about files in the D2P"""
         # Attributes
@@ -32,7 +36,7 @@ class D2OReader:
 
         string_header = D2O_file_binary.read_bytes(3)
         base_offset = 0
-        if string_header != b'D2O':
+        if string_header != b"D2O":
             self._stream.seek(0)
             string_header = D2O_file_binary.read_string()
             if string_header != "AKSF":
@@ -42,7 +46,7 @@ class D2OReader:
             self._stream.seek(base_offset, 1)
             self._stream_start_index = self._stream.position + 7
             string_header = D2O_file_binary.read_bytes(3)
-            if string_header != b'D2O':
+            if string_header != b"D2O":
                 raise InvalidD2OFile("Malformated game data file.")
 
         offset = D2O_file_binary.read_int32()
@@ -79,8 +83,7 @@ class D2OReader:
         objects = list()
         i = 0
         while i < counter:
-            objects.append(
-                classes[D2O_file_binary.read_int32()].read(D2O_file_binary))
+            objects.append(classes[D2O_file_binary.read_int32()].read(D2O_file_binary))
             i += 1
         return objects
 
@@ -104,8 +107,7 @@ class D2OReader:
 
 class _GameDataClassDefinition:
     def __init__(self, class_pkg, class_name, d2o_reader):
-        self._class = class_pkg.decode('utf-8') + '.' + \
-            class_name.decode('utf-8')
+        self._class = class_pkg.decode("utf-8") + "." + class_name.decode("utf-8")
         self._fields = list()
         self._d2o_reader = d2o_reader
 
@@ -126,7 +128,7 @@ class _GameDataClassDefinition:
 
 class _GameDataField:
     def __init__(self, name, d2o_reader):
-        self.name = name.decode('utf-8')
+        self.name = name.decode("utf-8")
         self._inner_read_methods = list()
         self._inner_type_names = list()
         self._d2o_reader = d2o_reader
@@ -150,14 +152,14 @@ class _GameDataField:
             return self._read_unsigned_integer
         elif read_id == -99:
             self._inner_type_names.append(D2O_file_binary.read_string())
-            self._inner_read_methods = [self._get_read_method(
-                D2O_file_binary.read_int32(),
-                D2O_file_binary)] + self._inner_read_methods
+            self._inner_read_methods = [
+                self._get_read_method(D2O_file_binary.read_int32(), D2O_file_binary)
+            ] + self._inner_read_methods
             return self._read_vector
         else:
             if read_id > 0:
                 return self._read_object
-            raise Exception("Unknown type \'" + read_id + "\'.")
+            raise Exception("Unknown type '" + read_id + "'.")
 
     def _read_integer(self, D2O_file_binary, vec_index=0):
         return D2O_file_binary.read_int32()
@@ -167,9 +169,9 @@ class _GameDataField:
 
     def _read_string(self, D2O_file_binary, vec_index=0):
         string = D2O_file_binary.read_string()
-        if string == 'null':
+        if string == "null":
             string = None
-        return string.decode('utf-8')
+        return string.decode("utf-8")
 
     def _read_number(self, D2O_file_binary, vec_index=0):
         return D2O_file_binary.read_double()
@@ -185,8 +187,9 @@ class _GameDataField:
         vector = list()
         i = 0
         while i < vector_size:
-            vector.append(self._inner_read_methods[vec_index](D2O_file_binary,
-                                                              vec_index + 1))
+            vector.append(
+                self._inner_read_methods[vec_index](D2O_file_binary, vec_index + 1)
+            )
             i += 1
         return vector
 

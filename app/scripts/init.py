@@ -20,7 +20,9 @@ if __name__ == "__main__":
     load_dotenv()
 
     get_as_scripts()
-    os.system(f"python {os.path.join(Path(__file__).parent.parent, 'network', 'protocol', 'build_protocol.py')}")
+    os.system(
+        f"python {os.path.join(Path(__file__).parent.parent, 'network', 'protocol', 'build_protocol.py')}"
+    )
     launch_generator()
 
     resources_path = os.path.join(Path(__file__).parent.parent.parent, "resources")

@@ -84,7 +84,7 @@ def create_python_class_dofus_file(base_path_output):
                 import_lines += find_import_path_by_class_name(
                     parent, protocol_json, base_path_imports
                 )
-                init_vars_init += f"\n\t\tsuper().__init__(*args, **kwargs)"
+                init_vars_init += "\n\t\tsuper().__init__(*args, **kwargs)"
 
             class_line += ":\n"
 
@@ -129,7 +129,7 @@ def create_python_class_dofus_file(base_path_output):
                 import_class_lines += "\t...\n"
 
             if parent is not None:
-                init_method_name += f", *args, **kwargs"
+                init_method_name += ", *args, **kwargs"
             init_method_name_optional += "):"
 
             python_code = (

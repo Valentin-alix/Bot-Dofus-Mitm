@@ -3,10 +3,12 @@
 
 from ._binarystream import _BinaryStream
 
+
 class InvalidDXFile(Exception):
     def __init__(self, message):
         super(InvalidDXFile, self).__init__(message)
         self.message = message
+
 
 class DX:
     def __init__(self, stream):
@@ -32,7 +34,7 @@ class DX:
         raw = _BinaryStream(self._stream, True)
         _in = _BinaryStream(in_stream, True)
 
-        key = 0 # WE DON'T NEED THIS FUCKING KEY, LET'S XOR WITH 0 !! :D
+        key = 0  # WE DON'T NEED THIS FUCKING KEY, LET'S XOR WITH 0 !! :D
 
         raw.write_char(83)
         raw.write_char(0)

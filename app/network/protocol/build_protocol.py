@@ -234,7 +234,7 @@ if __name__ == "__main__":
         _var["type"]
         for _type in types.values()
         for _var in _type["vars"]
-        if _var["type"] and not _var["type"] in types
+        if _var["type"] and _var["type"] not in types
     }  # Get all types of data (UnsignedShort, UTF, VarUhInt etc...)
 
     with open(os.path.join(Path(__file__).parent, "protocol.pk"), "wb") as file:

@@ -3,8 +3,10 @@
 
 from struct import *
 
+
 class _BinaryStream:
     """Allow some binary operations on a stream opened in binary mode"""
+
     def __init__(self, base_stream, big_endian=False):
         self._base_stream = base_stream
         self._big_endian = big_endian

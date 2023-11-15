@@ -51,9 +51,7 @@ class Item(Base):
     favorite_recycling_sub_areas: Mapped[List[SubArea]] = relationship(
         secondary=sub_area_association
     )
-    rune_id: Mapped[int] = mapped_column(
-        ForeignKey("rune.id"), nullable=True
-    )
+    rune_id: Mapped[int] = mapped_column(ForeignKey("rune.id"), nullable=True)
 
 
 class SubArea(Base):
@@ -100,7 +98,9 @@ class Price(Base):
 # For fm
 class Rune(Base):
     __tablename__ = "rune"
-    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=False, comment="actionId")
+    id: Mapped[int] = mapped_column(
+        primary_key=True, autoincrement=False, comment="actionId"
+    )
     weight: Mapped[float] = mapped_column(nullable=False)
 
 

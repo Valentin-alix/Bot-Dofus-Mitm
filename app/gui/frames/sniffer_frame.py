@@ -173,10 +173,10 @@ class SnifferFrame(Frame):
             self.content_layout.addWidget(self.info_message_widget)
 
     def deep_tree_from_message_dict(
-        self,
-        _values,
-        parent: QTreeWidgetItem | None = None,
-        base_qtree: QTreeWidget | None = None,
+            self,
+            _values,
+            parent: QTreeWidgetItem | None = None,
+            base_qtree: QTreeWidget | None = None,
     ):
         if not isinstance(_values, dict):
             widget_item = QTreeWidgetItem([f"{_values}"])

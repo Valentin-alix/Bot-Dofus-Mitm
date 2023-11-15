@@ -8,7 +8,6 @@ from threading import Thread
 from alembic import command
 from alembic.config import Config
 
-
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 from app.database.models import get_engine

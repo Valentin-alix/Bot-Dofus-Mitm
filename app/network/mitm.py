@@ -25,7 +25,7 @@ class Mitm:
         self.bot_info = bot_info
 
     def on_connection_callback(
-            self, connection_game: fritm.proxy.ConnectionWrapper, connection_server: Socket
+        self, connection_game: fritm.proxy.ConnectionWrapper, connection_server: Socket
     ):
         print("get connected")
         bridge = InjectorBridgeHandler(
@@ -49,10 +49,10 @@ class InjectorBridgeHandler:
     TIME_BETWEEN_SEND = [0.1, 0.2]
 
     def __init__(
-            self,
-            connection_game: fritm.proxy.ConnectionWrapper,
-            connection_server: Socket,
-            bot_info: BotInfo,
+        self,
+        connection_game: fritm.proxy.ConnectionWrapper,
+        connection_server: Socket,
+        bot_info: BotInfo,
     ):
         self.connection_game = connection_game
         self.connection_server = connection_server
@@ -97,8 +97,8 @@ class InjectorBridgeHandler:
 
     def send_basic_ping_recurrent(self):
         while (
-                not self.bot_info.common_info.is_closed_event.is_set()
-                and not self.is_server_closed()
+            not self.bot_info.common_info.is_closed_event.is_set()
+            and not self.is_server_closed()
         ):
             self.send_to_server(
                 Message.get_message_from_json(
@@ -109,11 +109,13 @@ class InjectorBridgeHandler:
 
     def check_send_msg_recurrent(self):
         while (
-                not self.bot_info.common_info.is_closed_event.is_set()
-                and not self.is_server_closed()
+            not self.bot_info.common_info.is_closed_event.is_set()
+            and not self.is_server_closed()
         ):
             try:
-                parsed_msg = self.bot_info.common_info.message_to_send_queue.get_nowait()
+                parsed_msg = (
+                    self.bot_info.common_info.message_to_send_queue.get_nowait()
+                )
                 message = Message.get_message_from_json(parsed_msg)
                 self.send_to_server(message)
             except Empty:

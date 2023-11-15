@@ -52,17 +52,19 @@ def deep_dict_to_object(from_client: bool | None = None, **kwargs):
         elif isinstance(value, list) and len(value) > 0 and isinstance(value[0], dict):
             value = [deep_dict_to_object(**_value) for _value in value]
             props[key] = value
-    if kwargs.get('__type__') is not None and (class_type := CLASSES_BY_NAME.get(kwargs.pop('__type__'))) is not None:
+    if (
+        kwargs.get("__type__") is not None
+        and (class_type := CLASSES_BY_NAME.get(kwargs.pop("__type__"))) is not None
+    ):
         return class_type(**props)
-    raise ValueError('object must contains valid __type__ key')
+    raise ValueError("object must contains valid __type__ key")
 
 
 def get_classes_in_path(path, condition_end_file: str) -> list:
     class_handlers = []
     for folder, sub_folder, files in os.walk(path):
-
-        app_folder_position = str(folder).find('app')
-        folder = folder[app_folder_position:].replace('\\', '.')
+        app_folder_position = str(folder).find("app")
+        folder = folder[app_folder_position:].replace("\\", ".")
 
         for file in files:
             if file.endswith(condition_end_file) and not file.startswith("__init__"):

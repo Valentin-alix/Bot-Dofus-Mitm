@@ -25,7 +25,7 @@ class MplCanvas(FigureCanvasQTAgg):
     def show(self, df_info: pd.DataFrame):
         self.axes.cla()
         self.axes.set_xlabel("Date de création")
-        self.axes.set_ylabel(f"Prix par 1, 10 et 100")
+        self.axes.set_ylabel("Prix par 1, 10 et 100")
 
         self.axes.plot(df_info["creation_date"], df_info["hundred"], label="100")
         self.axes.plot(df_info["creation_date"], df_info["ten"], label="10")

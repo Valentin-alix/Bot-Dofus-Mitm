@@ -1,14 +1,18 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-import zlib, tempfile, io
-from ._binarystream import _BinaryStream
+import tempfile
+import zlib
 from collections import OrderedDict
+
+from ._binarystream import _BinaryStream
+
 
 class InvalidELEFile(Exception):
     def __init__(self, message):
         super(InvalidELEFile, self).__init__(message)
         self.message = message
+
 
 class ELE:
     def __init__(self, stream):
@@ -66,17 +70,19 @@ class Element:
 
     def get_dict(self):
         ret = OrderedDict()
-        ret['file_version'] = self.file_version
-        ret['elements_count'] = self.elements_count
-        ret['elements_map'] = OrderedDict((key, value.get_dict()) for key, value
-                                          in self._elements_map.items())
+        ret["file_version"] = self.file_version
+        ret["elements_count"] = self.elements_count
+        ret["elements_map"] = OrderedDict(
+            (key, value.get_dict()) for key, value in self._elements_map.items()
+        )
         return ret
 
     def _read_element(self, ele_id):
         self._raw.position(self._elements_index[ele_id])
         ele_type = self._raw.read_char()
         gfx_ele_data = _GraphicalElementFactory.get_graphical_element_data(
-            ele_id, ele_type)
+            ele_id, ele_type
+        )
         if not gfx_ele_data:
             return None
         gfx_ele_data.read(self._raw, self.file_version)
@@ -110,8 +116,8 @@ class _GraphicalElementData:
 
     def get_dict(self):
         ret = OrderedDict()
-        ret['id'] = self.id
-        ret['type'] = self.type
+        ret["id"] = self.id
+        ret["type"] = self.type
         return ret
 
 
@@ -128,22 +134,22 @@ class _NormalGraphicalElementData(_GraphicalElementData):
         self.gfx_id = raw.read_int32()
         self.height = raw.read_char()
         self.horizontal_symetry = raw.read_bool()
-        self.origin['x'] = raw.read_int16()
-        self.origin['y'] = raw.read_int16()
-        self.size['x'] = raw.read_int16()
-        self.size['y'] = raw.read_int16()
+        self.origin["x"] = raw.read_int16()
+        self.origin["y"] = raw.read_int16()
+        self.size["x"] = raw.read_int16()
+        self.size["y"] = raw.read_int16()
 
     def get_dict(self):
         ret = super(_NormalGraphicalElementData, self).get_dict()
-        ret['gfx_id'] = self.gfx_id
-        ret['height'] = self.height
-        ret['horizontal_symetry'] = self.horizontal_symetry
-        ret['origin'] = OrderedDict()
-        ret['origin']['x'] = self.origin['x']
-        ret['origin']['y'] = self.origin['y']
-        ret['size'] = OrderedDict()
-        ret['size']['x'] = self.size['x']
-        ret['size']['y'] = self.size['y']
+        ret["gfx_id"] = self.gfx_id
+        ret["height"] = self.height
+        ret["horizontal_symetry"] = self.horizontal_symetry
+        ret["origin"] = OrderedDict()
+        ret["origin"]["x"] = self.origin["x"]
+        ret["origin"]["y"] = self.origin["y"]
+        ret["size"] = OrderedDict()
+        ret["size"]["x"] = self.size["x"]
+        ret["size"]["y"] = self.size["y"]
         return ret
 
 
@@ -166,8 +172,8 @@ class _AnimatedGraphicalElementData(_NormalGraphicalElementData):
 
     def get_dict(self):
         ret = super(_AnimatedGraphicalElementData, self).get_dict()
-        ret['min_delay'] = self.min_delay
-        ret['max_delay'] = self.max_delay
+        ret["min_delay"] = self.min_delay
+        ret["max_delay"] = self.max_delay
         return ret
 
 
@@ -183,7 +189,7 @@ class _EntityGraphicalElementData(_GraphicalElementData):
 
     def read(self, raw, file_version):
         look_length = raw.read_int32()
-        self.entity_look = raw.read_string_bytes(look_length).decode('utf-8')
+        self.entity_look = raw.read_string_bytes(look_length).decode("utf-8")
         self.horizontal_symetry = raw.read_bool()
         if file_version >= 7:
             self.play_animation = raw.read_bool()
@@ -195,12 +201,12 @@ class _EntityGraphicalElementData(_GraphicalElementData):
 
     def get_dict(self):
         ret = super(_EntityGraphicalElementData, self).get_dict()
-        ret['entity_look'] = self.entity_look
-        ret['horizontal_symetry'] = self.horizontal_symetry
-        ret['play_animation'] = self.play_animation
-        ret['play_anim_static'] = self.play_anim_static
-        ret['min_delay'] = self.min_delay
-        ret['max_delay'] = self.max_delay
+        ret["entity_look"] = self.entity_look
+        ret["horizontal_symetry"] = self.horizontal_symetry
+        ret["play_animation"] = self.play_animation
+        ret["play_anim_static"] = self.play_anim_static
+        ret["min_delay"] = self.min_delay
+        ret["max_delay"] = self.max_delay
         return ret
 
 
@@ -214,7 +220,7 @@ class _ParticlesGraphicalElementData(_GraphicalElementData):
 
     def get_dict(self):
         ret = super(_ParticlesGraphicalElementData, self).get_dict()
-        ret['script_id'] = self.script_id
+        ret["script_id"] = self.script_id
         return ret
 
 
@@ -226,9 +232,9 @@ class _BlendedGraphicalElementData(_NormalGraphicalElementData):
     def read(self, raw, file_version):
         super(_BlendedGraphicalElementData, self).read(raw, file_version)
         mode_length = raw.read_int32()
-        self.blend_mode = raw.read_string_bytes(mode_length).decode('utf-8')
+        self.blend_mode = raw.read_string_bytes(mode_length).decode("utf-8")
 
     def get_dict(self):
         ret = super(_BlendedGraphicalElementData, self).get_dict()
-        ret['blend_mode'] = self.blend_mode
+        ret["blend_mode"] = self.blend_mode
         return ret

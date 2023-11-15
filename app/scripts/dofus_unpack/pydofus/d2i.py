@@ -1,14 +1,18 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-import zlib, tempfile, io, unicodedata
-from ._binarystream import _BinaryStream
 from collections import OrderedDict
+
+import unicodedata
+
+from ._binarystream import _BinaryStream
+
 
 class InvalidD2IFile(Exception):
     def __init__(self, message):
         super(InvalidD2IFile, self).__init__(message)
         self.message = message
+
 
 class D2I:
     def __init__(self, stream):
@@ -49,7 +53,7 @@ class D2I:
             textKey = raw.read_string().decode("utf-8")
             pointer = raw.read_int32()
             self._obj["nameText"][textKey] = indexs[pointer]
-            indexesLength = (indexesLength - (self._stream.tell() - position))
+            indexesLength = indexesLength - (self._stream.tell() - position)
 
         i = 0
         indexesLength = raw.read_int32()
@@ -57,7 +61,7 @@ class D2I:
             position = self._stream.tell()
             i += 1
             self._obj["idText"][raw.read_int32()] = i
-            indexesLength = (indexesLength - (self._stream.tell() - position))
+            indexesLength = indexesLength - (self._stream.tell() - position)
 
         for pointer, key in indexs.items():
             self._stream.seek(pointer)
@@ -70,11 +74,14 @@ class D2I:
 
         indexs = OrderedDict()
 
-        raw.write_int32(0) # indexes offset
+        raw.write_int32(0)  # indexes offset
 
         i = 0
         for key in obj["texts"]:
-            data = {"pointer": self._stream.tell(), "diacriticalText": False, }
+            data = {
+                "pointer": self._stream.tell(),
+                "diacriticalText": False,
+            }
 
             raw.write_string(obj["texts"][key].encode())
             if self.needCritical(obj["texts"][key]):
@@ -86,7 +93,7 @@ class D2I:
             indexs[key] = data
 
         indexesSizePosition = self._stream.tell()
-        raw.write_int32(0) # indexes size
+        raw.write_int32(0)  # indexes size
         indexesPosition = self._stream.tell()
 
         for i, data in indexs.items():
@@ -96,26 +103,26 @@ class D2I:
             if data["diacriticalText"]:
                 raw.write_int32(data["unDiacriticalIndex"])
 
-        indexesLength = (self._stream.tell() - indexesPosition)
+        indexesLength = self._stream.tell() - indexesPosition
 
         nameTextSizePosition = self._stream.tell()
-        raw.write_int32(0) # name text size
+        raw.write_int32(0)  # name text size
         nameTextPosition = self._stream.tell()
 
         for name, key in obj["nameText"].items():
             raw.write_string(name.encode())
             raw.write_int32(indexs[str(key)]["pointer"])
 
-        nameTextLength = (self._stream.tell() - nameTextPosition)
+        nameTextLength = self._stream.tell() - nameTextPosition
 
         idTextSizePosition = self._stream.tell()
-        raw.write_int32(0) # id text size
+        raw.write_int32(0)  # id text size
         idTextPosition = self._stream.tell()
 
         for id in obj["idText"]:
             raw.write_int32(int(id))
 
-        idTextLength = (self._stream.tell() - idTextPosition)
+        idTextLength = self._stream.tell() - idTextPosition
         EOF = self._stream.tell()
 
         self._stream.seek(0)
@@ -136,4 +143,4 @@ class D2I:
         return all(ord(char) < 128 for char in str) == False
 
     def unicode(self, str):
-        return unicodedata.normalize('NFD', str).encode('ascii', 'ignore')
+        return unicodedata.normalize("NFD", str).encode("ascii", "ignore")

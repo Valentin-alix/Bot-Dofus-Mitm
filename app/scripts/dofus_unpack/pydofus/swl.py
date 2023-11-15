@@ -3,6 +3,7 @@
 
 from ._binarystream import _BinaryStream
 
+
 # Exceptions
 
 
@@ -11,11 +12,13 @@ class InvalidSWLFile(Exception):
         super(InvalidSWLFile, self).__init__(message)
         self.message = message
 
+
 # Classes
 
 
 class SWLReader:
     """Read SWL files"""
+
     def __init__(self, stream):
         """Load the class with the SWL stream given"""
         # Attributes
@@ -86,6 +89,7 @@ class SWLReader:
 
 class SWLBuilder:
     """Build SWL files"""
+
     def __init__(self, template, target):
         self._template = template
         self._target = target

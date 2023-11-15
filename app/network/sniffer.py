@@ -15,9 +15,9 @@ logger = logging.getLogger(__name__)
 
 class Sniffer:
     def __init__(
-            self,
-            bot_info: BotInfo | None = None,
-            capture_path: Optional[str] = None,
+        self,
+        bot_info: BotInfo | None = None,
+        capture_path: Optional[str] = None,
     ):
         self.bot_info = bot_info
         self.raw_parser = MessageRawDataParser(
@@ -36,15 +36,15 @@ class Sniffer:
         else:
             while True:
                 if (
-                        self.bot_info is None
-                        or self.bot_info.sniffer_info.is_playing_event.wait()
+                    self.bot_info is None
+                    or self.bot_info.sniffer_info.is_playing_event.wait()
                 ):
                     sniff(
                         prn=self.on_receive,
                         store=False,
                         filter=FILTER_DOFUS,
                         stop_filter=lambda _: self.bot_info is None
-                                              or not self.bot_info.sniffer_info.is_playing_event.is_set(),
+                        or not self.bot_info.sniffer_info.is_playing_event.is_set(),
                     )
 
     def on_receive(self, packet: Packet):

@@ -1,8 +1,10 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-from ._binarystream import _BinaryStream
 from collections import OrderedDict
+
+from ._binarystream import _BinaryStream
+
 
 # Exceptions
 
@@ -12,11 +14,13 @@ class InvalidD2PFile(Exception):
         super(InvalidD2PFile, self).__init__(message)
         self.message = message
 
+
 # Class itself
 
 
 class D2PReader:
     """Read D2P files"""
+
     def __init__(self, stream, autoload=True):
         """Init the class with the informations about files in the D2P"""
         # Attributes
@@ -45,8 +49,7 @@ class D2PReader:
             raise InvalidD2PFile("First bytes not found.")
 
         if bytes_header != b"\x02\x01":
-            raise InvalidD2PFile("The first bytes don't match the"
-                                 " SWL pattern.")
+            raise InvalidD2PFile("The first bytes don't match the" " SWL pattern.")
 
         self._stream.seek(-24, 2)  # Set position to end - 24 bytes
 
@@ -57,10 +60,14 @@ class D2PReader:
         self._properties_offset = D2P_file_binary.read_uint32()
         self._number_properties = D2P_file_binary.read_uint32()
 
-        if ((self._base_offset == b"" or self._base_length == b"" or
-             self._indexes_offset == b"" or self._number_indexes == b"" or
-             self._properties_offset == b"" or
-             self._number_properties == b"")):
+        if (
+            self._base_offset == b""
+            or self._base_length == b""
+            or self._indexes_offset == b""
+            or self._number_indexes == b""
+            or self._properties_offset == b""
+            or self._number_properties == b""
+        ):
             raise InvalidD2PFile("The file doesn't match the D2P pattern.")
 
         self._stream.seek(self._indexes_offset, 0)
@@ -78,7 +85,7 @@ class D2PReader:
                 raise InvalidD2PFile("The file appears to be corrupt.")
             self._files_position[file_name] = {
                 "offset": offset + self._base_offset,
-                "length": length
+                "length": length,
             }
 
             i += 1
@@ -95,9 +102,9 @@ class D2PReader:
                 property_type = (D2P_file_binary.read_string()).decode()
                 property_value = (D2P_file_binary.read_string()).decode()
             except ValueError:
-                property_type = (D2P_file_binary.read_string()).decode('latin-1')
-                property_value = (D2P_file_binary.read_string()).decode('latin-1')
-            
+                property_type = (D2P_file_binary.read_string()).decode("latin-1")
+                property_value = (D2P_file_binary.read_string()).decode("latin-1")
+
             if property_type == b"" or property_value == b"":
                 raise InvalidD2PFile("The file appears to be corrupt.")
             self._properties[property_type] = property_value
@@ -121,8 +128,7 @@ class D2PReader:
         for file_name, position in self._files_position.items():
             self._stream.seek(position["offset"], 0)
 
-            self._files[file_name] = (D2P_file_binary.
-                                      read_bytes(position["length"]))
+            self._files[file_name] = D2P_file_binary.read_bytes(position["length"])
 
         self._loaded = True
 
@@ -157,6 +163,7 @@ class D2PReader:
 
 class D2PBuilder:
     """Build D2P files"""
+
     def __init__(self, template, target):
         self._template = template
         self._stream = target
@@ -225,7 +232,7 @@ class D2PBuilder:
         for file_name, specs in self._files.items():
             self._files_position[file_name] = {
                 "offset": actual_offset,
-                "length": len(specs["binary"])
+                "length": len(specs["binary"]),
             }
             actual_offset += self._files_position[file_name]["length"]
 

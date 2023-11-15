@@ -1,7 +1,6 @@
 import os
 from pathlib import Path
 
-
 LOGGING_CONFIG = {
     "version": 1,
     "disable_existing_loggers": False,

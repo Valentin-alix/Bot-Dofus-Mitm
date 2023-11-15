@@ -56,7 +56,7 @@ def read(_type, data: Data):
 
     logger.debug("reading boolean variables")
     ans.update(readBooleans(_type["boolVars"], data))
-    logger.debug("remaining data: %s", data.data[data.pos:])
+    logger.debug("remaining data: %s", data.data[data.pos :])
 
     for var in _type["vars"]:
         logger.debug("reading %s", var)
@@ -67,7 +67,7 @@ def read(_type, data: Data):
             ans[var["name"]] = readVec(var, data)
         else:
             ans[var["name"]] = read(var["type"], data)
-        logger.debug("remaining data: %s", data.data[data.pos:])
+        logger.debug("remaining data: %s", data.data[data.pos :])
     if _type["hash_function"] and data.remaining() == 48:
         ans["hash_function"] = data.read(48)
     return ans

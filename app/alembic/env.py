@@ -15,8 +15,10 @@ from app.database.models import Base
 # access to the values within the .ini file in use.
 config = context.config
 
-config.set_main_option("sqlalchemy.url",
-                       f"sqlite:///{os.path.join(Path(__file__).parent.parent, 'database', 'sqlite3.db')}")
+config.set_main_option(
+    "sqlalchemy.url",
+    f"sqlite:///{os.path.join(Path(__file__).parent.parent, 'database', 'sqlite3.db')}",
+)
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
 if config.config_file_name is not None:
@@ -48,11 +50,7 @@ def run_migrations_offline() -> None:
 
     """
     url = config.get_main_option("sqlalchemy.url")
-    context.configure(
-        url=url,
-        target_metadata=target_metadata,
-        render_as_batch=True
-    )
+    context.configure(url=url, target_metadata=target_metadata, render_as_batch=True)
 
     with context.begin_transaction():
         context.run_migrations()
@@ -73,9 +71,7 @@ def run_migrations_online() -> None:
 
     with connectable.connect() as connection:
         context.configure(
-            connection=connection,
-            target_metadata=target_metadata,
-            render_as_batch=True
+            connection=connection, target_metadata=target_metadata, render_as_batch=True
         )
 
         with context.begin_transaction():
