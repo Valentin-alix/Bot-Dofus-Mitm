@@ -6,11 +6,9 @@ from typing import TYPE_CHECKING
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPalette, QColor
 from PyQt5.QtWidgets import (
-    QBoxLayout,
-    QWidget,
-)
+    QWidget, )
 
-from app.gui.components.common import PushButtonUtils
+from app.gui.components.common import PushButton
 from app.gui.components.organization import VerticalLayout
 
 if TYPE_CHECKING:
@@ -24,39 +22,36 @@ class SideMenu(QWidget):
         super().__init__(parent, *args, **kwargs)
         self.parent_ = parent
         self.setFixedWidth(self.WIDTH)
-        self.setup_menu()
+
+        self.layout = VerticalLayout()
+        self.setLayout(self.layout)
         self.show_menu()
 
-        self.parent_.signals.on_change_frame.connect(self.on_change_frame)
+        self.parent_.signals.on_new_frames.connect(self.on_new_frames)
 
-    def on_change_frame(self) -> None:
-        self.side_menu_layout.clear_list()
+    def on_new_frames(self) -> None:
+        self.layout.clear_list(clear_spacer=True)
         self.show_menu()
-
-    def setup_menu(self) -> None:
-        self.side_menu_layout = VerticalLayout()
-        self.side_menu_layout.addStretch()
-        self.side_menu_layout.setDirection(QBoxLayout.Direction.BottomToTop)
-        self.setLayout(self.side_menu_layout)
 
     def show_menu(self):
-        for index_widget in reversed(range(self.parent_.stacked_frames.count())):
+        for index_widget in range(self.parent_.stacked_frames.count()):
             current_widget = self.parent_.stacked_frames.widget(index_widget)
             if (name := getattr(current_widget, "name", None)) is not None:
-                button = PushButtonUtils(parent=self, text=name)
+                button = PushButton(parent=self, text=name)
                 button.setFixedHeight(100)
-                self.side_menu_layout.addWidget(button)
+                self.layout.addWidget(button)
                 if index_widget == 0:
                     button.set_active_button()
                 button.clicked.connect(partial(self.on_switch_frame, index_widget))
+        self.layout.addStretch()
 
     def update_state_button(self, index_widget):
         buttons_layout = [
             button
-            for index in reversed(range(self.side_menu_layout.count()))
+            for index in range(self.layout.count())
             if isinstance(
-                (button := self.side_menu_layout.itemAt(index).widget()),
-                PushButtonUtils,
+                (button := self.layout.itemAt(index).widget()),
+                PushButton,
             )
         ]
         for index, button in enumerate(buttons_layout):

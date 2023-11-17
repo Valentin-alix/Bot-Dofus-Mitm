@@ -2,7 +2,7 @@ import logging
 import math
 from threading import Thread
 from time import sleep
-from typing import Tuple
+from typing import Tuple, Type
 
 from sqlalchemy.orm import sessionmaker
 
@@ -30,9 +30,9 @@ logger = logging.getLogger(__name__)
 
 class SellingHdv:
     def __init__(
-        self,
-        seller_buyer_descriptor: SellerBuyerDescriptor,
-        bot_info: BotInfo,
+            self,
+            seller_buyer_descriptor: SellerBuyerDescriptor,
+            bot_info: BotInfo,
     ) -> None:
         self.engine = get_engine()
         self.bot_info = bot_info
@@ -44,6 +44,7 @@ class SellingHdv:
 
         self.selected_object: SelectedObject | None = None
 
+        # TODO Use signal instead
         self.is_playing = self.bot_info.selling_info.is_playing_event.is_set()
         self.stop_timer = False
         check_event_play_thread = Thread(target=self.check_event_play, daemon=True)
@@ -51,13 +52,10 @@ class SellingHdv:
 
     def check_event_play(self):
         """continuously check if event play has changed to true"""
-        while (
-            not self.bot_info.common_info.is_closed_event.is_set()
-            and not self.stop_timer
-        ):
+        while not self.stop_timer:
             if (
-                not self.is_playing
-                and self.bot_info.selling_info.is_playing_event.is_set()
+                    not self.is_playing
+                    and self.bot_info.selling_info.is_playing_event.is_set()
             ):
                 logger.info("launching selling hdv bot after manual start")
                 self.process()
@@ -71,7 +69,7 @@ class SellingHdv:
             else:
                 self.place_object(self.selected_object["object_gid"], False)
         elif (
-            accepted_objects_in_inventory := self.get_accepted_objects_in_inventory()
+                accepted_objects_in_inventory := self.get_accepted_objects_in_inventory()
         ) is not None and len(accepted_objects_in_inventory) > 0:
             self.place_object(accepted_objects_in_inventory[-1].objectGID)
         else:
@@ -143,9 +141,9 @@ class SellingHdv:
             raise ValueError("selected object should not be None")
 
     # Utils
-    def get_accepted_objects(self) -> list[Item]:
+    def get_accepted_objects(self) -> list[Type[Item]]:
         with sessionmaker(bind=self.engine)() as _session:
-            accepted_objects: list[Item] = (
+            accepted_objects: list[Type[Item]] = (
                 _session.query(Item)
                 .join(TypeItem, Item.type_item_id == TypeItem.id)
                 .filter(TypeItem.id.in_(self.accepted_categories))
@@ -157,16 +155,16 @@ class SellingHdv:
     def get_accepted_objects_in_inventory(self) -> list[ObjectItem] | None:
         with self.bot_info.common_info.character_with_lock.get("lock"):
             if (
-                character := self.bot_info.common_info.character_with_lock.get(
-                    "character"
-                )
+                    character := self.bot_info.common_info.character_with_lock.get(
+                        "character"
+                    )
             ) is not None:
                 accepted_objects_inventory = [
                     object_
                     for object_ in character.objects
                     if object_.objectGID
-                    in (accepted_object.id for accepted_object in self.accepted_objects)
-                    and object_.objectGID not in self.treated_objects
+                       in (accepted_object.id for accepted_object in self.accepted_objects)
+                       and object_.objectGID not in self.treated_objects
                 ]
                 logger.info(
                     f"Get accepted objects in inventory : {[_object.objectGID for _object in accepted_objects_inventory]}"
@@ -177,7 +175,7 @@ class SellingHdv:
 
     @staticmethod
     def get_price_and_quantity(
-        _object_quantity: int, minimal_prices: list[int]
+            _object_quantity: int, minimal_prices: list[int]
     ) -> Tuple[int, int] | None:
         if _object_quantity == 0:
             return None

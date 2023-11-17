@@ -1,5 +1,10 @@
 QLabel {
     font-size: 14px;
+    qproperty-alignment: AlignCenter;
+}
+
+QGroupBox {
+    qproperty-alignment: AlignCenter;
 }
 
 QGroupBox#not-title{
@@ -7,9 +12,9 @@ QGroupBox#not-title{
 }
 
 QPushButton#inactive {
-    background-color: rgb(53, 53, 53)
+    background-color: rgb(53, 53, 53);
 }
 
 QPushButton#active{
-    background-color: rgb(80, 80, 80)
+    background-color: rgb(80, 80, 80);
 }

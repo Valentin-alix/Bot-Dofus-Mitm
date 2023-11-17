@@ -25,21 +25,18 @@ class BuyingHdv:
 
         self.bot_info = bot_info
 
+        # TODO Use signal instead
         self.is_playing = self.bot_info.scraping_info.is_playing_event.is_set()
         self.stop_timer = False
-
         check_event_play_thread = Thread(target=self.check_event_play, daemon=True)
         check_event_play_thread.start()
 
     def check_event_play(self):
         """continuously check if event play has changed to true"""
-        while (
-            not self.bot_info.common_info.is_closed_event.is_set()
-            and not self.stop_timer
-        ):
+        while not self.stop_timer:
             if (
-                not self.is_playing
-                and self.bot_info.scraping_info.is_playing_event.is_set()
+                    not self.is_playing
+                    and self.bot_info.scraping_info.is_playing_event.is_set()
             ):
                 logger.info("launching hdv bot after manual start")
                 self.is_playing = True

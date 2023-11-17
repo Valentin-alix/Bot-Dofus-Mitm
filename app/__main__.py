@@ -5,11 +5,14 @@ import sys
 from pathlib import Path
 from threading import Thread
 
+from PyQt5.QtCore import QThread
 from alembic import command
 from alembic.config import Config
 
+
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
+from app.gui.signals import AppSignals
 from app.database.models import get_engine
 from app.types_ import BotInfo
 from gui.app import Application, MainWindow
@@ -46,6 +49,7 @@ if __name__ == "__main__":
     if args["migrations"] == "y":
         run_migrations()
 
+    app_signals = AppSignals()
     bot_info = BotInfo()
     bot_info.sniffer_info.is_playing_event.set()
 
@@ -54,11 +58,13 @@ if __name__ == "__main__":
         sniffer_thread = Thread(target=sniffer.launch_sniffer, daemon=True)
         sniffer_thread.start()
     else:
-        mitm = Mitm(bot_info)
-        mitm_thread = Thread(target=mitm.launch, daemon=True)
+        mitm_thread = QThread()
+        mitm = Mitm(bot_info, app_signals)
+        mitm.moveToThread(mitm_thread)
+        mitm_thread.started.connect(mitm.launch)
         mitm_thread.start()
 
     app = Application(sys.argv)
 
-    main_window = MainWindow(bot_info)
+    main_window = MainWindow(bot_info, app_signals, args["sniffer"] == "y")
     sys.exit(app.exec_())

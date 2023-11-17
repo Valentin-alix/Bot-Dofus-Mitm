@@ -6,7 +6,7 @@ from app.modules.character import Character
 from app.modules.hdv.buying_hdv import BuyingHdv
 from app.modules.hdv.selling_hdv import SellingHdv
 from app.network.utils import deep_dict_to_object, get_classes_in_path
-from app.types_ import ParsedMessage, ParsedMessageHandler, BotInfo
+from app.types_ import ParsedMessageHandler, BotInfo, ParsedMessage
 
 logger = logging.getLogger(__name__)
 

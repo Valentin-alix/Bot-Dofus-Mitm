@@ -3,17 +3,71 @@ from pathlib import Path
 
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import (
-    QDialog,
     QGroupBox,
     QPushButton,
-    QTextEdit,
-    QVBoxLayout,
     QWidget,
     QFrame,
+    QScrollArea,
+    QTableWidget,
+    QHeaderView,
+    QTreeWidget,
+    QTreeWidgetItem,
 )
 
-from app.gui.components.organization import HorizontalLayout
-from app.types_.parsed_message import ParsedMessage
+from app.gui.components.organization import HorizontalLayout, AlignDelegate
+
+
+class TableWidget(QScrollArea):
+    def __init__(self, columns_name: list[str], *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.table = QTableWidget(parent=self)
+        self.table.setColumnCount(len(columns_name))
+
+        delegate = AlignDelegate(self.table)
+        for index in range(len(columns_name)):
+            self.table.setItemDelegateForColumn(index, delegate)
+
+        self.table.setHorizontalHeaderLabels(columns_name)
+
+        self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.table.verticalHeader().hide()
+
+        self.setWidget(self.table)
+        self.setWidgetResizable(True)
+
+
+class TreeWidget(QTreeWidget):
+    def __init__(self, json: dict, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.header().hide()
+        self.deep_tree_from_message_dict(json, None, self)
+
+    def deep_tree_from_message_dict(
+        self,
+        _values,
+        parent: QTreeWidgetItem | None = None,
+        base_qtree: QTreeWidget | None = None,
+    ):
+        if not isinstance(_values, dict):
+            widget_item = QTreeWidgetItem([f"{_values}"])
+            if parent is not None:
+                parent.addChild(widget_item)
+        else:
+            for key, value in _values.items():
+                if isinstance(value, dict):
+                    widget_item = QTreeWidgetItem([f"{key}"])
+                    self.deep_tree_from_message_dict(value, widget_item)
+                elif isinstance(value, list):
+                    widget_item = QTreeWidgetItem([f"{key}"])
+                    for _value in value:
+                        self.deep_tree_from_message_dict(_value, widget_item)
+                else:
+                    widget_item = QTreeWidgetItem([f"{key} = {value}"])
+                if parent is not None:
+                    parent.addChild(widget_item)
+                elif base_qtree is not None:
+                    base_qtree.addTopLevelItem(widget_item)
 
 
 class GroupBox(QGroupBox):
@@ -25,21 +79,19 @@ class GroupBox(QGroupBox):
             self.style().polish(self)
 
 
-class PushButtonUtils(QPushButton):
+class PushButton(QPushButton):
     def set_active_button(self):
         self.setObjectName("active")
-        self.update_style()
+        self.style().unpolish(self)
+        self.style().polish(self)
 
     def set_inactive_button(self):
         self.setObjectName("inactive")
-        self.update_style()
-
-    def update_style(self):
         self.style().unpolish(self)
         self.style().polish(self)
 
 
-class ButtonIcon(PushButtonUtils):
+class ButtonIcon(PushButton):
     def __init__(self, filename, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.setIcon(
@@ -53,25 +105,8 @@ class ButtonIcon(PushButtonUtils):
         )
 
 
-class DetailMessageDialog(QDialog):
-    def __init__(self, parsed_msg: ParsedMessage, *args, **kwargs) -> None:
-        super().__init__(*args, **kwargs)
-
-        self.setFixedSize(500, 300)
-        self.setWindowTitle(f"{parsed_msg.__type__}")
-
-        main_layout = QVBoxLayout()
-
-        text_edit = QTextEdit(parent=self)
-        text_edit.setPlainText(str(parsed_msg))
-        text_edit.setReadOnly(True)
-        main_layout.addWidget(text_edit)
-
-        self.setLayout(main_layout)
-
-
 class Header(QWidget):
-    button_reset: PushButtonUtils | None = None
+    button_reset: PushButton | None = None
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)

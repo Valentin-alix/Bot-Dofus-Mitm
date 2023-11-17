@@ -88,12 +88,8 @@ class SellingInfo:
 
 @dataclass
 class CommonInfo:
-    is_closed_event: Event = Event()
-    is_connected_event: Event = Event()
     message_to_send_queue: Queue[dict] = Queue()
-    server_id_with_lock: ServerIdWithLock = field(
-        default_factory=lambda: {"lock": Lock(), "server_id": None}
-    )
+    server_id: int | None = None
     character_with_lock: CharacterWithLock = field(
         default_factory=lambda: {"lock": Lock(), "character": None}
     )

@@ -11,6 +11,5 @@ logger = logging.getLogger(__name__)
 
 class SelectedServerDataMessageHandler(ParsedMessageHandler, SelectedServerDataMessage):
     def handle(self, bot_info: BotInfo) -> None:
-        with bot_info.common_info.server_id_with_lock["lock"]:
-            bot_info.common_info.server_id_with_lock["server_id"] = self.serverId
-            logger.info(f"Got new serverId : {self.serverId}")
+        bot_info.common_info.server_id = self.serverId
+        logger.info(f"Got new serverId : {self.serverId}")

@@ -24,23 +24,23 @@ class ExchangeTypesItemsExchangerDescriptionForUserMessageHandler(
             engine = get_engine()
 
             with sessionmaker(
-                bind=engine
-            )() as session, bot_info.common_info.server_id_with_lock["lock"]:
+                    bind=engine
+            )() as session:
                 price = Price(
                     creation_date=datetime.now(),
                     item_id=self.objectGID,
                     one=self.itemTypeDescriptions[0].prices[0],
                     ten=self.itemTypeDescriptions[0].prices[1],
                     hundred=self.itemTypeDescriptions[0].prices[2],
-                    server_id=bot_info.common_info.server_id_with_lock["server_id"],
+                    server_id=bot_info.common_info.server_id,
                 )
                 session.add(price)
                 session.commit()
 
         with bot_info.scraping_info.buying_hdv_with_lock.get("lock"):
             if (
-                buying_hdv := bot_info.scraping_info.buying_hdv_with_lock.get(
-                    "buying_hdv"
-                )
+                    buying_hdv := bot_info.scraping_info.buying_hdv_with_lock.get(
+                        "buying_hdv"
+                    )
             ) is not None and bot_info.scraping_info.is_playing_event.is_set():
                 buying_hdv.process()

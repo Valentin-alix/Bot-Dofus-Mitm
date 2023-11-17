@@ -1,7 +1,7 @@
 from typing import Type
 
 import pandas as pd
-from sqlalchemy import and_, func, desc, Engine
+from sqlalchemy import func, desc, Engine
 from sqlalchemy.orm import sessionmaker, joinedload
 from sqlalchemy.orm.query import RowReturningQuery, Query
 
@@ -21,19 +21,14 @@ def get_items(engine: Engine) -> list[Type[Item]]:
 
 
 def get_info_by_type_or_object(
-    engine: Engine, type_name: str | None = None, object_name: str | None = None
+        engine: Engine, object_name: str | None = None, server_id: int | None = None
 ) -> pd.DataFrame:
     with sessionmaker(bind=engine)() as session:
-        if type_name is not None:
-            filters = {and_(TypeItem.name == type_name)}
-        else:
-            filters = {and_(Item.name == object_name)}
-
         df_prices = pd.read_sql(
             session.query(Item, Price, TypeItem)
             .join(TypeItem, Item.type_item_id == TypeItem.id)
             .join(Price, Item.id == Price.item_id)
-            .filter(*filters)
+            .filter(Item.name == object_name, Price.server_id == server_id)
             .with_entities(
                 Item.name, Price.creation_date, Price.one, Price.ten, Price.hundred
             )
@@ -45,8 +40,10 @@ def get_info_by_type_or_object(
 
 
 def get_difference_on_all_prices(
-    engine: Engine, server_id: int, quantity: str = "ten", limit: int = 10
-) -> RowReturningQuery[tuple[str, str, int]]:
+        engine: Engine, server_id: int, limit: int = 10
+) -> RowReturningQuery[tuple[str, Item, int]]:
+    # TODO Filter by server id
+    # FIXME Difference enorme la premiere fois => a cause de server id 
     with sessionmaker(bind=engine)() as session:
         _items_latest_oldest_date = (
             session.query(
@@ -105,8 +102,9 @@ def get_difference_on_all_prices(
 
 
 def get_benefit_nugget(
-    engine: Engine, server_id: int, limit: int = 10
+        engine: Engine, server_id: int, limit: int = 10
 ) -> RowReturningQuery[tuple[str, list[Item], int]] | Query | None:
+    # TODO
     with sessionmaker(bind=engine)() as session:
         price_for_100_nugget = (
             session.query(Price.hundred)
@@ -143,6 +141,7 @@ def get_benefit_nugget(
             .filter(
                 Price.server_id == server_id,
                 Price.creation_date == _items_latest.c.max_date,
+                TypeItem.category == CategoryEnum.RESOURCES,
             )
             .group_by(Price.item_id)
             .having(Price.hundred != 0)

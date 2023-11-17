@@ -1,15 +1,22 @@
-POUVOIR Trier par catégories, type d'item
-chute de prix
-et voir graphique par type d'item
+- Voir list graphique par liste d'item
 
-ajouter heure dans interface sniffer
+- ajouter heure dans interface sniffer
 
-ajouter migrations tool pour sqlalchemy
+- voir SimpleNamespace
 
-voir SimpleNamespace
+- utiliser des signals pour communiquer entre les threads
+    - utiliser QThread
+    - QMutex ?
+- Voir sniffer
 
-clean exit mitm when quit gui
+- Bot fm
 
-bugs:
-write exchange object move message
-write exchange object move priced message
+- moderniser interface
+
+- Refactorer le protocol builder
+
+- enlever les lock inutile
+
+- Résoudre problème le hook de la connection se fait mal des fois
+
+- Alembic find a way to create migration only if new changes

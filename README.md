@@ -11,8 +11,7 @@
   DOFUS_INVOKER="C:\\Users\\valen\\AppData\\Local\\Ankama\\Dofus\\DofusInvoker.swf"
   FFDECJAR_PATH="C:\\Program Files (x86)\\FFDec\\ffdec.jar"
   ```
-- Launch init.bat to setup environment
-- Launch init.py for
+- Launch init.bat to setup environment and 
     - Extract DofusInvoker.swf file into action script code
     - Build protocol.pk to get json from network message
     - Create all python class from dofus file with type hint for good autocompletion

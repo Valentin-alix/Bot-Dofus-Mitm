@@ -4,20 +4,20 @@ from typing import Optional
 from scapy.all import Packet, Raw, sniff
 from scapy.layers.inet import IP
 
-from app.network.models.data import BufferInfos, Data
-from app.network.models.message import Message
 from app.network.parser import MessageRawDataParser
 from app.network.utils import get_local_ip
 from app.types_ import FILTER_DOFUS, BotInfo
+from app.types_.models.data import BufferInfos, Data
+from app.types_.models.message import Message
 
 logger = logging.getLogger(__name__)
 
 
 class Sniffer:
     def __init__(
-        self,
-        bot_info: BotInfo | None = None,
-        capture_path: Optional[str] = None,
+            self,
+            bot_info: BotInfo | None = None,
+            capture_path: Optional[str] = None,
     ):
         self.bot_info = bot_info
         self.raw_parser = MessageRawDataParser(
@@ -36,15 +36,15 @@ class Sniffer:
         else:
             while True:
                 if (
-                    self.bot_info is None
-                    or self.bot_info.sniffer_info.is_playing_event.wait()
+                        self.bot_info is None
+                        or self.bot_info.sniffer_info.is_playing_event.wait()
                 ):
                     sniff(
                         prn=self.on_receive,
                         store=False,
                         filter=FILTER_DOFUS,
                         stop_filter=lambda _: self.bot_info is None
-                        or not self.bot_info.sniffer_info.is_playing_event.is_set(),
+                                              or not self.bot_info.sniffer_info.is_playing_event.is_set(),
                     )
 
     def on_receive(self, packet: Packet):
@@ -56,16 +56,16 @@ class Sniffer:
 
     def receive(self, data: Data, from_client: bool):
         if data.remaining() > 0:
-            buffer_infos = (
+            buffer_info = (
                 self.buffer_infos_from_client
                 if from_client
                 else self.buffer_infos_from_server
             )
-            buffer_infos.data += data
-            msg = Message.from_raw(from_client, buffer_infos, self.on_error)
+            buffer_info.data += data
+            msg = Message.from_raw(from_client, buffer_info, self.on_error)
             while msg is not None:
                 self.raw_parser.parse(msg, from_client)
-                msg = Message.from_raw(from_client, buffer_infos, self.on_error)
+                msg = Message.from_raw(from_client, buffer_info, self.on_error)
 
     def on_error(self, _):
         self.not_completed_message_number += 1
