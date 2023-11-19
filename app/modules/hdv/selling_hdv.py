@@ -72,7 +72,7 @@ class SellingHdv:
                 logger.info("launching selling hdv bot after manual start")
                 self.process()
             self.is_playing = self.is_playing_event.is_set()
-            sleep(2)
+            sleep(0.5)
 
     def process(self) -> None:
         if self.selected_object is not None and self.selected_object["quantity"] != 0:

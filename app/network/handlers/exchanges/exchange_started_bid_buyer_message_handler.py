@@ -18,7 +18,7 @@ class ExchangeStartedBidBuyerMessageHandler(
     def handle(self, bot_info: BotInfo, app_signals: AppSignals) -> None:
         bot_info.scraping_info.buying_hdv = BuyingHdv(
             self.buyerDescriptor.types, bot_info.scraping_info.is_playing_event,
-            bot_info.common_info.message_to_send_queue, bot_info.scraping_info.current_state,
+            bot_info.common_info.message_to_send_queue,
             app_signals
         )
         logger.info(f"got hdv buyer with types : {self.buyerDescriptor.types}")

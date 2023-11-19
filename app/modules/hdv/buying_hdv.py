@@ -8,7 +8,6 @@ from sqlalchemy.orm import sessionmaker
 from app.database.models import TypeItem, get_engine
 from app.gui.signals import AppSignals
 from app.network.utils import send_parsed_msg
-from app.types_.dicts.scraping import ScrapingCurrentState
 from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidHouseSearchMessage import (
     ExchangeBidHouseSearchMessage,
 )
@@ -21,9 +20,8 @@ logger = logging.getLogger(__name__)
 
 class BuyingHdv:
     def __init__(self, categories: list[int], is_playing_event: Event, message_to_send_queue: Queue[dict],
-                 scrapping_current_state: ScrapingCurrentState, app_signals: AppSignals) -> None:
+                 app_signals: AppSignals) -> None:
         self.engine = get_engine()
-        self.scrapping_current_state = scrapping_current_state
         self.app_signals = app_signals
         self.is_playing_event = is_playing_event
         self.message_to_send_queue = message_to_send_queue
@@ -39,14 +37,16 @@ class BuyingHdv:
         check_event_play_thread.start()
 
     def __del__(self):
-        self.scrapping_current_state["category_remaining"] = 0
-        self.scrapping_current_state["object_remaining"] = 0
-        self.app_signals.on_new_scraping_current_state.emit(self.scrapping_current_state)
+        self.app_signals.on_new_scraping_current_state.emit({
+            "category_remaining": 0,
+            "object_remaining": 0
+        })
 
     def update_current_state(self):
-        self.scrapping_current_state["category_remaining"] = len(self.categories)
-        self.scrapping_current_state["object_remaining"] = len(self.types_object)
-        self.app_signals.on_new_scraping_current_state.emit(self.scrapping_current_state)
+        self.app_signals.on_new_scraping_current_state.emit({
+            "category_remaining": len(self.categories),
+            "object_remaining": len(self.types_object)
+        })
 
     def check_event_play(self):
         """continuously check if event play has changed to true"""
@@ -59,7 +59,7 @@ class BuyingHdv:
                 self.is_playing = True
                 self.process()
             self.is_playing = self.is_playing_event.is_set()
-            sleep(2)
+            sleep(0.5)
 
     def get_consistent_categories(self, categories: list[int]) -> list[int]:
         """filter type category to be in database"""
