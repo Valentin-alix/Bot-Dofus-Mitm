@@ -6,9 +6,10 @@ from scapy.layers.inet import IP
 
 from app.network.parser import MessageRawDataParser
 from app.network.utils import get_local_ip
-from app.types_ import FILTER_DOFUS, BotInfo
-from app.types_.models.data import BufferInfos, Data
-from app.types_.models.message import Message
+from app.types_.constants import FILTER_DOFUS
+from app.types_.models.common import BotInfo
+from app.types_.models.network.data import BufferInfos, Data
+from app.types_.models.network.message import Message
 
 logger = logging.getLogger(__name__)
 

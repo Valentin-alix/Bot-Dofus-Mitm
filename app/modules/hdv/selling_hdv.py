@@ -1,12 +1,16 @@
+from __future__ import annotations
+
 import logging
 import math
-from threading import Thread
+from queue import Queue
+from threading import Thread, Event
 from time import sleep
-from typing import Tuple, Type
+from typing import Tuple, TYPE_CHECKING
 
 from sqlalchemy.orm import sessionmaker
 
 from app.database.models import Item, TypeItem, get_engine
+from app.modules.character import Character
 from app.network.utils import send_parsed_msg
 from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidHousePriceMessage import (
     ExchangeBidHousePriceMessage,
@@ -23,7 +27,9 @@ from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.data.item
 from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.data.items.SellerBuyerDescriptor import (
     SellerBuyerDescriptor,
 )
-from app.types_.interface import SelectedObject, BotInfo
+
+if TYPE_CHECKING:
+    from app.types_.dicts.selling import SelectedObject
 
 logger = logging.getLogger(__name__)
 
@@ -32,10 +38,15 @@ class SellingHdv:
     def __init__(
             self,
             seller_buyer_descriptor: SellerBuyerDescriptor,
-            bot_info: BotInfo,
+            is_playing_event: Event,
+            message_to_send_queue: Queue[dict],
+            character: Character
     ) -> None:
         self.engine = get_engine()
-        self.bot_info = bot_info
+
+        self.is_playing_event = is_playing_event
+        self.message_to_send_queue = message_to_send_queue
+        self.character = character
 
         self.accepted_categories: list[int] = seller_buyer_descriptor.types
         self.accepted_objects = self.get_accepted_objects()
@@ -43,9 +54,10 @@ class SellingHdv:
         self.treated_objects: list[int] = []
 
         self.selected_object: SelectedObject | None = None
+        self.is_selected_error = False
 
         # TODO Use signal instead
-        self.is_playing = self.bot_info.selling_info.is_playing_event.is_set()
+        self.is_playing = self.is_playing_event.is_set()
         self.stop_timer = False
         check_event_play_thread = Thread(target=self.check_event_play, daemon=True)
         check_event_play_thread.start()
@@ -55,11 +67,11 @@ class SellingHdv:
         while not self.stop_timer:
             if (
                     not self.is_playing
-                    and self.bot_info.selling_info.is_playing_event.is_set()
+                    and self.is_playing_event.is_set()
             ):
                 logger.info("launching selling hdv bot after manual start")
                 self.process()
-            self.is_playing = self.bot_info.selling_info.is_playing_event.is_set()
+            self.is_playing = self.is_playing_event.is_set()
             sleep(2)
 
     def process(self) -> None:
@@ -78,7 +90,7 @@ class SellingHdv:
     def place_object(self, object_gid: int, do_exchange_bid_house_search: bool = True):
         if do_exchange_bid_house_search:
             send_parsed_msg(
-                self.bot_info,
+                self.message_to_send_queue,
                 ExchangeBidHouseSearchMessage(
                     follow=True,
                     objectGID=object_gid,
@@ -88,7 +100,7 @@ class SellingHdv:
                 f"sending ExchangeBidHouseSearchMessage with objectGID : {object_gid}"
             )
         send_parsed_msg(
-            self.bot_info,
+            self.message_to_send_queue,
             ExchangeBidHousePriceMessage(
                 objectGID=object_gid,
             ),
@@ -110,7 +122,7 @@ class SellingHdv:
                     f"send ExchangeObjectMovePricedMessage {self.selected_object['object_uid']}"
                 )
                 send_parsed_msg(
-                    self.bot_info,
+                    self.message_to_send_queue,
                     ExchangeObjectMovePricedMessage(
                         objectUID=self.selected_object["object_uid"],
                         price=results[1],
@@ -122,28 +134,32 @@ class SellingHdv:
                 return
             else:
                 logger.info("result is none, cleaning inventory from object...")
-                self.treated_objects.append(self.selected_object["object_gid"])
-
-                send_parsed_msg(
-                    self.bot_info,
-                    ExchangeBidHouseSearchMessage(
-                        follow=False,
-                        objectGID=self.selected_object["object_gid"],
-                    ),
-                )
-                logger.info(
-                    f"sending ExchangeBidHouseSearchMessage with objectGID : {self.selected_object['object_gid']} to "
-                    f"close"
-                )
+                self.clean_object(self.selected_object["object_gid"])
                 self.selected_object = None
                 self.process()
         else:
             raise ValueError("selected object should not be None")
 
+    def clean_object(self, object_gid: int):
+        self.treated_objects.append(object_gid)
+
+        send_parsed_msg(
+            self.message_to_send_queue,
+            ExchangeBidHouseSearchMessage(
+                follow=False,
+                objectGID=object_gid,
+            ),
+        )
+        logger.info(
+            f"sending ExchangeBidHouseSearchMessage with objectGID : {object_gid} to "
+            f"close"
+        )
+        self.selected_object = None
+
     # Utils
-    def get_accepted_objects(self) -> list[Type[Item]]:
+    def get_accepted_objects(self) -> list[Item]:
         with sessionmaker(bind=self.engine)() as _session:
-            accepted_objects: list[Type[Item]] = (
+            accepted_objects = (
                 _session.query(Item)
                 .join(TypeItem, Item.type_item_id == TypeItem.id)
                 .filter(TypeItem.id.in_(self.accepted_categories))
@@ -153,25 +169,20 @@ class SellingHdv:
             return accepted_objects
 
     def get_accepted_objects_in_inventory(self) -> list[ObjectItem] | None:
-        with self.bot_info.common_info.character_with_lock.get("lock"):
-            if (
-                    character := self.bot_info.common_info.character_with_lock.get(
-                        "character"
-                    )
-            ) is not None:
-                accepted_objects_inventory = [
-                    object_
-                    for object_ in character.objects
-                    if object_.objectGID
-                       in (accepted_object.id for accepted_object in self.accepted_objects)
-                       and object_.objectGID not in self.treated_objects
-                ]
-                logger.info(
-                    f"Get accepted objects in inventory : {[_object.objectGID for _object in accepted_objects_inventory]}"
-                )
-                return accepted_objects_inventory
-            else:
-                raise ValueError("character should not be None")
+        if (character := self.character) is not None:
+            accepted_objects_inventory = [
+                object_
+                for object_ in character.objects
+                if object_.objectGID
+                   in (accepted_object.id for accepted_object in self.accepted_objects)
+                   and object_.objectGID not in self.treated_objects
+            ]
+            logger.info(
+                f"Get accepted objects in inventory : {[_object.objectGID for _object in accepted_objects_inventory]}"
+            )
+            return accepted_objects_inventory
+        else:
+            raise ValueError("character should not be None")
 
     @staticmethod
     def get_price_and_quantity(

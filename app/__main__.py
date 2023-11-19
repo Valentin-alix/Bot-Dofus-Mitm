@@ -6,15 +6,11 @@ from pathlib import Path
 from threading import Thread
 
 from PyQt5.QtCore import QThread
-from alembic import command
-from alembic.config import Config
-
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 from app.gui.signals import AppSignals
-from app.database.models import get_engine
-from app.types_ import BotInfo
+from app.types_.models.common import BotInfo
 from gui.app import Application, MainWindow
 from logs.config import LOGGING_CONFIG
 from network.mitm import Mitm
@@ -27,12 +23,8 @@ logger = logging.getLogger(__name__)
 def run_migrations():
     current_path = os.getcwd()
     os.chdir(os.path.join(os.path.join(Path(__file__).parent)))
-    engine = get_engine()
-    alembic_cfg = Config(os.path.join(Path(__file__).parent, "alembic.ini"))
-    with engine.begin() as connection:
-        command.revision(alembic_cfg, autogenerate=True)
-        command.upgrade(alembic_cfg, "head")
-
+    os.system("alembic revision --autogenerate")
+    os.system("alembic upgrade head")
     os.chdir(current_path)
 
 
@@ -41,13 +33,9 @@ if __name__ == "__main__":
     arg_parsed.add_argument(
         "-s", "--sniffer", required=False, help="y/n to use sniffer", default="n"
     )
-    arg_parsed.add_argument(
-        "-m", "--migrations", required=False, help="y/n to make migrations", default="n"
-    )
     args = vars(arg_parsed.parse_args())
 
-    if args["migrations"] == "y":
-        run_migrations()
+    run_migrations()
 
     app_signals = AppSignals()
     bot_info = BotInfo()

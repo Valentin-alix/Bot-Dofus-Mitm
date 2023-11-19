@@ -1,15 +1,15 @@
-from PyQt5.QtWidgets import QWidget, QGridLayout
+from PyQt5.QtWidgets import QGridLayout
 
-from app.gui.components.common import Frame, Header
+from app.gui.components.common import Frame, TopPage, Widget
 from app.gui.components.organization import VerticalLayout, GridLayout
 from app.gui.pages.fm.item import Item
 from app.gui.pages.fm.rentability_description import RentabilityDescription
-from app.types_ import BotInfo
+from app.types_.models.common import BotInfo
 
 
 class FmFrame(Frame):
-    header: Header
-    content_widget: QWidget
+    header: TopPage
+    content_widget: Widget
     content_layout: QGridLayout
     item: Item | None
     rentability_description: RentabilityDescription | None
@@ -23,7 +23,7 @@ class FmFrame(Frame):
         self.set_content()
 
     def set_header(self):
-        self.header = Header(parent=self)
+        self.header = TopPage(parent=self)
         self.header.button_play.clicked.connect(lambda: self.on_update_do_play(True))
         self.header.button_stop.clicked.connect(lambda: self.on_update_do_play(False))
         self.layout.addWidget(self.header)
@@ -40,7 +40,7 @@ class FmFrame(Frame):
         self.update_state_buttons()
 
     def set_content(self):
-        self.content_widget = QWidget(parent=self)
+        self.content_widget = Widget(parent=self)
         self.layout.addWidget(self.content_widget)
 
         self.content_layout = GridLayout()

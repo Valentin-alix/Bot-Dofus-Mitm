@@ -1,7 +1,9 @@
-from PyQt5.QtWidgets import QWidget, QGridLayout, QLabel
+from PyQt5.QtWidgets import QGridLayout, QLabel
+
+from app.gui.components.common import Widget
 
 
-class RentabilityDescription(QWidget):
+class RentabilityDescription(Widget):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.layout = QGridLayout()

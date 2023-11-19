@@ -1,9 +1,10 @@
 import os
 from pathlib import Path
 
-from PyQt5.QtGui import QIcon
+from PyQt5 import QtCore
+from PyQt5.QtCore import QSize
+from PyQt5.QtGui import QIcon, QCursor
 from PyQt5.QtWidgets import (
-    QGroupBox,
     QPushButton,
     QWidget,
     QFrame,
@@ -11,20 +12,27 @@ from PyQt5.QtWidgets import (
     QTableWidget,
     QHeaderView,
     QTreeWidget,
-    QTreeWidgetItem,
-)
+    QTreeWidgetItem, )
 
 from app.gui.components.organization import HorizontalLayout, AlignDelegate
 
 
+class Widget(QWidget):
+    def set_object_name(self, obj_name: str):
+        self.setObjectName(obj_name)
+        self.style().unpolish(self)
+        self.style().polish(self)
+
+
 class TableWidget(QScrollArea):
-    def __init__(self, columns_name: list[str], *args, **kwargs):
+    def __init__(self, columns_name: list[str], delegate_type=AlignDelegate, *args, **kwargs):
+        # TODO Delegate painter
         super().__init__(*args, **kwargs)
 
         self.table = QTableWidget(parent=self)
         self.table.setColumnCount(len(columns_name))
 
-        delegate = AlignDelegate(self.table)
+        delegate = delegate_type(self.table)
         for index in range(len(columns_name)):
             self.table.setItemDelegateForColumn(index, delegate)
 
@@ -44,10 +52,10 @@ class TreeWidget(QTreeWidget):
         self.deep_tree_from_message_dict(json, None, self)
 
     def deep_tree_from_message_dict(
-        self,
-        _values,
-        parent: QTreeWidgetItem | None = None,
-        base_qtree: QTreeWidget | None = None,
+            self,
+            _values,
+            parent: QTreeWidgetItem | None = None,
+            base_qtree: QTreeWidget | None = None,
     ):
         if not isinstance(_values, dict):
             widget_item = QTreeWidgetItem([f"{_values}"])
@@ -70,54 +78,63 @@ class TreeWidget(QTreeWidget):
                     base_qtree.addTopLevelItem(widget_item)
 
 
-class GroupBox(QGroupBox):
-    def __init__(self, with_title: bool = True, *args, **kwargs) -> None:
+class PushButton(QPushButton, Widget):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
-        if not with_title:
-            self.setObjectName("not-title")
-            self.style().unpolish(self)
-            self.style().polish(self)
+        self.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
 
-
-class PushButton(QPushButton):
     def set_active_button(self):
-        self.setObjectName("active")
-        self.style().unpolish(self)
-        self.style().polish(self)
+        self.set_object_name("active")
 
     def set_inactive_button(self):
-        self.setObjectName("inactive")
-        self.style().unpolish(self)
-        self.style().polish(self)
+        self.set_object_name("inactive")
 
 
 class ButtonIcon(PushButton):
-    def __init__(self, filename, *args, **kwargs) -> None:
+    def __init__(self, filename, height=40, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
+        self.set_icon(filename)
+        self.setFixedHeight(height)
+        self.setIconSize(QSize(height - 8, height - 8))
+
+    def set_icon(self, filename):
         self.setIcon(
             QIcon(
                 os.path.join(
-                    Path(__file__).parent,
-                    "../resources",
+                    Path(__file__).parent.parent,
+                    "resources",
+                    "icons",
                     filename,
                 )
             )
         )
 
 
-class Header(QWidget):
+class TopPage(Widget):
+    HEIGHT = 30
     button_reset: PushButton | None = None
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, with_restart: bool = False, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
+        self.setFixedHeight(self.HEIGHT)
 
         self.h_layout = HorizontalLayout()
         self.setLayout(self.h_layout)
 
+        if with_restart:
+            self.button_reset = ButtonIcon("restart.svg", parent=self)
+            self.button_reset.setFixedHeight(self.HEIGHT)
+            self.button_reset.setIconSize(QSize(self.HEIGHT - 10, self.HEIGHT - 10))
+            self.h_layout.addWidget(self.button_reset)
+
         self.button_play = ButtonIcon("play.svg", parent=self)
+        self.button_play.setFixedHeight(self.HEIGHT)
+        self.button_play.setIconSize(QSize(self.HEIGHT - 10, self.HEIGHT - 10))
         self.h_layout.addWidget(self.button_play)
 
         self.button_stop = ButtonIcon("stop", parent=self)
+        self.button_stop.setFixedHeight(self.HEIGHT)
+        self.button_stop.setIconSize(QSize(self.HEIGHT - 10, self.HEIGHT - 10))
         self.h_layout.addWidget(self.button_stop)
 
     def do_play(self, is_playing: bool):

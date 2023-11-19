@@ -14,9 +14,9 @@ from PyQt5.QtCore import QObject
 
 from app.gui.signals import AppSignals
 from app.network.parser import MessageRawDataParser
-from app.types_ import BotInfo
-from app.types_.models.data import BufferInfos
-from app.types_.models.message import Message
+from app.types_.models.common import BotInfo
+from app.types_.models.network.data import BufferInfos
+from app.types_.models.network.message import Message
 
 logger = logging.getLogger(__name__)
 
@@ -25,9 +25,9 @@ class Mitm(QObject):
     def __init__(self, bot_info: BotInfo, app_signals: AppSignals) -> None:
         super().__init__()
         self.app_signals = app_signals
+        self.app_signals.on_close.connect(self.on_close)
         self.bridges: list[InjectorBridgeHandler] = []
         self.bot_info = bot_info
-        self.app_signals.close.connect(self.on_close)
 
     def on_close(self) -> None:
         for bridge in self.bridges:
@@ -37,8 +37,9 @@ class Mitm(QObject):
     def on_connection_callback(
             self, connection_game: fritm.proxy.ConnectionWrapper, connection_server: Socket
     ):
+        print("connected")
         bridge = InjectorBridgeHandler(
-            connection_game, connection_server, self.bot_info
+            connection_game, connection_server, self.bot_info, self.app_signals
         )
         self.bridges.append(bridge)
 
@@ -62,6 +63,7 @@ class InjectorBridgeHandler:
             connection_game: fritm.proxy.ConnectionWrapper,
             connection_server: Socket,
             bot_info: BotInfo,
+            app_signals: AppSignals,
     ):
         self.connection_game = connection_game
         self.connection_server = connection_server
@@ -75,35 +77,22 @@ class InjectorBridgeHandler:
             connection_game: BufferInfos(),
             connection_server: BufferInfos(),
         }
-
         self.injected_to_client = 0
         self.injected_to_server = 0
         self.counter = 0
 
         self.bot_info = bot_info
+        self.app_signals = app_signals
+
         self.last_message_send_date: datetime | None = None
-        self.raw_parser = MessageRawDataParser(self.bot_info)
+        self.raw_parser = MessageRawDataParser(self.bot_info, self.app_signals)
 
         self.msgs_to_send: list[dict] = []
-
-        send_basic_ping_recurrent_thread = Thread(
-            target=self.send_basic_ping_recurrent, daemon=True
-        )
-        send_basic_ping_recurrent_thread.start()
 
         check_send_msg_recurrent_thread = Thread(
             target=self.check_send_msg_recurrent, daemon=True
         )
         check_send_msg_recurrent_thread.start()
-
-    def send_basic_ping_recurrent(self):
-        while not self.is_server_closed():
-            self.send_to_server(
-                Message.get_message_from_json(
-                    {"__type__": "BasicPingMessage", "quiet": True}
-                )
-            )
-            sleep(random.uniform(7, 10))
 
     def check_send_msg_recurrent(self):
         while not self.is_server_closed():
@@ -113,6 +102,7 @@ class InjectorBridgeHandler:
                 )
                 message = Message.get_message_from_json(parsed_msg)
                 self.send_to_server(message)
+
             except Empty:
                 pass
             sleep(random.uniform(*self.TIME_BETWEEN_SEND))

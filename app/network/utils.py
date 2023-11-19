@@ -1,9 +1,14 @@
+from __future__ import annotations
+
 import logging
 import os
 import socket
 from importlib import import_module
+from queue import Queue
+from typing import TYPE_CHECKING
 
-from app.types_.interface import BotInfo
+if TYPE_CHECKING:
+    pass
 
 try:
     from app.types_.dofus.utils import CLASSES_BY_NAME
@@ -28,12 +33,12 @@ def get_local_ip() -> str:
     return ip_local
 
 
-def send_parsed_msg(bot_info: BotInfo, parsed_message):
+def send_parsed_msg(message_to_send_queue: Queue[dict], parsed_message):
     msg_to_send = {
         **vars(parsed_message),
         "__type__": f"{parsed_message.__class__.__name__}",
     }
-    bot_info.common_info.message_to_send_queue.put(msg_to_send)
+    message_to_send_queue.put(msg_to_send)
 
 
 def convert_snake_case_to_camel_case(snake_case_str: str):
@@ -43,7 +48,7 @@ def convert_snake_case_to_camel_case(snake_case_str: str):
     return camel_case_str
 
 
-def deep_dict_to_object(from_client: bool | None = None, **kwargs):
+def deep_dict_to_object(**kwargs):
     props = kwargs
     for key, value in kwargs.items():
         if isinstance(value, dict):
@@ -53,8 +58,8 @@ def deep_dict_to_object(from_client: bool | None = None, **kwargs):
             value = [deep_dict_to_object(**_value) for _value in value]
             props[key] = value
     if (
-        kwargs.get("__type__") is not None
-        and (class_type := CLASSES_BY_NAME.get(kwargs.pop("__type__"))) is not None
+            kwargs.get("__type__") is not None
+            and (class_type := CLASSES_BY_NAME.get(kwargs.pop("__type__"))) is not None
     ):
         return class_type(**props)
     raise ValueError("object must contains valid __type__ key")

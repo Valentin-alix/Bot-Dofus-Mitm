@@ -1,34 +1,35 @@
-from queue import Empty
-
-from PyQt5.QtCore import QTimer
+from PyQt5 import QtWidgets
 from PyQt5.QtGui import QColor
 from PyQt5.QtWidgets import (
     QWidget,
     QTableWidgetItem,
-    QAbstractItemView, QTableWidget, )
+    QTableWidget,
+)
 
 from app.gui.components.common import (
-    ButtonIcon,
-    Header,
-    Frame, TableWidget,
+    TopPage,
+    Frame,
+    TableWidget, Widget,
 )
 from app.gui.components.organization import (
     VerticalLayout,
-    HorizontalLayout,
+    HorizontalLayout, SnifferTableDelegate,
 )
 from app.gui.pages.sniffer.detail_message import DetailMessage
-from app.types_ import BotInfo
+from app.gui.signals import AppSignals
+from app.types_.dicts.sniffer import ParsedMessageInfo
+from app.types_.models.common import BotInfo
 
 
 class SnifferFrame(Frame):
-    header_sniffer: Header
-    content: QWidget
+    header_sniffer: TopPage
+    content: Widget
     content_layout: HorizontalLayout
     table_messages: QTableWidget
 
-    def __init__(self, bot_info: BotInfo, *args, **kwargs) -> None:
+    def __init__(self, bot_info: BotInfo, app_signals: AppSignals, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
-
+        self.app_signals = app_signals
         self.bot_info = bot_info
 
         self.layout = VerticalLayout()
@@ -39,19 +40,7 @@ class SnifferFrame(Frame):
 
         self.setLayout(self.layout)
 
-        self.timer_check_new_msg = QTimer(self)
-        self.timer_check_new_msg.timeout.connect(self.check_new_msg)
-        self.timer_check_new_msg.start(300)
-
-    def check_new_msg(self):
-        try:
-            while True:
-                parsed_msg = (
-                    self.bot_info.sniffer_info.parsed_message_queue.get_nowait()
-                )
-                self.on_get_message(vars(parsed_msg))
-        except Empty:
-            pass
+        self.app_signals.on_parsed_msg_info.connect(self.on_get_message)
 
     def on_reset(self):
         self.table_messages.clearContents()
@@ -70,12 +59,8 @@ class SnifferFrame(Frame):
         )
 
     def set_header_sniffer(self):
-        self.header_sniffer = Header()
-
-        self.header_sniffer.button_reset = ButtonIcon("restart.svg")
+        self.header_sniffer = TopPage(with_restart=True)
         self.header_sniffer.button_reset.clicked.connect(self.on_reset)
-        self.header_sniffer.h_layout.insertWidget(0, self.header_sniffer.button_reset)
-
         self.header_sniffer.button_play.clicked.connect(self.on_play)
         self.header_sniffer.button_stop.clicked.connect(self.on_stop)
         self.header_sniffer.do_play(
@@ -94,43 +79,45 @@ class SnifferFrame(Frame):
         self.layout.addWidget(self.content)
 
     def set_list_message(self):
-        table_messages_scroll = TableWidget(columns_name=["Origine", "Message"])
+        table_messages_scroll = TableWidget(columns_name=["Heure", "Origine", "Message"],
+                                            delegate_type=SnifferTableDelegate)
         self.table_messages = table_messages_scroll.table
 
-        self.table_messages.setColumnCount(3)
-        self.table_messages.setColumnHidden(2, True)
-        self.table_messages.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.table_messages.setColumnCount(4)
+        self.table_messages.setColumnHidden(3, True)
+        self.table_messages.setSelectionBehavior(QtWidgets.QTableView.SelectRows)
         self.table_messages.cellClicked.connect(self.show_info_message)
 
         self.content_layout.addWidget(table_messages_scroll)
 
-    def on_get_message(self, parsed_message_json: dict):
+    def on_get_message(self, parsed_message_info: ParsedMessageInfo):
         if self.bot_info.sniffer_info.is_playing_event.is_set():
-            background_color = (
-                "red" if parsed_message_json.get("from_client") else "green"
-            )
+            background_color = "darkred" if parsed_message_info["from_client"] else "green"
 
             self.table_messages.insertRow(0)
 
+            time_col = QTableWidgetItem(parsed_message_info["time"].strftime("%H:%M:%S"))
+            time_col.setBackground(QColor(background_color))
+            self.table_messages.setItem(0, 0, time_col)
+
             origin_col = QTableWidgetItem(
-                "Client" if parsed_message_json.pop("from_client") else "Server"
+                "Client" if parsed_message_info["from_client"] else "Server"
             )
             origin_col.setBackground(QColor(background_color))
-            self.table_messages.setItem(0, 0, origin_col)
+            self.table_messages.setItem(0, 1, origin_col)
 
-            message_col = QTableWidgetItem(parsed_message_json.pop("__type__"))
+            message_col = QTableWidgetItem(parsed_message_info["parsed_msg"].__type__)
             message_col.setBackground(QColor(background_color))
-            self.table_messages.setItem(0, 1, message_col)
+            self.table_messages.setItem(0, 2, message_col)
 
             message_col_data = QTableWidgetItem()
-            message_col_data.setData(0, parsed_message_json)
-            self.table_messages.setItem(0, 2, message_col_data)
+            message_col_data.setData(0, vars(parsed_message_info["parsed_msg"]))
+            self.table_messages.setItem(0, 3, message_col_data)
 
     def show_info_message(self, row: int, _):
-        if (msg_item := self.table_messages.item(row, 2)) is not None:
+        if (msg_item := self.table_messages.item(row, 3)) is not None:
             self.quit_detail_msg()
             parsed_msg_json: dict = msg_item.data(0)
-
             self.detail_msg = DetailMessage(parsed_msg_json)
             self.detail_msg.quit_btn.clicked.connect(self.quit_detail_msg)
             self.content_layout.addWidget(self.detail_msg)

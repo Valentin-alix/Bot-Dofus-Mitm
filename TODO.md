@@ -1,22 +1,13 @@
 - Voir list graphique par liste d'item
 
-- ajouter heure dans interface sniffer
-
-- voir SimpleNamespace
-
-- utiliser des signals pour communiquer entre les threads
-    - utiliser QThread
-    - QMutex ?
-- Voir sniffer
+- signals => communiquer from thread to main gui
 
 - Bot fm
 
-- moderniser interface
-
 - Refactorer le protocol builder
 
-- enlever les lock inutile
+- stop playing when quitting hdv or finished
 
-- Résoudre problème le hook de la connection se fait mal des fois
+- Clean sniffer if 200+ rows
 
-- Alembic find a way to create migration only if new changes
+- Use postgresql

@@ -45,5 +45,17 @@ class GridLayout(QGridLayout, Layout):
 
 class AlignDelegate(QStyledItemDelegate):
     def initStyleOption(self, option, index):
-        super(AlignDelegate, self).initStyleOption(option, index)
+        super().initStyleOption(option, index)
         option.displayAlignment = QtCore.Qt.AlignCenter
+
+
+class SnifferTableDelegate(AlignDelegate):
+    def initStyleOption(self, option, index):
+        super().initStyleOption(option, index)
+
+    def paint(self, painter, option, index):
+        super().paint(painter, option, index)
+        # painter.save()
+        # if option.state & QStyle.State_Selected:
+        #     painter.fillRect(option.rect, QColor("red"))
+        # painter.restore()

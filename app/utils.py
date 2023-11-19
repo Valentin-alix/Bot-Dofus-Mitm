@@ -21,8 +21,10 @@ def get_items(engine: Engine) -> list[Type[Item]]:
 
 
 def get_info_by_type_or_object(
-        engine: Engine, object_name: str | None = None, server_id: int | None = None
-) -> pd.DataFrame:
+        engine: Engine, server_id: int | None, object_name: str | None = None
+) -> pd.DataFrame | None:
+    if server_id is None:
+        return None
     with sessionmaker(bind=engine)() as session:
         df_prices = pd.read_sql(
             session.query(Item, Price, TypeItem)
@@ -40,10 +42,13 @@ def get_info_by_type_or_object(
 
 
 def get_difference_on_all_prices(
-        engine: Engine, server_id: int, limit: int = 10
-) -> RowReturningQuery[tuple[str, Item, int]]:
+        engine: Engine, server_id: int | None, limit: int = 10
+) -> RowReturningQuery[tuple[str, Item, int]] | None:
     # TODO Filter by server id
-    # FIXME Difference enorme la premiere fois => a cause de server id 
+    # FIXME Difference enorme la premiere fois => a cause de server id ?
+    if server_id is None:
+        return None
+
     with sessionmaker(bind=engine)() as session:
         _items_latest_oldest_date = (
             session.query(
@@ -52,6 +57,7 @@ def get_difference_on_all_prices(
                 func.min(Price.creation_date).label("min_date"),
             )
             .join(Price, Price.item_id == Item.id)
+            .filter(Price.server_id == server_id)
             .group_by(Item.id)
             .subquery()
         )
@@ -75,10 +81,9 @@ def get_difference_on_all_prices(
         )
 
         difference_items = (
-            session.query(Price, TypeItem, Item)
-            .join(_items_latest, _items_latest.c.id == Price.item_id)
-            .join(_items_oldest, _items_oldest.c.id == Price.item_id)
-            .join(Item, Item.id == Price.item_id)
+            session.query(TypeItem, Item)
+            .join(_items_latest, _items_latest.c.id == Item.id)
+            .join(_items_oldest, _items_oldest.c.id == Item.id)
             .join(TypeItem, Item.type_item_id == TypeItem.id)
             .filter(
                 _items_latest.c.hundred != 0,
@@ -86,7 +91,6 @@ def get_difference_on_all_prices(
                 TypeItem.category.in_(
                     [CategoryEnum.RESOURCES, CategoryEnum.CONSUMABLES]
                 ),
-                Price.server_id == server_id,
             )
             .group_by(Item.id)
             .with_entities(
@@ -102,9 +106,11 @@ def get_difference_on_all_prices(
 
 
 def get_benefit_nugget(
-        engine: Engine, server_id: int, limit: int = 10
+        engine: Engine, server_id: int | None, limit: int = 10
 ) -> RowReturningQuery[tuple[str, list[Item], int]] | Query | None:
-    # TODO
+    # TODO Test server id
+    if server_id is None:
+        return None
     with sessionmaker(bind=engine)() as session:
         price_for_100_nugget = (
             session.query(Price.hundred)
@@ -116,11 +122,13 @@ def get_benefit_nugget(
         )
         if price_for_100_nugget is None:
             return None
+
         price_for_100_nugget = price_for_100_nugget[0]
 
         _items_latest = (
             session.query(Item.id, func.max(Price.creation_date).label("max_date"))
             .join(Price, Price.item_id == Item.id)
+            .filter(Price.server_id == server_id)
             .group_by(Item.id)
             .subquery()
         )

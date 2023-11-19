@@ -1,0 +1,13 @@
+version: '3'
+services:
+  postgres-service:
+    image: postgres:latest
+    container_name: postgres-container
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_DB= mitm_dofus
+      - POSTGRES_USER= admin
+      - POSTGRES_PASSWORD= admin
+    volumes:
+      - resources/db:/var/lib/postgres/data

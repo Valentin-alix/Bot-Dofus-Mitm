@@ -1,13 +1,13 @@
 import matplotlib
 from PyQt5.QtWidgets import (
-    QWidget,
     QComboBox,
 )
 from sqlalchemy import Engine
 
 from app.database.models import CategoryEnum
+from app.gui.components.common import Widget
 from app.gui.components.organization import VerticalLayout, HorizontalLayout
-from app.types_ import BotInfo
+from app.types_.models.common import BotInfo
 from app.utils import get_info_by_type_or_object, get_type, get_items
 
 matplotlib.use("Qt5Agg")
@@ -36,7 +36,7 @@ class ChartContent(FigureCanvasQTAgg):
         self.draw()
 
 
-class ChartFilters(QWidget):
+class ChartFilters(Widget):
     def __init__(self, parent: 'Chart', engine: Engine, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.engine = engine
@@ -86,7 +86,7 @@ class ChartFilters(QWidget):
             )
 
 
-class Chart(QWidget):
+class Chart(Widget):
     def __init__(self, engine: Engine, bot_info: BotInfo, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.engine = engine
@@ -104,6 +104,7 @@ class Chart(QWidget):
 
     def on_select_item(self, item_name: str):
         if item_name != "":
-            df_info = get_info_by_type_or_object(self.engine, server_id=self.server_id,
+            df_info = get_info_by_type_or_object(engine=self.engine, server_id=self.server_id,
                                                  object_name=item_name)
-            self.canvas.show(df_info)
+            if df_info is not None:
+                self.canvas.show(df_info)

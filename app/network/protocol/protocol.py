@@ -3,7 +3,7 @@ import random
 from functools import reduce
 
 from app.network.protocol.protocol_load import primitives, types, types_from_id
-from app.types_.models.data import Data
+from app.types_.models.network.data import Data
 
 logger = logging.getLogger("labot")
 

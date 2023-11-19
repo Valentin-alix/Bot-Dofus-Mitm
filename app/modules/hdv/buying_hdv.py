@@ -1,47 +1,64 @@
 import logging
-from threading import Thread
+from queue import Queue
+from threading import Thread, Event
 from time import sleep
 
 from sqlalchemy.orm import sessionmaker
 
 from app.database.models import TypeItem, get_engine
+from app.gui.signals import AppSignals
 from app.network.utils import send_parsed_msg
+from app.types_.dicts.scraping import ScrapingCurrentState
 from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidHouseSearchMessage import (
     ExchangeBidHouseSearchMessage,
 )
 from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidHouseTypeMessage import (
     ExchangeBidHouseTypeMessage,
 )
-from app.types_.interface import BotInfo
 
 logger = logging.getLogger(__name__)
 
 
 class BuyingHdv:
-    def __init__(self, categories: list[int], bot_info: BotInfo) -> None:
+    def __init__(self, categories: list[int], is_playing_event: Event, message_to_send_queue: Queue[dict],
+                 scrapping_current_state: ScrapingCurrentState, app_signals: AppSignals) -> None:
         self.engine = get_engine()
+        self.scrapping_current_state = scrapping_current_state
+        self.app_signals = app_signals
+        self.is_playing_event = is_playing_event
+        self.message_to_send_queue = message_to_send_queue
+
         self.categories = self.get_consistent_categories(categories)
         self.types_object: list[dict] = []
-
-        self.bot_info = bot_info
+        self.update_current_state()
 
         # TODO Use signal instead
-        self.is_playing = self.bot_info.scraping_info.is_playing_event.is_set()
+        self.is_playing = self.is_playing_event.is_set()
         self.stop_timer = False
         check_event_play_thread = Thread(target=self.check_event_play, daemon=True)
         check_event_play_thread.start()
+
+    def __del__(self):
+        self.scrapping_current_state["category_remaining"] = 0
+        self.scrapping_current_state["object_remaining"] = 0
+        self.app_signals.on_new_scraping_current_state.emit(self.scrapping_current_state)
+
+    def update_current_state(self):
+        self.scrapping_current_state["category_remaining"] = len(self.categories)
+        self.scrapping_current_state["object_remaining"] = len(self.types_object)
+        self.app_signals.on_new_scraping_current_state.emit(self.scrapping_current_state)
 
     def check_event_play(self):
         """continuously check if event play has changed to true"""
         while not self.stop_timer:
             if (
                     not self.is_playing
-                    and self.bot_info.scraping_info.is_playing_event.is_set()
+                    and self.is_playing_event.is_set()
             ):
                 logger.info("launching hdv bot after manual start")
                 self.is_playing = True
                 self.process()
-            self.is_playing = self.bot_info.scraping_info.is_playing_event.is_set()
+            self.is_playing = self.is_playing_event.is_set()
             sleep(2)
 
     def get_consistent_categories(self, categories: list[int]) -> list[int]:
@@ -70,7 +87,7 @@ class BuyingHdv:
         if len(self.categories) > 0:
             category = self.categories.pop()
             send_parsed_msg(
-                self.bot_info,
+                self.message_to_send_queue,
                 ExchangeBidHouseTypeMessage(
                     follow=True,
                     type=category,
@@ -81,7 +98,7 @@ class BuyingHdv:
     def send_get_prices(self, type_object):
         logger.info(f"Sending get prices {type_object.get('object_gid')}")
         send_parsed_msg(
-            self.bot_info,
+            self.message_to_send_queue,
             ExchangeBidHouseSearchMessage(
                 objectGID=type_object.get("object_gid"),
                 follow=not type_object.get("is_opened"),
@@ -93,3 +110,4 @@ class BuyingHdv:
             self.get_available_objects_gid()
         elif len(self.categories) > 0:
             self.send_get_category()
+        self.update_current_state()

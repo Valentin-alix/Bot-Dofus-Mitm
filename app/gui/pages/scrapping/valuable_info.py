@@ -1,13 +1,13 @@
-from PyQt5.QtWidgets import QWidget, QTableWidgetItem, QLabel
+from PyQt5.QtWidgets import QTableWidgetItem, QLabel
 from sqlalchemy import Engine
 
-from app.gui.components.common import TableWidget
+from app.gui.components.common import TableWidget, Widget
 from app.gui.components.organization import HorizontalLayout, VerticalLayout
-from app.types_ import BotInfo
+from app.types_.models.common import BotInfo
 from app.utils import get_benefit_nugget, get_difference_on_all_prices
 
 
-class ValuableInfo(QWidget):
+class ValuableInfo(Widget):
     table_benefit_recycling: TableWidget
     table_price_drop: TableWidget
 
@@ -21,15 +21,15 @@ class ValuableInfo(QWidget):
         self.main_layout = HorizontalLayout(without_space=False)
         self.setLayout(self.main_layout)
 
-        self.show_benefit_recycling()
-        self.show_price_drop()
+        self.setup_benefit_recycling()
+        self.setup_price_drop()
 
     def on_reset(self):
         self.get_benefit_recycling()
         self.get_price_drop()
 
-    def show_benefit_recycling(self):
-        benefit_recycling = QWidget(parent=self)
+    def setup_benefit_recycling(self):
+        benefit_recycling = Widget(parent=self)
 
         v_layout = VerticalLayout()
         benefit_recycling.setLayout(v_layout)
@@ -43,10 +43,8 @@ class ValuableInfo(QWidget):
 
         self.main_layout.addWidget(benefit_recycling)
 
-        self.get_benefit_recycling()
-
-    def show_price_drop(self):
-        price_drop_widget = QWidget(parent=self)
+    def setup_price_drop(self):
+        price_drop_widget = Widget(parent=self)
 
         v_layout = VerticalLayout()
         price_drop_widget.setLayout(v_layout)
@@ -60,8 +58,6 @@ class ValuableInfo(QWidget):
 
         self.main_layout.addWidget(price_drop_widget)
 
-        self.get_price_drop()
-
     def get_price_drop(self):
         self.table_price_drop.clearContents()
         self.table_price_drop.setRowCount(0)
@@ -69,6 +65,7 @@ class ValuableInfo(QWidget):
         items = get_difference_on_all_prices(self.engine, self.server_id)
         if items is None:
             return
+
         self.table_price_drop.setRowCount(10)
 
         for index, (_type, name, benefit) in enumerate(items):
@@ -76,16 +73,18 @@ class ValuableInfo(QWidget):
             name_col = QTableWidgetItem(name)
             difference_col = QTableWidgetItem(str(benefit))
 
-            self.table_price_drop.setItem(int(index), 0, type_col)
-            self.table_price_drop.setItem(int(index), 1, name_col)
-            self.table_price_drop.setItem(int(index), 2, difference_col)
+            self.table_price_drop.setItem(index, 0, type_col)
+            self.table_price_drop.setItem(index, 1, name_col)
+            self.table_price_drop.setItem(index, 2, difference_col)
 
     def get_benefit_recycling(self):
         self.table_benefit_recycling.clearContents()
         self.table_benefit_recycling.setRowCount(0)
+
         items_for_nugget = get_benefit_nugget(self.engine, self.server_id)
         if items_for_nugget is None:
             return
+
         self.table_benefit_recycling.setRowCount(10)
         for index, (_type, item, benefit) in enumerate(items_for_nugget):
             type_col = QTableWidgetItem(_type)

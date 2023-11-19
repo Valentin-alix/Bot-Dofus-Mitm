@@ -4,7 +4,7 @@ import logging
 from typing import Callable
 
 from app.network.protocol import protocol, protocol_load
-from app.types_.models.data import BufferInfos, Data
+from app.types_.models.network.data import BufferInfos, Data
 
 logger = logging.getLogger(__name__)
 

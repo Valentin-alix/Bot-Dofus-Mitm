@@ -4,7 +4,6 @@ from dataclasses import dataclass
 from sqlalchemy.orm import sessionmaker
 
 from app.database.models import get_engine, Rune
-from app.types_ import MagicPoolStatus
 from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.data.items.ObjectItem import (
     ObjectItem,
 )
@@ -14,6 +13,7 @@ from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.data.item
 from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.data.items.effects.ObjectEffectInteger import (
     ObjectEffectInteger,
 )
+from app.types_.enums import MagicPoolStatus
 
 logger = logging.getLogger(__name__)
 
@@ -51,7 +51,7 @@ class Fm:
         ...
 
     def get_remainder(
-        self, new_item_effects: list[ObjectEffect], magic_pool_status: MagicPoolStatus
+            self, new_item_effects: list[ObjectEffect], magic_pool_status: MagicPoolStatus
     ):
         def get_weight_item(effects: list[ObjectEffect]):
             weight_item = 0
