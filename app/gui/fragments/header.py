@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from PyQt5.QtCore import Qt, QEvent, QSize
+from PyQt5.QtCore import Qt, QEvent
 from PyQt5.QtWidgets import QSizePolicy
 
 from app.gui.components.common import Widget, ButtonIcon
@@ -11,8 +11,8 @@ if TYPE_CHECKING:
 
 
 class HeaderItem(ButtonIcon):
-    def __init__(self, height=50, text: str = "", *args, **kwargs) -> None:
-        super().__init__(height=height, *args, **kwargs)
+    def __init__(self, height=50, icon_size=20, text: str = "", *args, **kwargs) -> None:
+        super().__init__(height=height, icon_size=icon_size, *args, **kwargs)
         self.setFixedWidth(50)
 
     def set_active_button(self):
@@ -50,8 +50,7 @@ class Header(Widget):
         self.minimize_button.set_inactive_button()
         self.main_layout.addWidget(self.minimize_button)
 
-        self.resize_button = HeaderItem(height=self.HEIGHT, filename="square_big.svg", parent=self)
-        self.resize_button.setIconSize(QSize(30, 30))
+        self.resize_button = HeaderItem(height=self.HEIGHT, icon_size=15, filename="square_big.svg", parent=self)
         self.resize_button.clicked.connect(self.on_resize)
         self.resize_button.set_inactive_button()
         self.main_layout.addWidget(self.resize_button)
@@ -67,10 +66,8 @@ class Header(Widget):
     def on_resize(self):
         if not self.is_full_screen:
             self.parent.showFullScreen()
-            self.resize_button.setIconSize(QSize(20, 20))
         else:
             self.parent.showNormal()
-            self.resize_button.setIconSize(QSize(30, 30))
         self.is_full_screen = not self.is_full_screen
 
     def on_quit(self):

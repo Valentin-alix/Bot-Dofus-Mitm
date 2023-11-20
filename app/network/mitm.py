@@ -127,7 +127,6 @@ class InjectorBridgeHandler:
         buffer_info = self.buffers[origin]
         from_client = origin == self.connection_game
         buffer_info.data += _bytes
-
         message = Message.from_raw(from_client, buffer_info)
         while message is not None:
             self.raw_parser.parse(message, from_client)

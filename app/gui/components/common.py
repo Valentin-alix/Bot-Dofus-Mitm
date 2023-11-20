@@ -91,11 +91,11 @@ class PushButton(QPushButton, Widget):
 
 
 class ButtonIcon(PushButton):
-    def __init__(self, filename, height=40, *args, **kwargs) -> None:
+    def __init__(self, filename, height=40, icon_size=32, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.set_icon(filename)
         self.setFixedHeight(height)
-        self.setIconSize(QSize(height - 8, height - 8))
+        self.setIconSize(QSize(icon_size, icon_size))
 
     def set_icon(self, filename):
         self.setIcon(

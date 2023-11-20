@@ -11,3 +11,4 @@ class TestPriceQuantity(unittest.TestCase):
             "price": 123,
             "quantity": 100,
         }, random_hash=False)
+        print(data)
