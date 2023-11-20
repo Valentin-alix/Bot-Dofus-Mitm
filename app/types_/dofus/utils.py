@@ -1,0 +1,3078 @@
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.authorized.AdminCommandMessage import AdminCommandMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.authorized.AdminQuietCommandMessage import AdminQuietCommandMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.authorized.ConsoleCommandsListMessage import ConsoleCommandsListMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.authorized.ConsoleEndMessage import ConsoleEndMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.authorized.ConsoleMessage import ConsoleMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.common.NetworkDataContainerMessage import NetworkDataContainerMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.common.basic.BasicPingMessage import BasicPingMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.common.basic.BasicPongMessage import BasicPongMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.common.basic.BasicStatMessage import BasicStatMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.common.basic.BasicStatWithDataMessage import BasicStatWithDataMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.connection.CredentialsAcknowledgementMessage import CredentialsAcknowledgementMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.connection.ForceAccountErrorMessage import ForceAccountErrorMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.connection.ForceAccountMessage import ForceAccountMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.connection.ForceAccountStatusMessage import ForceAccountStatusMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.connection.HelloConnectMessage import HelloConnectMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.connection.IdentificationFailedBannedMessage import IdentificationFailedBannedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.connection.IdentificationFailedForBadVersionMessage import IdentificationFailedForBadVersionMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.connection.IdentificationFailedMessage import IdentificationFailedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.connection.IdentificationMessage import IdentificationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.connection.IdentificationSuccessMessage import IdentificationSuccessMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.connection.IdentificationSuccessWithLoginTokenMessage import IdentificationSuccessWithLoginTokenMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.connection.MigratedServerListMessage import MigratedServerListMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.connection.ReleaseAccountMessage import ReleaseAccountMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.connection.SelectedServerDataExtendedMessage import SelectedServerDataExtendedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.connection.SelectedServerDataMessage import SelectedServerDataMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.connection.SelectedServerRefusedMessage import SelectedServerRefusedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.connection.ServerSelectionMessage import ServerSelectionMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.connection.ServersListMessage import ServersListMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.connection.ServerStatusUpdateMessage import ServerStatusUpdateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.connection.register.AccountLinkRequiredMessage import AccountLinkRequiredMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.connection.register.NicknameAcceptedMessage import NicknameAcceptedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.connection.register.NicknameChoiceRequestMessage import NicknameChoiceRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.connection.register.NicknameRefusedMessage import NicknameRefusedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.connection.register.NicknameRegistrationMessage import NicknameRegistrationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.connection.search.AcquaintanceSearchErrorMessage import AcquaintanceSearchErrorMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.connection.search.AcquaintanceSearchMessage import AcquaintanceSearchMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.connection.search.AcquaintanceServerListMessage import AcquaintanceServerListMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.debug.DebugClearHighlightCellsMessage import DebugClearHighlightCellsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.debug.DebugHighlightCellsMessage import DebugHighlightCellsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.debug.DebugInClientMessage import DebugInClientMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.debug.DumpedEntityStatsMessage import DumpedEntityStatsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.PaginationAnswerAbstractMessage import PaginationAnswerAbstractMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.PaginationRequestAbstractMessage import PaginationRequestAbstractMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.achievement.AchievementAlmostFinishedDetailedListMessage import AchievementAlmostFinishedDetailedListMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.achievement.AchievementAlmostFinishedDetailedListRequestMessage import AchievementAlmostFinishedDetailedListRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.achievement.AchievementDetailedListMessage import AchievementDetailedListMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.achievement.AchievementDetailedListRequestMessage import AchievementDetailedListRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.achievement.AchievementDetailsMessage import AchievementDetailsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.achievement.AchievementDetailsRequestMessage import AchievementDetailsRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.achievement.AchievementFinishedInformationMessage import AchievementFinishedInformationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.achievement.AchievementFinishedMessage import AchievementFinishedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.achievement.AchievementListMessage import AchievementListMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.achievement.AchievementRewardErrorMessage import AchievementRewardErrorMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.achievement.AchievementRewardRequestMessage import AchievementRewardRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.achievement.AchievementRewardSuccessMessage import AchievementRewardSuccessMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.achievement.FriendGuildSetWarnOnAchievementCompleteMessage import FriendGuildSetWarnOnAchievementCompleteMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.achievement.FriendGuildWarnOnAchievementCompleteStateMessage import FriendGuildWarnOnAchievementCompleteStateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.actions.AbstractGameActionMessage import AbstractGameActionMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.actions.AbstractGameActionWithAckMessage import AbstractGameActionWithAckMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.actions.GameActionAcknowledgementMessage import GameActionAcknowledgementMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.actions.GameActionNoopMessage import GameActionNoopMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.actions.GameActionSpamMessage import GameActionSpamMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.actions.fight.AbstractGameActionFightTargetedAbilityMessage import AbstractGameActionFightTargetedAbilityMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.actions.fight.GameActionFightActivateGlyphTrapMessage import GameActionFightActivateGlyphTrapMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.actions.fight.GameActionFightCarryCharacterMessage import GameActionFightCarryCharacterMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.actions.fight.GameActionFightCastOnTargetRequestMessage import GameActionFightCastOnTargetRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.actions.fight.GameActionFightCastRequestMessage import GameActionFightCastRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.actions.fight.GameActionFightChangeLookMessage import GameActionFightChangeLookMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.actions.fight.GameActionFightCloseCombatMessage import GameActionFightCloseCombatMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.actions.fight.GameActionFightDeathMessage import GameActionFightDeathMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.actions.fight.GameActionFightDispellableEffectMessage import GameActionFightDispellableEffectMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.actions.fight.GameActionFightDispellEffectMessage import GameActionFightDispellEffectMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.actions.fight.GameActionFightDispellMessage import GameActionFightDispellMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.actions.fight.GameActionFightDispellSpellMessage import GameActionFightDispellSpellMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.actions.fight.GameActionFightDodgePointLossMessage import GameActionFightDodgePointLossMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.actions.fight.GameActionFightDropCharacterMessage import GameActionFightDropCharacterMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.actions.fight.GameActionFightExchangePositionsMessage import GameActionFightExchangePositionsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.actions.fight.GameActionFightInvisibilityMessage import GameActionFightInvisibilityMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.actions.fight.GameActionFightInvisibleDetectedMessage import GameActionFightInvisibleDetectedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.actions.fight.GameActionFightKillMessage import GameActionFightKillMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.actions.fight.GameActionFightLifeAndShieldPointsLostMessage import GameActionFightLifeAndShieldPointsLostMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.actions.fight.GameActionFightLifePointsGainMessage import GameActionFightLifePointsGainMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.actions.fight.GameActionFightLifePointsLostMessage import GameActionFightLifePointsLostMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.actions.fight.GameActionFightMarkCellsMessage import GameActionFightMarkCellsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.actions.fight.GameActionFightModifyEffectsDurationMessage import GameActionFightModifyEffectsDurationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.actions.fight.GameActionFightMultipleSummonMessage import GameActionFightMultipleSummonMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.actions.fight.GameActionFightNoSpellCastMessage import GameActionFightNoSpellCastMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.actions.fight.GameActionFightPointsVariationMessage import GameActionFightPointsVariationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.actions.fight.GameActionFightReduceDamagesMessage import GameActionFightReduceDamagesMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.actions.fight.GameActionFightReflectDamagesMessage import GameActionFightReflectDamagesMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.actions.fight.GameActionFightReflectSpellMessage import GameActionFightReflectSpellMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.actions.fight.GameActionFightSlideMessage import GameActionFightSlideMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.actions.fight.GameActionFightSpellCastMessage import GameActionFightSpellCastMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.actions.fight.GameActionFightSpellCooldownVariationMessage import GameActionFightSpellCooldownVariationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.actions.fight.GameActionFightSpellImmunityMessage import GameActionFightSpellImmunityMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.actions.fight.GameActionFightStealKamaMessage import GameActionFightStealKamaMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.actions.fight.GameActionFightSummonMessage import GameActionFightSummonMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.actions.fight.GameActionFightTackledMessage import GameActionFightTackledMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.actions.fight.GameActionFightTeleportOnSameMapMessage import GameActionFightTeleportOnSameMapMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.actions.fight.GameActionFightThrowCharacterMessage import GameActionFightThrowCharacterMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.actions.fight.GameActionFightTriggerEffectMessage import GameActionFightTriggerEffectMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.actions.fight.GameActionFightTriggerGlyphTrapMessage import GameActionFightTriggerGlyphTrapMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.actions.fight.GameActionFightUnmarkCellsMessage import GameActionFightUnmarkCellsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.actions.fight.GameActionFightVanishMessage import GameActionFightVanishMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.actions.fight.GameActionUpdateEffectTriggerCountMessage import GameActionUpdateEffectTriggerCountMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.actions.sequence.SequenceEndMessage import SequenceEndMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.actions.sequence.SequenceStartMessage import SequenceStartMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.AllianceAllRanksUpdateRequestMessage import AllianceAllRanksUpdateRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.AllianceBulletinMessage import AllianceBulletinMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.AllianceBulletinSetErrorMessage import AllianceBulletinSetErrorMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.AllianceBulletinSetRequestMessage import AllianceBulletinSetRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.AllianceChangeMemberRankMessage import AllianceChangeMemberRankMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.AllianceCreationResultMessage import AllianceCreationResultMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.AllianceCreationStartedMessage import AllianceCreationStartedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.AllianceCreationValidMessage import AllianceCreationValidMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.AllianceFactsErrorMessage import AllianceFactsErrorMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.AllianceFactsMessage import AllianceFactsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.AllianceFactsRequestMessage import AllianceFactsRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.AllianceInsiderInfoMessage import AllianceInsiderInfoMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.AllianceInsiderInfoRequestMessage import AllianceInsiderInfoRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.AllianceInvitationAnswerMessage import AllianceInvitationAnswerMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.AllianceInvitationMessage import AllianceInvitationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.AllianceInvitationStateRecrutedMessage import AllianceInvitationStateRecrutedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.AllianceInvitationStateRecruterMessage import AllianceInvitationStateRecruterMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.AllianceInvitedMessage import AllianceInvitedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.AllianceJoinAutomaticallyRequestMessage import AllianceJoinAutomaticallyRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.AllianceJoinedMessage import AllianceJoinedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.AllianceKickRequestMessage import AllianceKickRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.AllianceLeftMessage import AllianceLeftMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.AllianceListMessage import AllianceListMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.AllianceMemberInformationUpdateMessage import AllianceMemberInformationUpdateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.AllianceMemberLeavingMessage import AllianceMemberLeavingMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.AllianceMemberOnlineStatusMessage import AllianceMemberOnlineStatusMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.AllianceMembershipMessage import AllianceMembershipMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.AllianceMemberStartWarningOnConnectionMessage import AllianceMemberStartWarningOnConnectionMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.AllianceMemberStopWarningOnConnectionMessage import AllianceMemberStopWarningOnConnectionMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.AllianceModificationEmblemValidMessage import AllianceModificationEmblemValidMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.AllianceModificationNameAndTagValidMessage import AllianceModificationNameAndTagValidMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.AllianceModificationResultMessage import AllianceModificationResultMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.AllianceModificationStartedMessage import AllianceModificationStartedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.AllianceModificationValidMessage import AllianceModificationValidMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.AllianceMotdMessage import AllianceMotdMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.AllianceMotdSetErrorMessage import AllianceMotdSetErrorMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.AllianceMotdSetRequestMessage import AllianceMotdSetRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.AlliancePartialListMessage import AlliancePartialListMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.AllianceRankCreateRequestMessage import AllianceRankCreateRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.AllianceRankRemoveRequestMessage import AllianceRankRemoveRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.AllianceRanksMessage import AllianceRanksMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.AllianceRanksRequestMessage import AllianceRanksRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.AllianceRankUpdateRequestMessage import AllianceRankUpdateRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.AllianceRightsUpdateMessage import AllianceRightsUpdateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.KohUpdateMessage import KohUpdateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.KothEndMessage import KothEndMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.application.AllianceApplicationAnswerMessage import AllianceApplicationAnswerMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.application.AllianceApplicationDeletedMessage import AllianceApplicationDeletedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.application.AllianceApplicationIsAnsweredMessage import AllianceApplicationIsAnsweredMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.application.AllianceApplicationListenMessage import AllianceApplicationListenMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.application.AllianceApplicationPresenceMessage import AllianceApplicationPresenceMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.application.AllianceApplicationReceivedMessage import AllianceApplicationReceivedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.application.AllianceDeleteApplicationRequestMessage import AllianceDeleteApplicationRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.application.AllianceGetPlayerApplicationMessage import AllianceGetPlayerApplicationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.application.AllianceIsThereAnyApplicationMessage import AllianceIsThereAnyApplicationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.application.AllianceListApplicationAnswerMessage import AllianceListApplicationAnswerMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.application.AllianceListApplicationModifiedMessage import AllianceListApplicationModifiedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.application.AllianceListApplicationRequestMessage import AllianceListApplicationRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.application.AlliancePlayerApplicationAbstractMessage import AlliancePlayerApplicationAbstractMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.application.AlliancePlayerApplicationInformationMessage import AlliancePlayerApplicationInformationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.application.AlliancePlayerNoApplicationInformationMessage import AlliancePlayerNoApplicationInformationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.application.AllianceSubmitApplicationMessage import AllianceSubmitApplicationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.application.AllianceUpdateApplicationMessage import AllianceUpdateApplicationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.fight.AllianceFightFighterAddedMessage import AllianceFightFighterAddedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.fight.AllianceFightFighterRemovedMessage import AllianceFightFighterRemovedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.fight.AllianceFightFinishedMessage import AllianceFightFinishedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.fight.AllianceFightInfoMessage import AllianceFightInfoMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.fight.AllianceFightPhaseUpdateMessage import AllianceFightPhaseUpdateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.fight.AllianceFightStartedMessage import AllianceFightStartedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.fight.StartListenAllianceFightMessage import StartListenAllianceFightMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.fight.StopListenAllianceFightMessage import StopListenAllianceFightMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.recruitment.AllianceGetRecruitmentInformationMessage import AllianceGetRecruitmentInformationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.recruitment.AllianceRecruitmentInformationMessage import AllianceRecruitmentInformationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.recruitment.AllianceRecruitmentInvalidateMessage import AllianceRecruitmentInvalidateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.recruitment.AllianceUpdateRecruitmentInformationMessage import AllianceUpdateRecruitmentInformationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.summary.AllianceSummaryMessage import AllianceSummaryMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.alliance.summary.AllianceSummaryRequestMessage import AllianceSummaryRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.almanach.AlmanachCalendarDateMessage import AlmanachCalendarDateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.approach.AccountCapabilitiesMessage import AccountCapabilitiesMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.approach.AccountLoggingKickedMessage import AccountLoggingKickedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.approach.AlreadyConnectedMessage import AlreadyConnectedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.approach.AuthenticationTicketAcceptedMessage import AuthenticationTicketAcceptedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.approach.AuthenticationTicketMessage import AuthenticationTicketMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.approach.AuthenticationTicketRefusedMessage import AuthenticationTicketRefusedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.approach.HelloGameMessage import HelloGameMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.approach.ReloginTokenRequestMessage import ReloginTokenRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.approach.ReloginTokenStatusMessage import ReloginTokenStatusMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.approach.ServerOptionalFeaturesMessage import ServerOptionalFeaturesMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.approach.ServerSessionConstantsMessage import ServerSessionConstantsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.approach.ServerSettingsMessage import ServerSettingsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.atlas.AtlasPointInformationsMessage import AtlasPointInformationsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.atlas.compass.CompassResetMessage import CompassResetMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.atlas.compass.CompassUpdateMessage import CompassUpdateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.atlas.compass.CompassUpdatePartyMemberMessage import CompassUpdatePartyMemberMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.atlas.compass.CompassUpdatePvpSeekMessage import CompassUpdatePvpSeekMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.basic.BasicAckMessage import BasicAckMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.basic.BasicDateMessage import BasicDateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.basic.BasicLatencyStatsMessage import BasicLatencyStatsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.basic.BasicLatencyStatsRequestMessage import BasicLatencyStatsRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.basic.BasicNoOperationMessage import BasicNoOperationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.basic.BasicTimeMessage import BasicTimeMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.basic.BasicWhoAmIRequestMessage import BasicWhoAmIRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.basic.BasicWhoIsMessage import BasicWhoIsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.basic.BasicWhoIsNoMatchMessage import BasicWhoIsNoMatchMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.basic.BasicWhoIsRequestMessage import BasicWhoIsRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.basic.CurrentServerStatusUpdateMessage import CurrentServerStatusUpdateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.basic.NumericWhoIsMessage import NumericWhoIsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.basic.NumericWhoIsRequestMessage import NumericWhoIsRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.basic.SequenceNumberMessage import SequenceNumberMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.basic.SequenceNumberRequestMessage import SequenceNumberRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.basic.TextInformationMessage import TextInformationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.character.alignment.war.effort.AlignmentWarEffortDonatePreviewMessage import AlignmentWarEffortDonatePreviewMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.character.alignment.war.effort.AlignmentWarEffortDonateRequestMessage import AlignmentWarEffortDonateRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.character.alignment.war.effort.AlignmentWarEffortDonationResultMessage import AlignmentWarEffortDonationResultMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.character.alignment.war.effort.CharacterAlignmentWarEffortProgressionMessage import CharacterAlignmentWarEffortProgressionMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.character.alignment.war.effort.CharacterAlignmentWarEffortProgressionRequestMessage import CharacterAlignmentWarEffortProgressionRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.character.alteration.AlterationAddedMessage import AlterationAddedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.character.alteration.AlterationRemovedMessage import AlterationRemovedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.character.alteration.AlterationsMessage import AlterationsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.character.alteration.AlterationsUpdatedMessage import AlterationsUpdatedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.character.choice.CharacterFirstSelectionMessage import CharacterFirstSelectionMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.character.choice.CharacterReplayWithRemodelRequestMessage import CharacterReplayWithRemodelRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.character.choice.CharacterSelectedErrorMessage import CharacterSelectedErrorMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.character.choice.CharacterSelectedForceMessage import CharacterSelectedForceMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.character.choice.CharacterSelectedForceReadyMessage import CharacterSelectedForceReadyMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.character.choice.CharacterSelectedSuccessMessage import CharacterSelectedSuccessMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.character.choice.CharacterSelectionMessage import CharacterSelectionMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.character.choice.CharacterSelectionWithRemodelMessage import CharacterSelectionWithRemodelMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.character.choice.CharactersListErrorMessage import CharactersListErrorMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.character.choice.CharactersListMessage import CharactersListMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.character.choice.CharactersListRequestMessage import CharactersListRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.character.choice.CharactersListWithRemodelingMessage import CharactersListWithRemodelingMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.character.creation.CharacterCanBeCreatedRequestMessage import CharacterCanBeCreatedRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.character.creation.CharacterCanBeCreatedResultMessage import CharacterCanBeCreatedResultMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.character.creation.CharacterCreationRequestMessage import CharacterCreationRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.character.creation.CharacterCreationResultMessage import CharacterCreationResultMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.character.creation.CharacterNameSuggestionFailureMessage import CharacterNameSuggestionFailureMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.character.creation.CharacterNameSuggestionRequestMessage import CharacterNameSuggestionRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.character.creation.CharacterNameSuggestionSuccessMessage import CharacterNameSuggestionSuccessMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.character.debt.DebtsDeleteMessage import DebtsDeleteMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.character.debt.DebtsUpdateMessage import DebtsUpdateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.character.deletion.CharacterDeletionErrorMessage import CharacterDeletionErrorMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.character.deletion.CharacterDeletionPrepareMessage import CharacterDeletionPrepareMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.character.deletion.CharacterDeletionPrepareRequestMessage import CharacterDeletionPrepareRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.character.deletion.CharacterDeletionRequestMessage import CharacterDeletionRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.character.replay.CharacterReplayRequestMessage import CharacterReplayRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.character.spell.forgettable.ForgettableSpellClientActionMessage import ForgettableSpellClientActionMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.character.spell.forgettable.ForgettableSpellDeleteMessage import ForgettableSpellDeleteMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.character.spell.forgettable.ForgettableSpellEquipmentSlotsMessage import ForgettableSpellEquipmentSlotsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.character.spell.forgettable.ForgettableSpellListUpdateMessage import ForgettableSpellListUpdateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.character.spellmodifier.ApplySpellModifierMessage import ApplySpellModifierMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.character.spellmodifier.RemoveSpellModifierMessage import RemoveSpellModifierMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.character.stats.CharacterExperienceGainMessage import CharacterExperienceGainMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.character.stats.CharacterLevelUpInformationMessage import CharacterLevelUpInformationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.character.stats.CharacterLevelUpMessage import CharacterLevelUpMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.character.stats.CharacterStatsListMessage import CharacterStatsListMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.character.stats.FighterStatsListMessage import FighterStatsListMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.character.stats.LifePointsRegenBeginMessage import LifePointsRegenBeginMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.character.stats.LifePointsRegenEndMessage import LifePointsRegenEndMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.character.stats.ResetCharacterStatsRequestMessage import ResetCharacterStatsRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.character.stats.UpdateLifePointsMessage import UpdateLifePointsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.character.status.PlayerStatusUpdateErrorMessage import PlayerStatusUpdateErrorMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.character.status.PlayerStatusUpdateMessage import PlayerStatusUpdateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.character.status.PlayerStatusUpdateRequestMessage import PlayerStatusUpdateRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.chat.ChatAbstractClientMessage import ChatAbstractClientMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.chat.ChatAbstractServerMessage import ChatAbstractServerMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.chat.ChatAdminServerMessage import ChatAdminServerMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.chat.ChatClientMultiMessage import ChatClientMultiMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.chat.ChatClientMultiWithObjectMessage import ChatClientMultiWithObjectMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.chat.ChatClientPrivateMessage import ChatClientPrivateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.chat.ChatClientPrivateWithObjectMessage import ChatClientPrivateWithObjectMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.chat.ChatErrorMessage import ChatErrorMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.chat.ChatKolizeumServerMessage import ChatKolizeumServerMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.chat.ChatServerCopyMessage import ChatServerCopyMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.chat.ChatServerCopyWithObjectMessage import ChatServerCopyWithObjectMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.chat.ChatServerMessage import ChatServerMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.chat.ChatServerWithObjectMessage import ChatServerWithObjectMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.chat.channel.ChannelEnablingChangeMessage import ChannelEnablingChangeMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.chat.channel.ChannelEnablingMessage import ChannelEnablingMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.chat.channel.EnabledChannelsMessage import EnabledChannelsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.chat.community.ChatCommunityChannelCommunityMessage import ChatCommunityChannelCommunityMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.chat.community.ChatCommunityChannelSetCommunityRequestMessage import ChatCommunityChannelSetCommunityRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.chat.smiley.ChatSmileyExtraPackListMessage import ChatSmileyExtraPackListMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.chat.smiley.ChatSmileyMessage import ChatSmileyMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.chat.smiley.ChatSmileyRequestMessage import ChatSmileyRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.chat.smiley.LocalizedChatSmileyMessage import LocalizedChatSmileyMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.chat.smiley.MoodSmileyRequestMessage import MoodSmileyRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.chat.smiley.MoodSmileyResultMessage import MoodSmileyResultMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.chat.smiley.MoodSmileyUpdateMessage import MoodSmileyUpdateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.collector.tax.AddTaxCollectorOrderedSpellMessage import AddTaxCollectorOrderedSpellMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.collector.tax.AddTaxCollectorPresetSpellMessage import AddTaxCollectorPresetSpellMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.collector.tax.ConfirmationOfListeningTaxCollectorUpdatesMessage import ConfirmationOfListeningTaxCollectorUpdatesMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.collector.tax.GameRolePlayTaxCollectorFightRequestMessage import GameRolePlayTaxCollectorFightRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.collector.tax.MoveTaxCollectorOrderedSpellMessage import MoveTaxCollectorOrderedSpellMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.collector.tax.MoveTaxCollectorPresetSpellMessage import MoveTaxCollectorPresetSpellMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.collector.tax.RemoveTaxCollectorOrderedSpellMessage import RemoveTaxCollectorOrderedSpellMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.collector.tax.RemoveTaxCollectorPresetSpellMessage import RemoveTaxCollectorPresetSpellMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.collector.tax.StartListenTaxCollectorPresetsUpdatesMessage import StartListenTaxCollectorPresetsUpdatesMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.collector.tax.StartListenTaxCollectorUpdatesMessage import StartListenTaxCollectorUpdatesMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.collector.tax.StopListenTaxCollectorPresetsUpdatesMessage import StopListenTaxCollectorPresetsUpdatesMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.collector.tax.StopListenTaxCollectorUpdatesMessage import StopListenTaxCollectorUpdatesMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.collector.tax.TaxCollectorAddedMessage import TaxCollectorAddedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.collector.tax.TaxCollectorAttackedMessage import TaxCollectorAttackedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.collector.tax.TaxCollectorAttackedResultMessage import TaxCollectorAttackedResultMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.collector.tax.TaxCollectorErrorMessage import TaxCollectorErrorMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.collector.tax.TaxCollectorHarvestedMessage import TaxCollectorHarvestedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.collector.tax.TaxCollectorMovementsOfflineMessage import TaxCollectorMovementsOfflineMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.collector.tax.TaxCollectorOrderedSpellUpdatedMessage import TaxCollectorOrderedSpellUpdatedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.collector.tax.TaxCollectorPresetsMessage import TaxCollectorPresetsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.collector.tax.TaxCollectorPresetSpellUpdatedMessage import TaxCollectorPresetSpellUpdatedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.collector.tax.TaxCollectorRemovedMessage import TaxCollectorRemovedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.collector.tax.TaxCollectorStateUpdateMessage import TaxCollectorStateUpdateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.collector.tax.TopTaxCollectorListMessage import TopTaxCollectorListMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.GameCautiousMapMovementMessage import GameCautiousMapMovementMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.GameCautiousMapMovementRequestMessage import GameCautiousMapMovementRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.GameContextCreateErrorMessage import GameContextCreateErrorMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.GameContextCreateMessage import GameContextCreateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.GameContextCreateRequestMessage import GameContextCreateRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.GameContextDestroyMessage import GameContextDestroyMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.GameContextKickMessage import GameContextKickMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.GameContextMoveElementMessage import GameContextMoveElementMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.GameContextMoveMultipleElementsMessage import GameContextMoveMultipleElementsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.GameContextQuitMessage import GameContextQuitMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.GameContextReadyMessage import GameContextReadyMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.GameContextRefreshEntityLookMessage import GameContextRefreshEntityLookMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.GameContextRemoveElementMessage import GameContextRemoveElementMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.GameContextRemoveElementWithEventMessage import GameContextRemoveElementWithEventMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.GameContextRemoveMultipleElementsMessage import GameContextRemoveMultipleElementsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.GameContextRemoveMultipleElementsWithEventsMessage import GameContextRemoveMultipleElementsWithEventsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.GameEntitiesDispositionMessage import GameEntitiesDispositionMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.GameEntityDispositionErrorMessage import GameEntityDispositionErrorMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.GameEntityDispositionMessage import GameEntityDispositionMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.GameMapChangeOrientationMessage import GameMapChangeOrientationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.GameMapChangeOrientationRequestMessage import GameMapChangeOrientationRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.GameMapChangeOrientationsMessage import GameMapChangeOrientationsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.GameMapMovementCancelMessage import GameMapMovementCancelMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.GameMapMovementConfirmMessage import GameMapMovementConfirmMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.GameMapMovementMessage import GameMapMovementMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.GameMapMovementRequestMessage import GameMapMovementRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.GameMapNoMovementMessage import GameMapNoMovementMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.GameRefreshMonsterBoostsMessage import GameRefreshMonsterBoostsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.ShowCellMessage import ShowCellMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.ShowCellRequestMessage import ShowCellRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.ShowCellSpectatorMessage import ShowCellSpectatorMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.display.DisplayNumericalValuePaddockMessage import DisplayNumericalValuePaddockMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.dungeon.DungeonKeyRingMessage import DungeonKeyRingMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.dungeon.DungeonKeyRingUpdateMessage import DungeonKeyRingUpdateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.GameFightEndMessage import GameFightEndMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.GameFightHumanReadyStateMessage import GameFightHumanReadyStateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.GameFightJoinMessage import GameFightJoinMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.GameFightJoinRequestMessage import GameFightJoinRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.GameFightLeaveMessage import GameFightLeaveMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.GameFightNewRoundMessage import GameFightNewRoundMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.GameFightNewWaveMessage import GameFightNewWaveMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.GameFightOptionStateUpdateMessage import GameFightOptionStateUpdateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.GameFightOptionToggleMessage import GameFightOptionToggleMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.GameFightPauseMessage import GameFightPauseMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.GameFightPlacementPositionRequestMessage import GameFightPlacementPositionRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.GameFightPlacementPossiblePositionsMessage import GameFightPlacementPossiblePositionsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.GameFightPlacementSwapPositionsAcceptMessage import GameFightPlacementSwapPositionsAcceptMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.GameFightPlacementSwapPositionsCancelledMessage import GameFightPlacementSwapPositionsCancelledMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.GameFightPlacementSwapPositionsCancelMessage import GameFightPlacementSwapPositionsCancelMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.GameFightPlacementSwapPositionsErrorMessage import GameFightPlacementSwapPositionsErrorMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.GameFightPlacementSwapPositionsMessage import GameFightPlacementSwapPositionsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.GameFightPlacementSwapPositionsOfferMessage import GameFightPlacementSwapPositionsOfferMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.GameFightPlacementSwapPositionsRequestMessage import GameFightPlacementSwapPositionsRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.GameFightReadyMessage import GameFightReadyMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.GameFightRemoveTeamMemberMessage import GameFightRemoveTeamMemberMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.GameFightResumeMessage import GameFightResumeMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.GameFightResumeWithSlavesMessage import GameFightResumeWithSlavesMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.GameFightSpectateMessage import GameFightSpectateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.GameFightSpectatePlayerRequestMessage import GameFightSpectatePlayerRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.GameFightSpectatorJoinMessage import GameFightSpectatorJoinMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.GameFightStartingMessage import GameFightStartingMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.GameFightStartMessage import GameFightStartMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.GameFightSynchronizeMessage import GameFightSynchronizeMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.GameFightTurnEndMessage import GameFightTurnEndMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.GameFightTurnFinishMessage import GameFightTurnFinishMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.GameFightTurnListMessage import GameFightTurnListMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.GameFightTurnReadyMessage import GameFightTurnReadyMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.GameFightTurnReadyRequestMessage import GameFightTurnReadyRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.GameFightTurnResumeMessage import GameFightTurnResumeMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.GameFightTurnStartMessage import GameFightTurnStartMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.GameFightTurnStartPlayingMessage import GameFightTurnStartPlayingMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.GameFightUpdateTeamMessage import GameFightUpdateTeamMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.RefreshCharacterStatsMessage import RefreshCharacterStatsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.SlaveNoLongerControledMessage import SlaveNoLongerControledMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.SlaveSwitchContextMessage import SlaveSwitchContextMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.arena.ArenaFighterIdleMessage import ArenaFighterIdleMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.arena.ArenaFighterLeaveMessage import ArenaFighterLeaveMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.breach.BreachGameFightEndMessage import BreachGameFightEndMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.challenge.ChallengeAddMessage import ChallengeAddMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.challenge.ChallengeBonusChoiceMessage import ChallengeBonusChoiceMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.challenge.ChallengeBonusChoiceSelectedMessage import ChallengeBonusChoiceSelectedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.challenge.ChallengeListMessage import ChallengeListMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.challenge.ChallengeModSelectedMessage import ChallengeModSelectedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.challenge.ChallengeModSelectMessage import ChallengeModSelectMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.challenge.ChallengeNumberMessage import ChallengeNumberMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.challenge.ChallengeProposalMessage import ChallengeProposalMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.challenge.ChallengeReadyMessage import ChallengeReadyMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.challenge.ChallengeResultMessage import ChallengeResultMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.challenge.ChallengeSelectedMessage import ChallengeSelectedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.challenge.ChallengeSelectionMessage import ChallengeSelectionMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.challenge.ChallengeTargetsMessage import ChallengeTargetsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.challenge.ChallengeTargetsRequestMessage import ChallengeTargetsRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.challenge.ChallengeValidateMessage import ChallengeValidateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.character.GameFightRefreshFighterMessage import GameFightRefreshFighterMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.character.GameFightShowFighterMessage import GameFightShowFighterMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.fight.character.GameFightShowFighterRandomStaticPoseMessage import GameFightShowFighterRandomStaticPoseMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.mount.GameDataPaddockObjectAddMessage import GameDataPaddockObjectAddMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.mount.GameDataPaddockObjectListAddMessage import GameDataPaddockObjectListAddMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.mount.GameDataPaddockObjectRemoveMessage import GameDataPaddockObjectRemoveMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.mount.MountDataErrorMessage import MountDataErrorMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.mount.MountDataMessage import MountDataMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.mount.MountEmoteIconUsedOkMessage import MountEmoteIconUsedOkMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.mount.MountEquipedErrorMessage import MountEquipedErrorMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.mount.MountFeedRequestMessage import MountFeedRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.mount.MountHarnessColorsUpdateRequestMessage import MountHarnessColorsUpdateRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.mount.MountHarnessDissociateRequestMessage import MountHarnessDissociateRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.mount.MountInformationInPaddockRequestMessage import MountInformationInPaddockRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.mount.MountInformationRequestMessage import MountInformationRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.mount.MountReleasedMessage import MountReleasedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.mount.MountReleaseRequestMessage import MountReleaseRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.mount.MountRenamedMessage import MountRenamedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.mount.MountRenameRequestMessage import MountRenameRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.mount.MountRidingMessage import MountRidingMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.mount.MountSetMessage import MountSetMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.mount.MountSetXpRatioRequestMessage import MountSetXpRatioRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.mount.MountSterilizedMessage import MountSterilizedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.mount.MountSterilizeRequestMessage import MountSterilizeRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.mount.MountToggleRidingRequestMessage import MountToggleRidingRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.mount.MountUnSetMessage import MountUnSetMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.mount.MountXpRatioMessage import MountXpRatioMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.mount.PaddockBuyRequestMessage import PaddockBuyRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.mount.PaddockBuyResultMessage import PaddockBuyResultMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.mount.PaddockMoveItemRequestMessage import PaddockMoveItemRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.mount.PaddockRemoveItemRequestMessage import PaddockRemoveItemRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.mount.PaddockSellRequestMessage import PaddockSellRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.notification.NotificationByServerMessage import NotificationByServerMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.notification.NotificationListMessage import NotificationListMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.notification.NotificationResetMessage import NotificationResetMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.notification.NotificationUpdateFlagMessage import NotificationUpdateFlagMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.AnomalySubareaInformationRequestMessage import AnomalySubareaInformationRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.AnomalySubareaInformationResponseMessage import AnomalySubareaInformationResponseMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.ChangeMapMessage import ChangeMapMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.CurrentMapInstanceMessage import CurrentMapInstanceMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.CurrentMapMessage import CurrentMapMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.DiceRollRequestMessage import DiceRollRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.ErrorMapNotFoundMessage import ErrorMapNotFoundMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.GameRolePlayShowActorMessage import GameRolePlayShowActorMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.GameRolePlayShowActorWithEventMessage import GameRolePlayShowActorWithEventMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.GameRolePlayShowMultipleActorsMessage import GameRolePlayShowMultipleActorsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.MapComplementaryInformationsDataInHavenBagMessage import MapComplementaryInformationsDataInHavenBagMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.MapComplementaryInformationsDataInHouseMessage import MapComplementaryInformationsDataInHouseMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.MapComplementaryInformationsDataMessage import MapComplementaryInformationsDataMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.MapComplementaryInformationsWithCoordsMessage import MapComplementaryInformationsWithCoordsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.MapFightCountMessage import MapFightCountMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.MapFightStartPositionsUpdateMessage import MapFightStartPositionsUpdateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.MapInformationsRequestMessage import MapInformationsRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.MapObstacleUpdateMessage import MapObstacleUpdateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.MapRunningFightDetailsExtendedMessage import MapRunningFightDetailsExtendedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.MapRunningFightDetailsMessage import MapRunningFightDetailsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.MapRunningFightDetailsRequestMessage import MapRunningFightDetailsRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.MapRunningFightListMessage import MapRunningFightListMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.MapRunningFightListRequestMessage import MapRunningFightListRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.StopToListenRunningFightRequestMessage import StopToListenRunningFightRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.SubareaRewardRateMessage import SubareaRewardRateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.TeleportOnSameMapMessage import TeleportOnSameMapMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.alignment.war.effort.AlignmentWarEffortProgressionMessage import AlignmentWarEffortProgressionMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.alignment.war.effort.AlignmentWarEffortProgressionRequestMessage import AlignmentWarEffortProgressionRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.anomaly.AnomalyOpenedMessage import AnomalyOpenedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.anomaly.AnomalyStateMessage import AnomalyStateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.anomaly.MapComplementaryInformationsAnomalyMessage import MapComplementaryInformationsAnomalyMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.breach.BreachBonusMessage import BreachBonusMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.breach.BreachBudgetMessage import BreachBudgetMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.breach.BreachCharactersMessage import BreachCharactersMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.breach.BreachEnterMessage import BreachEnterMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.breach.BreachExitRequestMessage import BreachExitRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.breach.BreachExitResponseMessage import BreachExitResponseMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.breach.BreachRoomLockedMessage import BreachRoomLockedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.breach.BreachRoomUnlockRequestMessage import BreachRoomUnlockRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.breach.BreachRoomUnlockResultMessage import BreachRoomUnlockResultMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.breach.BreachSavedMessage import BreachSavedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.breach.BreachStateMessage import BreachStateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.breach.BreachTeleportRequestMessage import BreachTeleportRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.breach.BreachTeleportResponseMessage import BreachTeleportResponseMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.breach.MapComplementaryInformationsBreachMessage import MapComplementaryInformationsBreachMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.breach.branch.BreachBranchesMessage import BreachBranchesMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.breach.meeting.BreachInvitationAnswerMessage import BreachInvitationAnswerMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.breach.meeting.BreachInvitationCloseMessage import BreachInvitationCloseMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.breach.meeting.BreachInvitationOfferMessage import BreachInvitationOfferMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.breach.meeting.BreachInvitationRequestMessage import BreachInvitationRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.breach.meeting.BreachInvitationResponseMessage import BreachInvitationResponseMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.breach.meeting.BreachKickRequestMessage import BreachKickRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.breach.meeting.BreachKickResponseMessage import BreachKickResponseMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.breach.reward.BreachRewardBoughtMessage import BreachRewardBoughtMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.breach.reward.BreachRewardBuyMessage import BreachRewardBuyMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.breach.reward.BreachRewardsMessage import BreachRewardsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.death.GameRolePlayFreeSoulRequestMessage import GameRolePlayFreeSoulRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.death.GameRolePlayGameOverMessage import GameRolePlayGameOverMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.death.GameRolePlayPlayerLifeStatusMessage import GameRolePlayPlayerLifeStatusMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.death.WarnOnPermaDeathMessage import WarnOnPermaDeathMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.delay.GameRolePlayDelayedActionFinishedMessage import GameRolePlayDelayedActionFinishedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.delay.GameRolePlayDelayedActionMessage import GameRolePlayDelayedActionMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.delay.GameRolePlayDelayedObjectUseMessage import GameRolePlayDelayedObjectUseMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.document.DocumentReadingBeginMessage import DocumentReadingBeginMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.document.OpenGuideBookMessage import OpenGuideBookMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.emote.EmoteAddMessage import EmoteAddMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.emote.EmoteListMessage import EmoteListMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.emote.EmotePlayAbstractMessage import EmotePlayAbstractMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.emote.EmotePlayErrorMessage import EmotePlayErrorMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.emote.EmotePlayMassiveMessage import EmotePlayMassiveMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.emote.EmotePlayMessage import EmotePlayMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.emote.EmotePlayRequestMessage import EmotePlayRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.emote.EmoteRemoveMessage import EmoteRemoveMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.fight.GameRolePlayAggressionMessage import GameRolePlayAggressionMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.fight.GameRolePlayAttackMonsterRequestMessage import GameRolePlayAttackMonsterRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.fight.GameRolePlayFightRequestCanceledMessage import GameRolePlayFightRequestCanceledMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.fight.GameRolePlayMonsterAngryAtPlayerMessage import GameRolePlayMonsterAngryAtPlayerMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.fight.GameRolePlayMonsterNotAngryAtPlayerMessage import GameRolePlayMonsterNotAngryAtPlayerMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.fight.GameRolePlayPlayerFightFriendlyAnsweredMessage import GameRolePlayPlayerFightFriendlyAnsweredMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.fight.GameRolePlayPlayerFightFriendlyAnswerMessage import GameRolePlayPlayerFightFriendlyAnswerMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.fight.GameRolePlayPlayerFightFriendlyRequestedMessage import GameRolePlayPlayerFightFriendlyRequestedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.fight.GameRolePlayPlayerFightRequestMessage import GameRolePlayPlayerFightRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.fight.GameRolePlayRemoveChallengeMessage import GameRolePlayRemoveChallengeMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.fight.GameRolePlayShowChallengeMessage import GameRolePlayShowChallengeMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.fight.arena.GameRolePlayArenaFightAnswerMessage import GameRolePlayArenaFightAnswerMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.fight.arena.GameRolePlayArenaFighterStatusMessage import GameRolePlayArenaFighterStatusMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.fight.arena.GameRolePlayArenaFightPropositionMessage import GameRolePlayArenaFightPropositionMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.fight.arena.GameRolePlayArenaInvitationCandidatesAnswerMessage import GameRolePlayArenaInvitationCandidatesAnswerMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.fight.arena.GameRolePlayArenaLeagueRewardsMessage import GameRolePlayArenaLeagueRewardsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.fight.arena.GameRolePlayArenaPlayerBehavioursMessage import GameRolePlayArenaPlayerBehavioursMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.fight.arena.GameRolePlayArenaRegisterMessage import GameRolePlayArenaRegisterMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.fight.arena.GameRolePlayArenaRegistrationStatusMessage import GameRolePlayArenaRegistrationStatusMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.fight.arena.GameRolePlayArenaRegistrationWarningMessage import GameRolePlayArenaRegistrationWarningMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.fight.arena.GameRolePlayArenaSwitchToFightServerMessage import GameRolePlayArenaSwitchToFightServerMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.fight.arena.GameRolePlayArenaSwitchToGameServerMessage import GameRolePlayArenaSwitchToGameServerMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.fight.arena.GameRolePlayArenaUnregisterMessage import GameRolePlayArenaUnregisterMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.fight.arena.GameRolePlayArenaUpdatePlayerInfosAllQueuesMessage import GameRolePlayArenaUpdatePlayerInfosAllQueuesMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.fight.arena.GameRolePlayArenaUpdatePlayerInfosMessage import GameRolePlayArenaUpdatePlayerInfosMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.havenbag.ChangeHavenBagRoomRequestMessage import ChangeHavenBagRoomRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.havenbag.ChangeThemeRequestMessage import ChangeThemeRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.havenbag.CloseHavenBagFurnitureSequenceRequestMessage import CloseHavenBagFurnitureSequenceRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.havenbag.EditHavenBagCancelRequestMessage import EditHavenBagCancelRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.havenbag.EditHavenBagFinishedMessage import EditHavenBagFinishedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.havenbag.EditHavenBagRequestMessage import EditHavenBagRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.havenbag.EditHavenBagStartMessage import EditHavenBagStartMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.havenbag.EnterHavenBagRequestMessage import EnterHavenBagRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.havenbag.ExitHavenBagRequestMessage import ExitHavenBagRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.havenbag.HavenBagDailyLoteryMessage import HavenBagDailyLoteryMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.havenbag.HavenBagFurnituresMessage import HavenBagFurnituresMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.havenbag.HavenBagFurnituresRequestMessage import HavenBagFurnituresRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.havenbag.HavenBagPackListMessage import HavenBagPackListMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.havenbag.HavenBagRoomUpdateMessage import HavenBagRoomUpdateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.havenbag.KickHavenBagRequestMessage import KickHavenBagRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.havenbag.OpenHavenBagFurnitureSequenceRequestMessage import OpenHavenBagFurnitureSequenceRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.havenbag.meeting.HavenBagPermissionsUpdateMessage import HavenBagPermissionsUpdateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.havenbag.meeting.HavenBagPermissionsUpdateRequestMessage import HavenBagPermissionsUpdateRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.havenbag.meeting.InviteInHavenBagClosedMessage import InviteInHavenBagClosedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.havenbag.meeting.InviteInHavenBagMessage import InviteInHavenBagMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.havenbag.meeting.InviteInHavenBagOfferMessage import InviteInHavenBagOfferMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.havenbag.meeting.TeleportHavenBagAnswerMessage import TeleportHavenBagAnswerMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.havenbag.meeting.TeleportHavenBagRequestMessage import TeleportHavenBagRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.houses.AccountHouseMessage import AccountHouseMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.houses.HouseBuyRequestMessage import HouseBuyRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.houses.HouseBuyResultMessage import HouseBuyResultMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.houses.HouseKickRequestMessage import HouseKickRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.houses.HouseLockFromInsideRequestMessage import HouseLockFromInsideRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.houses.HousePropertiesMessage import HousePropertiesMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.houses.HouseSellFromInsideRequestMessage import HouseSellFromInsideRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.houses.HouseSellingUpdateMessage import HouseSellingUpdateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.houses.HouseSellRequestMessage import HouseSellRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.houses.HouseToSellFilterMessage import HouseToSellFilterMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.houses.HouseToSellListMessage import HouseToSellListMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.houses.HouseToSellListRequestMessage import HouseToSellListRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.houses.guild.HouseGuildNoneMessage import HouseGuildNoneMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.houses.guild.HouseGuildRightsMessage import HouseGuildRightsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.houses.guild.HouseGuildRightsViewMessage import HouseGuildRightsViewMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.houses.guild.HouseGuildShareRequestMessage import HouseGuildShareRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.job.JobAllowMultiCraftRequestMessage import JobAllowMultiCraftRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.job.JobBookSubscriptionMessage import JobBookSubscriptionMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.job.JobCrafterDirectoryAddMessage import JobCrafterDirectoryAddMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.job.JobCrafterDirectoryDefineSettingsMessage import JobCrafterDirectoryDefineSettingsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.job.JobCrafterDirectoryEntryMessage import JobCrafterDirectoryEntryMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.job.JobCrafterDirectoryEntryRequestMessage import JobCrafterDirectoryEntryRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.job.JobCrafterDirectoryListMessage import JobCrafterDirectoryListMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.job.JobCrafterDirectoryListRequestMessage import JobCrafterDirectoryListRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.job.JobCrafterDirectoryRemoveMessage import JobCrafterDirectoryRemoveMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.job.JobCrafterDirectorySettingsMessage import JobCrafterDirectorySettingsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.job.JobDescriptionMessage import JobDescriptionMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.job.JobExperienceMultiUpdateMessage import JobExperienceMultiUpdateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.job.JobExperienceOtherPlayerUpdateMessage import JobExperienceOtherPlayerUpdateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.job.JobExperienceUpdateMessage import JobExperienceUpdateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.job.JobLevelUpMessage import JobLevelUpMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.job.JobMultiCraftAvailableSkillsMessage import JobMultiCraftAvailableSkillsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.lockable.LockableChangeCodeMessage import LockableChangeCodeMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.lockable.LockableCodeResultMessage import LockableCodeResultMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.lockable.LockableShowCodeDialogMessage import LockableShowCodeDialogMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.lockable.LockableStateUpdateAbstractMessage import LockableStateUpdateAbstractMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.lockable.LockableStateUpdateHouseDoorMessage import LockableStateUpdateHouseDoorMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.lockable.LockableStateUpdateStorageMessage import LockableStateUpdateStorageMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.lockable.LockableUseCodeMessage import LockableUseCodeMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.npc.AlliancePrismDialogQuestionMessage import AlliancePrismDialogQuestionMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.npc.EntityTalkMessage import EntityTalkMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.npc.ListMapNpcsQuestStatusUpdateMessage import ListMapNpcsQuestStatusUpdateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.npc.NpcDialogCreationMessage import NpcDialogCreationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.npc.NpcDialogQuestionMessage import NpcDialogQuestionMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.npc.NpcDialogReplyMessage import NpcDialogReplyMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.npc.NpcGenericActionFailureMessage import NpcGenericActionFailureMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.npc.NpcGenericActionRequestMessage import NpcGenericActionRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.npc.PortalDialogCreationMessage import PortalDialogCreationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.npc.TaxCollectorDialogQuestionBasicMessage import TaxCollectorDialogQuestionBasicMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.npc.TaxCollectorDialogQuestionExtendedMessage import TaxCollectorDialogQuestionExtendedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.objects.ObjectGroundAddedMessage import ObjectGroundAddedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.objects.ObjectGroundListAddedMessage import ObjectGroundListAddedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.objects.ObjectGroundRemovedMessage import ObjectGroundRemovedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.objects.ObjectGroundRemovedMultipleMessage import ObjectGroundRemovedMultipleMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.paddock.GameDataPlayFarmObjectAnimationMessage import GameDataPlayFarmObjectAnimationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.paddock.PaddockPropertiesMessage import PaddockPropertiesMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.paddock.PaddockSellBuyDialogMessage import PaddockSellBuyDialogMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.paddock.PaddockToSellFilterMessage import PaddockToSellFilterMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.paddock.PaddockToSellListMessage import PaddockToSellListMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.paddock.PaddockToSellListRequestMessage import PaddockToSellListRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.AbstractPartyEventMessage import AbstractPartyEventMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.AbstractPartyMemberInFightMessage import AbstractPartyMemberInFightMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.AbstractPartyMessage import AbstractPartyMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.DungeonPartyFinderAvailableDungeonsMessage import DungeonPartyFinderAvailableDungeonsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.DungeonPartyFinderAvailableDungeonsRequestMessage import DungeonPartyFinderAvailableDungeonsRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.DungeonPartyFinderListenErrorMessage import DungeonPartyFinderListenErrorMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.DungeonPartyFinderListenRequestMessage import DungeonPartyFinderListenRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.DungeonPartyFinderRegisterErrorMessage import DungeonPartyFinderRegisterErrorMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.DungeonPartyFinderRegisterRequestMessage import DungeonPartyFinderRegisterRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.DungeonPartyFinderRegisterSuccessMessage import DungeonPartyFinderRegisterSuccessMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.DungeonPartyFinderRoomContentMessage import DungeonPartyFinderRoomContentMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.DungeonPartyFinderRoomContentUpdateMessage import DungeonPartyFinderRoomContentUpdateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.PartyAbdicateThroneMessage import PartyAbdicateThroneMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.PartyAcceptInvitationMessage import PartyAcceptInvitationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.PartyCancelInvitationMessage import PartyCancelInvitationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.PartyCancelInvitationNotificationMessage import PartyCancelInvitationNotificationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.PartyCannotJoinErrorMessage import PartyCannotJoinErrorMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.PartyDeletedMessage import PartyDeletedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.PartyFollowMemberRequestMessage import PartyFollowMemberRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.PartyFollowStatusUpdateMessage import PartyFollowStatusUpdateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.PartyFollowThisMemberRequestMessage import PartyFollowThisMemberRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.PartyInvitationArenaRequestMessage import PartyInvitationArenaRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.PartyInvitationCancelledForGuestMessage import PartyInvitationCancelledForGuestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.PartyInvitationDetailsMessage import PartyInvitationDetailsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.PartyInvitationDetailsRequestMessage import PartyInvitationDetailsRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.PartyInvitationDungeonDetailsMessage import PartyInvitationDungeonDetailsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.PartyInvitationDungeonMessage import PartyInvitationDungeonMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.PartyInvitationDungeonRequestMessage import PartyInvitationDungeonRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.PartyInvitationMessage import PartyInvitationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.PartyInvitationRequestMessage import PartyInvitationRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.PartyJoinMessage import PartyJoinMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.PartyKickedByMessage import PartyKickedByMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.PartyKickRequestMessage import PartyKickRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.PartyLeaderUpdateMessage import PartyLeaderUpdateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.PartyLeaveMessage import PartyLeaveMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.PartyLeaveRequestMessage import PartyLeaveRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.PartyLocateMembersMessage import PartyLocateMembersMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.PartyLocateMembersRequestMessage import PartyLocateMembersRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.PartyLoyaltyStatusMessage import PartyLoyaltyStatusMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.PartyMemberEjectedMessage import PartyMemberEjectedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.PartyMemberInStandardFightMessage import PartyMemberInStandardFightMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.PartyMemberRemoveMessage import PartyMemberRemoveMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.PartyModifiableStatusMessage import PartyModifiableStatusMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.PartyNameSetErrorMessage import PartyNameSetErrorMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.PartyNameSetRequestMessage import PartyNameSetRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.PartyNameUpdateMessage import PartyNameUpdateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.PartyNewGuestMessage import PartyNewGuestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.PartyNewMemberMessage import PartyNewMemberMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.PartyPledgeLoyaltyRequestMessage import PartyPledgeLoyaltyRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.PartyRefuseInvitationMessage import PartyRefuseInvitationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.PartyRefuseInvitationNotificationMessage import PartyRefuseInvitationNotificationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.PartyRestrictedMessage import PartyRestrictedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.PartyStopFollowRequestMessage import PartyStopFollowRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.PartyUpdateLightMessage import PartyUpdateLightMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.PartyUpdateMessage import PartyUpdateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.breach.PartyMemberInBreachFightMessage import PartyMemberInBreachFightMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.party.entity.PartyEntityUpdateLightMessage import PartyEntityUpdateLightMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.purchasable.PurchasableDialogMessage import PurchasableDialogMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.quest.FollowedQuestsMessage import FollowedQuestsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.quest.FollowQuestObjectiveRequestMessage import FollowQuestObjectiveRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.quest.GuidedModeQuitRequestMessage import GuidedModeQuitRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.quest.GuidedModeReturnRequestMessage import GuidedModeReturnRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.quest.QuestListMessage import QuestListMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.quest.QuestListRequestMessage import QuestListRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.quest.QuestObjectiveValidatedMessage import QuestObjectiveValidatedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.quest.QuestObjectiveValidationMessage import QuestObjectiveValidationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.quest.QuestStartedMessage import QuestStartedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.quest.QuestStartRequestMessage import QuestStartRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.quest.QuestStepInfoMessage import QuestStepInfoMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.quest.QuestStepInfoRequestMessage import QuestStepInfoRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.quest.QuestStepStartedMessage import QuestStepStartedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.quest.QuestStepValidatedMessage import QuestStepValidatedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.quest.QuestValidatedMessage import QuestValidatedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.quest.RefreshFollowedQuestsOrderRequestMessage import RefreshFollowedQuestsOrderRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.quest.UnfollowQuestObjectiveRequestMessage import UnfollowQuestObjectiveRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.quest.WatchQuestListMessage import WatchQuestListMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.quest.WatchQuestStepInfoMessage import WatchQuestStepInfoMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.quest.WatchQuestStepInfoRequestMessage import WatchQuestStepInfoRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.spell.SpellVariantActivationMessage import SpellVariantActivationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.spell.SpellVariantActivationRequestMessage import SpellVariantActivationRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.stats.StatsUpgradeRequestMessage import StatsUpgradeRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.stats.StatsUpgradeResultMessage import StatsUpgradeResultMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.treasureHunt.PortalUseRequestMessage import PortalUseRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.treasureHunt.TreasureHuntAvailableRetryCountUpdateMessage import TreasureHuntAvailableRetryCountUpdateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.treasureHunt.TreasureHuntDigRequestAnswerFailedMessage import TreasureHuntDigRequestAnswerFailedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.treasureHunt.TreasureHuntDigRequestAnswerMessage import TreasureHuntDigRequestAnswerMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.treasureHunt.TreasureHuntDigRequestMessage import TreasureHuntDigRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.treasureHunt.TreasureHuntFinishedMessage import TreasureHuntFinishedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.treasureHunt.TreasureHuntFlagRemoveRequestMessage import TreasureHuntFlagRemoveRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.treasureHunt.TreasureHuntFlagRequestAnswerMessage import TreasureHuntFlagRequestAnswerMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.treasureHunt.TreasureHuntFlagRequestMessage import TreasureHuntFlagRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.treasureHunt.TreasureHuntGiveUpRequestMessage import TreasureHuntGiveUpRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.treasureHunt.TreasureHuntLegendaryRequestMessage import TreasureHuntLegendaryRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.treasureHunt.TreasureHuntMessage import TreasureHuntMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.treasureHunt.TreasureHuntRequestAnswerMessage import TreasureHuntRequestAnswerMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.treasureHunt.TreasureHuntShowLegendaryUIMessage import TreasureHuntShowLegendaryUIMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.context.roleplay.visual.GameRolePlaySpellAnimMessage import GameRolePlaySpellAnimMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.dialog.LeaveDialogMessage import LeaveDialogMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.dialog.LeaveDialogRequestMessage import LeaveDialogRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.dialog.PauseDialogMessage import PauseDialogMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.entity.EntitiesInformationMessage import EntitiesInformationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.entity.EntityInformationMessage import EntityInformationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.feed.ObjectFeedMessage import ObjectFeedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.finishmoves.FinishMoveListMessage import FinishMoveListMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.finishmoves.FinishMoveListRequestMessage import FinishMoveListRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.finishmoves.FinishMoveSetRequestMessage import FinishMoveSetRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.friend.AcquaintanceAddedMessage import AcquaintanceAddedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.friend.AcquaintancesGetListMessage import AcquaintancesGetListMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.friend.AcquaintancesListMessage import AcquaintancesListMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.friend.ContactAddFailureMessage import ContactAddFailureMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.friend.FriendAddedMessage import FriendAddedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.friend.FriendAddFailureMessage import FriendAddFailureMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.friend.FriendAddRequestMessage import FriendAddRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.friend.FriendDeleteRequestMessage import FriendDeleteRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.friend.FriendDeleteResultMessage import FriendDeleteResultMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.friend.FriendJoinRequestMessage import FriendJoinRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.friend.FriendSetStatusShareMessage import FriendSetStatusShareMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.friend.FriendSetWarnOnConnectionMessage import FriendSetWarnOnConnectionMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.friend.FriendSetWarnOnLevelGainMessage import FriendSetWarnOnLevelGainMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.friend.FriendsGetListMessage import FriendsGetListMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.friend.FriendsListMessage import FriendsListMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.friend.FriendSpouseFollowWithCompassRequestMessage import FriendSpouseFollowWithCompassRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.friend.FriendSpouseJoinRequestMessage import FriendSpouseJoinRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.friend.FriendStatusShareStateMessage import FriendStatusShareStateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.friend.FriendUpdateMessage import FriendUpdateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.friend.FriendWarnOnConnectionStateMessage import FriendWarnOnConnectionStateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.friend.FriendWarnOnLevelGainStateMessage import FriendWarnOnLevelGainStateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.friend.IgnoredAddedMessage import IgnoredAddedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.friend.IgnoredAddFailureMessage import IgnoredAddFailureMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.friend.IgnoredAddRequestMessage import IgnoredAddRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.friend.IgnoredDeleteRequestMessage import IgnoredDeleteRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.friend.IgnoredDeleteResultMessage import IgnoredDeleteResultMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.friend.IgnoredGetListMessage import IgnoredGetListMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.friend.IgnoredListMessage import IgnoredListMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.friend.SpouseGetInformationsMessage import SpouseGetInformationsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.friend.SpouseInformationsMessage import SpouseInformationsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.friend.SpouseStatusMessage import SpouseStatusMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.friend.WarnOnPermaDeathStateMessage import WarnOnPermaDeathStateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guest.GuestLimitationMessage import GuestLimitationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guest.GuestModeMessage import GuestModeMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.ChallengeFightJoinRefusedMessage import ChallengeFightJoinRefusedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.CreateGuildRankRequestMessage import CreateGuildRankRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildBulletinMessage import GuildBulletinMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildBulletinSetErrorMessage import GuildBulletinSetErrorMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildBulletinSetRequestMessage import GuildBulletinSetRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildChangeMemberParametersMessage import GuildChangeMemberParametersMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildCharacsUpgradeRequestMessage import GuildCharacsUpgradeRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildChestTabContributionMessage import GuildChestTabContributionMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildChestTabContributionsMessage import GuildChestTabContributionsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildChestTabLastContributionMessage import GuildChestTabLastContributionMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildCreationResultMessage import GuildCreationResultMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildCreationStartedMessage import GuildCreationStartedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildCreationValidMessage import GuildCreationValidMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildFactsErrorMessage import GuildFactsErrorMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildFactsMessage import GuildFactsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildFactsRequestMessage import GuildFactsRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildGetChestTabContributionsRequestMessage import GuildGetChestTabContributionsRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildGetInformationsMessage import GuildGetInformationsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildHouseRemoveMessage import GuildHouseRemoveMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildHousesInformationMessage import GuildHousesInformationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildHouseUpdateInformationMessage import GuildHouseUpdateInformationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildInformationsGeneralMessage import GuildInformationsGeneralMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildInformationsMembersMessage import GuildInformationsMembersMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildInformationsMemberUpdateMessage import GuildInformationsMemberUpdateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildInformationsPaddocksMessage import GuildInformationsPaddocksMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildInvitationAnswerMessage import GuildInvitationAnswerMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildInvitationMessage import GuildInvitationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildInvitationStateRecrutedMessage import GuildInvitationStateRecrutedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildInvitationStateRecruterMessage import GuildInvitationStateRecruterMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildInvitedMessage import GuildInvitedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildJoinAutomaticallyRequestMessage import GuildJoinAutomaticallyRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildJoinedMessage import GuildJoinedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildKickRequestMessage import GuildKickRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildLeftMessage import GuildLeftMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildLevelUpMessage import GuildLevelUpMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildListMessage import GuildListMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildMemberLeavingMessage import GuildMemberLeavingMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildMemberOnlineStatusMessage import GuildMemberOnlineStatusMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildMembershipMessage import GuildMembershipMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildMemberStartWarnOnConnectionMessage import GuildMemberStartWarnOnConnectionMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildMemberStopWarnOnConnectionMessage import GuildMemberStopWarnOnConnectionMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildModificationEmblemValidMessage import GuildModificationEmblemValidMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildModificationNameValidMessage import GuildModificationNameValidMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildModificationResultMessage import GuildModificationResultMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildModificationStartedMessage import GuildModificationStartedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildModificationValidMessage import GuildModificationValidMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildMotdMessage import GuildMotdMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildMotdSetErrorMessage import GuildMotdSetErrorMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildMotdSetRequestMessage import GuildMotdSetRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildPaddockBoughtMessage import GuildPaddockBoughtMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildPaddockRemovedMessage import GuildPaddockRemovedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildPaddockTeleportRequestMessage import GuildPaddockTeleportRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildRanksMessage import GuildRanksMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildRanksRequestMessage import GuildRanksRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildSelectChestTabRequestMessage import GuildSelectChestTabRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildSpellUpgradeRequestMessage import GuildSpellUpgradeRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildSummaryMessage import GuildSummaryMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildSummaryRequestMessage import GuildSummaryRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.GuildUpdateChestTabRequestMessage import GuildUpdateChestTabRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.RemoveGuildRankRequestMessage import RemoveGuildRankRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.StartGuildChestContributionMessage import StartGuildChestContributionMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.StartListenGuildChestStructureMessage import StartListenGuildChestStructureMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.StopGuildChestContributionMessage import StopGuildChestContributionMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.StopListenGuildChestStructureMessage import StopListenGuildChestStructureMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.UpdateAllGuildRankRequestMessage import UpdateAllGuildRankRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.UpdateGuildRankRequestMessage import UpdateGuildRankRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.UpdateGuildRightsMessage import UpdateGuildRightsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.application.GuildApplicationAnswerMessage import GuildApplicationAnswerMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.application.GuildApplicationDeletedMessage import GuildApplicationDeletedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.application.GuildApplicationIsAnsweredMessage import GuildApplicationIsAnsweredMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.application.GuildApplicationListenMessage import GuildApplicationListenMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.application.GuildApplicationPresenceMessage import GuildApplicationPresenceMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.application.GuildApplicationReceivedMessage import GuildApplicationReceivedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.application.GuildDeleteApplicationRequestMessage import GuildDeleteApplicationRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.application.GuildGetPlayerApplicationMessage import GuildGetPlayerApplicationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.application.GuildIsThereAnyApplicationMessage import GuildIsThereAnyApplicationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.application.GuildListApplicationAnswerMessage import GuildListApplicationAnswerMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.application.GuildListApplicationModifiedMessage import GuildListApplicationModifiedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.application.GuildListApplicationRequestMessage import GuildListApplicationRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.application.GuildPlayerApplicationAbstractMessage import GuildPlayerApplicationAbstractMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.application.GuildPlayerApplicationInformationMessage import GuildPlayerApplicationInformationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.application.GuildPlayerNoApplicationInformationMessage import GuildPlayerNoApplicationInformationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.application.GuildSubmitApplicationMessage import GuildSubmitApplicationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.application.GuildUpdateApplicationMessage import GuildUpdateApplicationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.application.GuildUpdateNoteMessage import GuildUpdateNoteMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.chest.AddListenerOnSynchronizedStorageMessage import AddListenerOnSynchronizedStorageMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.chest.ListenersOfSynchronizedStorageMessage import ListenersOfSynchronizedStorageMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.chest.RemoveListenerOnSynchronizedStorageMessage import RemoveListenerOnSynchronizedStorageMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.logbook.GuildLogbookInformationMessage import GuildLogbookInformationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.logbook.GuildLogbookInformationRequestMessage import GuildLogbookInformationRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.recruitment.GuildRecruitmentInvalidateMessage import GuildRecruitmentInvalidateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.recruitment.RecruitmentInformationMessage import RecruitmentInformationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.recruitment.UpdateRecruitmentInformationMessage import UpdateRecruitmentInformationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.guild.tax.TaxCollectorEquipmentUpdateMessage import TaxCollectorEquipmentUpdateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.house.HouseTeleportRequestMessage import HouseTeleportRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.initialization.CharacterCapabilitiesMessage import CharacterCapabilitiesMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.initialization.CharacterLoadingCompleteMessage import CharacterLoadingCompleteMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.initialization.OnConnectionEventMessage import OnConnectionEventMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.initialization.ServerExperienceModificatorMessage import ServerExperienceModificatorMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.initialization.SetCharacterRestrictionsMessage import SetCharacterRestrictionsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.interactive.InteractiveElementUpdatedMessage import InteractiveElementUpdatedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.interactive.InteractiveMapUpdateMessage import InteractiveMapUpdateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.interactive.InteractiveUsedMessage import InteractiveUsedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.interactive.InteractiveUseEndedMessage import InteractiveUseEndedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.interactive.InteractiveUseErrorMessage import InteractiveUseErrorMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.interactive.InteractiveUseRequestMessage import InteractiveUseRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.interactive.StatedElementUpdatedMessage import StatedElementUpdatedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.interactive.StatedMapUpdateMessage import StatedMapUpdateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.interactive.meeting.GroupTeleportPlayerAnswerMessage import GroupTeleportPlayerAnswerMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.interactive.meeting.GroupTeleportPlayerCloseMessage import GroupTeleportPlayerCloseMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.interactive.meeting.GroupTeleportPlayerOfferMessage import GroupTeleportPlayerOfferMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.interactive.meeting.TeleportBuddiesAnswerMessage import TeleportBuddiesAnswerMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.interactive.meeting.TeleportBuddiesMessage import TeleportBuddiesMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.interactive.meeting.TeleportBuddiesRequestedMessage import TeleportBuddiesRequestedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.interactive.meeting.TeleportPlayerAnswerMessage import TeleportPlayerAnswerMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.interactive.meeting.TeleportPlayerCloseMessage import TeleportPlayerCloseMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.interactive.meeting.TeleportPlayerOfferMessage import TeleportPlayerOfferMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.interactive.meeting.TeleportToBuddyAnswerMessage import TeleportToBuddyAnswerMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.interactive.meeting.TeleportToBuddyCloseMessage import TeleportToBuddyCloseMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.interactive.meeting.TeleportToBuddyOfferMessage import TeleportToBuddyOfferMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.interactive.skill.InteractiveUseWithParamRequestMessage import InteractiveUseWithParamRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.interactive.zaap.KnownZaapListMessage import KnownZaapListMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.interactive.zaap.TeleportDestinationsMessage import TeleportDestinationsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.interactive.zaap.TeleportRequestMessage import TeleportRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.interactive.zaap.ZaapDestinationsMessage import ZaapDestinationsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.interactive.zaap.ZaapRespawnSaveRequestMessage import ZaapRespawnSaveRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.interactive.zaap.ZaapRespawnUpdatedMessage import ZaapRespawnUpdatedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.KamasUpdateMessage import KamasUpdateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.MultiTabStorageMessage import MultiTabStorageMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.ObjectAveragePricesErrorMessage import ObjectAveragePricesErrorMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.ObjectAveragePricesGetMessage import ObjectAveragePricesGetMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.ObjectAveragePricesMessage import ObjectAveragePricesMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.DecraftResultMessage import DecraftResultMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.EvolutiveObjectRecycleResultMessage import EvolutiveObjectRecycleResultMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeAcceptMessage import ExchangeAcceptMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidHouseBuyMessage import ExchangeBidHouseBuyMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidHouseBuyResultMessage import ExchangeBidHouseBuyResultMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidHouseGenericItemAddedMessage import ExchangeBidHouseGenericItemAddedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidHouseGenericItemRemovedMessage import ExchangeBidHouseGenericItemRemovedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidHouseInListAddedMessage import ExchangeBidHouseInListAddedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidHouseInListRemovedMessage import ExchangeBidHouseInListRemovedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidHouseInListUpdatedMessage import ExchangeBidHouseInListUpdatedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidHouseItemAddOkMessage import ExchangeBidHouseItemAddOkMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidHouseItemRemoveOkMessage import ExchangeBidHouseItemRemoveOkMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidHouseListMessage import ExchangeBidHouseListMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidHousePriceMessage import ExchangeBidHousePriceMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidHouseSearchMessage import ExchangeBidHouseSearchMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidHouseTypeMessage import ExchangeBidHouseTypeMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidHouseUnsoldItemsMessage import ExchangeBidHouseUnsoldItemsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidPriceForSellerMessage import ExchangeBidPriceForSellerMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidPriceMessage import ExchangeBidPriceMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidSearchOkMessage import ExchangeBidSearchOkMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBuyMessage import ExchangeBuyMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBuyOkMessage import ExchangeBuyOkMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeCraftCountModifiedMessage import ExchangeCraftCountModifiedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeCraftCountRequestMessage import ExchangeCraftCountRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeCrafterJobLevelupMessage import ExchangeCrafterJobLevelupMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeCraftPaymentModificationRequestMessage import ExchangeCraftPaymentModificationRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeCraftPaymentModifiedMessage import ExchangeCraftPaymentModifiedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeCraftResultMagicWithObjectDescMessage import ExchangeCraftResultMagicWithObjectDescMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeCraftResultMessage import ExchangeCraftResultMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeCraftResultWithObjectDescMessage import ExchangeCraftResultWithObjectDescMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeCraftResultWithObjectIdMessage import ExchangeCraftResultWithObjectIdMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeErrorMessage import ExchangeErrorMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeHandleMountsMessage import ExchangeHandleMountsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeIsReadyMessage import ExchangeIsReadyMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeItemAutoCraftStopedMessage import ExchangeItemAutoCraftStopedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeLeaveMessage import ExchangeLeaveMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeMoneyMovementInformationMessage import ExchangeMoneyMovementInformationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeMountFreeFromPaddockMessage import ExchangeMountFreeFromPaddockMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeMountsPaddockAddMessage import ExchangeMountsPaddockAddMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeMountsPaddockRemoveMessage import ExchangeMountsPaddockRemoveMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeMountsStableAddMessage import ExchangeMountsStableAddMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeMountsStableBornAddMessage import ExchangeMountsStableBornAddMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeMountsStableRemoveMessage import ExchangeMountsStableRemoveMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeMountStableErrorMessage import ExchangeMountStableErrorMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeMountsTakenFromPaddockMessage import ExchangeMountsTakenFromPaddockMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeMountSterilizeFromPaddockMessage import ExchangeMountSterilizeFromPaddockMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeObjectAddedMessage import ExchangeObjectAddedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeObjectMessage import ExchangeObjectMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeObjectModifyPricedMessage import ExchangeObjectModifyPricedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeObjectMoveKamaMessage import ExchangeObjectMoveKamaMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeObjectMoveMessage import ExchangeObjectMoveMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeObjectMovePricedMessage import ExchangeObjectMovePricedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeObjectMoveToTabMessage import ExchangeObjectMoveToTabMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeObjectsAddedMessage import ExchangeObjectsAddedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeObjectTransfertAllFromInvMessage import ExchangeObjectTransfertAllFromInvMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeObjectTransfertAllToInvMessage import ExchangeObjectTransfertAllToInvMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeObjectTransfertExistingFromInvMessage import ExchangeObjectTransfertExistingFromInvMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeObjectTransfertExistingToInvMessage import ExchangeObjectTransfertExistingToInvMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeObjectTransfertListFromInvMessage import ExchangeObjectTransfertListFromInvMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeObjectTransfertListToInvMessage import ExchangeObjectTransfertListToInvMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeObjectTransfertListWithQuantityToInvMessage import ExchangeObjectTransfertListWithQuantityToInvMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeObjectUseInWorkshopMessage import ExchangeObjectUseInWorkshopMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeOfflineSoldItemsMessage import ExchangeOfflineSoldItemsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeOkMultiCraftMessage import ExchangeOkMultiCraftMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangePlayerMultiCraftRequestMessage import ExchangePlayerMultiCraftRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangePlayerRequestMessage import ExchangePlayerRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeReadyMessage import ExchangeReadyMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeReplayStopMessage import ExchangeReplayStopMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeRequestedMessage import ExchangeRequestedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeRequestedTradeMessage import ExchangeRequestedTradeMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeRequestMessage import ExchangeRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeRequestOnMountStockMessage import ExchangeRequestOnMountStockMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeRequestOnTaxCollectorMessage import ExchangeRequestOnTaxCollectorMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeSellMessage import ExchangeSellMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeSellOkMessage import ExchangeSellOkMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeSetCraftRecipeMessage import ExchangeSetCraftRecipeMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeStartedBidBuyerMessage import ExchangeStartedBidBuyerMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeStartedBidSellerMessage import ExchangeStartedBidSellerMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeStartedMessage import ExchangeStartedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeStartedMountStockMessage import ExchangeStartedMountStockMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeStartedTaxCollectorEquipmentMessage import ExchangeStartedTaxCollectorEquipmentMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeStartedTaxCollectorShopMessage import ExchangeStartedTaxCollectorShopMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeStartedWithMultiTabStorageMessage import ExchangeStartedWithMultiTabStorageMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeStartedWithPodsMessage import ExchangeStartedWithPodsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeStartedWithStorageMessage import ExchangeStartedWithStorageMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeStartOkCraftMessage import ExchangeStartOkCraftMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeStartOkCraftWithInformationMessage import ExchangeStartOkCraftWithInformationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeStartOkEvolutiveObjectRecycleTradeMessage import ExchangeStartOkEvolutiveObjectRecycleTradeMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeStartOkJobIndexMessage import ExchangeStartOkJobIndexMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeStartOkMountMessage import ExchangeStartOkMountMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeStartOkMountWithOutPaddockMessage import ExchangeStartOkMountWithOutPaddockMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeStartOkMulticraftCrafterMessage import ExchangeStartOkMulticraftCrafterMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeStartOkMulticraftCustomerMessage import ExchangeStartOkMulticraftCustomerMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeStartOkNpcShopMessage import ExchangeStartOkNpcShopMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeStartOkNpcTradeMessage import ExchangeStartOkNpcTradeMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeStartOkRecycleTradeMessage import ExchangeStartOkRecycleTradeMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeStartOkRunesTradeMessage import ExchangeStartOkRunesTradeMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeStoppedMessage import ExchangeStoppedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeTaxCollectorGetMessage import ExchangeTaxCollectorGetMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeTypesExchangerDescriptionForUserMessage import ExchangeTypesExchangerDescriptionForUserMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeTypesItemsExchangerDescriptionForUserMessage import ExchangeTypesItemsExchangerDescriptionForUserMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeWaitingResultMessage import ExchangeWaitingResultMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeWeightMessage import ExchangeWeightMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.FocusedExchangeReadyMessage import FocusedExchangeReadyMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ItemNoMoreAvailableMessage import ItemNoMoreAvailableMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.JobBookSubscribeRequestMessage import JobBookSubscribeRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.RecycleResultMessage import RecycleResultMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.StartExchangeTaxCollectorEquipmentMessage import StartExchangeTaxCollectorEquipmentMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.UpdateMountCharacteristicsMessage import UpdateMountCharacteristicsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.ExchangeKamaModifiedMessage import ExchangeKamaModifiedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.ExchangeMultiCraftCrafterCanUseHisRessourcesMessage import ExchangeMultiCraftCrafterCanUseHisRessourcesMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.ExchangeMultiCraftSetCrafterCanUseHisRessourcesMessage import ExchangeMultiCraftSetCrafterCanUseHisRessourcesMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.ExchangeObjectModifiedInBagMessage import ExchangeObjectModifiedInBagMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.ExchangeObjectModifiedMessage import ExchangeObjectModifiedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.ExchangeObjectPutInBagMessage import ExchangeObjectPutInBagMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.ExchangeObjectRemovedFromBagMessage import ExchangeObjectRemovedFromBagMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.ExchangeObjectRemovedMessage import ExchangeObjectRemovedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.ExchangeObjectsModifiedMessage import ExchangeObjectsModifiedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.ExchangeObjectsRemovedMessage import ExchangeObjectsRemovedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.ExchangePodsModifiedMessage import ExchangePodsModifiedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.GoldAddedMessage import GoldAddedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.InventoryContentMessage import InventoryContentMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.InventoryWeightMessage import InventoryWeightMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.LivingObjectChangeSkinRequestMessage import LivingObjectChangeSkinRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.LivingObjectDissociateMessage import LivingObjectDissociateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.LivingObjectMessageMessage import LivingObjectMessageMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.LivingObjectMessageRequestMessage import LivingObjectMessageRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.MimicryObjectAssociatedMessage import MimicryObjectAssociatedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.MimicryObjectEraseRequestMessage import MimicryObjectEraseRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.MimicryObjectErrorMessage import MimicryObjectErrorMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.MimicryObjectFeedAndAssociateRequestMessage import MimicryObjectFeedAndAssociateRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.MimicryObjectPreviewMessage import MimicryObjectPreviewMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.ObjectAddedMessage import ObjectAddedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.ObjectDeletedMessage import ObjectDeletedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.ObjectDeleteMessage import ObjectDeleteMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.ObjectDropMessage import ObjectDropMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.ObjectErrorMessage import ObjectErrorMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.ObjectJobAddedMessage import ObjectJobAddedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.ObjectModifiedMessage import ObjectModifiedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.ObjectMovementMessage import ObjectMovementMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.ObjectQuantityMessage import ObjectQuantityMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.ObjectsAddedMessage import ObjectsAddedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.ObjectsDeletedMessage import ObjectsDeletedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.ObjectSetPositionMessage import ObjectSetPositionMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.ObjectsQuantityMessage import ObjectsQuantityMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.ObjectUseMessage import ObjectUseMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.ObjectUseMultipleMessage import ObjectUseMultipleMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.ObjectUseOnCellMessage import ObjectUseOnCellMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.ObjectUseOnCharacterMessage import ObjectUseOnCharacterMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.ObtainedItemMessage import ObtainedItemMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.ObtainedItemWithBonusMessage import ObtainedItemWithBonusMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.SetUpdateMessage import SetUpdateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.SymbioticObjectAssociatedMessage import SymbioticObjectAssociatedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.SymbioticObjectAssociateRequestMessage import SymbioticObjectAssociateRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.SymbioticObjectErrorMessage import SymbioticObjectErrorMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.WatchInventoryContentMessage import WatchInventoryContentMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.WrapperObjectAssociatedMessage import WrapperObjectAssociatedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.WrapperObjectDissociateRequestMessage import WrapperObjectDissociateRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.WrapperObjectErrorMessage import WrapperObjectErrorMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.spells.SpellListMessage import SpellListMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.storage.StorageInventoryContentMessage import StorageInventoryContentMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.storage.StorageKamasUpdateMessage import StorageKamasUpdateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.storage.StorageObjectRemoveMessage import StorageObjectRemoveMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.storage.StorageObjectsRemoveMessage import StorageObjectsRemoveMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.storage.StorageObjectsUpdateMessage import StorageObjectsUpdateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.storage.StorageObjectUpdateMessage import StorageObjectUpdateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.look.AccessoryPreviewErrorMessage import AccessoryPreviewErrorMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.look.AccessoryPreviewMessage import AccessoryPreviewMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.look.AccessoryPreviewRequestMessage import AccessoryPreviewRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.moderation.PopupWarningClosedMessage import PopupWarningClosedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.moderation.PopupWarningCloseRequestMessage import PopupWarningCloseRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.moderation.PopupWarningMessage import PopupWarningMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.modificator.AreaFightModificatorUpdateMessage import AreaFightModificatorUpdateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.nuggets.NuggetsDistributionMessage import NuggetsDistributionMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.nuggets.NuggetsInformationMessage import NuggetsInformationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.nuggets.StartListenNuggetsMessage import StartListenNuggetsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.nuggets.StopListenNuggetsMessage import StopListenNuggetsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.presets.IconNamedPresetSaveRequestMessage import IconNamedPresetSaveRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.presets.IconPresetSaveRequestMessage import IconPresetSaveRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.presets.InvalidPresetsMessage import InvalidPresetsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.presets.ItemForPresetUpdateMessage import ItemForPresetUpdateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.presets.PresetDeleteRequestMessage import PresetDeleteRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.presets.PresetDeleteResultMessage import PresetDeleteResultMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.presets.PresetSavedMessage import PresetSavedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.presets.PresetSaveErrorMessage import PresetSaveErrorMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.presets.PresetsMessage import PresetsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.presets.PresetUseRequestMessage import PresetUseRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.presets.PresetUseResultMessage import PresetUseResultMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.presets.PresetUseResultWithMissingIdsMessage import PresetUseResultWithMissingIdsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.prism.PrismAddOrUpdateMessage import PrismAddOrUpdateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.prism.PrismAttackedMessage import PrismAttackedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.prism.PrismAttackRequestMessage import PrismAttackRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.prism.PrismAttackResultMessage import PrismAttackResultMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.prism.PrismExchangeRequestMessage import PrismExchangeRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.prism.PrismRecycleTradeRequestMessage import PrismRecycleTradeRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.prism.PrismRemoveMessage import PrismRemoveMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.prism.PrismsListMessage import PrismsListMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.prism.PrismTeleportationRequestMessage import PrismTeleportationRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.progression.suggestion.ActivityHideRequestMessage import ActivityHideRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.progression.suggestion.ActivityLockRequestMessage import ActivityLockRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.progression.suggestion.ActivitySuggestionsMessage import ActivitySuggestionsMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.progression.suggestion.ActivitySuggestionsRequestMessage import ActivitySuggestionsRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.pvp.AlignmentRankUpdateMessage import AlignmentRankUpdateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.pvp.SetEnableAVARequestMessage import SetEnableAVARequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.pvp.SetEnablePVPRequestMessage import SetEnablePVPRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.pvp.UpdateMapPlayersAgressableStatusMessage import UpdateMapPlayersAgressableStatusMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.pvp.UpdateSelfAgressableStatusMessage import UpdateSelfAgressableStatusMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.script.CinematicMessage import CinematicMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.shortcut.ShortcutBarAddErrorMessage import ShortcutBarAddErrorMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.shortcut.ShortcutBarAddRequestMessage import ShortcutBarAddRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.shortcut.ShortcutBarContentMessage import ShortcutBarContentMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.shortcut.ShortcutBarRefreshMessage import ShortcutBarRefreshMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.shortcut.ShortcutBarRemovedMessage import ShortcutBarRemovedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.shortcut.ShortcutBarRemoveErrorMessage import ShortcutBarRemoveErrorMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.shortcut.ShortcutBarRemoveRequestMessage import ShortcutBarRemoveRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.shortcut.ShortcutBarReplacedMessage import ShortcutBarReplacedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.shortcut.ShortcutBarSwapErrorMessage import ShortcutBarSwapErrorMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.shortcut.ShortcutBarSwapRequestMessage import ShortcutBarSwapRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.social.BulletinMessage import BulletinMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.social.ContactLookErrorMessage import ContactLookErrorMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.social.ContactLookMessage import ContactLookMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.social.ContactLookRequestByIdMessage import ContactLookRequestByIdMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.social.ContactLookRequestByNameMessage import ContactLookRequestByNameMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.social.ContactLookRequestMessage import ContactLookRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.social.SocialNoticeMessage import SocialNoticeMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.social.SocialNoticeSetErrorMessage import SocialNoticeSetErrorMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.social.SocialNoticeSetRequestMessage import SocialNoticeSetRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.social.fight.SocialFightJoinRequestMessage import SocialFightJoinRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.social.fight.SocialFightLeaveRequestMessage import SocialFightLeaveRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.social.fight.SocialFightTakePlaceRequestMessage import SocialFightTakePlaceRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.startup.ConsumeAllGameActionItemMessage import ConsumeAllGameActionItemMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.startup.ConsumeGameActionItemMessage import ConsumeGameActionItemMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.startup.GameActionItemAddMessage import GameActionItemAddMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.startup.GameActionItemConsumedMessage import GameActionItemConsumedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.startup.GameActionItemListMessage import GameActionItemListMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.subscriber.SubscriptionLimitationMessage import SubscriptionLimitationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.subscriber.SubscriptionZoneMessage import SubscriptionZoneMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.tinsel.OrnamentGainedMessage import OrnamentGainedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.tinsel.OrnamentLostMessage import OrnamentLostMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.tinsel.OrnamentSelectedMessage import OrnamentSelectedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.tinsel.OrnamentSelectErrorMessage import OrnamentSelectErrorMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.tinsel.OrnamentSelectRequestMessage import OrnamentSelectRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.tinsel.TitleGainedMessage import TitleGainedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.tinsel.TitleLostMessage import TitleLostMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.tinsel.TitlesAndOrnamentsListMessage import TitlesAndOrnamentsListMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.tinsel.TitlesAndOrnamentsListRequestMessage import TitlesAndOrnamentsListRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.tinsel.TitleSelectedMessage import TitleSelectedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.tinsel.TitleSelectErrorMessage import TitleSelectErrorMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.tinsel.TitleSelectRequestMessage import TitleSelectRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.ui.ClientUIOpenedByObjectMessage import ClientUIOpenedByObjectMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.ui.ClientUIOpenedMessage import ClientUIOpenedMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.handshake.ProtocolRequired import ProtocolRequired
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.queues.LoginQueueStatusMessage import LoginQueueStatusMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.queues.QueueStatusMessage import QueueStatusMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.secure.TrustStatusMessage import TrustStatusMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.security.CheckFileMessage import CheckFileMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.security.CheckFileRequestMessage import CheckFileRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.security.CheckIntegrityMessage import CheckIntegrityMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.security.ClientKeyMessage import ClientKeyMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.security.RawDataMessage import RawDataMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.server.basic.SystemMessageDisplayMessage import SystemMessageDisplayMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.subscription.AccountInformationsUpdateMessage import AccountInformationsUpdateMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.subscription.AccountSubscriptionElapsedDurationMessage import AccountSubscriptionElapsedDurationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.web.haapi.HaapiApiKeyMessage import HaapiApiKeyMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.web.haapi.HaapiApiKeyRequestMessage import HaapiApiKeyRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.web.haapi.HaapiAuthErrorMessage import HaapiAuthErrorMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.web.haapi.HaapiBufferListMessage import HaapiBufferListMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.web.haapi.HaapiBufferListRequestMessage import HaapiBufferListRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.web.haapi.HaapiBuyValidationMessage import HaapiBuyValidationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.web.haapi.HaapiCancelBidRequestMessage import HaapiCancelBidRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.web.haapi.HaapiConfirmationMessage import HaapiConfirmationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.web.haapi.HaapiConfirmationRequestMessage import HaapiConfirmationRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.web.haapi.HaapiConsumeBufferRequestMessage import HaapiConsumeBufferRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.web.haapi.HaapiSessionMessage import HaapiSessionMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.web.haapi.HaapiShopApiKeyMessage import HaapiShopApiKeyMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.web.haapi.HaapiShopApiKeyRequestMessage import HaapiShopApiKeyRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.web.haapi.HaapiTokenMessage import HaapiTokenMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.web.haapi.HaapiTokenRequestMessage import HaapiTokenRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.web.haapi.HaapiValidationMessage import HaapiValidationMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.web.haapi.HaapiValidationRequestMessage import HaapiValidationRequestMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.wtf.ClientYouAreDrunkMessage import ClientYouAreDrunkMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.common.AbstractPlayerSearchInformation import AbstractPlayerSearchInformation
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.common.AccountTagInformation import AccountTagInformation
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.common.PlayerSearchCharacterNameInformation import PlayerSearchCharacterNameInformation
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.common.PlayerSearchTagInformation import PlayerSearchTagInformation
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.common.basic.StatisticData import StatisticData
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.common.basic.StatisticDataBoolean import StatisticDataBoolean
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.common.basic.StatisticDataByte import StatisticDataByte
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.common.basic.StatisticDataInt import StatisticDataInt
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.common.basic.StatisticDataShort import StatisticDataShort
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.common.basic.StatisticDataString import StatisticDataString
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.connection.GameServerInformations import GameServerInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.Uuid import Uuid
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.achievement.Achievement import Achievement
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.achievement.AchievementAchieved import AchievementAchieved
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.achievement.AchievementAchievedRewardable import AchievementAchievedRewardable
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.achievement.AchievementObjective import AchievementObjective
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.achievement.AchievementStartedObjective import AchievementStartedObjective
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.action.fight.FightDispellableEffectExtendedInformations import FightDispellableEffectExtendedInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.actions.fight.AbstractFightDispellableEffect import AbstractFightDispellableEffect
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.actions.fight.FightDetailedTemporaryBoostEffect import FightDetailedTemporaryBoostEffect
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.actions.fight.FightTemporaryBoostEffect import FightTemporaryBoostEffect
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.actions.fight.FightTemporaryBoostStateEffect import FightTemporaryBoostStateEffect
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.actions.fight.FightTemporaryBoostWeaponDamagesEffect import FightTemporaryBoostWeaponDamagesEffect
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.actions.fight.FightTemporarySpellBoostEffect import FightTemporarySpellBoostEffect
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.actions.fight.FightTemporarySpellImmunityEffect import FightTemporarySpellImmunityEffect
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.actions.fight.FightTriggeredEffect import FightTriggeredEffect
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.actions.fight.GameActionMark import GameActionMark
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.actions.fight.GameActionMarkedCell import GameActionMarkedCell
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.alliance.AllianceMemberInfo import AllianceMemberInfo
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.alliance.KohAllianceInfo import KohAllianceInfo
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.alliance.KohAllianceRoleMembers import KohAllianceRoleMembers
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.alliance.KohScore import KohScore
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.alliance.KothWinner import KothWinner
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.alliance.recruitment.AllianceRecruitmentInformation import AllianceRecruitmentInformation
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.approach.ServerSessionConstant import ServerSessionConstant
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.approach.ServerSessionConstantInteger import ServerSessionConstantInteger
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.approach.ServerSessionConstantLong import ServerSessionConstantLong
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.approach.ServerSessionConstantString import ServerSessionConstantString
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.character.AbstractCharacterInformation import AbstractCharacterInformation
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.character.CharacterBasicMinimalInformations import CharacterBasicMinimalInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.character.CharacterMinimalAllianceInformations import CharacterMinimalAllianceInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.character.CharacterMinimalGuildInformations import CharacterMinimalGuildInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.character.CharacterMinimalInformations import CharacterMinimalInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.character.CharacterMinimalPlusLookInformations import CharacterMinimalPlusLookInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.character.CharacterMinimalSocialPublicInformations import CharacterMinimalSocialPublicInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.character.alignment.ActorAlignmentInformations import ActorAlignmentInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.character.alignment.ActorExtendedAlignmentInformations import ActorExtendedAlignmentInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.character.alteration.AlterationInfo import AlterationInfo
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.character.characteristic.CharacterCharacteristic import CharacterCharacteristic
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.character.characteristic.CharacterCharacteristicDetailed import CharacterCharacteristicDetailed
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.character.characteristic.CharacterCharacteristics import CharacterCharacteristics
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.character.characteristic.CharacterCharacteristicsInformations import CharacterCharacteristicsInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.character.characteristic.CharacterCharacteristicValue import CharacterCharacteristicValue
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.character.characteristic.CharacterUsableCharacteristicDetailed import CharacterUsableCharacteristicDetailed
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.character.choice.CharacterBaseInformations import CharacterBaseInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.character.choice.CharacterHardcoreOrEpicInformations import CharacterHardcoreOrEpicInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.character.choice.CharacterRemodelingInformation import CharacterRemodelingInformation
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.character.choice.CharacterToRemodelInformations import CharacterToRemodelInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.character.choice.RemodelingInformation import RemodelingInformation
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.character.debt.DebtInformation import DebtInformation
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.character.debt.KamaDebtInformation import KamaDebtInformation
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.character.guild.note.PlayerNote import PlayerNote
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.character.restriction.ActorRestrictionsInformations import ActorRestrictionsInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.character.spellmodifier.SpellModifierMessage import SpellModifierMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.character.status.PlayerStatus import PlayerStatus
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.character.status.PlayerStatusExtended import PlayerStatusExtended
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.collector.tax.AdditionalTaxCollectorInformation import AdditionalTaxCollectorInformation
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.collector.tax.TaxCollectorBasicInformations import TaxCollectorBasicInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.collector.tax.TaxCollectorComplementaryInformations import TaxCollectorComplementaryInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.collector.tax.TaxCollectorInformations import TaxCollectorInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.collector.tax.TaxCollectorLootInformations import TaxCollectorLootInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.collector.tax.TaxCollectorMovement import TaxCollectorMovement
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.collector.tax.TaxCollectorOrderedSpell import TaxCollectorOrderedSpell
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.collector.tax.TaxCollectorPreset import TaxCollectorPreset
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.collector.tax.TaxCollectorWaitingForHelpInformations import TaxCollectorWaitingForHelpInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.ActorOrientation import ActorOrientation
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.EntityDispositionInformations import EntityDispositionInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.EntityMovementInformations import EntityMovementInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.FightEntityDispositionInformations import FightEntityDispositionInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.GameContextActorInformations import GameContextActorInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.GameContextActorPositionInformations import GameContextActorPositionInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.GameRolePlayTaxCollectorInformations import GameRolePlayTaxCollectorInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.IdentifiedEntityDispositionInformations import IdentifiedEntityDispositionInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.MapCoordinates import MapCoordinates
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.MapCoordinatesAndId import MapCoordinatesAndId
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.MapCoordinatesExtended import MapCoordinatesExtended
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.TaxCollectorStaticInformations import TaxCollectorStaticInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.AbstractFightTeamInformations import AbstractFightTeamInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.BaseSpawnMonsterInformation import BaseSpawnMonsterInformation
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.FightAllianceTeamInformations import FightAllianceTeamInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.FightCommonInformations import FightCommonInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.FightExternalInformations import FightExternalInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.FightLoot import FightLoot
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.FightLootObject import FightLootObject
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.FightOptionsInformations import FightOptionsInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.FightPhase import FightPhase
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.FightResultAdditionalData import FightResultAdditionalData
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.FightResultExperienceData import FightResultExperienceData
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.FightResultFighterListEntry import FightResultFighterListEntry
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.FightResultListEntry import FightResultListEntry
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.FightResultMutantListEntry import FightResultMutantListEntry
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.FightResultPlayerListEntry import FightResultPlayerListEntry
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.FightResultPvpData import FightResultPvpData
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.FightResultTaxCollectorListEntry import FightResultTaxCollectorListEntry
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.FightStartingPositions import FightStartingPositions
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.FightTeamInformations import FightTeamInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.FightTeamLightInformations import FightTeamLightInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.FightTeamMemberCharacterInformations import FightTeamMemberCharacterInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.FightTeamMemberEntityInformation import FightTeamMemberEntityInformation
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.FightTeamMemberInformations import FightTeamMemberInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.FightTeamMemberMonsterInformations import FightTeamMemberMonsterInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.FightTeamMemberTaxCollectorInformations import FightTeamMemberTaxCollectorInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.FightTeamMemberWithAllianceCharacterInformations import FightTeamMemberWithAllianceCharacterInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.GameContextBasicSpawnInformation import GameContextBasicSpawnInformation
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.GameContextSummonsInformation import GameContextSummonsInformation
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.GameFightAIInformations import GameFightAIInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.GameFightCharacterInformations import GameFightCharacterInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.GameFightCharacteristics import GameFightCharacteristics
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.GameFightEffectTriggerCount import GameFightEffectTriggerCount
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.GameFightEntityInformation import GameFightEntityInformation
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.GameFightFighterEntityLightInformation import GameFightFighterEntityLightInformation
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.GameFightFighterInformations import GameFightFighterInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.GameFightFighterLightInformations import GameFightFighterLightInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.GameFightFighterMonsterLightInformations import GameFightFighterMonsterLightInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.GameFightFighterNamedInformations import GameFightFighterNamedInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.GameFightFighterNamedLightInformations import GameFightFighterNamedLightInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.GameFightFighterTaxCollectorLightInformations import GameFightFighterTaxCollectorLightInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.GameFightMonsterInformations import GameFightMonsterInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.GameFightMonsterWithAlignmentInformations import GameFightMonsterWithAlignmentInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.GameFightMutantInformations import GameFightMutantInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.GameFightResumeSlaveInfo import GameFightResumeSlaveInfo
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.GameFightSpellCooldown import GameFightSpellCooldown
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.GameFightTaxCollectorInformations import GameFightTaxCollectorInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.SpawnCharacterInformation import SpawnCharacterInformation
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.SpawnCompanionInformation import SpawnCompanionInformation
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.SpawnInformation import SpawnInformation
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.SpawnMonsterInformation import SpawnMonsterInformation
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.SpawnScaledMonsterInformation import SpawnScaledMonsterInformation
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.challenge.ChallengeInformation import ChallengeInformation
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.challenge.ChallengeTargetInformation import ChallengeTargetInformation
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.fight.challenge.ChallengeTargetWithAttackerInformation import ChallengeTargetWithAttackerInformation
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.AllianceInformation import AllianceInformation
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.AlternativeMonstersInGroupLightInformations import AlternativeMonstersInGroupLightInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.AnomalySubareaInformation import AnomalySubareaInformation
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.AtlasPointsInformations import AtlasPointsInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.BasicAllianceInformations import BasicAllianceInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.BasicGuildInformations import BasicGuildInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.BasicNamedAllianceInformations import BasicNamedAllianceInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.GameRolePlayActorInformations import GameRolePlayActorInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.GameRolePlayCharacterInformations import GameRolePlayCharacterInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.GameRolePlayGroupMonsterInformations import GameRolePlayGroupMonsterInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.GameRolePlayGroupMonsterWaveInformations import GameRolePlayGroupMonsterWaveInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.GameRolePlayHumanoidInformations import GameRolePlayHumanoidInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.GameRolePlayMountInformations import GameRolePlayMountInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.GameRolePlayMutantInformations import GameRolePlayMutantInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.GameRolePlayNamedActorInformations import GameRolePlayNamedActorInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.GameRolePlayNpcInformations import GameRolePlayNpcInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.GameRolePlayNpcWithQuestInformations import GameRolePlayNpcWithQuestInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.GameRolePlayPortalInformations import GameRolePlayPortalInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.GameRolePlayPrismInformations import GameRolePlayPrismInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.GameRolePlayTreasureHintInformations import GameRolePlayTreasureHintInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.GroupMonsterStaticInformations import GroupMonsterStaticInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.GroupMonsterStaticInformationsWithAlternatives import GroupMonsterStaticInformationsWithAlternatives
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.GuildInformations import GuildInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.HumanInformations import HumanInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.HumanOption import HumanOption
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.HumanOptionAlliance import HumanOptionAlliance
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.HumanOptionEmote import HumanOptionEmote
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.HumanOptionFollowers import HumanOptionFollowers
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.HumanOptionGuild import HumanOptionGuild
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.HumanOptionObjectUse import HumanOptionObjectUse
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.HumanOptionOrnament import HumanOptionOrnament
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.HumanOptionSkillUse import HumanOptionSkillUse
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.HumanOptionSpeedMultiplier import HumanOptionSpeedMultiplier
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.HumanOptionTitle import HumanOptionTitle
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.MonsterBoosts import MonsterBoosts
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.MonsterInGroupInformations import MonsterInGroupInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.MonsterInGroupLightInformations import MonsterInGroupLightInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.ObjectItemInRolePlay import ObjectItemInRolePlay
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.alignment.war.effort.AlignmentWarEffortInformation import AlignmentWarEffortInformation
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.breach.BreachBranch import BreachBranch
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.breach.BreachReward import BreachReward
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.breach.ExtendedBreachBranch import ExtendedBreachBranch
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.breach.ExtendedLockedBreachBranch import ExtendedLockedBreachBranch
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.fight.arena.ArenaLeagueRanking import ArenaLeagueRanking
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.fight.arena.ArenaRankInfos import ArenaRankInfos
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.fight.arena.ArenaRanking import ArenaRanking
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.fight.arena.LeagueFriendInformations import LeagueFriendInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.job.DecraftedItemStackInfo import DecraftedItemStackInfo
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.job.JobBookSubscription import JobBookSubscription
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.job.JobCrafterDirectoryEntryJobInfo import JobCrafterDirectoryEntryJobInfo
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.job.JobCrafterDirectoryEntryPlayerInfo import JobCrafterDirectoryEntryPlayerInfo
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.job.JobCrafterDirectoryListEntry import JobCrafterDirectoryListEntry
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.job.JobCrafterDirectorySettings import JobCrafterDirectorySettings
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.job.JobDescription import JobDescription
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.job.JobExperience import JobExperience
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.npc.MapNpcQuestInfo import MapNpcQuestInfo
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.party.DungeonPartyFinderPlayer import DungeonPartyFinderPlayer
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.party.NamedPartyTeam import NamedPartyTeam
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.party.NamedPartyTeamWithOutcome import NamedPartyTeamWithOutcome
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.party.PartyGuestInformations import PartyGuestInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.party.PartyInvitationMemberInformations import PartyInvitationMemberInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.party.PartyMemberArenaInformations import PartyMemberArenaInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.party.PartyMemberGeoPosition import PartyMemberGeoPosition
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.party.PartyMemberInformations import PartyMemberInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.party.entity.PartyEntityBaseInformation import PartyEntityBaseInformation
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.party.entity.PartyEntityMemberInformation import PartyEntityMemberInformation
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.quest.GameRolePlayNpcQuestFlag import GameRolePlayNpcQuestFlag
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.quest.QuestActiveDetailedInformations import QuestActiveDetailedInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.quest.QuestActiveInformations import QuestActiveInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.quest.QuestObjectiveInformations import QuestObjectiveInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.quest.QuestObjectiveInformationsWithCompletion import QuestObjectiveInformationsWithCompletion
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.treasureHunt.PortalInformation import PortalInformation
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.treasureHunt.TreasureHuntFlag import TreasureHuntFlag
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.treasureHunt.TreasureHuntStep import TreasureHuntStep
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.treasureHunt.TreasureHuntStepDig import TreasureHuntStepDig
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.treasureHunt.TreasureHuntStepFight import TreasureHuntStepFight
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.treasureHunt.TreasureHuntStepFollowDirection import TreasureHuntStepFollowDirection
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.treasureHunt.TreasureHuntStepFollowDirectionToHint import TreasureHuntStepFollowDirectionToHint
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.context.roleplay.treasureHunt.TreasureHuntStepFollowDirectionToPOI import TreasureHuntStepFollowDirectionToPOI
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.data.items.BidExchangerObjectInfo import BidExchangerObjectInfo
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.data.items.ForgettableSpellItem import ForgettableSpellItem
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.data.items.GoldItem import GoldItem
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.data.items.Item import Item
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.data.items.ObjectEffects import ObjectEffects
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.data.items.ObjectItem import ObjectItem
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.data.items.ObjectItemGenericQuantity import ObjectItemGenericQuantity
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.data.items.ObjectItemInformationWithQuantity import ObjectItemInformationWithQuantity
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.data.items.ObjectItemMinimalInformation import ObjectItemMinimalInformation
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.data.items.ObjectItemNotInContainer import ObjectItemNotInContainer
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.data.items.ObjectItemQuantity import ObjectItemQuantity
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.data.items.ObjectItemQuantityPriceDateEffects import ObjectItemQuantityPriceDateEffects
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.data.items.ObjectItemToSell import ObjectItemToSell
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.data.items.ObjectItemToSellInBid import ObjectItemToSellInBid
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.data.items.ObjectItemToSellInNpcShop import ObjectItemToSellInNpcShop
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.data.items.SellerBuyerDescriptor import SellerBuyerDescriptor
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.data.items.SpellItem import SpellItem
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.data.items.effects.ObjectEffect import ObjectEffect
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.data.items.effects.ObjectEffectCreature import ObjectEffectCreature
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.data.items.effects.ObjectEffectDate import ObjectEffectDate
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.data.items.effects.ObjectEffectDice import ObjectEffectDice
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.data.items.effects.ObjectEffectDuration import ObjectEffectDuration
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.data.items.effects.ObjectEffectInteger import ObjectEffectInteger
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.data.items.effects.ObjectEffectLadder import ObjectEffectLadder
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.data.items.effects.ObjectEffectMinMax import ObjectEffectMinMax
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.data.items.effects.ObjectEffectMount import ObjectEffectMount
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.data.items.effects.ObjectEffectString import ObjectEffectString
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.entity.EntityInformation import EntityInformation
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.fight.ProtectedEntityWaitingForHelpInfo import ProtectedEntityWaitingForHelpInfo
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.finishmoves.FinishMoveInformations import FinishMoveInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.friend.AbstractContactInformations import AbstractContactInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.friend.AcquaintanceInformation import AcquaintanceInformation
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.friend.AcquaintanceOnlineInformation import AcquaintanceOnlineInformation
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.friend.FriendInformations import FriendInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.friend.FriendOnlineInformations import FriendOnlineInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.friend.FriendSpouseInformations import FriendSpouseInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.friend.FriendSpouseOnlineInformations import FriendSpouseOnlineInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.friend.IgnoredInformations import IgnoredInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.friend.IgnoredOnlineInformations import IgnoredOnlineInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.guild.Contribution import Contribution
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.guild.GuildMemberInfo import GuildMemberInfo
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.guild.HavenBagFurnitureInformation import HavenBagFurnitureInformation
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.guild.RankPublicInformation import RankPublicInformation
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.guild.logbook.GuildLogbookEntryBasicInformation import GuildLogbookEntryBasicInformation
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.guild.logbook.chest.GuildLogbookChestActivity import GuildLogbookChestActivity
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.guild.logbook._global.GuildLevelUpActivity import GuildLevelUpActivity
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.guild.logbook._global.GuildPaddockActivity import GuildPaddockActivity
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.guild.logbook._global.GuildPlayerFlowActivity import GuildPlayerFlowActivity
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.guild.logbook._global.GuildPlayerRankUpdateActivity import GuildPlayerRankUpdateActivity
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.guild.logbook._global.GuildRankActivity import GuildRankActivity
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.guild.logbook._global.GuildUnlockNewTabActivity import GuildUnlockNewTabActivity
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.guild.recruitment.GuildRecruitmentInformation import GuildRecruitmentInformation
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.havenbag.HavenBagRoomPreviewInformation import HavenBagRoomPreviewInformation
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.house.AccountHouseInformations import AccountHouseInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.house.HouseGuildedInformations import HouseGuildedInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.house.HouseInformations import HouseInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.house.HouseInformationsForGuild import HouseInformationsForGuild
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.house.HouseInformationsForSell import HouseInformationsForSell
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.house.HouseInformationsInside import HouseInformationsInside
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.house.HouseInstanceInformations import HouseInstanceInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.house.HouseOnMapInformations import HouseOnMapInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.interactive.InteractiveElement import InteractiveElement
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.interactive.InteractiveElementNamedSkill import InteractiveElementNamedSkill
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.interactive.InteractiveElementSkill import InteractiveElementSkill
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.interactive.InteractiveElementWithAgeBonus import InteractiveElementWithAgeBonus
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.interactive.MapObstacle import MapObstacle
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.interactive.StatedElement import StatedElement
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.interactive.skill.SkillActionDescription import SkillActionDescription
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.interactive.skill.SkillActionDescriptionCollect import SkillActionDescriptionCollect
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.interactive.skill.SkillActionDescriptionCraft import SkillActionDescriptionCraft
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.interactive.skill.SkillActionDescriptionTimed import SkillActionDescriptionTimed
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.interactive.zaap.TeleportDestination import TeleportDestination
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.inventory.StorageTabInformation import StorageTabInformation
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.inventory.UpdatedStorageTabInformation import UpdatedStorageTabInformation
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.inventory.exchanges.RecycledItem import RecycledItem
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.look.EntityLook import EntityLook
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.look.IndexedEntityLook import IndexedEntityLook
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.look.SubEntity import SubEntity
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.mount.ItemDurability import ItemDurability
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.mount.MountClientData import MountClientData
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.mount.UpdateMountBooleanCharacteristic import UpdateMountBooleanCharacteristic
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.mount.UpdateMountCharacteristic import UpdateMountCharacteristic
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.mount.UpdateMountIntegerCharacteristic import UpdateMountIntegerCharacteristic
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.nuggets.NuggetsBeneficiary import NuggetsBeneficiary
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.paddock.MountInformationsForPaddock import MountInformationsForPaddock
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.paddock.PaddockBuyableInformations import PaddockBuyableInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.paddock.PaddockContentInformations import PaddockContentInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.paddock.PaddockGuildedInformations import PaddockGuildedInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.paddock.PaddockInformations import PaddockInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.paddock.PaddockInformationsForSell import PaddockInformationsForSell
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.paddock.PaddockInstancesInformations import PaddockInstancesInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.paddock.PaddockItem import PaddockItem
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.presets.CharacterCharacteristicForPreset import CharacterCharacteristicForPreset
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.presets.EntitiesPreset import EntitiesPreset
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.presets.ForgettableSpellsPreset import ForgettableSpellsPreset
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.presets.FullStatsPreset import FullStatsPreset
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.presets.IconNamedPreset import IconNamedPreset
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.presets.ItemForPreset import ItemForPreset
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.presets.ItemsPreset import ItemsPreset
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.presets.Preset import Preset
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.presets.PresetsContainerPreset import PresetsContainerPreset
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.presets.SimpleCharacterCharacteristicForPreset import SimpleCharacterCharacteristicForPreset
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.presets.SpellForPreset import SpellForPreset
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.presets.SpellsPreset import SpellsPreset
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.presets.StatsPreset import StatsPreset
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.prism.AllianceInsiderPrismInformation import AllianceInsiderPrismInformation
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.prism.AlliancePrismInformation import AlliancePrismInformation
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.prism.PrismGeolocalizedInformation import PrismGeolocalizedInformation
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.prism.PrismInformation import PrismInformation
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.pvp.AgressableStatusMessage import AgressableStatusMessage
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.rank.RankInformation import RankInformation
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.rank.RankMinimalInformation import RankMinimalInformation
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.shortcut.Shortcut import Shortcut
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.shortcut.ShortcutEmote import ShortcutEmote
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.shortcut.ShortcutEntitiesPreset import ShortcutEntitiesPreset
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.shortcut.ShortcutObject import ShortcutObject
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.shortcut.ShortcutObjectItem import ShortcutObjectItem
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.shortcut.ShortcutObjectPreset import ShortcutObjectPreset
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.shortcut.ShortcutSmiley import ShortcutSmiley
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.shortcut.ShortcutSpell import ShortcutSpell
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.social.AbstractSocialGroupInfos import AbstractSocialGroupInfos
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.social.AllianceFactSheetInformation import AllianceFactSheetInformation
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.social.GuildFactSheetInformations import GuildFactSheetInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.social.GuildInsiderFactSheetInformations import GuildInsiderFactSheetInformations
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.social.SocialEmblem import SocialEmblem
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.social.SocialMember import SocialMember
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.social.application.ApplicationPlayerInformation import ApplicationPlayerInformation
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.social.application.SocialApplicationInformation import SocialApplicationInformation
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.social.fight.SocialFight import SocialFight
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.social.fight.SocialFightInfo import SocialFightInfo
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.social.recruitment.SocialRecruitmentInformation import SocialRecruitmentInformation
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.startup.GameActionItem import GameActionItem
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.secure.TrustCertificate import TrustCertificate
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.version.Version import Version
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.web.haapi.BufferInformation import BufferInformation
+CLASSES_BY_NAME = {
+	'AdminCommandMessage': AdminCommandMessage,
+	'AdminQuietCommandMessage': AdminQuietCommandMessage,
+	'ConsoleCommandsListMessage': ConsoleCommandsListMessage,
+	'ConsoleEndMessage': ConsoleEndMessage,
+	'ConsoleMessage': ConsoleMessage,
+	'NetworkDataContainerMessage': NetworkDataContainerMessage,
+	'BasicPingMessage': BasicPingMessage,
+	'BasicPongMessage': BasicPongMessage,
+	'BasicStatMessage': BasicStatMessage,
+	'BasicStatWithDataMessage': BasicStatWithDataMessage,
+	'CredentialsAcknowledgementMessage': CredentialsAcknowledgementMessage,
+	'ForceAccountErrorMessage': ForceAccountErrorMessage,
+	'ForceAccountMessage': ForceAccountMessage,
+	'ForceAccountStatusMessage': ForceAccountStatusMessage,
+	'HelloConnectMessage': HelloConnectMessage,
+	'IdentificationFailedBannedMessage': IdentificationFailedBannedMessage,
+	'IdentificationFailedForBadVersionMessage': IdentificationFailedForBadVersionMessage,
+	'IdentificationFailedMessage': IdentificationFailedMessage,
+	'IdentificationMessage': IdentificationMessage,
+	'IdentificationSuccessMessage': IdentificationSuccessMessage,
+	'IdentificationSuccessWithLoginTokenMessage': IdentificationSuccessWithLoginTokenMessage,
+	'MigratedServerListMessage': MigratedServerListMessage,
+	'ReleaseAccountMessage': ReleaseAccountMessage,
+	'SelectedServerDataExtendedMessage': SelectedServerDataExtendedMessage,
+	'SelectedServerDataMessage': SelectedServerDataMessage,
+	'SelectedServerRefusedMessage': SelectedServerRefusedMessage,
+	'ServerSelectionMessage': ServerSelectionMessage,
+	'ServersListMessage': ServersListMessage,
+	'ServerStatusUpdateMessage': ServerStatusUpdateMessage,
+	'AccountLinkRequiredMessage': AccountLinkRequiredMessage,
+	'NicknameAcceptedMessage': NicknameAcceptedMessage,
+	'NicknameChoiceRequestMessage': NicknameChoiceRequestMessage,
+	'NicknameRefusedMessage': NicknameRefusedMessage,
+	'NicknameRegistrationMessage': NicknameRegistrationMessage,
+	'AcquaintanceSearchErrorMessage': AcquaintanceSearchErrorMessage,
+	'AcquaintanceSearchMessage': AcquaintanceSearchMessage,
+	'AcquaintanceServerListMessage': AcquaintanceServerListMessage,
+	'DebugClearHighlightCellsMessage': DebugClearHighlightCellsMessage,
+	'DebugHighlightCellsMessage': DebugHighlightCellsMessage,
+	'DebugInClientMessage': DebugInClientMessage,
+	'DumpedEntityStatsMessage': DumpedEntityStatsMessage,
+	'PaginationAnswerAbstractMessage': PaginationAnswerAbstractMessage,
+	'PaginationRequestAbstractMessage': PaginationRequestAbstractMessage,
+	'AchievementAlmostFinishedDetailedListMessage': AchievementAlmostFinishedDetailedListMessage,
+	'AchievementAlmostFinishedDetailedListRequestMessage': AchievementAlmostFinishedDetailedListRequestMessage,
+	'AchievementDetailedListMessage': AchievementDetailedListMessage,
+	'AchievementDetailedListRequestMessage': AchievementDetailedListRequestMessage,
+	'AchievementDetailsMessage': AchievementDetailsMessage,
+	'AchievementDetailsRequestMessage': AchievementDetailsRequestMessage,
+	'AchievementFinishedInformationMessage': AchievementFinishedInformationMessage,
+	'AchievementFinishedMessage': AchievementFinishedMessage,
+	'AchievementListMessage': AchievementListMessage,
+	'AchievementRewardErrorMessage': AchievementRewardErrorMessage,
+	'AchievementRewardRequestMessage': AchievementRewardRequestMessage,
+	'AchievementRewardSuccessMessage': AchievementRewardSuccessMessage,
+	'FriendGuildSetWarnOnAchievementCompleteMessage': FriendGuildSetWarnOnAchievementCompleteMessage,
+	'FriendGuildWarnOnAchievementCompleteStateMessage': FriendGuildWarnOnAchievementCompleteStateMessage,
+	'AbstractGameActionMessage': AbstractGameActionMessage,
+	'AbstractGameActionWithAckMessage': AbstractGameActionWithAckMessage,
+	'GameActionAcknowledgementMessage': GameActionAcknowledgementMessage,
+	'GameActionNoopMessage': GameActionNoopMessage,
+	'GameActionSpamMessage': GameActionSpamMessage,
+	'AbstractGameActionFightTargetedAbilityMessage': AbstractGameActionFightTargetedAbilityMessage,
+	'GameActionFightActivateGlyphTrapMessage': GameActionFightActivateGlyphTrapMessage,
+	'GameActionFightCarryCharacterMessage': GameActionFightCarryCharacterMessage,
+	'GameActionFightCastOnTargetRequestMessage': GameActionFightCastOnTargetRequestMessage,
+	'GameActionFightCastRequestMessage': GameActionFightCastRequestMessage,
+	'GameActionFightChangeLookMessage': GameActionFightChangeLookMessage,
+	'GameActionFightCloseCombatMessage': GameActionFightCloseCombatMessage,
+	'GameActionFightDeathMessage': GameActionFightDeathMessage,
+	'GameActionFightDispellableEffectMessage': GameActionFightDispellableEffectMessage,
+	'GameActionFightDispellEffectMessage': GameActionFightDispellEffectMessage,
+	'GameActionFightDispellMessage': GameActionFightDispellMessage,
+	'GameActionFightDispellSpellMessage': GameActionFightDispellSpellMessage,
+	'GameActionFightDodgePointLossMessage': GameActionFightDodgePointLossMessage,
+	'GameActionFightDropCharacterMessage': GameActionFightDropCharacterMessage,
+	'GameActionFightExchangePositionsMessage': GameActionFightExchangePositionsMessage,
+	'GameActionFightInvisibilityMessage': GameActionFightInvisibilityMessage,
+	'GameActionFightInvisibleDetectedMessage': GameActionFightInvisibleDetectedMessage,
+	'GameActionFightKillMessage': GameActionFightKillMessage,
+	'GameActionFightLifeAndShieldPointsLostMessage': GameActionFightLifeAndShieldPointsLostMessage,
+	'GameActionFightLifePointsGainMessage': GameActionFightLifePointsGainMessage,
+	'GameActionFightLifePointsLostMessage': GameActionFightLifePointsLostMessage,
+	'GameActionFightMarkCellsMessage': GameActionFightMarkCellsMessage,
+	'GameActionFightModifyEffectsDurationMessage': GameActionFightModifyEffectsDurationMessage,
+	'GameActionFightMultipleSummonMessage': GameActionFightMultipleSummonMessage,
+	'GameActionFightNoSpellCastMessage': GameActionFightNoSpellCastMessage,
+	'GameActionFightPointsVariationMessage': GameActionFightPointsVariationMessage,
+	'GameActionFightReduceDamagesMessage': GameActionFightReduceDamagesMessage,
+	'GameActionFightReflectDamagesMessage': GameActionFightReflectDamagesMessage,
+	'GameActionFightReflectSpellMessage': GameActionFightReflectSpellMessage,
+	'GameActionFightSlideMessage': GameActionFightSlideMessage,
+	'GameActionFightSpellCastMessage': GameActionFightSpellCastMessage,
+	'GameActionFightSpellCooldownVariationMessage': GameActionFightSpellCooldownVariationMessage,
+	'GameActionFightSpellImmunityMessage': GameActionFightSpellImmunityMessage,
+	'GameActionFightStealKamaMessage': GameActionFightStealKamaMessage,
+	'GameActionFightSummonMessage': GameActionFightSummonMessage,
+	'GameActionFightTackledMessage': GameActionFightTackledMessage,
+	'GameActionFightTeleportOnSameMapMessage': GameActionFightTeleportOnSameMapMessage,
+	'GameActionFightThrowCharacterMessage': GameActionFightThrowCharacterMessage,
+	'GameActionFightTriggerEffectMessage': GameActionFightTriggerEffectMessage,
+	'GameActionFightTriggerGlyphTrapMessage': GameActionFightTriggerGlyphTrapMessage,
+	'GameActionFightUnmarkCellsMessage': GameActionFightUnmarkCellsMessage,
+	'GameActionFightVanishMessage': GameActionFightVanishMessage,
+	'GameActionUpdateEffectTriggerCountMessage': GameActionUpdateEffectTriggerCountMessage,
+	'SequenceEndMessage': SequenceEndMessage,
+	'SequenceStartMessage': SequenceStartMessage,
+	'AllianceAllRanksUpdateRequestMessage': AllianceAllRanksUpdateRequestMessage,
+	'AllianceBulletinMessage': AllianceBulletinMessage,
+	'AllianceBulletinSetErrorMessage': AllianceBulletinSetErrorMessage,
+	'AllianceBulletinSetRequestMessage': AllianceBulletinSetRequestMessage,
+	'AllianceChangeMemberRankMessage': AllianceChangeMemberRankMessage,
+	'AllianceCreationResultMessage': AllianceCreationResultMessage,
+	'AllianceCreationStartedMessage': AllianceCreationStartedMessage,
+	'AllianceCreationValidMessage': AllianceCreationValidMessage,
+	'AllianceFactsErrorMessage': AllianceFactsErrorMessage,
+	'AllianceFactsMessage': AllianceFactsMessage,
+	'AllianceFactsRequestMessage': AllianceFactsRequestMessage,
+	'AllianceInsiderInfoMessage': AllianceInsiderInfoMessage,
+	'AllianceInsiderInfoRequestMessage': AllianceInsiderInfoRequestMessage,
+	'AllianceInvitationAnswerMessage': AllianceInvitationAnswerMessage,
+	'AllianceInvitationMessage': AllianceInvitationMessage,
+	'AllianceInvitationStateRecrutedMessage': AllianceInvitationStateRecrutedMessage,
+	'AllianceInvitationStateRecruterMessage': AllianceInvitationStateRecruterMessage,
+	'AllianceInvitedMessage': AllianceInvitedMessage,
+	'AllianceJoinAutomaticallyRequestMessage': AllianceJoinAutomaticallyRequestMessage,
+	'AllianceJoinedMessage': AllianceJoinedMessage,
+	'AllianceKickRequestMessage': AllianceKickRequestMessage,
+	'AllianceLeftMessage': AllianceLeftMessage,
+	'AllianceListMessage': AllianceListMessage,
+	'AllianceMemberInformationUpdateMessage': AllianceMemberInformationUpdateMessage,
+	'AllianceMemberLeavingMessage': AllianceMemberLeavingMessage,
+	'AllianceMemberOnlineStatusMessage': AllianceMemberOnlineStatusMessage,
+	'AllianceMembershipMessage': AllianceMembershipMessage,
+	'AllianceMemberStartWarningOnConnectionMessage': AllianceMemberStartWarningOnConnectionMessage,
+	'AllianceMemberStopWarningOnConnectionMessage': AllianceMemberStopWarningOnConnectionMessage,
+	'AllianceModificationEmblemValidMessage': AllianceModificationEmblemValidMessage,
+	'AllianceModificationNameAndTagValidMessage': AllianceModificationNameAndTagValidMessage,
+	'AllianceModificationResultMessage': AllianceModificationResultMessage,
+	'AllianceModificationStartedMessage': AllianceModificationStartedMessage,
+	'AllianceModificationValidMessage': AllianceModificationValidMessage,
+	'AllianceMotdMessage': AllianceMotdMessage,
+	'AllianceMotdSetErrorMessage': AllianceMotdSetErrorMessage,
+	'AllianceMotdSetRequestMessage': AllianceMotdSetRequestMessage,
+	'AlliancePartialListMessage': AlliancePartialListMessage,
+	'AllianceRankCreateRequestMessage': AllianceRankCreateRequestMessage,
+	'AllianceRankRemoveRequestMessage': AllianceRankRemoveRequestMessage,
+	'AllianceRanksMessage': AllianceRanksMessage,
+	'AllianceRanksRequestMessage': AllianceRanksRequestMessage,
+	'AllianceRankUpdateRequestMessage': AllianceRankUpdateRequestMessage,
+	'AllianceRightsUpdateMessage': AllianceRightsUpdateMessage,
+	'KohUpdateMessage': KohUpdateMessage,
+	'KothEndMessage': KothEndMessage,
+	'AllianceApplicationAnswerMessage': AllianceApplicationAnswerMessage,
+	'AllianceApplicationDeletedMessage': AllianceApplicationDeletedMessage,
+	'AllianceApplicationIsAnsweredMessage': AllianceApplicationIsAnsweredMessage,
+	'AllianceApplicationListenMessage': AllianceApplicationListenMessage,
+	'AllianceApplicationPresenceMessage': AllianceApplicationPresenceMessage,
+	'AllianceApplicationReceivedMessage': AllianceApplicationReceivedMessage,
+	'AllianceDeleteApplicationRequestMessage': AllianceDeleteApplicationRequestMessage,
+	'AllianceGetPlayerApplicationMessage': AllianceGetPlayerApplicationMessage,
+	'AllianceIsThereAnyApplicationMessage': AllianceIsThereAnyApplicationMessage,
+	'AllianceListApplicationAnswerMessage': AllianceListApplicationAnswerMessage,
+	'AllianceListApplicationModifiedMessage': AllianceListApplicationModifiedMessage,
+	'AllianceListApplicationRequestMessage': AllianceListApplicationRequestMessage,
+	'AlliancePlayerApplicationAbstractMessage': AlliancePlayerApplicationAbstractMessage,
+	'AlliancePlayerApplicationInformationMessage': AlliancePlayerApplicationInformationMessage,
+	'AlliancePlayerNoApplicationInformationMessage': AlliancePlayerNoApplicationInformationMessage,
+	'AllianceSubmitApplicationMessage': AllianceSubmitApplicationMessage,
+	'AllianceUpdateApplicationMessage': AllianceUpdateApplicationMessage,
+	'AllianceFightFighterAddedMessage': AllianceFightFighterAddedMessage,
+	'AllianceFightFighterRemovedMessage': AllianceFightFighterRemovedMessage,
+	'AllianceFightFinishedMessage': AllianceFightFinishedMessage,
+	'AllianceFightInfoMessage': AllianceFightInfoMessage,
+	'AllianceFightPhaseUpdateMessage': AllianceFightPhaseUpdateMessage,
+	'AllianceFightStartedMessage': AllianceFightStartedMessage,
+	'StartListenAllianceFightMessage': StartListenAllianceFightMessage,
+	'StopListenAllianceFightMessage': StopListenAllianceFightMessage,
+	'AllianceGetRecruitmentInformationMessage': AllianceGetRecruitmentInformationMessage,
+	'AllianceRecruitmentInformationMessage': AllianceRecruitmentInformationMessage,
+	'AllianceRecruitmentInvalidateMessage': AllianceRecruitmentInvalidateMessage,
+	'AllianceUpdateRecruitmentInformationMessage': AllianceUpdateRecruitmentInformationMessage,
+	'AllianceSummaryMessage': AllianceSummaryMessage,
+	'AllianceSummaryRequestMessage': AllianceSummaryRequestMessage,
+	'AlmanachCalendarDateMessage': AlmanachCalendarDateMessage,
+	'AccountCapabilitiesMessage': AccountCapabilitiesMessage,
+	'AccountLoggingKickedMessage': AccountLoggingKickedMessage,
+	'AlreadyConnectedMessage': AlreadyConnectedMessage,
+	'AuthenticationTicketAcceptedMessage': AuthenticationTicketAcceptedMessage,
+	'AuthenticationTicketMessage': AuthenticationTicketMessage,
+	'AuthenticationTicketRefusedMessage': AuthenticationTicketRefusedMessage,
+	'HelloGameMessage': HelloGameMessage,
+	'ReloginTokenRequestMessage': ReloginTokenRequestMessage,
+	'ReloginTokenStatusMessage': ReloginTokenStatusMessage,
+	'ServerOptionalFeaturesMessage': ServerOptionalFeaturesMessage,
+	'ServerSessionConstantsMessage': ServerSessionConstantsMessage,
+	'ServerSettingsMessage': ServerSettingsMessage,
+	'AtlasPointInformationsMessage': AtlasPointInformationsMessage,
+	'CompassResetMessage': CompassResetMessage,
+	'CompassUpdateMessage': CompassUpdateMessage,
+	'CompassUpdatePartyMemberMessage': CompassUpdatePartyMemberMessage,
+	'CompassUpdatePvpSeekMessage': CompassUpdatePvpSeekMessage,
+	'BasicAckMessage': BasicAckMessage,
+	'BasicDateMessage': BasicDateMessage,
+	'BasicLatencyStatsMessage': BasicLatencyStatsMessage,
+	'BasicLatencyStatsRequestMessage': BasicLatencyStatsRequestMessage,
+	'BasicNoOperationMessage': BasicNoOperationMessage,
+	'BasicTimeMessage': BasicTimeMessage,
+	'BasicWhoAmIRequestMessage': BasicWhoAmIRequestMessage,
+	'BasicWhoIsMessage': BasicWhoIsMessage,
+	'BasicWhoIsNoMatchMessage': BasicWhoIsNoMatchMessage,
+	'BasicWhoIsRequestMessage': BasicWhoIsRequestMessage,
+	'CurrentServerStatusUpdateMessage': CurrentServerStatusUpdateMessage,
+	'NumericWhoIsMessage': NumericWhoIsMessage,
+	'NumericWhoIsRequestMessage': NumericWhoIsRequestMessage,
+	'SequenceNumberMessage': SequenceNumberMessage,
+	'SequenceNumberRequestMessage': SequenceNumberRequestMessage,
+	'TextInformationMessage': TextInformationMessage,
+	'AlignmentWarEffortDonatePreviewMessage': AlignmentWarEffortDonatePreviewMessage,
+	'AlignmentWarEffortDonateRequestMessage': AlignmentWarEffortDonateRequestMessage,
+	'AlignmentWarEffortDonationResultMessage': AlignmentWarEffortDonationResultMessage,
+	'CharacterAlignmentWarEffortProgressionMessage': CharacterAlignmentWarEffortProgressionMessage,
+	'CharacterAlignmentWarEffortProgressionRequestMessage': CharacterAlignmentWarEffortProgressionRequestMessage,
+	'AlterationAddedMessage': AlterationAddedMessage,
+	'AlterationRemovedMessage': AlterationRemovedMessage,
+	'AlterationsMessage': AlterationsMessage,
+	'AlterationsUpdatedMessage': AlterationsUpdatedMessage,
+	'CharacterFirstSelectionMessage': CharacterFirstSelectionMessage,
+	'CharacterReplayWithRemodelRequestMessage': CharacterReplayWithRemodelRequestMessage,
+	'CharacterSelectedErrorMessage': CharacterSelectedErrorMessage,
+	'CharacterSelectedForceMessage': CharacterSelectedForceMessage,
+	'CharacterSelectedForceReadyMessage': CharacterSelectedForceReadyMessage,
+	'CharacterSelectedSuccessMessage': CharacterSelectedSuccessMessage,
+	'CharacterSelectionMessage': CharacterSelectionMessage,
+	'CharacterSelectionWithRemodelMessage': CharacterSelectionWithRemodelMessage,
+	'CharactersListErrorMessage': CharactersListErrorMessage,
+	'CharactersListMessage': CharactersListMessage,
+	'CharactersListRequestMessage': CharactersListRequestMessage,
+	'CharactersListWithRemodelingMessage': CharactersListWithRemodelingMessage,
+	'CharacterCanBeCreatedRequestMessage': CharacterCanBeCreatedRequestMessage,
+	'CharacterCanBeCreatedResultMessage': CharacterCanBeCreatedResultMessage,
+	'CharacterCreationRequestMessage': CharacterCreationRequestMessage,
+	'CharacterCreationResultMessage': CharacterCreationResultMessage,
+	'CharacterNameSuggestionFailureMessage': CharacterNameSuggestionFailureMessage,
+	'CharacterNameSuggestionRequestMessage': CharacterNameSuggestionRequestMessage,
+	'CharacterNameSuggestionSuccessMessage': CharacterNameSuggestionSuccessMessage,
+	'DebtsDeleteMessage': DebtsDeleteMessage,
+	'DebtsUpdateMessage': DebtsUpdateMessage,
+	'CharacterDeletionErrorMessage': CharacterDeletionErrorMessage,
+	'CharacterDeletionPrepareMessage': CharacterDeletionPrepareMessage,
+	'CharacterDeletionPrepareRequestMessage': CharacterDeletionPrepareRequestMessage,
+	'CharacterDeletionRequestMessage': CharacterDeletionRequestMessage,
+	'CharacterReplayRequestMessage': CharacterReplayRequestMessage,
+	'ForgettableSpellClientActionMessage': ForgettableSpellClientActionMessage,
+	'ForgettableSpellDeleteMessage': ForgettableSpellDeleteMessage,
+	'ForgettableSpellEquipmentSlotsMessage': ForgettableSpellEquipmentSlotsMessage,
+	'ForgettableSpellListUpdateMessage': ForgettableSpellListUpdateMessage,
+	'ApplySpellModifierMessage': ApplySpellModifierMessage,
+	'RemoveSpellModifierMessage': RemoveSpellModifierMessage,
+	'CharacterExperienceGainMessage': CharacterExperienceGainMessage,
+	'CharacterLevelUpInformationMessage': CharacterLevelUpInformationMessage,
+	'CharacterLevelUpMessage': CharacterLevelUpMessage,
+	'CharacterStatsListMessage': CharacterStatsListMessage,
+	'FighterStatsListMessage': FighterStatsListMessage,
+	'LifePointsRegenBeginMessage': LifePointsRegenBeginMessage,
+	'LifePointsRegenEndMessage': LifePointsRegenEndMessage,
+	'ResetCharacterStatsRequestMessage': ResetCharacterStatsRequestMessage,
+	'UpdateLifePointsMessage': UpdateLifePointsMessage,
+	'PlayerStatusUpdateErrorMessage': PlayerStatusUpdateErrorMessage,
+	'PlayerStatusUpdateMessage': PlayerStatusUpdateMessage,
+	'PlayerStatusUpdateRequestMessage': PlayerStatusUpdateRequestMessage,
+	'ChatAbstractClientMessage': ChatAbstractClientMessage,
+	'ChatAbstractServerMessage': ChatAbstractServerMessage,
+	'ChatAdminServerMessage': ChatAdminServerMessage,
+	'ChatClientMultiMessage': ChatClientMultiMessage,
+	'ChatClientMultiWithObjectMessage': ChatClientMultiWithObjectMessage,
+	'ChatClientPrivateMessage': ChatClientPrivateMessage,
+	'ChatClientPrivateWithObjectMessage': ChatClientPrivateWithObjectMessage,
+	'ChatErrorMessage': ChatErrorMessage,
+	'ChatKolizeumServerMessage': ChatKolizeumServerMessage,
+	'ChatServerCopyMessage': ChatServerCopyMessage,
+	'ChatServerCopyWithObjectMessage': ChatServerCopyWithObjectMessage,
+	'ChatServerMessage': ChatServerMessage,
+	'ChatServerWithObjectMessage': ChatServerWithObjectMessage,
+	'ChannelEnablingChangeMessage': ChannelEnablingChangeMessage,
+	'ChannelEnablingMessage': ChannelEnablingMessage,
+	'EnabledChannelsMessage': EnabledChannelsMessage,
+	'ChatCommunityChannelCommunityMessage': ChatCommunityChannelCommunityMessage,
+	'ChatCommunityChannelSetCommunityRequestMessage': ChatCommunityChannelSetCommunityRequestMessage,
+	'ChatSmileyExtraPackListMessage': ChatSmileyExtraPackListMessage,
+	'ChatSmileyMessage': ChatSmileyMessage,
+	'ChatSmileyRequestMessage': ChatSmileyRequestMessage,
+	'LocalizedChatSmileyMessage': LocalizedChatSmileyMessage,
+	'MoodSmileyRequestMessage': MoodSmileyRequestMessage,
+	'MoodSmileyResultMessage': MoodSmileyResultMessage,
+	'MoodSmileyUpdateMessage': MoodSmileyUpdateMessage,
+	'AddTaxCollectorOrderedSpellMessage': AddTaxCollectorOrderedSpellMessage,
+	'AddTaxCollectorPresetSpellMessage': AddTaxCollectorPresetSpellMessage,
+	'ConfirmationOfListeningTaxCollectorUpdatesMessage': ConfirmationOfListeningTaxCollectorUpdatesMessage,
+	'GameRolePlayTaxCollectorFightRequestMessage': GameRolePlayTaxCollectorFightRequestMessage,
+	'MoveTaxCollectorOrderedSpellMessage': MoveTaxCollectorOrderedSpellMessage,
+	'MoveTaxCollectorPresetSpellMessage': MoveTaxCollectorPresetSpellMessage,
+	'RemoveTaxCollectorOrderedSpellMessage': RemoveTaxCollectorOrderedSpellMessage,
+	'RemoveTaxCollectorPresetSpellMessage': RemoveTaxCollectorPresetSpellMessage,
+	'StartListenTaxCollectorPresetsUpdatesMessage': StartListenTaxCollectorPresetsUpdatesMessage,
+	'StartListenTaxCollectorUpdatesMessage': StartListenTaxCollectorUpdatesMessage,
+	'StopListenTaxCollectorPresetsUpdatesMessage': StopListenTaxCollectorPresetsUpdatesMessage,
+	'StopListenTaxCollectorUpdatesMessage': StopListenTaxCollectorUpdatesMessage,
+	'TaxCollectorAddedMessage': TaxCollectorAddedMessage,
+	'TaxCollectorAttackedMessage': TaxCollectorAttackedMessage,
+	'TaxCollectorAttackedResultMessage': TaxCollectorAttackedResultMessage,
+	'TaxCollectorErrorMessage': TaxCollectorErrorMessage,
+	'TaxCollectorHarvestedMessage': TaxCollectorHarvestedMessage,
+	'TaxCollectorMovementsOfflineMessage': TaxCollectorMovementsOfflineMessage,
+	'TaxCollectorOrderedSpellUpdatedMessage': TaxCollectorOrderedSpellUpdatedMessage,
+	'TaxCollectorPresetsMessage': TaxCollectorPresetsMessage,
+	'TaxCollectorPresetSpellUpdatedMessage': TaxCollectorPresetSpellUpdatedMessage,
+	'TaxCollectorRemovedMessage': TaxCollectorRemovedMessage,
+	'TaxCollectorStateUpdateMessage': TaxCollectorStateUpdateMessage,
+	'TopTaxCollectorListMessage': TopTaxCollectorListMessage,
+	'GameCautiousMapMovementMessage': GameCautiousMapMovementMessage,
+	'GameCautiousMapMovementRequestMessage': GameCautiousMapMovementRequestMessage,
+	'GameContextCreateErrorMessage': GameContextCreateErrorMessage,
+	'GameContextCreateMessage': GameContextCreateMessage,
+	'GameContextCreateRequestMessage': GameContextCreateRequestMessage,
+	'GameContextDestroyMessage': GameContextDestroyMessage,
+	'GameContextKickMessage': GameContextKickMessage,
+	'GameContextMoveElementMessage': GameContextMoveElementMessage,
+	'GameContextMoveMultipleElementsMessage': GameContextMoveMultipleElementsMessage,
+	'GameContextQuitMessage': GameContextQuitMessage,
+	'GameContextReadyMessage': GameContextReadyMessage,
+	'GameContextRefreshEntityLookMessage': GameContextRefreshEntityLookMessage,
+	'GameContextRemoveElementMessage': GameContextRemoveElementMessage,
+	'GameContextRemoveElementWithEventMessage': GameContextRemoveElementWithEventMessage,
+	'GameContextRemoveMultipleElementsMessage': GameContextRemoveMultipleElementsMessage,
+	'GameContextRemoveMultipleElementsWithEventsMessage': GameContextRemoveMultipleElementsWithEventsMessage,
+	'GameEntitiesDispositionMessage': GameEntitiesDispositionMessage,
+	'GameEntityDispositionErrorMessage': GameEntityDispositionErrorMessage,
+	'GameEntityDispositionMessage': GameEntityDispositionMessage,
+	'GameMapChangeOrientationMessage': GameMapChangeOrientationMessage,
+	'GameMapChangeOrientationRequestMessage': GameMapChangeOrientationRequestMessage,
+	'GameMapChangeOrientationsMessage': GameMapChangeOrientationsMessage,
+	'GameMapMovementCancelMessage': GameMapMovementCancelMessage,
+	'GameMapMovementConfirmMessage': GameMapMovementConfirmMessage,
+	'GameMapMovementMessage': GameMapMovementMessage,
+	'GameMapMovementRequestMessage': GameMapMovementRequestMessage,
+	'GameMapNoMovementMessage': GameMapNoMovementMessage,
+	'GameRefreshMonsterBoostsMessage': GameRefreshMonsterBoostsMessage,
+	'ShowCellMessage': ShowCellMessage,
+	'ShowCellRequestMessage': ShowCellRequestMessage,
+	'ShowCellSpectatorMessage': ShowCellSpectatorMessage,
+	'DisplayNumericalValuePaddockMessage': DisplayNumericalValuePaddockMessage,
+	'DungeonKeyRingMessage': DungeonKeyRingMessage,
+	'DungeonKeyRingUpdateMessage': DungeonKeyRingUpdateMessage,
+	'GameFightEndMessage': GameFightEndMessage,
+	'GameFightHumanReadyStateMessage': GameFightHumanReadyStateMessage,
+	'GameFightJoinMessage': GameFightJoinMessage,
+	'GameFightJoinRequestMessage': GameFightJoinRequestMessage,
+	'GameFightLeaveMessage': GameFightLeaveMessage,
+	'GameFightNewRoundMessage': GameFightNewRoundMessage,
+	'GameFightNewWaveMessage': GameFightNewWaveMessage,
+	'GameFightOptionStateUpdateMessage': GameFightOptionStateUpdateMessage,
+	'GameFightOptionToggleMessage': GameFightOptionToggleMessage,
+	'GameFightPauseMessage': GameFightPauseMessage,
+	'GameFightPlacementPositionRequestMessage': GameFightPlacementPositionRequestMessage,
+	'GameFightPlacementPossiblePositionsMessage': GameFightPlacementPossiblePositionsMessage,
+	'GameFightPlacementSwapPositionsAcceptMessage': GameFightPlacementSwapPositionsAcceptMessage,
+	'GameFightPlacementSwapPositionsCancelledMessage': GameFightPlacementSwapPositionsCancelledMessage,
+	'GameFightPlacementSwapPositionsCancelMessage': GameFightPlacementSwapPositionsCancelMessage,
+	'GameFightPlacementSwapPositionsErrorMessage': GameFightPlacementSwapPositionsErrorMessage,
+	'GameFightPlacementSwapPositionsMessage': GameFightPlacementSwapPositionsMessage,
+	'GameFightPlacementSwapPositionsOfferMessage': GameFightPlacementSwapPositionsOfferMessage,
+	'GameFightPlacementSwapPositionsRequestMessage': GameFightPlacementSwapPositionsRequestMessage,
+	'GameFightReadyMessage': GameFightReadyMessage,
+	'GameFightRemoveTeamMemberMessage': GameFightRemoveTeamMemberMessage,
+	'GameFightResumeMessage': GameFightResumeMessage,
+	'GameFightResumeWithSlavesMessage': GameFightResumeWithSlavesMessage,
+	'GameFightSpectateMessage': GameFightSpectateMessage,
+	'GameFightSpectatePlayerRequestMessage': GameFightSpectatePlayerRequestMessage,
+	'GameFightSpectatorJoinMessage': GameFightSpectatorJoinMessage,
+	'GameFightStartingMessage': GameFightStartingMessage,
+	'GameFightStartMessage': GameFightStartMessage,
+	'GameFightSynchronizeMessage': GameFightSynchronizeMessage,
+	'GameFightTurnEndMessage': GameFightTurnEndMessage,
+	'GameFightTurnFinishMessage': GameFightTurnFinishMessage,
+	'GameFightTurnListMessage': GameFightTurnListMessage,
+	'GameFightTurnReadyMessage': GameFightTurnReadyMessage,
+	'GameFightTurnReadyRequestMessage': GameFightTurnReadyRequestMessage,
+	'GameFightTurnResumeMessage': GameFightTurnResumeMessage,
+	'GameFightTurnStartMessage': GameFightTurnStartMessage,
+	'GameFightTurnStartPlayingMessage': GameFightTurnStartPlayingMessage,
+	'GameFightUpdateTeamMessage': GameFightUpdateTeamMessage,
+	'RefreshCharacterStatsMessage': RefreshCharacterStatsMessage,
+	'SlaveNoLongerControledMessage': SlaveNoLongerControledMessage,
+	'SlaveSwitchContextMessage': SlaveSwitchContextMessage,
+	'ArenaFighterIdleMessage': ArenaFighterIdleMessage,
+	'ArenaFighterLeaveMessage': ArenaFighterLeaveMessage,
+	'BreachGameFightEndMessage': BreachGameFightEndMessage,
+	'ChallengeAddMessage': ChallengeAddMessage,
+	'ChallengeBonusChoiceMessage': ChallengeBonusChoiceMessage,
+	'ChallengeBonusChoiceSelectedMessage': ChallengeBonusChoiceSelectedMessage,
+	'ChallengeListMessage': ChallengeListMessage,
+	'ChallengeModSelectedMessage': ChallengeModSelectedMessage,
+	'ChallengeModSelectMessage': ChallengeModSelectMessage,
+	'ChallengeNumberMessage': ChallengeNumberMessage,
+	'ChallengeProposalMessage': ChallengeProposalMessage,
+	'ChallengeReadyMessage': ChallengeReadyMessage,
+	'ChallengeResultMessage': ChallengeResultMessage,
+	'ChallengeSelectedMessage': ChallengeSelectedMessage,
+	'ChallengeSelectionMessage': ChallengeSelectionMessage,
+	'ChallengeTargetsMessage': ChallengeTargetsMessage,
+	'ChallengeTargetsRequestMessage': ChallengeTargetsRequestMessage,
+	'ChallengeValidateMessage': ChallengeValidateMessage,
+	'GameFightRefreshFighterMessage': GameFightRefreshFighterMessage,
+	'GameFightShowFighterMessage': GameFightShowFighterMessage,
+	'GameFightShowFighterRandomStaticPoseMessage': GameFightShowFighterRandomStaticPoseMessage,
+	'GameDataPaddockObjectAddMessage': GameDataPaddockObjectAddMessage,
+	'GameDataPaddockObjectListAddMessage': GameDataPaddockObjectListAddMessage,
+	'GameDataPaddockObjectRemoveMessage': GameDataPaddockObjectRemoveMessage,
+	'MountDataErrorMessage': MountDataErrorMessage,
+	'MountDataMessage': MountDataMessage,
+	'MountEmoteIconUsedOkMessage': MountEmoteIconUsedOkMessage,
+	'MountEquipedErrorMessage': MountEquipedErrorMessage,
+	'MountFeedRequestMessage': MountFeedRequestMessage,
+	'MountHarnessColorsUpdateRequestMessage': MountHarnessColorsUpdateRequestMessage,
+	'MountHarnessDissociateRequestMessage': MountHarnessDissociateRequestMessage,
+	'MountInformationInPaddockRequestMessage': MountInformationInPaddockRequestMessage,
+	'MountInformationRequestMessage': MountInformationRequestMessage,
+	'MountReleasedMessage': MountReleasedMessage,
+	'MountReleaseRequestMessage': MountReleaseRequestMessage,
+	'MountRenamedMessage': MountRenamedMessage,
+	'MountRenameRequestMessage': MountRenameRequestMessage,
+	'MountRidingMessage': MountRidingMessage,
+	'MountSetMessage': MountSetMessage,
+	'MountSetXpRatioRequestMessage': MountSetXpRatioRequestMessage,
+	'MountSterilizedMessage': MountSterilizedMessage,
+	'MountSterilizeRequestMessage': MountSterilizeRequestMessage,
+	'MountToggleRidingRequestMessage': MountToggleRidingRequestMessage,
+	'MountUnSetMessage': MountUnSetMessage,
+	'MountXpRatioMessage': MountXpRatioMessage,
+	'PaddockBuyRequestMessage': PaddockBuyRequestMessage,
+	'PaddockBuyResultMessage': PaddockBuyResultMessage,
+	'PaddockMoveItemRequestMessage': PaddockMoveItemRequestMessage,
+	'PaddockRemoveItemRequestMessage': PaddockRemoveItemRequestMessage,
+	'PaddockSellRequestMessage': PaddockSellRequestMessage,
+	'NotificationByServerMessage': NotificationByServerMessage,
+	'NotificationListMessage': NotificationListMessage,
+	'NotificationResetMessage': NotificationResetMessage,
+	'NotificationUpdateFlagMessage': NotificationUpdateFlagMessage,
+	'AnomalySubareaInformationRequestMessage': AnomalySubareaInformationRequestMessage,
+	'AnomalySubareaInformationResponseMessage': AnomalySubareaInformationResponseMessage,
+	'ChangeMapMessage': ChangeMapMessage,
+	'CurrentMapInstanceMessage': CurrentMapInstanceMessage,
+	'CurrentMapMessage': CurrentMapMessage,
+	'DiceRollRequestMessage': DiceRollRequestMessage,
+	'ErrorMapNotFoundMessage': ErrorMapNotFoundMessage,
+	'GameRolePlayShowActorMessage': GameRolePlayShowActorMessage,
+	'GameRolePlayShowActorWithEventMessage': GameRolePlayShowActorWithEventMessage,
+	'GameRolePlayShowMultipleActorsMessage': GameRolePlayShowMultipleActorsMessage,
+	'MapComplementaryInformationsDataInHavenBagMessage': MapComplementaryInformationsDataInHavenBagMessage,
+	'MapComplementaryInformationsDataInHouseMessage': MapComplementaryInformationsDataInHouseMessage,
+	'MapComplementaryInformationsDataMessage': MapComplementaryInformationsDataMessage,
+	'MapComplementaryInformationsWithCoordsMessage': MapComplementaryInformationsWithCoordsMessage,
+	'MapFightCountMessage': MapFightCountMessage,
+	'MapFightStartPositionsUpdateMessage': MapFightStartPositionsUpdateMessage,
+	'MapInformationsRequestMessage': MapInformationsRequestMessage,
+	'MapObstacleUpdateMessage': MapObstacleUpdateMessage,
+	'MapRunningFightDetailsExtendedMessage': MapRunningFightDetailsExtendedMessage,
+	'MapRunningFightDetailsMessage': MapRunningFightDetailsMessage,
+	'MapRunningFightDetailsRequestMessage': MapRunningFightDetailsRequestMessage,
+	'MapRunningFightListMessage': MapRunningFightListMessage,
+	'MapRunningFightListRequestMessage': MapRunningFightListRequestMessage,
+	'StopToListenRunningFightRequestMessage': StopToListenRunningFightRequestMessage,
+	'SubareaRewardRateMessage': SubareaRewardRateMessage,
+	'TeleportOnSameMapMessage': TeleportOnSameMapMessage,
+	'AlignmentWarEffortProgressionMessage': AlignmentWarEffortProgressionMessage,
+	'AlignmentWarEffortProgressionRequestMessage': AlignmentWarEffortProgressionRequestMessage,
+	'AnomalyOpenedMessage': AnomalyOpenedMessage,
+	'AnomalyStateMessage': AnomalyStateMessage,
+	'MapComplementaryInformationsAnomalyMessage': MapComplementaryInformationsAnomalyMessage,
+	'BreachBonusMessage': BreachBonusMessage,
+	'BreachBudgetMessage': BreachBudgetMessage,
+	'BreachCharactersMessage': BreachCharactersMessage,
+	'BreachEnterMessage': BreachEnterMessage,
+	'BreachExitRequestMessage': BreachExitRequestMessage,
+	'BreachExitResponseMessage': BreachExitResponseMessage,
+	'BreachRoomLockedMessage': BreachRoomLockedMessage,
+	'BreachRoomUnlockRequestMessage': BreachRoomUnlockRequestMessage,
+	'BreachRoomUnlockResultMessage': BreachRoomUnlockResultMessage,
+	'BreachSavedMessage': BreachSavedMessage,
+	'BreachStateMessage': BreachStateMessage,
+	'BreachTeleportRequestMessage': BreachTeleportRequestMessage,
+	'BreachTeleportResponseMessage': BreachTeleportResponseMessage,
+	'MapComplementaryInformationsBreachMessage': MapComplementaryInformationsBreachMessage,
+	'BreachBranchesMessage': BreachBranchesMessage,
+	'BreachInvitationAnswerMessage': BreachInvitationAnswerMessage,
+	'BreachInvitationCloseMessage': BreachInvitationCloseMessage,
+	'BreachInvitationOfferMessage': BreachInvitationOfferMessage,
+	'BreachInvitationRequestMessage': BreachInvitationRequestMessage,
+	'BreachInvitationResponseMessage': BreachInvitationResponseMessage,
+	'BreachKickRequestMessage': BreachKickRequestMessage,
+	'BreachKickResponseMessage': BreachKickResponseMessage,
+	'BreachRewardBoughtMessage': BreachRewardBoughtMessage,
+	'BreachRewardBuyMessage': BreachRewardBuyMessage,
+	'BreachRewardsMessage': BreachRewardsMessage,
+	'GameRolePlayFreeSoulRequestMessage': GameRolePlayFreeSoulRequestMessage,
+	'GameRolePlayGameOverMessage': GameRolePlayGameOverMessage,
+	'GameRolePlayPlayerLifeStatusMessage': GameRolePlayPlayerLifeStatusMessage,
+	'WarnOnPermaDeathMessage': WarnOnPermaDeathMessage,
+	'GameRolePlayDelayedActionFinishedMessage': GameRolePlayDelayedActionFinishedMessage,
+	'GameRolePlayDelayedActionMessage': GameRolePlayDelayedActionMessage,
+	'GameRolePlayDelayedObjectUseMessage': GameRolePlayDelayedObjectUseMessage,
+	'DocumentReadingBeginMessage': DocumentReadingBeginMessage,
+	'OpenGuideBookMessage': OpenGuideBookMessage,
+	'EmoteAddMessage': EmoteAddMessage,
+	'EmoteListMessage': EmoteListMessage,
+	'EmotePlayAbstractMessage': EmotePlayAbstractMessage,
+	'EmotePlayErrorMessage': EmotePlayErrorMessage,
+	'EmotePlayMassiveMessage': EmotePlayMassiveMessage,
+	'EmotePlayMessage': EmotePlayMessage,
+	'EmotePlayRequestMessage': EmotePlayRequestMessage,
+	'EmoteRemoveMessage': EmoteRemoveMessage,
+	'GameRolePlayAggressionMessage': GameRolePlayAggressionMessage,
+	'GameRolePlayAttackMonsterRequestMessage': GameRolePlayAttackMonsterRequestMessage,
+	'GameRolePlayFightRequestCanceledMessage': GameRolePlayFightRequestCanceledMessage,
+	'GameRolePlayMonsterAngryAtPlayerMessage': GameRolePlayMonsterAngryAtPlayerMessage,
+	'GameRolePlayMonsterNotAngryAtPlayerMessage': GameRolePlayMonsterNotAngryAtPlayerMessage,
+	'GameRolePlayPlayerFightFriendlyAnsweredMessage': GameRolePlayPlayerFightFriendlyAnsweredMessage,
+	'GameRolePlayPlayerFightFriendlyAnswerMessage': GameRolePlayPlayerFightFriendlyAnswerMessage,
+	'GameRolePlayPlayerFightFriendlyRequestedMessage': GameRolePlayPlayerFightFriendlyRequestedMessage,
+	'GameRolePlayPlayerFightRequestMessage': GameRolePlayPlayerFightRequestMessage,
+	'GameRolePlayRemoveChallengeMessage': GameRolePlayRemoveChallengeMessage,
+	'GameRolePlayShowChallengeMessage': GameRolePlayShowChallengeMessage,
+	'GameRolePlayArenaFightAnswerMessage': GameRolePlayArenaFightAnswerMessage,
+	'GameRolePlayArenaFighterStatusMessage': GameRolePlayArenaFighterStatusMessage,
+	'GameRolePlayArenaFightPropositionMessage': GameRolePlayArenaFightPropositionMessage,
+	'GameRolePlayArenaInvitationCandidatesAnswerMessage': GameRolePlayArenaInvitationCandidatesAnswerMessage,
+	'GameRolePlayArenaLeagueRewardsMessage': GameRolePlayArenaLeagueRewardsMessage,
+	'GameRolePlayArenaPlayerBehavioursMessage': GameRolePlayArenaPlayerBehavioursMessage,
+	'GameRolePlayArenaRegisterMessage': GameRolePlayArenaRegisterMessage,
+	'GameRolePlayArenaRegistrationStatusMessage': GameRolePlayArenaRegistrationStatusMessage,
+	'GameRolePlayArenaRegistrationWarningMessage': GameRolePlayArenaRegistrationWarningMessage,
+	'GameRolePlayArenaSwitchToFightServerMessage': GameRolePlayArenaSwitchToFightServerMessage,
+	'GameRolePlayArenaSwitchToGameServerMessage': GameRolePlayArenaSwitchToGameServerMessage,
+	'GameRolePlayArenaUnregisterMessage': GameRolePlayArenaUnregisterMessage,
+	'GameRolePlayArenaUpdatePlayerInfosAllQueuesMessage': GameRolePlayArenaUpdatePlayerInfosAllQueuesMessage,
+	'GameRolePlayArenaUpdatePlayerInfosMessage': GameRolePlayArenaUpdatePlayerInfosMessage,
+	'ChangeHavenBagRoomRequestMessage': ChangeHavenBagRoomRequestMessage,
+	'ChangeThemeRequestMessage': ChangeThemeRequestMessage,
+	'CloseHavenBagFurnitureSequenceRequestMessage': CloseHavenBagFurnitureSequenceRequestMessage,
+	'EditHavenBagCancelRequestMessage': EditHavenBagCancelRequestMessage,
+	'EditHavenBagFinishedMessage': EditHavenBagFinishedMessage,
+	'EditHavenBagRequestMessage': EditHavenBagRequestMessage,
+	'EditHavenBagStartMessage': EditHavenBagStartMessage,
+	'EnterHavenBagRequestMessage': EnterHavenBagRequestMessage,
+	'ExitHavenBagRequestMessage': ExitHavenBagRequestMessage,
+	'HavenBagDailyLoteryMessage': HavenBagDailyLoteryMessage,
+	'HavenBagFurnituresMessage': HavenBagFurnituresMessage,
+	'HavenBagFurnituresRequestMessage': HavenBagFurnituresRequestMessage,
+	'HavenBagPackListMessage': HavenBagPackListMessage,
+	'HavenBagRoomUpdateMessage': HavenBagRoomUpdateMessage,
+	'KickHavenBagRequestMessage': KickHavenBagRequestMessage,
+	'OpenHavenBagFurnitureSequenceRequestMessage': OpenHavenBagFurnitureSequenceRequestMessage,
+	'HavenBagPermissionsUpdateMessage': HavenBagPermissionsUpdateMessage,
+	'HavenBagPermissionsUpdateRequestMessage': HavenBagPermissionsUpdateRequestMessage,
+	'InviteInHavenBagClosedMessage': InviteInHavenBagClosedMessage,
+	'InviteInHavenBagMessage': InviteInHavenBagMessage,
+	'InviteInHavenBagOfferMessage': InviteInHavenBagOfferMessage,
+	'TeleportHavenBagAnswerMessage': TeleportHavenBagAnswerMessage,
+	'TeleportHavenBagRequestMessage': TeleportHavenBagRequestMessage,
+	'AccountHouseMessage': AccountHouseMessage,
+	'HouseBuyRequestMessage': HouseBuyRequestMessage,
+	'HouseBuyResultMessage': HouseBuyResultMessage,
+	'HouseKickRequestMessage': HouseKickRequestMessage,
+	'HouseLockFromInsideRequestMessage': HouseLockFromInsideRequestMessage,
+	'HousePropertiesMessage': HousePropertiesMessage,
+	'HouseSellFromInsideRequestMessage': HouseSellFromInsideRequestMessage,
+	'HouseSellingUpdateMessage': HouseSellingUpdateMessage,
+	'HouseSellRequestMessage': HouseSellRequestMessage,
+	'HouseToSellFilterMessage': HouseToSellFilterMessage,
+	'HouseToSellListMessage': HouseToSellListMessage,
+	'HouseToSellListRequestMessage': HouseToSellListRequestMessage,
+	'HouseGuildNoneMessage': HouseGuildNoneMessage,
+	'HouseGuildRightsMessage': HouseGuildRightsMessage,
+	'HouseGuildRightsViewMessage': HouseGuildRightsViewMessage,
+	'HouseGuildShareRequestMessage': HouseGuildShareRequestMessage,
+	'JobAllowMultiCraftRequestMessage': JobAllowMultiCraftRequestMessage,
+	'JobBookSubscriptionMessage': JobBookSubscriptionMessage,
+	'JobCrafterDirectoryAddMessage': JobCrafterDirectoryAddMessage,
+	'JobCrafterDirectoryDefineSettingsMessage': JobCrafterDirectoryDefineSettingsMessage,
+	'JobCrafterDirectoryEntryMessage': JobCrafterDirectoryEntryMessage,
+	'JobCrafterDirectoryEntryRequestMessage': JobCrafterDirectoryEntryRequestMessage,
+	'JobCrafterDirectoryListMessage': JobCrafterDirectoryListMessage,
+	'JobCrafterDirectoryListRequestMessage': JobCrafterDirectoryListRequestMessage,
+	'JobCrafterDirectoryRemoveMessage': JobCrafterDirectoryRemoveMessage,
+	'JobCrafterDirectorySettingsMessage': JobCrafterDirectorySettingsMessage,
+	'JobDescriptionMessage': JobDescriptionMessage,
+	'JobExperienceMultiUpdateMessage': JobExperienceMultiUpdateMessage,
+	'JobExperienceOtherPlayerUpdateMessage': JobExperienceOtherPlayerUpdateMessage,
+	'JobExperienceUpdateMessage': JobExperienceUpdateMessage,
+	'JobLevelUpMessage': JobLevelUpMessage,
+	'JobMultiCraftAvailableSkillsMessage': JobMultiCraftAvailableSkillsMessage,
+	'LockableChangeCodeMessage': LockableChangeCodeMessage,
+	'LockableCodeResultMessage': LockableCodeResultMessage,
+	'LockableShowCodeDialogMessage': LockableShowCodeDialogMessage,
+	'LockableStateUpdateAbstractMessage': LockableStateUpdateAbstractMessage,
+	'LockableStateUpdateHouseDoorMessage': LockableStateUpdateHouseDoorMessage,
+	'LockableStateUpdateStorageMessage': LockableStateUpdateStorageMessage,
+	'LockableUseCodeMessage': LockableUseCodeMessage,
+	'AlliancePrismDialogQuestionMessage': AlliancePrismDialogQuestionMessage,
+	'EntityTalkMessage': EntityTalkMessage,
+	'ListMapNpcsQuestStatusUpdateMessage': ListMapNpcsQuestStatusUpdateMessage,
+	'NpcDialogCreationMessage': NpcDialogCreationMessage,
+	'NpcDialogQuestionMessage': NpcDialogQuestionMessage,
+	'NpcDialogReplyMessage': NpcDialogReplyMessage,
+	'NpcGenericActionFailureMessage': NpcGenericActionFailureMessage,
+	'NpcGenericActionRequestMessage': NpcGenericActionRequestMessage,
+	'PortalDialogCreationMessage': PortalDialogCreationMessage,
+	'TaxCollectorDialogQuestionBasicMessage': TaxCollectorDialogQuestionBasicMessage,
+	'TaxCollectorDialogQuestionExtendedMessage': TaxCollectorDialogQuestionExtendedMessage,
+	'ObjectGroundAddedMessage': ObjectGroundAddedMessage,
+	'ObjectGroundListAddedMessage': ObjectGroundListAddedMessage,
+	'ObjectGroundRemovedMessage': ObjectGroundRemovedMessage,
+	'ObjectGroundRemovedMultipleMessage': ObjectGroundRemovedMultipleMessage,
+	'GameDataPlayFarmObjectAnimationMessage': GameDataPlayFarmObjectAnimationMessage,
+	'PaddockPropertiesMessage': PaddockPropertiesMessage,
+	'PaddockSellBuyDialogMessage': PaddockSellBuyDialogMessage,
+	'PaddockToSellFilterMessage': PaddockToSellFilterMessage,
+	'PaddockToSellListMessage': PaddockToSellListMessage,
+	'PaddockToSellListRequestMessage': PaddockToSellListRequestMessage,
+	'AbstractPartyEventMessage': AbstractPartyEventMessage,
+	'AbstractPartyMemberInFightMessage': AbstractPartyMemberInFightMessage,
+	'AbstractPartyMessage': AbstractPartyMessage,
+	'DungeonPartyFinderAvailableDungeonsMessage': DungeonPartyFinderAvailableDungeonsMessage,
+	'DungeonPartyFinderAvailableDungeonsRequestMessage': DungeonPartyFinderAvailableDungeonsRequestMessage,
+	'DungeonPartyFinderListenErrorMessage': DungeonPartyFinderListenErrorMessage,
+	'DungeonPartyFinderListenRequestMessage': DungeonPartyFinderListenRequestMessage,
+	'DungeonPartyFinderRegisterErrorMessage': DungeonPartyFinderRegisterErrorMessage,
+	'DungeonPartyFinderRegisterRequestMessage': DungeonPartyFinderRegisterRequestMessage,
+	'DungeonPartyFinderRegisterSuccessMessage': DungeonPartyFinderRegisterSuccessMessage,
+	'DungeonPartyFinderRoomContentMessage': DungeonPartyFinderRoomContentMessage,
+	'DungeonPartyFinderRoomContentUpdateMessage': DungeonPartyFinderRoomContentUpdateMessage,
+	'PartyAbdicateThroneMessage': PartyAbdicateThroneMessage,
+	'PartyAcceptInvitationMessage': PartyAcceptInvitationMessage,
+	'PartyCancelInvitationMessage': PartyCancelInvitationMessage,
+	'PartyCancelInvitationNotificationMessage': PartyCancelInvitationNotificationMessage,
+	'PartyCannotJoinErrorMessage': PartyCannotJoinErrorMessage,
+	'PartyDeletedMessage': PartyDeletedMessage,
+	'PartyFollowMemberRequestMessage': PartyFollowMemberRequestMessage,
+	'PartyFollowStatusUpdateMessage': PartyFollowStatusUpdateMessage,
+	'PartyFollowThisMemberRequestMessage': PartyFollowThisMemberRequestMessage,
+	'PartyInvitationArenaRequestMessage': PartyInvitationArenaRequestMessage,
+	'PartyInvitationCancelledForGuestMessage': PartyInvitationCancelledForGuestMessage,
+	'PartyInvitationDetailsMessage': PartyInvitationDetailsMessage,
+	'PartyInvitationDetailsRequestMessage': PartyInvitationDetailsRequestMessage,
+	'PartyInvitationDungeonDetailsMessage': PartyInvitationDungeonDetailsMessage,
+	'PartyInvitationDungeonMessage': PartyInvitationDungeonMessage,
+	'PartyInvitationDungeonRequestMessage': PartyInvitationDungeonRequestMessage,
+	'PartyInvitationMessage': PartyInvitationMessage,
+	'PartyInvitationRequestMessage': PartyInvitationRequestMessage,
+	'PartyJoinMessage': PartyJoinMessage,
+	'PartyKickedByMessage': PartyKickedByMessage,
+	'PartyKickRequestMessage': PartyKickRequestMessage,
+	'PartyLeaderUpdateMessage': PartyLeaderUpdateMessage,
+	'PartyLeaveMessage': PartyLeaveMessage,
+	'PartyLeaveRequestMessage': PartyLeaveRequestMessage,
+	'PartyLocateMembersMessage': PartyLocateMembersMessage,
+	'PartyLocateMembersRequestMessage': PartyLocateMembersRequestMessage,
+	'PartyLoyaltyStatusMessage': PartyLoyaltyStatusMessage,
+	'PartyMemberEjectedMessage': PartyMemberEjectedMessage,
+	'PartyMemberInStandardFightMessage': PartyMemberInStandardFightMessage,
+	'PartyMemberRemoveMessage': PartyMemberRemoveMessage,
+	'PartyModifiableStatusMessage': PartyModifiableStatusMessage,
+	'PartyNameSetErrorMessage': PartyNameSetErrorMessage,
+	'PartyNameSetRequestMessage': PartyNameSetRequestMessage,
+	'PartyNameUpdateMessage': PartyNameUpdateMessage,
+	'PartyNewGuestMessage': PartyNewGuestMessage,
+	'PartyNewMemberMessage': PartyNewMemberMessage,
+	'PartyPledgeLoyaltyRequestMessage': PartyPledgeLoyaltyRequestMessage,
+	'PartyRefuseInvitationMessage': PartyRefuseInvitationMessage,
+	'PartyRefuseInvitationNotificationMessage': PartyRefuseInvitationNotificationMessage,
+	'PartyRestrictedMessage': PartyRestrictedMessage,
+	'PartyStopFollowRequestMessage': PartyStopFollowRequestMessage,
+	'PartyUpdateLightMessage': PartyUpdateLightMessage,
+	'PartyUpdateMessage': PartyUpdateMessage,
+	'PartyMemberInBreachFightMessage': PartyMemberInBreachFightMessage,
+	'PartyEntityUpdateLightMessage': PartyEntityUpdateLightMessage,
+	'PurchasableDialogMessage': PurchasableDialogMessage,
+	'FollowedQuestsMessage': FollowedQuestsMessage,
+	'FollowQuestObjectiveRequestMessage': FollowQuestObjectiveRequestMessage,
+	'GuidedModeQuitRequestMessage': GuidedModeQuitRequestMessage,
+	'GuidedModeReturnRequestMessage': GuidedModeReturnRequestMessage,
+	'QuestListMessage': QuestListMessage,
+	'QuestListRequestMessage': QuestListRequestMessage,
+	'QuestObjectiveValidatedMessage': QuestObjectiveValidatedMessage,
+	'QuestObjectiveValidationMessage': QuestObjectiveValidationMessage,
+	'QuestStartedMessage': QuestStartedMessage,
+	'QuestStartRequestMessage': QuestStartRequestMessage,
+	'QuestStepInfoMessage': QuestStepInfoMessage,
+	'QuestStepInfoRequestMessage': QuestStepInfoRequestMessage,
+	'QuestStepStartedMessage': QuestStepStartedMessage,
+	'QuestStepValidatedMessage': QuestStepValidatedMessage,
+	'QuestValidatedMessage': QuestValidatedMessage,
+	'RefreshFollowedQuestsOrderRequestMessage': RefreshFollowedQuestsOrderRequestMessage,
+	'UnfollowQuestObjectiveRequestMessage': UnfollowQuestObjectiveRequestMessage,
+	'WatchQuestListMessage': WatchQuestListMessage,
+	'WatchQuestStepInfoMessage': WatchQuestStepInfoMessage,
+	'WatchQuestStepInfoRequestMessage': WatchQuestStepInfoRequestMessage,
+	'SpellVariantActivationMessage': SpellVariantActivationMessage,
+	'SpellVariantActivationRequestMessage': SpellVariantActivationRequestMessage,
+	'StatsUpgradeRequestMessage': StatsUpgradeRequestMessage,
+	'StatsUpgradeResultMessage': StatsUpgradeResultMessage,
+	'PortalUseRequestMessage': PortalUseRequestMessage,
+	'TreasureHuntAvailableRetryCountUpdateMessage': TreasureHuntAvailableRetryCountUpdateMessage,
+	'TreasureHuntDigRequestAnswerFailedMessage': TreasureHuntDigRequestAnswerFailedMessage,
+	'TreasureHuntDigRequestAnswerMessage': TreasureHuntDigRequestAnswerMessage,
+	'TreasureHuntDigRequestMessage': TreasureHuntDigRequestMessage,
+	'TreasureHuntFinishedMessage': TreasureHuntFinishedMessage,
+	'TreasureHuntFlagRemoveRequestMessage': TreasureHuntFlagRemoveRequestMessage,
+	'TreasureHuntFlagRequestAnswerMessage': TreasureHuntFlagRequestAnswerMessage,
+	'TreasureHuntFlagRequestMessage': TreasureHuntFlagRequestMessage,
+	'TreasureHuntGiveUpRequestMessage': TreasureHuntGiveUpRequestMessage,
+	'TreasureHuntLegendaryRequestMessage': TreasureHuntLegendaryRequestMessage,
+	'TreasureHuntMessage': TreasureHuntMessage,
+	'TreasureHuntRequestAnswerMessage': TreasureHuntRequestAnswerMessage,
+	'TreasureHuntShowLegendaryUIMessage': TreasureHuntShowLegendaryUIMessage,
+	'GameRolePlaySpellAnimMessage': GameRolePlaySpellAnimMessage,
+	'LeaveDialogMessage': LeaveDialogMessage,
+	'LeaveDialogRequestMessage': LeaveDialogRequestMessage,
+	'PauseDialogMessage': PauseDialogMessage,
+	'EntitiesInformationMessage': EntitiesInformationMessage,
+	'EntityInformationMessage': EntityInformationMessage,
+	'ObjectFeedMessage': ObjectFeedMessage,
+	'FinishMoveListMessage': FinishMoveListMessage,
+	'FinishMoveListRequestMessage': FinishMoveListRequestMessage,
+	'FinishMoveSetRequestMessage': FinishMoveSetRequestMessage,
+	'AcquaintanceAddedMessage': AcquaintanceAddedMessage,
+	'AcquaintancesGetListMessage': AcquaintancesGetListMessage,
+	'AcquaintancesListMessage': AcquaintancesListMessage,
+	'ContactAddFailureMessage': ContactAddFailureMessage,
+	'FriendAddedMessage': FriendAddedMessage,
+	'FriendAddFailureMessage': FriendAddFailureMessage,
+	'FriendAddRequestMessage': FriendAddRequestMessage,
+	'FriendDeleteRequestMessage': FriendDeleteRequestMessage,
+	'FriendDeleteResultMessage': FriendDeleteResultMessage,
+	'FriendJoinRequestMessage': FriendJoinRequestMessage,
+	'FriendSetStatusShareMessage': FriendSetStatusShareMessage,
+	'FriendSetWarnOnConnectionMessage': FriendSetWarnOnConnectionMessage,
+	'FriendSetWarnOnLevelGainMessage': FriendSetWarnOnLevelGainMessage,
+	'FriendsGetListMessage': FriendsGetListMessage,
+	'FriendsListMessage': FriendsListMessage,
+	'FriendSpouseFollowWithCompassRequestMessage': FriendSpouseFollowWithCompassRequestMessage,
+	'FriendSpouseJoinRequestMessage': FriendSpouseJoinRequestMessage,
+	'FriendStatusShareStateMessage': FriendStatusShareStateMessage,
+	'FriendUpdateMessage': FriendUpdateMessage,
+	'FriendWarnOnConnectionStateMessage': FriendWarnOnConnectionStateMessage,
+	'FriendWarnOnLevelGainStateMessage': FriendWarnOnLevelGainStateMessage,
+	'IgnoredAddedMessage': IgnoredAddedMessage,
+	'IgnoredAddFailureMessage': IgnoredAddFailureMessage,
+	'IgnoredAddRequestMessage': IgnoredAddRequestMessage,
+	'IgnoredDeleteRequestMessage': IgnoredDeleteRequestMessage,
+	'IgnoredDeleteResultMessage': IgnoredDeleteResultMessage,
+	'IgnoredGetListMessage': IgnoredGetListMessage,
+	'IgnoredListMessage': IgnoredListMessage,
+	'SpouseGetInformationsMessage': SpouseGetInformationsMessage,
+	'SpouseInformationsMessage': SpouseInformationsMessage,
+	'SpouseStatusMessage': SpouseStatusMessage,
+	'WarnOnPermaDeathStateMessage': WarnOnPermaDeathStateMessage,
+	'GuestLimitationMessage': GuestLimitationMessage,
+	'GuestModeMessage': GuestModeMessage,
+	'ChallengeFightJoinRefusedMessage': ChallengeFightJoinRefusedMessage,
+	'CreateGuildRankRequestMessage': CreateGuildRankRequestMessage,
+	'GuildBulletinMessage': GuildBulletinMessage,
+	'GuildBulletinSetErrorMessage': GuildBulletinSetErrorMessage,
+	'GuildBulletinSetRequestMessage': GuildBulletinSetRequestMessage,
+	'GuildChangeMemberParametersMessage': GuildChangeMemberParametersMessage,
+	'GuildCharacsUpgradeRequestMessage': GuildCharacsUpgradeRequestMessage,
+	'GuildChestTabContributionMessage': GuildChestTabContributionMessage,
+	'GuildChestTabContributionsMessage': GuildChestTabContributionsMessage,
+	'GuildChestTabLastContributionMessage': GuildChestTabLastContributionMessage,
+	'GuildCreationResultMessage': GuildCreationResultMessage,
+	'GuildCreationStartedMessage': GuildCreationStartedMessage,
+	'GuildCreationValidMessage': GuildCreationValidMessage,
+	'GuildFactsErrorMessage': GuildFactsErrorMessage,
+	'GuildFactsMessage': GuildFactsMessage,
+	'GuildFactsRequestMessage': GuildFactsRequestMessage,
+	'GuildGetChestTabContributionsRequestMessage': GuildGetChestTabContributionsRequestMessage,
+	'GuildGetInformationsMessage': GuildGetInformationsMessage,
+	'GuildHouseRemoveMessage': GuildHouseRemoveMessage,
+	'GuildHousesInformationMessage': GuildHousesInformationMessage,
+	'GuildHouseUpdateInformationMessage': GuildHouseUpdateInformationMessage,
+	'GuildInformationsGeneralMessage': GuildInformationsGeneralMessage,
+	'GuildInformationsMembersMessage': GuildInformationsMembersMessage,
+	'GuildInformationsMemberUpdateMessage': GuildInformationsMemberUpdateMessage,
+	'GuildInformationsPaddocksMessage': GuildInformationsPaddocksMessage,
+	'GuildInvitationAnswerMessage': GuildInvitationAnswerMessage,
+	'GuildInvitationMessage': GuildInvitationMessage,
+	'GuildInvitationStateRecrutedMessage': GuildInvitationStateRecrutedMessage,
+	'GuildInvitationStateRecruterMessage': GuildInvitationStateRecruterMessage,
+	'GuildInvitedMessage': GuildInvitedMessage,
+	'GuildJoinAutomaticallyRequestMessage': GuildJoinAutomaticallyRequestMessage,
+	'GuildJoinedMessage': GuildJoinedMessage,
+	'GuildKickRequestMessage': GuildKickRequestMessage,
+	'GuildLeftMessage': GuildLeftMessage,
+	'GuildLevelUpMessage': GuildLevelUpMessage,
+	'GuildListMessage': GuildListMessage,
+	'GuildMemberLeavingMessage': GuildMemberLeavingMessage,
+	'GuildMemberOnlineStatusMessage': GuildMemberOnlineStatusMessage,
+	'GuildMembershipMessage': GuildMembershipMessage,
+	'GuildMemberStartWarnOnConnectionMessage': GuildMemberStartWarnOnConnectionMessage,
+	'GuildMemberStopWarnOnConnectionMessage': GuildMemberStopWarnOnConnectionMessage,
+	'GuildModificationEmblemValidMessage': GuildModificationEmblemValidMessage,
+	'GuildModificationNameValidMessage': GuildModificationNameValidMessage,
+	'GuildModificationResultMessage': GuildModificationResultMessage,
+	'GuildModificationStartedMessage': GuildModificationStartedMessage,
+	'GuildModificationValidMessage': GuildModificationValidMessage,
+	'GuildMotdMessage': GuildMotdMessage,
+	'GuildMotdSetErrorMessage': GuildMotdSetErrorMessage,
+	'GuildMotdSetRequestMessage': GuildMotdSetRequestMessage,
+	'GuildPaddockBoughtMessage': GuildPaddockBoughtMessage,
+	'GuildPaddockRemovedMessage': GuildPaddockRemovedMessage,
+	'GuildPaddockTeleportRequestMessage': GuildPaddockTeleportRequestMessage,
+	'GuildRanksMessage': GuildRanksMessage,
+	'GuildRanksRequestMessage': GuildRanksRequestMessage,
+	'GuildSelectChestTabRequestMessage': GuildSelectChestTabRequestMessage,
+	'GuildSpellUpgradeRequestMessage': GuildSpellUpgradeRequestMessage,
+	'GuildSummaryMessage': GuildSummaryMessage,
+	'GuildSummaryRequestMessage': GuildSummaryRequestMessage,
+	'GuildUpdateChestTabRequestMessage': GuildUpdateChestTabRequestMessage,
+	'RemoveGuildRankRequestMessage': RemoveGuildRankRequestMessage,
+	'StartGuildChestContributionMessage': StartGuildChestContributionMessage,
+	'StartListenGuildChestStructureMessage': StartListenGuildChestStructureMessage,
+	'StopGuildChestContributionMessage': StopGuildChestContributionMessage,
+	'StopListenGuildChestStructureMessage': StopListenGuildChestStructureMessage,
+	'UpdateAllGuildRankRequestMessage': UpdateAllGuildRankRequestMessage,
+	'UpdateGuildRankRequestMessage': UpdateGuildRankRequestMessage,
+	'UpdateGuildRightsMessage': UpdateGuildRightsMessage,
+	'GuildApplicationAnswerMessage': GuildApplicationAnswerMessage,
+	'GuildApplicationDeletedMessage': GuildApplicationDeletedMessage,
+	'GuildApplicationIsAnsweredMessage': GuildApplicationIsAnsweredMessage,
+	'GuildApplicationListenMessage': GuildApplicationListenMessage,
+	'GuildApplicationPresenceMessage': GuildApplicationPresenceMessage,
+	'GuildApplicationReceivedMessage': GuildApplicationReceivedMessage,
+	'GuildDeleteApplicationRequestMessage': GuildDeleteApplicationRequestMessage,
+	'GuildGetPlayerApplicationMessage': GuildGetPlayerApplicationMessage,
+	'GuildIsThereAnyApplicationMessage': GuildIsThereAnyApplicationMessage,
+	'GuildListApplicationAnswerMessage': GuildListApplicationAnswerMessage,
+	'GuildListApplicationModifiedMessage': GuildListApplicationModifiedMessage,
+	'GuildListApplicationRequestMessage': GuildListApplicationRequestMessage,
+	'GuildPlayerApplicationAbstractMessage': GuildPlayerApplicationAbstractMessage,
+	'GuildPlayerApplicationInformationMessage': GuildPlayerApplicationInformationMessage,
+	'GuildPlayerNoApplicationInformationMessage': GuildPlayerNoApplicationInformationMessage,
+	'GuildSubmitApplicationMessage': GuildSubmitApplicationMessage,
+	'GuildUpdateApplicationMessage': GuildUpdateApplicationMessage,
+	'GuildUpdateNoteMessage': GuildUpdateNoteMessage,
+	'AddListenerOnSynchronizedStorageMessage': AddListenerOnSynchronizedStorageMessage,
+	'ListenersOfSynchronizedStorageMessage': ListenersOfSynchronizedStorageMessage,
+	'RemoveListenerOnSynchronizedStorageMessage': RemoveListenerOnSynchronizedStorageMessage,
+	'GuildLogbookInformationMessage': GuildLogbookInformationMessage,
+	'GuildLogbookInformationRequestMessage': GuildLogbookInformationRequestMessage,
+	'GuildRecruitmentInvalidateMessage': GuildRecruitmentInvalidateMessage,
+	'RecruitmentInformationMessage': RecruitmentInformationMessage,
+	'UpdateRecruitmentInformationMessage': UpdateRecruitmentInformationMessage,
+	'TaxCollectorEquipmentUpdateMessage': TaxCollectorEquipmentUpdateMessage,
+	'HouseTeleportRequestMessage': HouseTeleportRequestMessage,
+	'CharacterCapabilitiesMessage': CharacterCapabilitiesMessage,
+	'CharacterLoadingCompleteMessage': CharacterLoadingCompleteMessage,
+	'OnConnectionEventMessage': OnConnectionEventMessage,
+	'ServerExperienceModificatorMessage': ServerExperienceModificatorMessage,
+	'SetCharacterRestrictionsMessage': SetCharacterRestrictionsMessage,
+	'InteractiveElementUpdatedMessage': InteractiveElementUpdatedMessage,
+	'InteractiveMapUpdateMessage': InteractiveMapUpdateMessage,
+	'InteractiveUsedMessage': InteractiveUsedMessage,
+	'InteractiveUseEndedMessage': InteractiveUseEndedMessage,
+	'InteractiveUseErrorMessage': InteractiveUseErrorMessage,
+	'InteractiveUseRequestMessage': InteractiveUseRequestMessage,
+	'StatedElementUpdatedMessage': StatedElementUpdatedMessage,
+	'StatedMapUpdateMessage': StatedMapUpdateMessage,
+	'GroupTeleportPlayerAnswerMessage': GroupTeleportPlayerAnswerMessage,
+	'GroupTeleportPlayerCloseMessage': GroupTeleportPlayerCloseMessage,
+	'GroupTeleportPlayerOfferMessage': GroupTeleportPlayerOfferMessage,
+	'TeleportBuddiesAnswerMessage': TeleportBuddiesAnswerMessage,
+	'TeleportBuddiesMessage': TeleportBuddiesMessage,
+	'TeleportBuddiesRequestedMessage': TeleportBuddiesRequestedMessage,
+	'TeleportPlayerAnswerMessage': TeleportPlayerAnswerMessage,
+	'TeleportPlayerCloseMessage': TeleportPlayerCloseMessage,
+	'TeleportPlayerOfferMessage': TeleportPlayerOfferMessage,
+	'TeleportToBuddyAnswerMessage': TeleportToBuddyAnswerMessage,
+	'TeleportToBuddyCloseMessage': TeleportToBuddyCloseMessage,
+	'TeleportToBuddyOfferMessage': TeleportToBuddyOfferMessage,
+	'InteractiveUseWithParamRequestMessage': InteractiveUseWithParamRequestMessage,
+	'KnownZaapListMessage': KnownZaapListMessage,
+	'TeleportDestinationsMessage': TeleportDestinationsMessage,
+	'TeleportRequestMessage': TeleportRequestMessage,
+	'ZaapDestinationsMessage': ZaapDestinationsMessage,
+	'ZaapRespawnSaveRequestMessage': ZaapRespawnSaveRequestMessage,
+	'ZaapRespawnUpdatedMessage': ZaapRespawnUpdatedMessage,
+	'KamasUpdateMessage': KamasUpdateMessage,
+	'MultiTabStorageMessage': MultiTabStorageMessage,
+	'ObjectAveragePricesErrorMessage': ObjectAveragePricesErrorMessage,
+	'ObjectAveragePricesGetMessage': ObjectAveragePricesGetMessage,
+	'ObjectAveragePricesMessage': ObjectAveragePricesMessage,
+	'DecraftResultMessage': DecraftResultMessage,
+	'EvolutiveObjectRecycleResultMessage': EvolutiveObjectRecycleResultMessage,
+	'ExchangeAcceptMessage': ExchangeAcceptMessage,
+	'ExchangeBidHouseBuyMessage': ExchangeBidHouseBuyMessage,
+	'ExchangeBidHouseBuyResultMessage': ExchangeBidHouseBuyResultMessage,
+	'ExchangeBidHouseGenericItemAddedMessage': ExchangeBidHouseGenericItemAddedMessage,
+	'ExchangeBidHouseGenericItemRemovedMessage': ExchangeBidHouseGenericItemRemovedMessage,
+	'ExchangeBidHouseInListAddedMessage': ExchangeBidHouseInListAddedMessage,
+	'ExchangeBidHouseInListRemovedMessage': ExchangeBidHouseInListRemovedMessage,
+	'ExchangeBidHouseInListUpdatedMessage': ExchangeBidHouseInListUpdatedMessage,
+	'ExchangeBidHouseItemAddOkMessage': ExchangeBidHouseItemAddOkMessage,
+	'ExchangeBidHouseItemRemoveOkMessage': ExchangeBidHouseItemRemoveOkMessage,
+	'ExchangeBidHouseListMessage': ExchangeBidHouseListMessage,
+	'ExchangeBidHousePriceMessage': ExchangeBidHousePriceMessage,
+	'ExchangeBidHouseSearchMessage': ExchangeBidHouseSearchMessage,
+	'ExchangeBidHouseTypeMessage': ExchangeBidHouseTypeMessage,
+	'ExchangeBidHouseUnsoldItemsMessage': ExchangeBidHouseUnsoldItemsMessage,
+	'ExchangeBidPriceForSellerMessage': ExchangeBidPriceForSellerMessage,
+	'ExchangeBidPriceMessage': ExchangeBidPriceMessage,
+	'ExchangeBidSearchOkMessage': ExchangeBidSearchOkMessage,
+	'ExchangeBuyMessage': ExchangeBuyMessage,
+	'ExchangeBuyOkMessage': ExchangeBuyOkMessage,
+	'ExchangeCraftCountModifiedMessage': ExchangeCraftCountModifiedMessage,
+	'ExchangeCraftCountRequestMessage': ExchangeCraftCountRequestMessage,
+	'ExchangeCrafterJobLevelupMessage': ExchangeCrafterJobLevelupMessage,
+	'ExchangeCraftPaymentModificationRequestMessage': ExchangeCraftPaymentModificationRequestMessage,
+	'ExchangeCraftPaymentModifiedMessage': ExchangeCraftPaymentModifiedMessage,
+	'ExchangeCraftResultMagicWithObjectDescMessage': ExchangeCraftResultMagicWithObjectDescMessage,
+	'ExchangeCraftResultMessage': ExchangeCraftResultMessage,
+	'ExchangeCraftResultWithObjectDescMessage': ExchangeCraftResultWithObjectDescMessage,
+	'ExchangeCraftResultWithObjectIdMessage': ExchangeCraftResultWithObjectIdMessage,
+	'ExchangeErrorMessage': ExchangeErrorMessage,
+	'ExchangeHandleMountsMessage': ExchangeHandleMountsMessage,
+	'ExchangeIsReadyMessage': ExchangeIsReadyMessage,
+	'ExchangeItemAutoCraftStopedMessage': ExchangeItemAutoCraftStopedMessage,
+	'ExchangeLeaveMessage': ExchangeLeaveMessage,
+	'ExchangeMoneyMovementInformationMessage': ExchangeMoneyMovementInformationMessage,
+	'ExchangeMountFreeFromPaddockMessage': ExchangeMountFreeFromPaddockMessage,
+	'ExchangeMountsPaddockAddMessage': ExchangeMountsPaddockAddMessage,
+	'ExchangeMountsPaddockRemoveMessage': ExchangeMountsPaddockRemoveMessage,
+	'ExchangeMountsStableAddMessage': ExchangeMountsStableAddMessage,
+	'ExchangeMountsStableBornAddMessage': ExchangeMountsStableBornAddMessage,
+	'ExchangeMountsStableRemoveMessage': ExchangeMountsStableRemoveMessage,
+	'ExchangeMountStableErrorMessage': ExchangeMountStableErrorMessage,
+	'ExchangeMountsTakenFromPaddockMessage': ExchangeMountsTakenFromPaddockMessage,
+	'ExchangeMountSterilizeFromPaddockMessage': ExchangeMountSterilizeFromPaddockMessage,
+	'ExchangeObjectAddedMessage': ExchangeObjectAddedMessage,
+	'ExchangeObjectMessage': ExchangeObjectMessage,
+	'ExchangeObjectModifyPricedMessage': ExchangeObjectModifyPricedMessage,
+	'ExchangeObjectMoveKamaMessage': ExchangeObjectMoveKamaMessage,
+	'ExchangeObjectMoveMessage': ExchangeObjectMoveMessage,
+	'ExchangeObjectMovePricedMessage': ExchangeObjectMovePricedMessage,
+	'ExchangeObjectMoveToTabMessage': ExchangeObjectMoveToTabMessage,
+	'ExchangeObjectsAddedMessage': ExchangeObjectsAddedMessage,
+	'ExchangeObjectTransfertAllFromInvMessage': ExchangeObjectTransfertAllFromInvMessage,
+	'ExchangeObjectTransfertAllToInvMessage': ExchangeObjectTransfertAllToInvMessage,
+	'ExchangeObjectTransfertExistingFromInvMessage': ExchangeObjectTransfertExistingFromInvMessage,
+	'ExchangeObjectTransfertExistingToInvMessage': ExchangeObjectTransfertExistingToInvMessage,
+	'ExchangeObjectTransfertListFromInvMessage': ExchangeObjectTransfertListFromInvMessage,
+	'ExchangeObjectTransfertListToInvMessage': ExchangeObjectTransfertListToInvMessage,
+	'ExchangeObjectTransfertListWithQuantityToInvMessage': ExchangeObjectTransfertListWithQuantityToInvMessage,
+	'ExchangeObjectUseInWorkshopMessage': ExchangeObjectUseInWorkshopMessage,
+	'ExchangeOfflineSoldItemsMessage': ExchangeOfflineSoldItemsMessage,
+	'ExchangeOkMultiCraftMessage': ExchangeOkMultiCraftMessage,
+	'ExchangePlayerMultiCraftRequestMessage': ExchangePlayerMultiCraftRequestMessage,
+	'ExchangePlayerRequestMessage': ExchangePlayerRequestMessage,
+	'ExchangeReadyMessage': ExchangeReadyMessage,
+	'ExchangeReplayStopMessage': ExchangeReplayStopMessage,
+	'ExchangeRequestedMessage': ExchangeRequestedMessage,
+	'ExchangeRequestedTradeMessage': ExchangeRequestedTradeMessage,
+	'ExchangeRequestMessage': ExchangeRequestMessage,
+	'ExchangeRequestOnMountStockMessage': ExchangeRequestOnMountStockMessage,
+	'ExchangeRequestOnTaxCollectorMessage': ExchangeRequestOnTaxCollectorMessage,
+	'ExchangeSellMessage': ExchangeSellMessage,
+	'ExchangeSellOkMessage': ExchangeSellOkMessage,
+	'ExchangeSetCraftRecipeMessage': ExchangeSetCraftRecipeMessage,
+	'ExchangeStartedBidBuyerMessage': ExchangeStartedBidBuyerMessage,
+	'ExchangeStartedBidSellerMessage': ExchangeStartedBidSellerMessage,
+	'ExchangeStartedMessage': ExchangeStartedMessage,
+	'ExchangeStartedMountStockMessage': ExchangeStartedMountStockMessage,
+	'ExchangeStartedTaxCollectorEquipmentMessage': ExchangeStartedTaxCollectorEquipmentMessage,
+	'ExchangeStartedTaxCollectorShopMessage': ExchangeStartedTaxCollectorShopMessage,
+	'ExchangeStartedWithMultiTabStorageMessage': ExchangeStartedWithMultiTabStorageMessage,
+	'ExchangeStartedWithPodsMessage': ExchangeStartedWithPodsMessage,
+	'ExchangeStartedWithStorageMessage': ExchangeStartedWithStorageMessage,
+	'ExchangeStartOkCraftMessage': ExchangeStartOkCraftMessage,
+	'ExchangeStartOkCraftWithInformationMessage': ExchangeStartOkCraftWithInformationMessage,
+	'ExchangeStartOkEvolutiveObjectRecycleTradeMessage': ExchangeStartOkEvolutiveObjectRecycleTradeMessage,
+	'ExchangeStartOkJobIndexMessage': ExchangeStartOkJobIndexMessage,
+	'ExchangeStartOkMountMessage': ExchangeStartOkMountMessage,
+	'ExchangeStartOkMountWithOutPaddockMessage': ExchangeStartOkMountWithOutPaddockMessage,
+	'ExchangeStartOkMulticraftCrafterMessage': ExchangeStartOkMulticraftCrafterMessage,
+	'ExchangeStartOkMulticraftCustomerMessage': ExchangeStartOkMulticraftCustomerMessage,
+	'ExchangeStartOkNpcShopMessage': ExchangeStartOkNpcShopMessage,
+	'ExchangeStartOkNpcTradeMessage': ExchangeStartOkNpcTradeMessage,
+	'ExchangeStartOkRecycleTradeMessage': ExchangeStartOkRecycleTradeMessage,
+	'ExchangeStartOkRunesTradeMessage': ExchangeStartOkRunesTradeMessage,
+	'ExchangeStoppedMessage': ExchangeStoppedMessage,
+	'ExchangeTaxCollectorGetMessage': ExchangeTaxCollectorGetMessage,
+	'ExchangeTypesExchangerDescriptionForUserMessage': ExchangeTypesExchangerDescriptionForUserMessage,
+	'ExchangeTypesItemsExchangerDescriptionForUserMessage': ExchangeTypesItemsExchangerDescriptionForUserMessage,
+	'ExchangeWaitingResultMessage': ExchangeWaitingResultMessage,
+	'ExchangeWeightMessage': ExchangeWeightMessage,
+	'FocusedExchangeReadyMessage': FocusedExchangeReadyMessage,
+	'ItemNoMoreAvailableMessage': ItemNoMoreAvailableMessage,
+	'JobBookSubscribeRequestMessage': JobBookSubscribeRequestMessage,
+	'RecycleResultMessage': RecycleResultMessage,
+	'StartExchangeTaxCollectorEquipmentMessage': StartExchangeTaxCollectorEquipmentMessage,
+	'UpdateMountCharacteristicsMessage': UpdateMountCharacteristicsMessage,
+	'ExchangeKamaModifiedMessage': ExchangeKamaModifiedMessage,
+	'ExchangeMultiCraftCrafterCanUseHisRessourcesMessage': ExchangeMultiCraftCrafterCanUseHisRessourcesMessage,
+	'ExchangeMultiCraftSetCrafterCanUseHisRessourcesMessage': ExchangeMultiCraftSetCrafterCanUseHisRessourcesMessage,
+	'ExchangeObjectModifiedInBagMessage': ExchangeObjectModifiedInBagMessage,
+	'ExchangeObjectModifiedMessage': ExchangeObjectModifiedMessage,
+	'ExchangeObjectPutInBagMessage': ExchangeObjectPutInBagMessage,
+	'ExchangeObjectRemovedFromBagMessage': ExchangeObjectRemovedFromBagMessage,
+	'ExchangeObjectRemovedMessage': ExchangeObjectRemovedMessage,
+	'ExchangeObjectsModifiedMessage': ExchangeObjectsModifiedMessage,
+	'ExchangeObjectsRemovedMessage': ExchangeObjectsRemovedMessage,
+	'ExchangePodsModifiedMessage': ExchangePodsModifiedMessage,
+	'GoldAddedMessage': GoldAddedMessage,
+	'InventoryContentMessage': InventoryContentMessage,
+	'InventoryWeightMessage': InventoryWeightMessage,
+	'LivingObjectChangeSkinRequestMessage': LivingObjectChangeSkinRequestMessage,
+	'LivingObjectDissociateMessage': LivingObjectDissociateMessage,
+	'LivingObjectMessageMessage': LivingObjectMessageMessage,
+	'LivingObjectMessageRequestMessage': LivingObjectMessageRequestMessage,
+	'MimicryObjectAssociatedMessage': MimicryObjectAssociatedMessage,
+	'MimicryObjectEraseRequestMessage': MimicryObjectEraseRequestMessage,
+	'MimicryObjectErrorMessage': MimicryObjectErrorMessage,
+	'MimicryObjectFeedAndAssociateRequestMessage': MimicryObjectFeedAndAssociateRequestMessage,
+	'MimicryObjectPreviewMessage': MimicryObjectPreviewMessage,
+	'ObjectAddedMessage': ObjectAddedMessage,
+	'ObjectDeletedMessage': ObjectDeletedMessage,
+	'ObjectDeleteMessage': ObjectDeleteMessage,
+	'ObjectDropMessage': ObjectDropMessage,
+	'ObjectErrorMessage': ObjectErrorMessage,
+	'ObjectJobAddedMessage': ObjectJobAddedMessage,
+	'ObjectModifiedMessage': ObjectModifiedMessage,
+	'ObjectMovementMessage': ObjectMovementMessage,
+	'ObjectQuantityMessage': ObjectQuantityMessage,
+	'ObjectsAddedMessage': ObjectsAddedMessage,
+	'ObjectsDeletedMessage': ObjectsDeletedMessage,
+	'ObjectSetPositionMessage': ObjectSetPositionMessage,
+	'ObjectsQuantityMessage': ObjectsQuantityMessage,
+	'ObjectUseMessage': ObjectUseMessage,
+	'ObjectUseMultipleMessage': ObjectUseMultipleMessage,
+	'ObjectUseOnCellMessage': ObjectUseOnCellMessage,
+	'ObjectUseOnCharacterMessage': ObjectUseOnCharacterMessage,
+	'ObtainedItemMessage': ObtainedItemMessage,
+	'ObtainedItemWithBonusMessage': ObtainedItemWithBonusMessage,
+	'SetUpdateMessage': SetUpdateMessage,
+	'SymbioticObjectAssociatedMessage': SymbioticObjectAssociatedMessage,
+	'SymbioticObjectAssociateRequestMessage': SymbioticObjectAssociateRequestMessage,
+	'SymbioticObjectErrorMessage': SymbioticObjectErrorMessage,
+	'WatchInventoryContentMessage': WatchInventoryContentMessage,
+	'WrapperObjectAssociatedMessage': WrapperObjectAssociatedMessage,
+	'WrapperObjectDissociateRequestMessage': WrapperObjectDissociateRequestMessage,
+	'WrapperObjectErrorMessage': WrapperObjectErrorMessage,
+	'SpellListMessage': SpellListMessage,
+	'StorageInventoryContentMessage': StorageInventoryContentMessage,
+	'StorageKamasUpdateMessage': StorageKamasUpdateMessage,
+	'StorageObjectRemoveMessage': StorageObjectRemoveMessage,
+	'StorageObjectsRemoveMessage': StorageObjectsRemoveMessage,
+	'StorageObjectsUpdateMessage': StorageObjectsUpdateMessage,
+	'StorageObjectUpdateMessage': StorageObjectUpdateMessage,
+	'AccessoryPreviewErrorMessage': AccessoryPreviewErrorMessage,
+	'AccessoryPreviewMessage': AccessoryPreviewMessage,
+	'AccessoryPreviewRequestMessage': AccessoryPreviewRequestMessage,
+	'PopupWarningClosedMessage': PopupWarningClosedMessage,
+	'PopupWarningCloseRequestMessage': PopupWarningCloseRequestMessage,
+	'PopupWarningMessage': PopupWarningMessage,
+	'AreaFightModificatorUpdateMessage': AreaFightModificatorUpdateMessage,
+	'NuggetsDistributionMessage': NuggetsDistributionMessage,
+	'NuggetsInformationMessage': NuggetsInformationMessage,
+	'StartListenNuggetsMessage': StartListenNuggetsMessage,
+	'StopListenNuggetsMessage': StopListenNuggetsMessage,
+	'IconNamedPresetSaveRequestMessage': IconNamedPresetSaveRequestMessage,
+	'IconPresetSaveRequestMessage': IconPresetSaveRequestMessage,
+	'InvalidPresetsMessage': InvalidPresetsMessage,
+	'ItemForPresetUpdateMessage': ItemForPresetUpdateMessage,
+	'PresetDeleteRequestMessage': PresetDeleteRequestMessage,
+	'PresetDeleteResultMessage': PresetDeleteResultMessage,
+	'PresetSavedMessage': PresetSavedMessage,
+	'PresetSaveErrorMessage': PresetSaveErrorMessage,
+	'PresetsMessage': PresetsMessage,
+	'PresetUseRequestMessage': PresetUseRequestMessage,
+	'PresetUseResultMessage': PresetUseResultMessage,
+	'PresetUseResultWithMissingIdsMessage': PresetUseResultWithMissingIdsMessage,
+	'PrismAddOrUpdateMessage': PrismAddOrUpdateMessage,
+	'PrismAttackedMessage': PrismAttackedMessage,
+	'PrismAttackRequestMessage': PrismAttackRequestMessage,
+	'PrismAttackResultMessage': PrismAttackResultMessage,
+	'PrismExchangeRequestMessage': PrismExchangeRequestMessage,
+	'PrismRecycleTradeRequestMessage': PrismRecycleTradeRequestMessage,
+	'PrismRemoveMessage': PrismRemoveMessage,
+	'PrismsListMessage': PrismsListMessage,
+	'PrismTeleportationRequestMessage': PrismTeleportationRequestMessage,
+	'ActivityHideRequestMessage': ActivityHideRequestMessage,
+	'ActivityLockRequestMessage': ActivityLockRequestMessage,
+	'ActivitySuggestionsMessage': ActivitySuggestionsMessage,
+	'ActivitySuggestionsRequestMessage': ActivitySuggestionsRequestMessage,
+	'AlignmentRankUpdateMessage': AlignmentRankUpdateMessage,
+	'SetEnableAVARequestMessage': SetEnableAVARequestMessage,
+	'SetEnablePVPRequestMessage': SetEnablePVPRequestMessage,
+	'UpdateMapPlayersAgressableStatusMessage': UpdateMapPlayersAgressableStatusMessage,
+	'UpdateSelfAgressableStatusMessage': UpdateSelfAgressableStatusMessage,
+	'CinematicMessage': CinematicMessage,
+	'ShortcutBarAddErrorMessage': ShortcutBarAddErrorMessage,
+	'ShortcutBarAddRequestMessage': ShortcutBarAddRequestMessage,
+	'ShortcutBarContentMessage': ShortcutBarContentMessage,
+	'ShortcutBarRefreshMessage': ShortcutBarRefreshMessage,
+	'ShortcutBarRemovedMessage': ShortcutBarRemovedMessage,
+	'ShortcutBarRemoveErrorMessage': ShortcutBarRemoveErrorMessage,
+	'ShortcutBarRemoveRequestMessage': ShortcutBarRemoveRequestMessage,
+	'ShortcutBarReplacedMessage': ShortcutBarReplacedMessage,
+	'ShortcutBarSwapErrorMessage': ShortcutBarSwapErrorMessage,
+	'ShortcutBarSwapRequestMessage': ShortcutBarSwapRequestMessage,
+	'BulletinMessage': BulletinMessage,
+	'ContactLookErrorMessage': ContactLookErrorMessage,
+	'ContactLookMessage': ContactLookMessage,
+	'ContactLookRequestByIdMessage': ContactLookRequestByIdMessage,
+	'ContactLookRequestByNameMessage': ContactLookRequestByNameMessage,
+	'ContactLookRequestMessage': ContactLookRequestMessage,
+	'SocialNoticeMessage': SocialNoticeMessage,
+	'SocialNoticeSetErrorMessage': SocialNoticeSetErrorMessage,
+	'SocialNoticeSetRequestMessage': SocialNoticeSetRequestMessage,
+	'SocialFightJoinRequestMessage': SocialFightJoinRequestMessage,
+	'SocialFightLeaveRequestMessage': SocialFightLeaveRequestMessage,
+	'SocialFightTakePlaceRequestMessage': SocialFightTakePlaceRequestMessage,
+	'ConsumeAllGameActionItemMessage': ConsumeAllGameActionItemMessage,
+	'ConsumeGameActionItemMessage': ConsumeGameActionItemMessage,
+	'GameActionItemAddMessage': GameActionItemAddMessage,
+	'GameActionItemConsumedMessage': GameActionItemConsumedMessage,
+	'GameActionItemListMessage': GameActionItemListMessage,
+	'SubscriptionLimitationMessage': SubscriptionLimitationMessage,
+	'SubscriptionZoneMessage': SubscriptionZoneMessage,
+	'OrnamentGainedMessage': OrnamentGainedMessage,
+	'OrnamentLostMessage': OrnamentLostMessage,
+	'OrnamentSelectedMessage': OrnamentSelectedMessage,
+	'OrnamentSelectErrorMessage': OrnamentSelectErrorMessage,
+	'OrnamentSelectRequestMessage': OrnamentSelectRequestMessage,
+	'TitleGainedMessage': TitleGainedMessage,
+	'TitleLostMessage': TitleLostMessage,
+	'TitlesAndOrnamentsListMessage': TitlesAndOrnamentsListMessage,
+	'TitlesAndOrnamentsListRequestMessage': TitlesAndOrnamentsListRequestMessage,
+	'TitleSelectedMessage': TitleSelectedMessage,
+	'TitleSelectErrorMessage': TitleSelectErrorMessage,
+	'TitleSelectRequestMessage': TitleSelectRequestMessage,
+	'ClientUIOpenedByObjectMessage': ClientUIOpenedByObjectMessage,
+	'ClientUIOpenedMessage': ClientUIOpenedMessage,
+	'ProtocolRequired': ProtocolRequired,
+	'LoginQueueStatusMessage': LoginQueueStatusMessage,
+	'QueueStatusMessage': QueueStatusMessage,
+	'TrustStatusMessage': TrustStatusMessage,
+	'CheckFileMessage': CheckFileMessage,
+	'CheckFileRequestMessage': CheckFileRequestMessage,
+	'CheckIntegrityMessage': CheckIntegrityMessage,
+	'ClientKeyMessage': ClientKeyMessage,
+	'RawDataMessage': RawDataMessage,
+	'SystemMessageDisplayMessage': SystemMessageDisplayMessage,
+	'AccountInformationsUpdateMessage': AccountInformationsUpdateMessage,
+	'AccountSubscriptionElapsedDurationMessage': AccountSubscriptionElapsedDurationMessage,
+	'HaapiApiKeyMessage': HaapiApiKeyMessage,
+	'HaapiApiKeyRequestMessage': HaapiApiKeyRequestMessage,
+	'HaapiAuthErrorMessage': HaapiAuthErrorMessage,
+	'HaapiBufferListMessage': HaapiBufferListMessage,
+	'HaapiBufferListRequestMessage': HaapiBufferListRequestMessage,
+	'HaapiBuyValidationMessage': HaapiBuyValidationMessage,
+	'HaapiCancelBidRequestMessage': HaapiCancelBidRequestMessage,
+	'HaapiConfirmationMessage': HaapiConfirmationMessage,
+	'HaapiConfirmationRequestMessage': HaapiConfirmationRequestMessage,
+	'HaapiConsumeBufferRequestMessage': HaapiConsumeBufferRequestMessage,
+	'HaapiSessionMessage': HaapiSessionMessage,
+	'HaapiShopApiKeyMessage': HaapiShopApiKeyMessage,
+	'HaapiShopApiKeyRequestMessage': HaapiShopApiKeyRequestMessage,
+	'HaapiTokenMessage': HaapiTokenMessage,
+	'HaapiTokenRequestMessage': HaapiTokenRequestMessage,
+	'HaapiValidationMessage': HaapiValidationMessage,
+	'HaapiValidationRequestMessage': HaapiValidationRequestMessage,
+	'ClientYouAreDrunkMessage': ClientYouAreDrunkMessage,
+	'AbstractPlayerSearchInformation': AbstractPlayerSearchInformation,
+	'AccountTagInformation': AccountTagInformation,
+	'PlayerSearchCharacterNameInformation': PlayerSearchCharacterNameInformation,
+	'PlayerSearchTagInformation': PlayerSearchTagInformation,
+	'StatisticData': StatisticData,
+	'StatisticDataBoolean': StatisticDataBoolean,
+	'StatisticDataByte': StatisticDataByte,
+	'StatisticDataInt': StatisticDataInt,
+	'StatisticDataShort': StatisticDataShort,
+	'StatisticDataString': StatisticDataString,
+	'GameServerInformations': GameServerInformations,
+	'Uuid': Uuid,
+	'Achievement': Achievement,
+	'AchievementAchieved': AchievementAchieved,
+	'AchievementAchievedRewardable': AchievementAchievedRewardable,
+	'AchievementObjective': AchievementObjective,
+	'AchievementStartedObjective': AchievementStartedObjective,
+	'FightDispellableEffectExtendedInformations': FightDispellableEffectExtendedInformations,
+	'AbstractFightDispellableEffect': AbstractFightDispellableEffect,
+	'FightDetailedTemporaryBoostEffect': FightDetailedTemporaryBoostEffect,
+	'FightTemporaryBoostEffect': FightTemporaryBoostEffect,
+	'FightTemporaryBoostStateEffect': FightTemporaryBoostStateEffect,
+	'FightTemporaryBoostWeaponDamagesEffect': FightTemporaryBoostWeaponDamagesEffect,
+	'FightTemporarySpellBoostEffect': FightTemporarySpellBoostEffect,
+	'FightTemporarySpellImmunityEffect': FightTemporarySpellImmunityEffect,
+	'FightTriggeredEffect': FightTriggeredEffect,
+	'GameActionMark': GameActionMark,
+	'GameActionMarkedCell': GameActionMarkedCell,
+	'AllianceMemberInfo': AllianceMemberInfo,
+	'KohAllianceInfo': KohAllianceInfo,
+	'KohAllianceRoleMembers': KohAllianceRoleMembers,
+	'KohScore': KohScore,
+	'KothWinner': KothWinner,
+	'AllianceRecruitmentInformation': AllianceRecruitmentInformation,
+	'ServerSessionConstant': ServerSessionConstant,
+	'ServerSessionConstantInteger': ServerSessionConstantInteger,
+	'ServerSessionConstantLong': ServerSessionConstantLong,
+	'ServerSessionConstantString': ServerSessionConstantString,
+	'AbstractCharacterInformation': AbstractCharacterInformation,
+	'CharacterBasicMinimalInformations': CharacterBasicMinimalInformations,
+	'CharacterMinimalAllianceInformations': CharacterMinimalAllianceInformations,
+	'CharacterMinimalGuildInformations': CharacterMinimalGuildInformations,
+	'CharacterMinimalInformations': CharacterMinimalInformations,
+	'CharacterMinimalPlusLookInformations': CharacterMinimalPlusLookInformations,
+	'CharacterMinimalSocialPublicInformations': CharacterMinimalSocialPublicInformations,
+	'ActorAlignmentInformations': ActorAlignmentInformations,
+	'ActorExtendedAlignmentInformations': ActorExtendedAlignmentInformations,
+	'AlterationInfo': AlterationInfo,
+	'CharacterCharacteristic': CharacterCharacteristic,
+	'CharacterCharacteristicDetailed': CharacterCharacteristicDetailed,
+	'CharacterCharacteristics': CharacterCharacteristics,
+	'CharacterCharacteristicsInformations': CharacterCharacteristicsInformations,
+	'CharacterCharacteristicValue': CharacterCharacteristicValue,
+	'CharacterUsableCharacteristicDetailed': CharacterUsableCharacteristicDetailed,
+	'CharacterBaseInformations': CharacterBaseInformations,
+	'CharacterHardcoreOrEpicInformations': CharacterHardcoreOrEpicInformations,
+	'CharacterRemodelingInformation': CharacterRemodelingInformation,
+	'CharacterToRemodelInformations': CharacterToRemodelInformations,
+	'RemodelingInformation': RemodelingInformation,
+	'DebtInformation': DebtInformation,
+	'KamaDebtInformation': KamaDebtInformation,
+	'PlayerNote': PlayerNote,
+	'ActorRestrictionsInformations': ActorRestrictionsInformations,
+	'SpellModifierMessage': SpellModifierMessage,
+	'PlayerStatus': PlayerStatus,
+	'PlayerStatusExtended': PlayerStatusExtended,
+	'AdditionalTaxCollectorInformation': AdditionalTaxCollectorInformation,
+	'TaxCollectorBasicInformations': TaxCollectorBasicInformations,
+	'TaxCollectorComplementaryInformations': TaxCollectorComplementaryInformations,
+	'TaxCollectorInformations': TaxCollectorInformations,
+	'TaxCollectorLootInformations': TaxCollectorLootInformations,
+	'TaxCollectorMovement': TaxCollectorMovement,
+	'TaxCollectorOrderedSpell': TaxCollectorOrderedSpell,
+	'TaxCollectorPreset': TaxCollectorPreset,
+	'TaxCollectorWaitingForHelpInformations': TaxCollectorWaitingForHelpInformations,
+	'ActorOrientation': ActorOrientation,
+	'EntityDispositionInformations': EntityDispositionInformations,
+	'EntityMovementInformations': EntityMovementInformations,
+	'FightEntityDispositionInformations': FightEntityDispositionInformations,
+	'GameContextActorInformations': GameContextActorInformations,
+	'GameContextActorPositionInformations': GameContextActorPositionInformations,
+	'GameRolePlayTaxCollectorInformations': GameRolePlayTaxCollectorInformations,
+	'IdentifiedEntityDispositionInformations': IdentifiedEntityDispositionInformations,
+	'MapCoordinates': MapCoordinates,
+	'MapCoordinatesAndId': MapCoordinatesAndId,
+	'MapCoordinatesExtended': MapCoordinatesExtended,
+	'TaxCollectorStaticInformations': TaxCollectorStaticInformations,
+	'AbstractFightTeamInformations': AbstractFightTeamInformations,
+	'BaseSpawnMonsterInformation': BaseSpawnMonsterInformation,
+	'FightAllianceTeamInformations': FightAllianceTeamInformations,
+	'FightCommonInformations': FightCommonInformations,
+	'FightExternalInformations': FightExternalInformations,
+	'FightLoot': FightLoot,
+	'FightLootObject': FightLootObject,
+	'FightOptionsInformations': FightOptionsInformations,
+	'FightPhase': FightPhase,
+	'FightResultAdditionalData': FightResultAdditionalData,
+	'FightResultExperienceData': FightResultExperienceData,
+	'FightResultFighterListEntry': FightResultFighterListEntry,
+	'FightResultListEntry': FightResultListEntry,
+	'FightResultMutantListEntry': FightResultMutantListEntry,
+	'FightResultPlayerListEntry': FightResultPlayerListEntry,
+	'FightResultPvpData': FightResultPvpData,
+	'FightResultTaxCollectorListEntry': FightResultTaxCollectorListEntry,
+	'FightStartingPositions': FightStartingPositions,
+	'FightTeamInformations': FightTeamInformations,
+	'FightTeamLightInformations': FightTeamLightInformations,
+	'FightTeamMemberCharacterInformations': FightTeamMemberCharacterInformations,
+	'FightTeamMemberEntityInformation': FightTeamMemberEntityInformation,
+	'FightTeamMemberInformations': FightTeamMemberInformations,
+	'FightTeamMemberMonsterInformations': FightTeamMemberMonsterInformations,
+	'FightTeamMemberTaxCollectorInformations': FightTeamMemberTaxCollectorInformations,
+	'FightTeamMemberWithAllianceCharacterInformations': FightTeamMemberWithAllianceCharacterInformations,
+	'GameContextBasicSpawnInformation': GameContextBasicSpawnInformation,
+	'GameContextSummonsInformation': GameContextSummonsInformation,
+	'GameFightAIInformations': GameFightAIInformations,
+	'GameFightCharacterInformations': GameFightCharacterInformations,
+	'GameFightCharacteristics': GameFightCharacteristics,
+	'GameFightEffectTriggerCount': GameFightEffectTriggerCount,
+	'GameFightEntityInformation': GameFightEntityInformation,
+	'GameFightFighterEntityLightInformation': GameFightFighterEntityLightInformation,
+	'GameFightFighterInformations': GameFightFighterInformations,
+	'GameFightFighterLightInformations': GameFightFighterLightInformations,
+	'GameFightFighterMonsterLightInformations': GameFightFighterMonsterLightInformations,
+	'GameFightFighterNamedInformations': GameFightFighterNamedInformations,
+	'GameFightFighterNamedLightInformations': GameFightFighterNamedLightInformations,
+	'GameFightFighterTaxCollectorLightInformations': GameFightFighterTaxCollectorLightInformations,
+	'GameFightMonsterInformations': GameFightMonsterInformations,
+	'GameFightMonsterWithAlignmentInformations': GameFightMonsterWithAlignmentInformations,
+	'GameFightMutantInformations': GameFightMutantInformations,
+	'GameFightResumeSlaveInfo': GameFightResumeSlaveInfo,
+	'GameFightSpellCooldown': GameFightSpellCooldown,
+	'GameFightTaxCollectorInformations': GameFightTaxCollectorInformations,
+	'SpawnCharacterInformation': SpawnCharacterInformation,
+	'SpawnCompanionInformation': SpawnCompanionInformation,
+	'SpawnInformation': SpawnInformation,
+	'SpawnMonsterInformation': SpawnMonsterInformation,
+	'SpawnScaledMonsterInformation': SpawnScaledMonsterInformation,
+	'ChallengeInformation': ChallengeInformation,
+	'ChallengeTargetInformation': ChallengeTargetInformation,
+	'ChallengeTargetWithAttackerInformation': ChallengeTargetWithAttackerInformation,
+	'AllianceInformation': AllianceInformation,
+	'AlternativeMonstersInGroupLightInformations': AlternativeMonstersInGroupLightInformations,
+	'AnomalySubareaInformation': AnomalySubareaInformation,
+	'AtlasPointsInformations': AtlasPointsInformations,
+	'BasicAllianceInformations': BasicAllianceInformations,
+	'BasicGuildInformations': BasicGuildInformations,
+	'BasicNamedAllianceInformations': BasicNamedAllianceInformations,
+	'GameRolePlayActorInformations': GameRolePlayActorInformations,
+	'GameRolePlayCharacterInformations': GameRolePlayCharacterInformations,
+	'GameRolePlayGroupMonsterInformations': GameRolePlayGroupMonsterInformations,
+	'GameRolePlayGroupMonsterWaveInformations': GameRolePlayGroupMonsterWaveInformations,
+	'GameRolePlayHumanoidInformations': GameRolePlayHumanoidInformations,
+	'GameRolePlayMountInformations': GameRolePlayMountInformations,
+	'GameRolePlayMutantInformations': GameRolePlayMutantInformations,
+	'GameRolePlayNamedActorInformations': GameRolePlayNamedActorInformations,
+	'GameRolePlayNpcInformations': GameRolePlayNpcInformations,
+	'GameRolePlayNpcWithQuestInformations': GameRolePlayNpcWithQuestInformations,
+	'GameRolePlayPortalInformations': GameRolePlayPortalInformations,
+	'GameRolePlayPrismInformations': GameRolePlayPrismInformations,
+	'GameRolePlayTreasureHintInformations': GameRolePlayTreasureHintInformations,
+	'GroupMonsterStaticInformations': GroupMonsterStaticInformations,
+	'GroupMonsterStaticInformationsWithAlternatives': GroupMonsterStaticInformationsWithAlternatives,
+	'GuildInformations': GuildInformations,
+	'HumanInformations': HumanInformations,
+	'HumanOption': HumanOption,
+	'HumanOptionAlliance': HumanOptionAlliance,
+	'HumanOptionEmote': HumanOptionEmote,
+	'HumanOptionFollowers': HumanOptionFollowers,
+	'HumanOptionGuild': HumanOptionGuild,
+	'HumanOptionObjectUse': HumanOptionObjectUse,
+	'HumanOptionOrnament': HumanOptionOrnament,
+	'HumanOptionSkillUse': HumanOptionSkillUse,
+	'HumanOptionSpeedMultiplier': HumanOptionSpeedMultiplier,
+	'HumanOptionTitle': HumanOptionTitle,
+	'MonsterBoosts': MonsterBoosts,
+	'MonsterInGroupInformations': MonsterInGroupInformations,
+	'MonsterInGroupLightInformations': MonsterInGroupLightInformations,
+	'ObjectItemInRolePlay': ObjectItemInRolePlay,
+	'AlignmentWarEffortInformation': AlignmentWarEffortInformation,
+	'BreachBranch': BreachBranch,
+	'BreachReward': BreachReward,
+	'ExtendedBreachBranch': ExtendedBreachBranch,
+	'ExtendedLockedBreachBranch': ExtendedLockedBreachBranch,
+	'ArenaLeagueRanking': ArenaLeagueRanking,
+	'ArenaRankInfos': ArenaRankInfos,
+	'ArenaRanking': ArenaRanking,
+	'LeagueFriendInformations': LeagueFriendInformations,
+	'DecraftedItemStackInfo': DecraftedItemStackInfo,
+	'JobBookSubscription': JobBookSubscription,
+	'JobCrafterDirectoryEntryJobInfo': JobCrafterDirectoryEntryJobInfo,
+	'JobCrafterDirectoryEntryPlayerInfo': JobCrafterDirectoryEntryPlayerInfo,
+	'JobCrafterDirectoryListEntry': JobCrafterDirectoryListEntry,
+	'JobCrafterDirectorySettings': JobCrafterDirectorySettings,
+	'JobDescription': JobDescription,
+	'JobExperience': JobExperience,
+	'MapNpcQuestInfo': MapNpcQuestInfo,
+	'DungeonPartyFinderPlayer': DungeonPartyFinderPlayer,
+	'NamedPartyTeam': NamedPartyTeam,
+	'NamedPartyTeamWithOutcome': NamedPartyTeamWithOutcome,
+	'PartyGuestInformations': PartyGuestInformations,
+	'PartyInvitationMemberInformations': PartyInvitationMemberInformations,
+	'PartyMemberArenaInformations': PartyMemberArenaInformations,
+	'PartyMemberGeoPosition': PartyMemberGeoPosition,
+	'PartyMemberInformations': PartyMemberInformations,
+	'PartyEntityBaseInformation': PartyEntityBaseInformation,
+	'PartyEntityMemberInformation': PartyEntityMemberInformation,
+	'GameRolePlayNpcQuestFlag': GameRolePlayNpcQuestFlag,
+	'QuestActiveDetailedInformations': QuestActiveDetailedInformations,
+	'QuestActiveInformations': QuestActiveInformations,
+	'QuestObjectiveInformations': QuestObjectiveInformations,
+	'QuestObjectiveInformationsWithCompletion': QuestObjectiveInformationsWithCompletion,
+	'PortalInformation': PortalInformation,
+	'TreasureHuntFlag': TreasureHuntFlag,
+	'TreasureHuntStep': TreasureHuntStep,
+	'TreasureHuntStepDig': TreasureHuntStepDig,
+	'TreasureHuntStepFight': TreasureHuntStepFight,
+	'TreasureHuntStepFollowDirection': TreasureHuntStepFollowDirection,
+	'TreasureHuntStepFollowDirectionToHint': TreasureHuntStepFollowDirectionToHint,
+	'TreasureHuntStepFollowDirectionToPOI': TreasureHuntStepFollowDirectionToPOI,
+	'BidExchangerObjectInfo': BidExchangerObjectInfo,
+	'ForgettableSpellItem': ForgettableSpellItem,
+	'GoldItem': GoldItem,
+	'Item': Item,
+	'ObjectEffects': ObjectEffects,
+	'ObjectItem': ObjectItem,
+	'ObjectItemGenericQuantity': ObjectItemGenericQuantity,
+	'ObjectItemInformationWithQuantity': ObjectItemInformationWithQuantity,
+	'ObjectItemMinimalInformation': ObjectItemMinimalInformation,
+	'ObjectItemNotInContainer': ObjectItemNotInContainer,
+	'ObjectItemQuantity': ObjectItemQuantity,
+	'ObjectItemQuantityPriceDateEffects': ObjectItemQuantityPriceDateEffects,
+	'ObjectItemToSell': ObjectItemToSell,
+	'ObjectItemToSellInBid': ObjectItemToSellInBid,
+	'ObjectItemToSellInNpcShop': ObjectItemToSellInNpcShop,
+	'SellerBuyerDescriptor': SellerBuyerDescriptor,
+	'SpellItem': SpellItem,
+	'ObjectEffect': ObjectEffect,
+	'ObjectEffectCreature': ObjectEffectCreature,
+	'ObjectEffectDate': ObjectEffectDate,
+	'ObjectEffectDice': ObjectEffectDice,
+	'ObjectEffectDuration': ObjectEffectDuration,
+	'ObjectEffectInteger': ObjectEffectInteger,
+	'ObjectEffectLadder': ObjectEffectLadder,
+	'ObjectEffectMinMax': ObjectEffectMinMax,
+	'ObjectEffectMount': ObjectEffectMount,
+	'ObjectEffectString': ObjectEffectString,
+	'EntityInformation': EntityInformation,
+	'ProtectedEntityWaitingForHelpInfo': ProtectedEntityWaitingForHelpInfo,
+	'FinishMoveInformations': FinishMoveInformations,
+	'AbstractContactInformations': AbstractContactInformations,
+	'AcquaintanceInformation': AcquaintanceInformation,
+	'AcquaintanceOnlineInformation': AcquaintanceOnlineInformation,
+	'FriendInformations': FriendInformations,
+	'FriendOnlineInformations': FriendOnlineInformations,
+	'FriendSpouseInformations': FriendSpouseInformations,
+	'FriendSpouseOnlineInformations': FriendSpouseOnlineInformations,
+	'IgnoredInformations': IgnoredInformations,
+	'IgnoredOnlineInformations': IgnoredOnlineInformations,
+	'Contribution': Contribution,
+	'GuildMemberInfo': GuildMemberInfo,
+	'HavenBagFurnitureInformation': HavenBagFurnitureInformation,
+	'RankPublicInformation': RankPublicInformation,
+	'GuildLogbookEntryBasicInformation': GuildLogbookEntryBasicInformation,
+	'GuildLogbookChestActivity': GuildLogbookChestActivity,
+	'GuildLevelUpActivity': GuildLevelUpActivity,
+	'GuildPaddockActivity': GuildPaddockActivity,
+	'GuildPlayerFlowActivity': GuildPlayerFlowActivity,
+	'GuildPlayerRankUpdateActivity': GuildPlayerRankUpdateActivity,
+	'GuildRankActivity': GuildRankActivity,
+	'GuildUnlockNewTabActivity': GuildUnlockNewTabActivity,
+	'GuildRecruitmentInformation': GuildRecruitmentInformation,
+	'HavenBagRoomPreviewInformation': HavenBagRoomPreviewInformation,
+	'AccountHouseInformations': AccountHouseInformations,
+	'HouseGuildedInformations': HouseGuildedInformations,
+	'HouseInformations': HouseInformations,
+	'HouseInformationsForGuild': HouseInformationsForGuild,
+	'HouseInformationsForSell': HouseInformationsForSell,
+	'HouseInformationsInside': HouseInformationsInside,
+	'HouseInstanceInformations': HouseInstanceInformations,
+	'HouseOnMapInformations': HouseOnMapInformations,
+	'InteractiveElement': InteractiveElement,
+	'InteractiveElementNamedSkill': InteractiveElementNamedSkill,
+	'InteractiveElementSkill': InteractiveElementSkill,
+	'InteractiveElementWithAgeBonus': InteractiveElementWithAgeBonus,
+	'MapObstacle': MapObstacle,
+	'StatedElement': StatedElement,
+	'SkillActionDescription': SkillActionDescription,
+	'SkillActionDescriptionCollect': SkillActionDescriptionCollect,
+	'SkillActionDescriptionCraft': SkillActionDescriptionCraft,
+	'SkillActionDescriptionTimed': SkillActionDescriptionTimed,
+	'TeleportDestination': TeleportDestination,
+	'StorageTabInformation': StorageTabInformation,
+	'UpdatedStorageTabInformation': UpdatedStorageTabInformation,
+	'RecycledItem': RecycledItem,
+	'EntityLook': EntityLook,
+	'IndexedEntityLook': IndexedEntityLook,
+	'SubEntity': SubEntity,
+	'ItemDurability': ItemDurability,
+	'MountClientData': MountClientData,
+	'UpdateMountBooleanCharacteristic': UpdateMountBooleanCharacteristic,
+	'UpdateMountCharacteristic': UpdateMountCharacteristic,
+	'UpdateMountIntegerCharacteristic': UpdateMountIntegerCharacteristic,
+	'NuggetsBeneficiary': NuggetsBeneficiary,
+	'MountInformationsForPaddock': MountInformationsForPaddock,
+	'PaddockBuyableInformations': PaddockBuyableInformations,
+	'PaddockContentInformations': PaddockContentInformations,
+	'PaddockGuildedInformations': PaddockGuildedInformations,
+	'PaddockInformations': PaddockInformations,
+	'PaddockInformationsForSell': PaddockInformationsForSell,
+	'PaddockInstancesInformations': PaddockInstancesInformations,
+	'PaddockItem': PaddockItem,
+	'CharacterCharacteristicForPreset': CharacterCharacteristicForPreset,
+	'EntitiesPreset': EntitiesPreset,
+	'ForgettableSpellsPreset': ForgettableSpellsPreset,
+	'FullStatsPreset': FullStatsPreset,
+	'IconNamedPreset': IconNamedPreset,
+	'ItemForPreset': ItemForPreset,
+	'ItemsPreset': ItemsPreset,
+	'Preset': Preset,
+	'PresetsContainerPreset': PresetsContainerPreset,
+	'SimpleCharacterCharacteristicForPreset': SimpleCharacterCharacteristicForPreset,
+	'SpellForPreset': SpellForPreset,
+	'SpellsPreset': SpellsPreset,
+	'StatsPreset': StatsPreset,
+	'AllianceInsiderPrismInformation': AllianceInsiderPrismInformation,
+	'AlliancePrismInformation': AlliancePrismInformation,
+	'PrismGeolocalizedInformation': PrismGeolocalizedInformation,
+	'PrismInformation': PrismInformation,
+	'AgressableStatusMessage': AgressableStatusMessage,
+	'RankInformation': RankInformation,
+	'RankMinimalInformation': RankMinimalInformation,
+	'Shortcut': Shortcut,
+	'ShortcutEmote': ShortcutEmote,
+	'ShortcutEntitiesPreset': ShortcutEntitiesPreset,
+	'ShortcutObject': ShortcutObject,
+	'ShortcutObjectItem': ShortcutObjectItem,
+	'ShortcutObjectPreset': ShortcutObjectPreset,
+	'ShortcutSmiley': ShortcutSmiley,
+	'ShortcutSpell': ShortcutSpell,
+	'AbstractSocialGroupInfos': AbstractSocialGroupInfos,
+	'AllianceFactSheetInformation': AllianceFactSheetInformation,
+	'GuildFactSheetInformations': GuildFactSheetInformations,
+	'GuildInsiderFactSheetInformations': GuildInsiderFactSheetInformations,
+	'SocialEmblem': SocialEmblem,
+	'SocialMember': SocialMember,
+	'ApplicationPlayerInformation': ApplicationPlayerInformation,
+	'SocialApplicationInformation': SocialApplicationInformation,
+	'SocialFight': SocialFight,
+	'SocialFightInfo': SocialFightInfo,
+	'SocialRecruitmentInformation': SocialRecruitmentInformation,
+	'GameActionItem': GameActionItem,
+	'TrustCertificate': TrustCertificate,
+	'Version': Version,
+	'BufferInformation': BufferInformation,
+}

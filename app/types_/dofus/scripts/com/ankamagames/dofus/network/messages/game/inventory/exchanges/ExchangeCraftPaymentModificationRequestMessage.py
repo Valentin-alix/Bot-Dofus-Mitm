@@ -1,0 +1,7 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+	...
+class ExchangeCraftPaymentModificationRequestMessage:
+	def __init__(self, quantity:int):
+		self.quantity=quantity
