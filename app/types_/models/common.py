@@ -1,5 +1,6 @@
 from abc import abstractmethod
 from dataclasses import dataclass, field
+from datetime import datetime
 from pprint import pformat
 from queue import Queue
 
@@ -15,6 +16,7 @@ from app.types_.models.sniffer import SnifferInfo
 class CommonInfo:
     message_to_send_queue: Queue[dict] = Queue()
     server_id: int | None = None
+    subscription_end_date: datetime | None = None
     character: Character | None = None
 
 

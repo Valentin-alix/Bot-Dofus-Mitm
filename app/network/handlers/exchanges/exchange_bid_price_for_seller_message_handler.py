@@ -18,11 +18,6 @@ class ExchangeBidPriceForSellerMessageHandler(
         if (
                 selling_hdv := bot_info.selling_info.selling_hdv
         ) is not None:
-            if selling_hdv.is_selected_error:
-                selling_hdv.is_selected_error = False
-                selling_hdv.clean_object(self.genericId)
-                selling_hdv.process()
-                return
             logger.info("get selected object")
 
             _object_in_inventory = next(
@@ -42,6 +37,11 @@ class ExchangeBidPriceForSellerMessageHandler(
                     "is_placed": True,
                     "minimal_prices": self.minimalPrices,
                 }
+                logger.info(selling_hdv.selected_object)
+            else:
+                logger.info(f"object not found in inventory, cleaning : {selling_hdv.selected_object['object_gid']}")
+                selling_hdv.clean_selected_object()
+
             if bot_info.selling_info.is_playing_event.is_set():
                 selling_hdv.process()
         else:

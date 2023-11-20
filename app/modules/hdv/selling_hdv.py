@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 import math
-from queue import Queue
+from datetime import datetime
 from threading import Thread, Event
 from time import sleep
 from typing import Tuple, TYPE_CHECKING
@@ -10,7 +10,6 @@ from typing import Tuple, TYPE_CHECKING
 from sqlalchemy.orm import sessionmaker
 
 from app.database.models import Item, TypeItem, get_engine
-from app.modules.character import Character
 from app.network.utils import send_parsed_msg
 from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidHousePriceMessage import (
     ExchangeBidHousePriceMessage,
@@ -29,6 +28,7 @@ from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.data.item
 )
 
 if TYPE_CHECKING:
+    from app.types_.models.common import CommonInfo
     from app.types_.dicts.selling import SelectedObject
 
 logger = logging.getLogger(__name__)
@@ -39,14 +39,12 @@ class SellingHdv:
             self,
             seller_buyer_descriptor: SellerBuyerDescriptor,
             is_playing_event: Event,
-            message_to_send_queue: Queue[dict],
-            character: Character
+            common_info: CommonInfo,
     ) -> None:
         self.engine = get_engine()
 
         self.is_playing_event = is_playing_event
-        self.message_to_send_queue = message_to_send_queue
-        self.character = character
+        self.common_info = common_info
 
         self.accepted_categories: list[int] = seller_buyer_descriptor.types
         self.accepted_objects = self.get_accepted_objects()
@@ -54,7 +52,6 @@ class SellingHdv:
         self.treated_objects: list[int] = []
 
         self.selected_object: SelectedObject | None = None
-        self.is_selected_error = False
 
         # TODO Use signal instead
         self.is_playing = self.is_playing_event.is_set()
@@ -90,7 +87,7 @@ class SellingHdv:
     def place_object(self, object_gid: int, do_exchange_bid_house_search: bool = True):
         if do_exchange_bid_house_search:
             send_parsed_msg(
-                self.message_to_send_queue,
+                self.common_info.message_to_send_queue,
                 ExchangeBidHouseSearchMessage(
                     follow=True,
                     objectGID=object_gid,
@@ -100,7 +97,7 @@ class SellingHdv:
                 f"sending ExchangeBidHouseSearchMessage with objectGID : {object_gid}"
             )
         send_parsed_msg(
-            self.message_to_send_queue,
+            self.common_info.message_to_send_queue,
             ExchangeBidHousePriceMessage(
                 objectGID=object_gid,
             ),
@@ -122,7 +119,7 @@ class SellingHdv:
                     f"send ExchangeObjectMovePricedMessage {self.selected_object['object_uid']}"
                 )
                 send_parsed_msg(
-                    self.message_to_send_queue,
+                    self.common_info.message_to_send_queue,
                     ExchangeObjectMovePricedMessage(
                         objectUID=self.selected_object["object_uid"],
                         price=results[1],
@@ -133,25 +130,24 @@ class SellingHdv:
                 self.selected_object["quantity"] -= results[0]
                 return
             else:
-                logger.info("result is none, cleaning inventory from object...")
-                self.clean_object(self.selected_object["object_gid"])
-                self.selected_object = None
+                logger.info(f"result is none, cleaning inventory from object {self.selected_object['object_gid']}")
+                self.clean_selected_object()
                 self.process()
         else:
             raise ValueError("selected object should not be None")
 
-    def clean_object(self, object_gid: int):
-        self.treated_objects.append(object_gid)
+    def clean_selected_object(self):
+        self.treated_objects.append(self.selected_object['object_gid'])
 
         send_parsed_msg(
-            self.message_to_send_queue,
+            self.common_info.message_to_send_queue,
             ExchangeBidHouseSearchMessage(
                 follow=False,
-                objectGID=object_gid,
+                objectGID=self.selected_object['object_gid'],
             ),
         )
         logger.info(
-            f"sending ExchangeBidHouseSearchMessage with objectGID : {object_gid} to "
+            f"sending ExchangeBidHouseSearchMessage with objectGID : {self.selected_object['object_gid']} to "
             f"close"
         )
         self.selected_object = None
@@ -159,17 +155,27 @@ class SellingHdv:
     # Utils
     def get_accepted_objects(self) -> list[Item]:
         with sessionmaker(bind=self.engine)() as _session:
-            accepted_objects = (
-                _session.query(Item)
-                .join(TypeItem, Item.type_item_id == TypeItem.id)
-                .filter(TypeItem.id.in_(self.accepted_categories))
-                .with_entities(Item)
-                .all()
-            )
+            if self.common_info.subscription_end_date <= datetime.now():
+                accepted_objects = (
+                    _session.query(Item)
+                    .join(TypeItem, Item.type_item_id == TypeItem.id)
+                    .filter(TypeItem.id.in_(self.accepted_categories), Item.level <= 60)
+                    .with_entities(Item)
+                    .all()
+                )
+            else:
+                accepted_objects = (
+                    _session.query(Item)
+                    .join(TypeItem, Item.type_item_id == TypeItem.id)
+                    .filter(TypeItem.id.in_(self.accepted_categories))
+                    .with_entities(Item)
+                    .all()
+                )
+
             return accepted_objects
 
     def get_accepted_objects_in_inventory(self) -> list[ObjectItem] | None:
-        if (character := self.character) is not None:
+        if (character := self.common_info.character) is not None:
             accepted_objects_inventory = [
                 object_
                 for object_ in character.objects

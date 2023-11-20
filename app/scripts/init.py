@@ -4,10 +4,11 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
+from app.scripts.decompile_code_source import get_as_scripts
+
 ROOT_DIR = str(Path(__file__).parent.parent.parent)
 sys.path.append(ROOT_DIR)
 
-from app.scripts.decompile_code_source import get_as_scripts
 from app.scripts.generate_python_class import (
     launch_generator,
 )

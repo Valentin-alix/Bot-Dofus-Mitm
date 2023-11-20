@@ -1,5 +1,8 @@
 import logging
 
+from sqlalchemy.orm import sessionmaker
+
+from app.database.models import get_engine, TypeItem, CategoryEnum
 from app.gui.signals import AppSignals
 from app.modules.hdv.selling_hdv import SellingHdv
 from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeStartedBidSellerMessage import (
@@ -16,10 +19,17 @@ class ExchangeStartedBidSellerMessageHandler(
     """Received hdv info seller"""
 
     def handle(self, bot_info: BotInfo, app_signals: AppSignals) -> None:
-        bot_info.selling_info.selling_hdv = SellingHdv(
-            self.sellerDescriptor, bot_info.selling_info.is_playing_event, bot_info.common_info.message_to_send_queue,
-            bot_info.common_info.character
-        )
-        logger.info(f"got hdv seller with types : {self.sellerDescriptor.types}")
-        if bot_info.selling_info.is_playing_event.is_set():
-            bot_info.selling_info.selling_hdv.process()
+
+        if len(self.sellerDescriptor.types) > 0:
+            engine = get_engine()
+            with sessionmaker(bind=engine)() as session:
+                category = session.query(TypeItem.category).filter(
+                    TypeItem.id == self.sellerDescriptor.types[0]).scalar()
+            if category in [CategoryEnum.RESOURCES, CategoryEnum.CONSUMABLES, CategoryEnum.COSMETICS]:
+                bot_info.selling_info.selling_hdv = SellingHdv(
+                    self.sellerDescriptor, bot_info.selling_info.is_playing_event,
+                    bot_info.common_info
+                )
+                logger.info(f"got hdv seller with types : {self.sellerDescriptor.types}")
+                if bot_info.selling_info.is_playing_event.is_set():
+                    bot_info.selling_info.selling_hdv.process()

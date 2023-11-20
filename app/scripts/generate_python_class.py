@@ -89,7 +89,10 @@ def create_python_class_dofus_file(base_path_output):
             class_line += ":\n"
 
             if len(class_data["vars"]) > 0:
-                for _var in class_data["vars"]:
+                for _var in class_data.get("vars") + class_data.get("boolVars"):
+                    if _var["name"] == "self":
+                        continue
+
                     if (var_spe := (_var.get('extra_type', None))) is not None:
                         _var['length'] = var_spe.get('length')
                         _var['type'] = var_spe.get('type')
