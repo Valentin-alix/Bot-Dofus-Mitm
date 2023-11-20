@@ -1,9 +1,0 @@
-from __future__ import annotations
-from typing import TYPE_CHECKING
-if TYPE_CHECKING:
-	...
-class CharacterAlignmentWarEffortProgressionMessage:
-	def __init__(self, alignmentWarEffortDailyLimit:int, alignmentWarEffortDailyDonation:int, alignmentWarEffortPersonalDonation:int):
-		self.alignmentWarEffortDailyLimit=alignmentWarEffortDailyLimit
-		self.alignmentWarEffortDailyDonation=alignmentWarEffortDailyDonation
-		self.alignmentWarEffortPersonalDonation=alignmentWarEffortPersonalDonation
