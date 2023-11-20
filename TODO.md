@@ -1,15 +1,19 @@
-- Voir list graphique par liste d'item
+- bot fm
 
-- signals => communiquer from thread to main gui
+- seller hdv update prices automatically
 
-- Bot fm
+- protocol_builder
+    - refactor
 
-- Refactorer le protocol builder / generate python class
+- gui:
+    - clean sniffer if 200+ rows
+    - signal from thread to main gui
+    - voir list graphique par liste d'item
 
 - stop playing when quitting hdv or finished
 
-- Clean sniffer if 200+ rows
+- generate_python_class:
+    - refactor
+    - Fix when variable = self
 
-- Use postgresql
--
-- Fixme when variable = self
+- use postgresql with docker

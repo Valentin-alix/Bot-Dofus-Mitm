@@ -39,10 +39,8 @@ class ExchangeBidPriceForSellerMessageHandler(
                 }
                 logger.info(selling_hdv.selected_object)
             else:
-                logger.info(f"object not found in inventory, cleaning : {selling_hdv.selected_object['object_gid']}")
+                logger.info(f"object not found in inventory, cleaning : {selling_hdv.selected_object}")
                 selling_hdv.clean_selected_object()
 
             if bot_info.selling_info.is_playing_event.is_set():
                 selling_hdv.process()
-        else:
-            raise ValueError("SellerHdv should not be None")

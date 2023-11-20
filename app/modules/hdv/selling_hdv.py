@@ -47,6 +47,7 @@ class SellingHdv:
         self.common_info = common_info
 
         self.accepted_categories: list[int] = seller_buyer_descriptor.types
+        # store the price put for selected object
         self.accepted_objects = self.get_accepted_objects()
 
         self.treated_objects: list[int] = []
@@ -137,20 +138,21 @@ class SellingHdv:
             raise ValueError("selected object should not be None")
 
     def clean_selected_object(self):
-        self.treated_objects.append(self.selected_object['object_gid'])
+        if self.selected_object is not None:
+            self.treated_objects.append(self.selected_object['object_gid'])
 
-        send_parsed_msg(
-            self.common_info.message_to_send_queue,
-            ExchangeBidHouseSearchMessage(
-                follow=False,
-                objectGID=self.selected_object['object_gid'],
-            ),
-        )
-        logger.info(
-            f"sending ExchangeBidHouseSearchMessage with objectGID : {self.selected_object['object_gid']} to "
-            f"close"
-        )
-        self.selected_object = None
+            send_parsed_msg(
+                self.common_info.message_to_send_queue,
+                ExchangeBidHouseSearchMessage(
+                    follow=False,
+                    objectGID=self.selected_object['object_gid'],
+                ),
+            )
+            logger.info(
+                f"sending ExchangeBidHouseSearchMessage with objectGID : {self.selected_object['object_gid']} to "
+                f"close"
+            )
+            self.selected_object = None
 
     # Utils
     def get_accepted_objects(self) -> list[Item]:
