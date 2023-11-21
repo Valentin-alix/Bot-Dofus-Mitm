@@ -11,5 +11,6 @@ logger = logging.getLogger(__name__)
 
 class ObjectsAddedMessageHandler(ParsedMessageHandler, ObjectsAddedMessage):
     def handle(self, bot_info: BotInfo, app_signals: AppSignals) -> None:
+        assert bot_info.common_info.character is not None
         for _object in self.object:
             bot_info.common_info.character.on_object_added_msg(_object)

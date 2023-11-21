@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 class ObjectsDeletedMessageHandler(ParsedMessageHandler, ObjectsDeletedMessage):
     def handle(self, bot_info: BotInfo, app_signals: AppSignals) -> None:
-        if (character := bot_info.common_info.character) is not None:
-            for _object in self.objectUID:
-                logger.info(f"remove object {self.objectUID} to character")
-                character.on_object_deleted_msg(_object)
+        assert bot_info.common_info.character is not None
+        for _object in self.objectUID:
+            logger.info(f"remove object {self.objectUID} to character")
+            bot_info.common_info.character.on_object_deleted_msg(_object)

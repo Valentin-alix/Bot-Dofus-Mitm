@@ -7,7 +7,8 @@ from app.gui.components.common import (
     Frame, Widget,
 )
 from app.gui.components.organization import VerticalLayout, HorizontalLayout
-from app.gui.pages.seller.selling import Selling
+from app.gui.pages.seller.selling_from_inventory import SellingFromInventory
+from app.gui.pages.seller.selling_update import SellingUpdate
 from app.gui.signals import AppSignals
 from app.types_.models.common import BotInfo
 
@@ -25,8 +26,11 @@ class SellerFrame(Frame):
         self.bot_info = bot_info
         self.app_signals = app_signals
 
-        self.main_layout = HorizontalLayout()
+        self.main_layout = HorizontalLayout(without_space=False)
         self.setLayout(self.main_layout)
 
-        self.selling = Selling(self.bot_info, self.app_signals)
+        self.selling = SellingFromInventory(self.bot_info, self.app_signals)
         self.main_layout.addWidget(self.selling)
+
+        self.selling_update = SellingUpdate(self.bot_info, self.app_signals)
+        self.main_layout.addWidget(self.selling_update)

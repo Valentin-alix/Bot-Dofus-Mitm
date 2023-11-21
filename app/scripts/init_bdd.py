@@ -82,9 +82,6 @@ def init_item(session: Session, d2i_texts: dict):
                     )
                 )
                 items_entities.append(item_object)
-            else:
-                if _item_db is not None:
-                    session.delete(_item_db)
         session.add_all(items_entities)
         session.flush()
 

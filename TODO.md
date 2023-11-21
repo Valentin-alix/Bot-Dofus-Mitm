@@ -1,6 +1,8 @@
 - bot fm
 
-- seller hdv update prices automatically
+- stop playing when quitting hdv or finished
+
+- close object automatically when stopped hdv buyer or selling
 
 - protocol_builder
     - refactor
@@ -9,8 +11,6 @@
     - clean sniffer if 200+ rows
     - signal from thread to main gui
     - voir list graphique par liste d'item
-
-- stop playing when quitting hdv or finished
 
 - generate_python_class:
     - refactor

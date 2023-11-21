@@ -37,10 +37,10 @@ class Mitm(QObject):
     def on_connection_callback(
             self, connection_game: fritm.proxy.ConnectionWrapper, connection_server: Socket
     ):
-        print("connected")
         bridge = InjectorBridgeHandler(
             connection_game, connection_server, self.bot_info, self.app_signals
         )
+
         self.bridges.append(bridge)
 
         bridge.loop()

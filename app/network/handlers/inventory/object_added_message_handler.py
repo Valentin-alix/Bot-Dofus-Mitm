@@ -11,6 +11,6 @@ logger = logging.getLogger(__name__)
 
 class ObjectAddedMessageHandler(ParsedMessageHandler, ObjectAddedMessage):
     def handle(self, bot_info: BotInfo, app_signals: AppSignals) -> None:
-        if (character := bot_info.common_info.character) is not None:
-            logger.info(f"add object {self.object} to character")
-            character.on_object_added_msg(self.object)
+        assert bot_info.common_info.character is not None
+        logger.info(f"add object {self.object} to character")
+        bot_info.common_info.character.on_object_added_msg(self.object)

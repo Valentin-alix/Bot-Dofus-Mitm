@@ -6,9 +6,9 @@ from app.gui.signals import AppSignals
 from app.types_.models.common import BotInfo
 
 
-class Selling(QWidget):
+class SellingUpdate(QWidget):
     def __init__(self, bot_info: BotInfo, app_signals: AppSignals, *args, **kwargs):
-        super().__init__()
+        super().__init__(*args, **kwargs)
 
         self.bot_info = bot_info
         self.app_signals = app_signals
@@ -23,7 +23,7 @@ class Selling(QWidget):
         self.app_signals.on_new_sale_info.connect(self.update_content_selling)
 
     def set_header(self):
-        self.header = TopPage(parent=self)
+        self.header = TopPage(parent=self, title="Mettre à jour les prix")
         self.header.button_play.clicked.connect(lambda: self.on_update_do_play(True))
         self.header.button_stop.clicked.connect(lambda: self.on_update_do_play(False))
         self.main_frame_layout.addWidget(self.header)
@@ -49,17 +49,18 @@ class Selling(QWidget):
         self.layout_content.addWidget(self.label_sum_on_sale)
 
     def update_state_buttons(self):
-        self.header.do_play(self.bot_info.selling_info.is_playing_event.is_set())
+        self.header.do_play(self.bot_info.selling_info.is_playing_update_event.is_set())
 
     def on_update_do_play(self, do_play: bool):
-        if do_play:
-            self.bot_info.selling_info.is_playing_event.set()
+        if do_play and not self.bot_info.selling_info.is_playing_from_inventory_event.is_set():
+            self.bot_info.selling_info.is_playing_update_event.set()
         else:
-            self.bot_info.selling_info.is_playing_event.clear()
+            self.bot_info.selling_info.is_playing_update_event.clear()
         self.update_state_buttons()
 
     def update_content_selling(self):
-        self.label_number_on_sale.setText(
-            f"Nombre de slot utilisé : {self.bot_info.selling_info.on_sale_info_with_lock['number']}")
-        self.label_sum_on_sale.setText(
-            f"Valeur estimé mis en vente : {self.bot_info.selling_info.on_sale_info_with_lock['sum_price']}")
+        return
+        # self.label_number_on_sale.setText(
+        #     f"Nombre de slot utilisé : {self.bot_info.selling_info.on_sale_info_with_lock['number']}")
+        # self.label_sum_on_sale.setText(
+        #     f"Valeur estimé mis en vente : {self.bot_info.selling_info.on_sale_info_with_lock['sum_price']}")

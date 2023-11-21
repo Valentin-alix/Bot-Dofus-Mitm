@@ -12,9 +12,9 @@ from PyQt5.QtWidgets import (
     QTableWidget,
     QHeaderView,
     QTreeWidget,
-    QTreeWidgetItem, )
+    QTreeWidgetItem, QLabel, )
 
-from app.gui.components.organization import HorizontalLayout, AlignDelegate
+from app.gui.components.organization import HorizontalLayout, AlignDelegate, VerticalLayout
 
 
 class Widget(QWidget):
@@ -111,30 +111,32 @@ class ButtonIcon(PushButton):
 
 
 class TopPage(Widget):
-    HEIGHT = 30
     button_reset: PushButton | None = None
 
-    def __init__(self, with_restart: bool = False, *args, **kwargs) -> None:
+    def __init__(self, with_restart: bool = False, title: str | None = None, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
-        self.setFixedHeight(self.HEIGHT)
 
+        self.main_layout = VerticalLayout()
+        self.setLayout(self.main_layout)
+
+        if title is not None:
+            self.title = QLabel(parent=self, text=title)
+            self.main_layout.addWidget(self.title)
+
+        self.header_buttons = QWidget(parent=self)
+        self.main_layout.addWidget(self.header_buttons)
         self.h_layout = HorizontalLayout()
-        self.setLayout(self.h_layout)
+        self.header_buttons.setLayout(self.h_layout)
+        self.header_buttons.setLayout(self.h_layout)
 
         if with_restart:
-            self.button_reset = ButtonIcon("restart.svg", parent=self)
-            self.button_reset.setFixedHeight(self.HEIGHT)
-            self.button_reset.setIconSize(QSize(self.HEIGHT - 10, self.HEIGHT - 10))
+            self.button_reset = ButtonIcon("restart.svg", parent=self, height=30, icon_size=20)
             self.h_layout.addWidget(self.button_reset)
 
-        self.button_play = ButtonIcon("play.svg", parent=self)
-        self.button_play.setFixedHeight(self.HEIGHT)
-        self.button_play.setIconSize(QSize(self.HEIGHT - 10, self.HEIGHT - 10))
+        self.button_play = ButtonIcon("play.svg", parent=self, height=30, icon_size=20)
         self.h_layout.addWidget(self.button_play)
 
-        self.button_stop = ButtonIcon("stop", parent=self)
-        self.button_stop.setFixedHeight(self.HEIGHT)
-        self.button_stop.setIconSize(QSize(self.HEIGHT - 10, self.HEIGHT - 10))
+        self.button_stop = ButtonIcon("stop", parent=self, height=30, icon_size=15)
         self.h_layout.addWidget(self.button_stop)
 
     def do_play(self, is_playing: bool):

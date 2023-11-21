@@ -56,6 +56,7 @@ class Header(Widget):
         self.main_layout.addWidget(self.resize_button)
 
         self.quit_button = HeaderItem(height=self.HEIGHT, filename="quit.svg", parent=self)
+        self.quit_button.set_object_name('danger')
         self.quit_button.clicked.connect(self.on_quit)
         self.quit_button.set_inactive_button()
         self.main_layout.addWidget(self.quit_button)

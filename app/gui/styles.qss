@@ -33,6 +33,7 @@ QAbstractButton:hover {
     background-color: rgb(80,80,80);
 }
 
+
 QAbstractButton#inactive {
     border: none;
     font-size: 18px;

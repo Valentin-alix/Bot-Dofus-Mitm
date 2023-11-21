@@ -19,10 +19,11 @@ class ExchangeTypesItemsExchangerDescriptionForUserMessageHandler(
     """Received hdv object prices after clicking in objects"""
 
     def handle(self, bot_info: BotInfo, app_signals: AppSignals) -> None:
-        logger.info("Got prices of objects")
+        # TODO Why itemTypeDescriptions is list
         if len(self.itemTypeDescriptions) == 1:
+            # storing prices in database
             engine = get_engine()
-
+            logger.info(f"Got prices of objects : {self.itemTypeDescriptions[0]}")
             with sessionmaker(bind=engine)() as session:
                 price = Price(
                     creation_date=datetime.now(),

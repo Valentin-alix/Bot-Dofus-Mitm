@@ -15,32 +15,14 @@ class ExchangeBidPriceForSellerMessageHandler(
     """When selecting object for sells"""
 
     def handle(self, bot_info: BotInfo, app_signals: AppSignals) -> None:
-        if (
-                selling_hdv := bot_info.selling_info.selling_hdv
-        ) is not None:
-            logger.info("get selected object")
+        if (selling_hdv := bot_info.selling_info.selling_hdv) is not None:
+            assert selling_hdv.selected_object is not None
+            assert selling_hdv.selected_object["object_gid"] == self.genericId
+            selling_hdv.selected_object["minimal_prices"] = self.minimalPrices
+            logger.info(f"get minimal prices of selected object: {self.minimalPrices}")
 
-            _object_in_inventory = next(
-                (
-                    _object
-                    for _object in bot_info.common_info.character.objects
-                    if _object.objectGID == self.genericId
-                ),
-                None,
-            )
-            if _object_in_inventory is not None:
-                selling_hdv.selected_object = {
-                    "quantity": _object_in_inventory.quantity,
-                    "all_identical": self.allIdentical,
-                    "object_gid": self.genericId,
-                    "object_uid": _object_in_inventory.objectUID,
-                    "is_placed": True,
-                    "minimal_prices": self.minimalPrices,
-                }
-                logger.info(selling_hdv.selected_object)
-            else:
-                logger.info(f"object not found in inventory, cleaning : {selling_hdv.selected_object}")
-                selling_hdv.clean_selected_object()
+            if bot_info.selling_info.is_playing_from_inventory_event.is_set():
+                selling_hdv.process_from_inventory()
 
-            if bot_info.selling_info.is_playing_event.is_set():
-                selling_hdv.process()
+            if bot_info.selling_info.is_playing_update_event.is_set():
+                selling_hdv.process_update()
