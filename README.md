@@ -26,12 +26,16 @@
     - Chart on prices by item
     - Top 10 of best benefits item in nuggets
     - Top 10 of most important price drop
+    - FIXME Need to remove value when equal to zero
 
 - Automate sells resource in hdv
+    - Vente automatique des objets(ressource/consommable/cosmétique) en hdv
+    - Modification automatique des prix des objets (ressource/consommable/cosmétique) en hdv
+    - <!> Still in testing
 
 - Automate FM &#8594; WIP
 
-# Technology
+# Technologies :
 
 ➡️ 🐍 Python
 
