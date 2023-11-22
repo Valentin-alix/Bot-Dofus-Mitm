@@ -34,9 +34,10 @@ def get_local_ip() -> str:
 
 
 def send_parsed_msg(message_to_send_queue: Queue[dict], parsed_message):
+    logger.info(f"Sending: {parsed_message.__class__.__name__}")
     msg_to_send = {
         **vars(parsed_message),
-        "__type__": f"{parsed_message.__class__.__name__}",
+        "__type__": parsed_message.__class__.__name__,
     }
     message_to_send_queue.put(msg_to_send)
 

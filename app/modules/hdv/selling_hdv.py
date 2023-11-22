@@ -4,8 +4,7 @@ import logging
 import math
 from copy import deepcopy
 from datetime import datetime
-from threading import Thread, Event
-from time import sleep
+from threading import Event, Thread
 from typing import Tuple, TYPE_CHECKING
 
 from sqlalchemy.orm import sessionmaker
@@ -13,6 +12,7 @@ from sqlalchemy.orm import sessionmaker
 from app.database.models import Item, TypeItem, get_engine
 from app.modules.hdv.hdv import Hdv
 from app.network.utils import send_parsed_msg
+from app.types_.dicts.common import EventValueChangeWithCallback
 from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidHousePriceMessage import (
     ExchangeBidHousePriceMessage,
 )
@@ -65,33 +65,57 @@ class SellingHdv(Hdv):
         )
         self.treated_objects_in_inventory: list[int] = []
 
-        # TODO Use signal instead
-        self.is_playing_from_inventory = self.is_playing_from_inventory_event.is_set()
-        self.is_playing_update = self.is_playing_update_event.is_set()
-        self.stop_timer = False
-        check_event_play_thread = Thread(target=self.check_event_play, daemon=True)
-        check_event_play_thread.start()
+        if self.is_playing_update_event.is_set():
+            self.on_start_update(True)
+        elif self.is_playing_from_inventory_event.is_set():
+            self.on_start_inventory(True)
+        else:
+            self.on_stop(True)
 
-    def check_event_play(self):
-        """continuously check if event play has changed to true"""
-        while not self.stop_timer:
-            if (
-                    not self.is_playing_from_inventory
-                    and self.is_playing_from_inventory_event.is_set()
-            ):
-                logger.info(
-                    "launching selling from inventory hdv bot after manual start"
-                )
-                self.process_from_inventory()
-            self.is_playing_from_inventory = (
-                self.is_playing_from_inventory_event.is_set()
-            )
+    def on_stop(self, is_first: bool = False):
+        if not is_first and self.selected_object is not None:
+            self.close_selected_object()
+        check_event_play_inventory_thread = Thread(
+            target=lambda: self.check_event_play(
+                EventValueChangeWithCallback(
+                    target_value=True,
+                    event=self.is_playing_from_inventory_event,
+                    callback=self.on_start_inventory,
+                )), daemon=True)
+        check_event_play_inventory_thread.start()
 
-            if not self.is_playing_update and self.is_playing_update_event.is_set():
-                logger.info("launching updating selling hdv bot after manual start")
-                self.process_update()
-            self.is_playing_update = self.is_playing_update_event.is_set()
-            sleep(0.5)
+        check_event_play_update_thread = Thread(
+            target=lambda: self.check_event_play(
+                EventValueChangeWithCallback(
+                    target_value=True,
+                    event=self.is_playing_update_event,
+                    callback=self.on_start_update,
+                )), daemon=True)
+        check_event_play_update_thread.start()
+
+    def on_start_inventory(self, is_first: bool = False):
+        if not is_first:
+            self.process_from_inventory()
+        check_event_play_update_thread = Thread(
+            target=lambda: self.check_event_play(
+                EventValueChangeWithCallback(
+                    target_value=False,
+                    event=self.is_playing_from_inventory_event,
+                    callback=self.on_stop,
+                )), daemon=True)
+        check_event_play_update_thread.start()
+
+    def on_start_update(self, is_first: bool = False):
+        if not is_first:
+            self.process_update()
+        check_event_play_update_thread = Thread(
+            target=lambda: self.check_event_play(
+                EventValueChangeWithCallback(
+                    target_value=False,
+                    event=self.is_playing_update_event,
+                    callback=self.on_stop,
+                )), daemon=True)
+        check_event_play_update_thread.start()
 
     def process_update(self) -> None:
         if self.selected_object is not None:
@@ -107,7 +131,7 @@ class SellingHdv(Hdv):
                 and self.get_quantity_in_inventory(self.selected_object["object_gid"])
                 != 0
         ):
-            if self.selected_object.get("is_placed"):
+            if self.selected_object["is_placed"]:
                 self.sell_selected_object()
             else:
                 self.place_object(self.selected_object["object_gid"], False)
@@ -121,16 +145,26 @@ class SellingHdv(Hdv):
     def place_object(self, object_gid: int, do_exchange_bid_house_search: bool = True):
         if do_exchange_bid_house_search:
             super().place_object(object_gid)
+        assert self.selected_object['is_placed'] is False
         send_parsed_msg(
             self.common_info.message_to_send_queue,
             ExchangeBidHousePriceMessage(
                 objectGID=object_gid,
             ),
         )
+        self.selected_object['is_placed'] = True
 
         logger.info(
             f"sending ExchangeBidHousePriceMessage with objectGID : {object_gid}"
         )
+
+    def close_selected_object(self):
+        self.treated_objects_in_inventory.append(self.selected_object["object_gid"])
+        super().close_selected_object()
+        if self.is_playing_from_inventory_event.is_set():
+            self.process_from_inventory()
+        elif self.is_playing_update_event.is_set():
+            self.process_update()
 
     def update_price_selected_object(self):
         assert self.selected_object is not None
@@ -140,7 +174,7 @@ class SellingHdv(Hdv):
         results = self.get_price_and_quantity(
             self.selected_object["object_gid"],
             _object_to_update.quantity,
-            self.selected_object.get("minimal_prices"),
+            self.selected_object["minimal_prices"],
         )
         logger.info(f"get price_and_quantity : {results}")
         if results is not None and results[1] != _object_to_update.objectPrice:
@@ -177,7 +211,7 @@ class SellingHdv(Hdv):
         results = self.get_price_and_quantity(
             self.selected_object["object_gid"],
             total_quantity,
-            self.selected_object.get("minimal_prices"),
+            self.selected_object["minimal_prices"],
         )
         logger.info(f"get price_and_quantity : {results}")
         if results is not None:
@@ -198,11 +232,6 @@ class SellingHdv(Hdv):
             )
             self.close_selected_object()
             self.process_from_inventory()
-
-    def close_selected_object(self):
-        assert self.selected_object is not None
-        self.treated_objects_in_inventory.append(self.selected_object["object_gid"])
-        super().close_selected_object()
 
     def get_quantity_in_inventory(self, object_gid: int) -> int:
         return sum(

@@ -1,12 +1,12 @@
 import logging
 from threading import Thread, Event
-from time import sleep
 from typing import TYPE_CHECKING
 
 from app.database.models import get_engine
 from app.gui.signals import AppSignals
 from app.modules.hdv.hdv import Hdv
 from app.network.utils import send_parsed_msg
+from app.types_.dicts.common import EventValueChangeWithCallback
 from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidHouseTypeMessage import (
     ExchangeBidHouseTypeMessage,
 )
@@ -37,21 +37,37 @@ class BuyingHdv(Hdv):
 
         self.update_current_state()
 
-        # TODO Use signal instead
-        self.is_playing = self.is_playing_event.is_set()
-        self.stop_timer = False
-        check_event_play_thread = Thread(target=self.check_event_play, daemon=True)
-        check_event_play_thread.start()
+        if self.is_playing_event.is_set():
+            self.on_start(True)
+        else:
+            self.on_stop(True)
 
-    def check_event_play(self):
-        """continuously check if event play has changed to true"""
-        while not self.stop_timer:
-            if not self.is_playing and self.is_playing_event.is_set():
-                logger.info("launching hdv bot after manual start")
-                self.is_playing = True
-                self.process()
-            self.is_playing = self.is_playing_event.is_set()
-            sleep(0.5)
+    def on_start(self, is_first: bool = False):
+        if not is_first:
+            self.process()
+        check_event_change_thread = Thread(
+            target=lambda: self.check_event_play(
+                EventValueChangeWithCallback(
+                    target_value=False,
+                    event=self.is_playing_event,
+                    callback=self.on_stop,
+                )), daemon=True)
+        check_event_change_thread.start()
+
+    def on_stop(self, is_first: bool = False):
+        if not is_first:
+            if self.selected_object is not None:
+                self.close_selected_object()
+            if self.selected_type is not None:
+                self.close_type()
+        check_event_change_thread = Thread(
+            target=lambda: self.check_event_play(
+                EventValueChangeWithCallback(
+                    target_value=True,
+                    event=self.is_playing_event,
+                    callback=self.on_start,
+                )), daemon=True)
+        check_event_change_thread.start()
 
     def __del__(self):
         self.app_signals.on_new_scraping_current_state.emit(
@@ -92,10 +108,12 @@ class BuyingHdv(Hdv):
                 type=_type,
             ),
         )
+        self.selected_type = _type
         logger.info(f"Sending check type {_type}")
 
     def close_type(self):
         assert self.selected_type is not None
+        logger.info(f"Sending check type {self.selected_type} to close")
         send_parsed_msg(
             self.common_info.message_to_send_queue,
             ExchangeBidHouseTypeMessage(
@@ -103,4 +121,6 @@ class BuyingHdv(Hdv):
                 type=self.selected_type,
             ),
         )
-        logger.info(f"Sending check type {self.selected_type} to close")
+        self.selected_type = None
+        if self.is_playing_event.is_set():
+            self.process()

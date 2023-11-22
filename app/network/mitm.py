@@ -1,6 +1,5 @@
 import logging
 import random
-from copy import deepcopy
 from datetime import datetime
 from queue import Empty
 from socket import socket as Socket, SHUT_WR
@@ -63,7 +62,7 @@ class InjectorBridgeHandler:
             connection_game: fritm.proxy.ConnectionWrapper,
             connection_server: Socket,
             bot_info: BotInfo,
-            app_signals: AppSignals,
+            app_signals: AppSignals
     ):
         self.connection_game = connection_game
         self.connection_server = connection_server
@@ -102,7 +101,6 @@ class InjectorBridgeHandler:
                 )
                 message = Message.get_message_from_json(parsed_msg)
                 self.send_to_server(message)
-
             except Empty:
                 pass
             sleep(random.uniform(*self.TIME_BETWEEN_SEND))
@@ -163,18 +161,16 @@ class InjectorBridgeHandler:
 
     def send_to_client(self, data):
         if isinstance(data, Message):
-            self.raw_parser.parse(deepcopy(data), False)
             data = data.bytes()
         self.injected_to_client += 1
         self.connection_game.sendall(data)
 
     def send_to_server(self, data):
+        if isinstance(data, Message):
+            data.count = self.counter + 1
+            data = data.bytes()
+        self.injected_to_server += 1
         if not self.is_server_closed():
-            if isinstance(data, Message):
-                data.count = self.counter + 1
-                self.raw_parser.parse(deepcopy(data), True)
-                data = data.bytes()
-            self.injected_to_server += 1
             self.connection_server.sendall(data)
 
     def send_message(self, content: str):

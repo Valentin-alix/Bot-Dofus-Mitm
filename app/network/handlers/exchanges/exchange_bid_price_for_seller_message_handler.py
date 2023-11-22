@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 class ExchangeBidPriceForSellerMessageHandler(
     ParsedMessageHandler, ExchangeBidPriceForSellerMessage
 ):
-    """When selecting object for sells"""
+    """When receiving object for sells"""
 
     def handle(self, bot_info: BotInfo, app_signals: AppSignals) -> None:
         if (selling_hdv := bot_info.selling_info.selling_hdv) is not None:

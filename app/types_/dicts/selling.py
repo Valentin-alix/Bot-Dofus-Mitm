@@ -1,10 +1,10 @@
-from typing import TypedDict
+from typing import TypedDict, NotRequired
 
 
 class SelectedObject(TypedDict):
     object_gid: int
-    minimal_prices: list[int]
     is_placed: bool
+    minimal_prices: NotRequired[list[int]]
 
 
 class OnSaleInfoWithLock(TypedDict):

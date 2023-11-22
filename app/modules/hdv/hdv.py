@@ -1,12 +1,14 @@
 from __future__ import annotations
 
 import logging
+from time import sleep
 from typing import TYPE_CHECKING
 
 from sqlalchemy.orm import sessionmaker
 
 from app.database.models import get_engine, TypeItem
 from app.network.utils import send_parsed_msg
+from app.types_.dicts.common import EventValueChangeWithCallback
 from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidHouseSearchMessage import \
     ExchangeBidHouseSearchMessage
 
@@ -23,9 +25,20 @@ class Hdv:
         self.selected_object: SelectedObject | None = None
         self.engine = get_engine()
 
-        # TODO Close object at stop playing
+        self.stop_timer = False
+
+    def check_event_play(self, event_value_change_with_callback: EventValueChangeWithCallback):
+        """continuously check if event play has changed to true"""
+        while not self.stop_timer:
+            if event_value_change_with_callback['event'].is_set() is event_value_change_with_callback['target_value']:
+                logger.info("event value change detected")
+                logger.info(f"firing {event_value_change_with_callback['callback']}")
+                event_value_change_with_callback['callback']()
+                break
+            sleep(0.5)
 
     def place_object(self, object_gid: int):
+        assert self.selected_object is None
         logger.info(f"Sending place object {object_gid}")
         send_parsed_msg(
             self.common_info.message_to_send_queue,
@@ -34,9 +47,17 @@ class Hdv:
                 follow=True,
             ),
         )
+        self.selected_object = {
+            "object_gid": object_gid,
+            "is_placed": False
+        }
 
     def close_selected_object(self):
         assert self.selected_object is not None
+        logger.info(
+            f"sending ExchangeBidHouseSearchMessage with objectGID : {self.selected_object['object_gid']} to "
+            f"close"
+        )
         send_parsed_msg(
             self.common_info.message_to_send_queue,
             ExchangeBidHouseSearchMessage(
@@ -44,10 +65,7 @@ class Hdv:
                 objectGID=self.selected_object["object_gid"],
             ),
         )
-        logger.info(
-            f"sending ExchangeBidHouseSearchMessage with objectGID : {self.selected_object['object_gid']} to "
-            f"close"
-        )
+        self.selected_object = None
 
     def get_accepted_types(self, types_id: list[int]) -> list[int]:
         """filter type item to be in database"""
