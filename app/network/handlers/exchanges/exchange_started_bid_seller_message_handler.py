@@ -28,7 +28,8 @@ class ExchangeStartedBidSellerMessageHandler(
                 bot_info.selling_info.selling_hdv = SellingHdv(
                     self.sellerDescriptor, self.objectsInfos, bot_info.selling_info.is_playing_from_inventory_event,
                     bot_info.selling_info.is_playing_update_event,
-                    bot_info.common_info
+                    bot_info.common_info,
+                    app_signals
                 )
                 logger.info(f"got hdv seller with types : {self.sellerDescriptor.types}")
                 if bot_info.selling_info.is_playing_from_inventory_event.is_set():

@@ -15,6 +15,7 @@ class ExchangeLeaveMessageHandler(ParsedMessageHandler, ExchangeLeaveMessage):
 
     def handle(self, bot_info: BotInfo, app_signals: AppSignals) -> None:
         if self.dialogType == DialogType.DIALOG_EXCHANGE:
+            app_signals.on_leaving_hdv.emit()
             # clearing buying hdv or selling hdv
             if (buying_hdv := bot_info.scraping_info.buying_hdv) is not None:
                 logger.info("deleting buying hdv")

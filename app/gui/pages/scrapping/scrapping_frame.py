@@ -35,8 +35,12 @@ class ScrappingFrame(Frame):
 
         self.setLayout(self.main_frame_layout)
 
+        self.app_signals.on_leaving_hdv.connect(self.remaining_content.hide)
         self.app_signals.on_new_scraping_current_state.connect(self.remaining_content.update_content)
         self.app_signals.on_new_server_id.connect(self.on_new_server_id)
+
+        self.app_signals.on_new_buying_hdv_playing_value.connect(
+            lambda: self.header.do_play(self.bot_info.scraping_info.is_playing_event.is_set()))
 
     def on_new_server_id(self) -> None:
         if (server_id := self.bot_info.common_info.server_id) != self.server_id:

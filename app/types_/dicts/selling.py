@@ -7,6 +7,6 @@ class SelectedObject(TypedDict):
     minimal_prices: NotRequired[list[int]]
 
 
-class OnSaleInfoWithLock(TypedDict):
-    number: int
-    sum_price: int
+class TreatedObjectProgression(TypedDict):
+    total_objects_count: int
+    treated_objects_count: int

@@ -1,5 +1,5 @@
 import logging
-from threading import Thread, Event
+from threading import Event
 from typing import TYPE_CHECKING
 
 from app.database.models import get_engine
@@ -25,17 +25,14 @@ class BuyingHdv(Hdv):
             app_signals: AppSignals,
             common_info: 'CommonInfo',
     ) -> None:
-        super().__init__(common_info)
+        super().__init__(common_info, app_signals)
         self.engine = get_engine()
-        self.app_signals = app_signals
         self.is_playing_event = is_playing_event
 
         self.selected_type: int | None = None
 
         self.types_left = self.get_accepted_types(types)
         self.objects_left_in_type: list[dict] = []
-
-        self.update_current_state()
 
         if self.is_playing_event.is_set():
             self.on_start(True)
@@ -45,14 +42,16 @@ class BuyingHdv(Hdv):
     def on_start(self, is_first: bool = False):
         if not is_first:
             self.process()
-        check_event_change_thread = Thread(
-            target=lambda: self.check_event_play(
+
+        self.check_event_change_thread(
+            [
                 EventValueChangeWithCallback(
                     target_value=False,
                     event=self.is_playing_event,
                     callback=self.on_stop,
-                )), daemon=True)
-        check_event_change_thread.start()
+                )
+            ]
+        )
 
     def on_stop(self, is_first: bool = False):
         if not is_first:
@@ -60,21 +59,24 @@ class BuyingHdv(Hdv):
                 self.close_selected_object()
             if self.selected_type is not None:
                 self.close_type()
-        check_event_change_thread = Thread(
-            target=lambda: self.check_event_play(
+
+        self.check_event_change_thread(
+            [
                 EventValueChangeWithCallback(
                     target_value=True,
                     event=self.is_playing_event,
                     callback=self.on_start,
-                )), daemon=True)
-        check_event_change_thread.start()
-
-    def __del__(self):
-        self.app_signals.on_new_scraping_current_state.emit(
-            {"category_remaining": 0, "object_remaining": 0}
+                )
+            ]
         )
 
-    def update_current_state(self):
+    def clear(self):
+        super().clear()
+        # FIXME When quitting hdv
+        self.is_playing_event.clear()
+        self.app_signals.on_new_buying_hdv_playing_value.emit()
+
+    def update_progression(self):
         self.app_signals.on_new_scraping_current_state.emit(
             {
                 "category_remaining": len(self.types_left),
@@ -95,8 +97,10 @@ class BuyingHdv(Hdv):
                 self.place_type()
         else:
             logger.info("no object or type left to check prices")
+            self.is_playing_event.clear()
+            self.app_signals.on_new_buying_hdv_playing_value.emit()
 
-        self.update_current_state()
+        self.update_progression()
 
     def place_type(self):
         assert len(self.types_left) > 0

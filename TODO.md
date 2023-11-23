@@ -17,4 +17,9 @@
 
 - use postgresql with docker
 
+- selling hdv fixme, disable buttons when hdv is None, stop scraping when hdv full scrapped or quit
+
 - bot fm
+
+- firing event from thread to main thread -> ok
+    - but reverse not possible because of intermediate thread non QThread in injector

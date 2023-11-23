@@ -4,15 +4,17 @@ import logging
 import math
 from copy import deepcopy
 from datetime import datetime
-from threading import Event, Thread
+from threading import Event
 from typing import Tuple, TYPE_CHECKING
 
 from sqlalchemy.orm import sessionmaker
 
 from app.database.models import Item, TypeItem, get_engine
+from app.gui.signals import AppSignals
 from app.modules.hdv.hdv import Hdv
 from app.network.utils import send_parsed_msg
 from app.types_.dicts.common import EventValueChangeWithCallback
+from app.types_.dicts.selling import TreatedObjectProgression
 from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidHousePriceMessage import (
     ExchangeBidHousePriceMessage,
 )
@@ -46,8 +48,9 @@ class SellingHdv(Hdv):
             is_playing_from_inventory_event: Event,
             is_playing_update_event: Event,
             common_info: CommonInfo,
+            app_signals: AppSignals
     ) -> None:
-        super().__init__(common_info)
+        super().__init__(common_info, app_signals)
         self.engine = get_engine()
 
         self.is_playing_from_inventory_event = is_playing_from_inventory_event
@@ -55,15 +58,16 @@ class SellingHdv(Hdv):
 
         self.accepted_objects_type: list[int] = seller_buyer_descriptor.types
         self.accepted_objects_gid = self.get_accepted_objects()
-        self.object_on_sale_info = [
-            _object
-            for _object in object_on_sale_info
-            if _object.objectGID in self.accepted_objects_gid
-        ]
-        self.objects_to_update: list[ObjectItemToSellInBid] = deepcopy(
-            object_on_sale_info
-        )
+
+        self.origin_object_in_inventory_count = len([object_ for object_ in self.common_info.character.objects
+                                                     if object_.objectGID in self.accepted_objects_gid])
+
         self.treated_objects_in_inventory: list[int] = []
+
+        self.object_on_sale_info = object_on_sale_info
+        self.objects_to_update: list[ObjectItemToSellInBid] = deepcopy(
+            self.object_on_sale_info
+        )
 
         if self.is_playing_update_event.is_set():
             self.on_start_update(True)
@@ -72,58 +76,78 @@ class SellingHdv(Hdv):
         else:
             self.on_stop(True)
 
+    def clear(self):
+        super().clear()
+        self.is_playing_update_event.clear()
+        self.app_signals.on_new_selling_hdv_update_playing_value.emit()
+
+        self.is_playing_from_inventory_event.clear()
+        self.app_signals.on_new_selling_hdv_inventory_playing_value.emit()
+
     def on_stop(self, is_first: bool = False):
         if not is_first and self.selected_object is not None:
             self.close_selected_object()
-        check_event_play_inventory_thread = Thread(
-            target=lambda: self.check_event_play(
+
+        self.check_event_change_thread(
+            [
                 EventValueChangeWithCallback(
                     target_value=True,
                     event=self.is_playing_from_inventory_event,
                     callback=self.on_start_inventory,
-                )), daemon=True)
-        check_event_play_inventory_thread.start()
-
-        check_event_play_update_thread = Thread(
-            target=lambda: self.check_event_play(
+                ),
                 EventValueChangeWithCallback(
                     target_value=True,
                     event=self.is_playing_update_event,
                     callback=self.on_start_update,
-                )), daemon=True)
-        check_event_play_update_thread.start()
+                )
+            ]
+        )
 
     def on_start_inventory(self, is_first: bool = False):
         if not is_first:
             self.process_from_inventory()
-        check_event_play_update_thread = Thread(
-            target=lambda: self.check_event_play(
+
+        self.check_event_change_thread(
+            [
                 EventValueChangeWithCallback(
                     target_value=False,
                     event=self.is_playing_from_inventory_event,
                     callback=self.on_stop,
-                )), daemon=True)
-        check_event_play_update_thread.start()
+                )
+            ]
+        )
 
     def on_start_update(self, is_first: bool = False):
         if not is_first:
             self.process_update()
-        check_event_play_update_thread = Thread(
-            target=lambda: self.check_event_play(
+
+        self.check_event_change_thread(
+            [
                 EventValueChangeWithCallback(
                     target_value=False,
                     event=self.is_playing_update_event,
                     callback=self.on_stop,
-                )), daemon=True)
-        check_event_play_update_thread.start()
+                )
+            ]
+        )
 
     def process_update(self) -> None:
+        # TODO Use generator
         if self.selected_object is not None:
             self.update_price_selected_object()
         elif len(self.objects_to_update) > 0:
             self.place_object(self.objects_to_update[0].objectGID, True)
         else:
+            self.is_playing_update_event.clear()
+            self.app_signals.on_new_selling_hdv_update_playing_value.emit()
             logger.info("no object left to update")
+        self.emit_progression_update()
+
+    def emit_progression_update(self):
+        self.app_signals.on_new_hdv_update_progression.emit(TreatedObjectProgression(
+            treated_objects_count=len(self.object_on_sale_info) - len(self.objects_to_update),
+            total_objects_count=len(self.object_on_sale_info)
+        ))
 
     def process_from_inventory(self) -> None:
         if (
@@ -140,7 +164,16 @@ class SellingHdv(Hdv):
         elif (_object := self.get_accepted_object_in_inventory()) is not None:
             self.place_object(_object.objectGID)
         else:
+            self.is_playing_from_inventory_event.clear()
+            self.app_signals.on_new_selling_hdv_inventory_playing_value.emit()
             logger.info("no object left to sell")
+        self.emit_progression_inventory()
+
+    def emit_progression_inventory(self):
+        self.app_signals.on_new_hdv_inventory_progression.emit(TreatedObjectProgression(
+            treated_objects_count=len(self.treated_objects_in_inventory),
+            total_objects_count=self.origin_object_in_inventory_count
+        ))
 
     def place_object(self, object_gid: int, do_exchange_bid_house_search: bool = True):
         if do_exchange_bid_house_search:
@@ -159,7 +192,8 @@ class SellingHdv(Hdv):
         )
 
     def close_selected_object(self):
-        self.treated_objects_in_inventory.append(self.selected_object["object_gid"])
+        if self.is_playing_from_inventory_event.is_set():
+            self.treated_objects_in_inventory.append(self.selected_object["object_gid"])
         super().close_selected_object()
         if self.is_playing_from_inventory_event.is_set():
             self.process_from_inventory()
@@ -171,6 +205,7 @@ class SellingHdv(Hdv):
 
         _object_to_update = self.objects_to_update.pop(0)
 
+        # FIXME When playing update after inventory key error minimal prices (peu importe l'attente)
         results = self.get_price_and_quantity(
             self.selected_object["object_gid"],
             _object_to_update.quantity,
@@ -179,6 +214,11 @@ class SellingHdv(Hdv):
         logger.info(f"get price_and_quantity : {results}")
         if results is not None and results[1] != _object_to_update.objectPrice:
             quantity, price = results
+            self.object_on_sale_info = [
+                _object
+                for _object in self.object_on_sale_info
+                if _object.objectUID != _object_to_update.objectUID
+            ]
             logger.info(
                 f"send ExchangeObjectModifyPricedMessage gid : {self.selected_object['object_gid']}"
             )
@@ -195,7 +235,6 @@ class SellingHdv(Hdv):
                 f"result is none, not updating object {self.selected_object['object_gid']}"
             )
             self.close_selected_object()
-            # self.process_update()
 
     def sell_selected_object(self):
         assert self.selected_object is not None
@@ -280,20 +319,25 @@ class SellingHdv(Hdv):
     def get_price_and_quantity(
             self, object_gid: int, quantity: int, minimal_prices: list[int]
     ) -> Tuple[int, int] | None:
-        if quantity == 0:
+        forbidden_quantity = 0
+        minimal_price_authorized = 2
+
+        if quantity == forbidden_quantity:
             return None
 
+        # getting quantity based on number of digit in quantity
         quantity = int(f"1{str(0) * min((len(str(quantity)) - 1), 2)}")
 
         price = None
         for index, _price in enumerate(minimal_prices):
-            if _price > 1:
+            if _price >= minimal_price_authorized:
                 current_quantity = int(f"1{str(0) * index}")
                 price = _price / current_quantity
                 if current_quantity == quantity:
                     break
         if price is None:
             return None
+
         price = math.ceil(price * quantity)
 
         if not any(
@@ -302,9 +346,10 @@ class SellingHdv(Hdv):
                 and _object.objectGID == object_gid
                 for _object in self.object_on_sale_info
         ):
+            # check if object is not already on sale with same prices
             price -= 1
 
-        if price <= 1:
+        if price < minimal_price_authorized:
             return None
 
         return quantity, price

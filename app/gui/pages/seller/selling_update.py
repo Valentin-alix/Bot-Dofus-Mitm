@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import QWidget, QLabel, QBoxLayout
 from app.gui.components.common import TopPage, Widget
 from app.gui.components.organization import VerticalLayout
 from app.gui.signals import AppSignals
+from app.types_.dicts.selling import TreatedObjectProgression
 from app.types_.models.common import BotInfo
 
 
@@ -20,7 +21,12 @@ class SellingUpdate(QWidget):
 
         self.setLayout(self.main_frame_layout)
 
-        self.app_signals.on_new_sale_info.connect(self.update_content_selling)
+        self.app_signals.on_leaving_hdv.connect(self.clear_progression)
+        self.app_signals.on_new_hdv_update_progression.connect(self.update_progression)
+        self.app_signals.on_new_selling_hdv_update_playing_value.connect(self.update_state_buttons)
+
+    def clear_progression(self):
+        self.progression_label.setText("")
 
     def set_header(self):
         self.header = TopPage(parent=self, title="Mettre à jour les prix")
@@ -37,16 +43,13 @@ class SellingUpdate(QWidget):
         self.layout_content.setDirection(QBoxLayout.Direction.BottomToTop)
         self.widget_content.setLayout(self.layout_content)
 
-        self.set_content_selling()
+        self.setup_progression()
 
         self.main_frame_layout.addWidget(self.widget_content)
 
-    def set_content_selling(self):
-        self.label_number_on_sale = QLabel(parent=self.widget_content)
-        self.layout_content.addWidget(self.label_number_on_sale)
-
-        self.label_sum_on_sale = QLabel(parent=self.widget_content)
-        self.layout_content.addWidget(self.label_sum_on_sale)
+    def setup_progression(self):
+        self.progression_label = QLabel(parent=self.widget_content)
+        self.layout_content.addWidget(self.progression_label)
 
     def update_state_buttons(self):
         self.header.do_play(self.bot_info.selling_info.is_playing_update_event.is_set())
@@ -58,9 +61,5 @@ class SellingUpdate(QWidget):
             self.bot_info.selling_info.is_playing_update_event.clear()
         self.update_state_buttons()
 
-    def update_content_selling(self):
-        return
-        # self.label_number_on_sale.setText(
-        #     f"Nombre de slot utilisé : {self.bot_info.selling_info.on_sale_info_with_lock['number']}")
-        # self.label_sum_on_sale.setText(
-        #     f"Valeur estimé mis en vente : {self.bot_info.selling_info.on_sale_info_with_lock['sum_price']}")
+    def update_progression(self, progression: TreatedObjectProgression):
+        self.progression_label.setText(f"{progression['treated_objects_count']} / {progression['total_objects_count']}")
