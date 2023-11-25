@@ -20,6 +20,8 @@ def get_items(engine: Engine) -> list[Type[Item]]:
     return items
 
 
+# TODO Benefit from recipe
+
 def get_info_by_type_or_object(
         engine: Engine, server_id: int | None, object_name: str | None = None
 ) -> pd.DataFrame | None:
@@ -42,7 +44,7 @@ def get_info_by_type_or_object(
 
 
 def get_difference_on_all_prices(
-        engine: Engine, server_id: int | None, limit: int = 10
+        engine: Engine, server_id: int | None, quantity: str, limit: int = 10
 ) -> RowReturningQuery[tuple[str, Item, int]] | None:
     # TODO Filter by server id
     # FIXME Difference enorme la premiere fois => a cause de server id ?
@@ -63,7 +65,7 @@ def get_difference_on_all_prices(
         )
 
         _items_latest = (
-            session.query(Item.id, Price.hundred)
+            session.query(Item.id, getattr(Price, quantity))
             .join(_items_latest_oldest_date, _items_latest_oldest_date.c.id == Item.id)
             .join(Price, Price.item_id == Item.id)
             .filter(Price.creation_date == _items_latest_oldest_date.c.max_date)
@@ -72,7 +74,7 @@ def get_difference_on_all_prices(
         )
 
         _items_oldest = (
-            session.query(Item.id, Price.hundred)
+            session.query(Item.id, getattr(Price, quantity))
             .join(_items_latest_oldest_date, _items_latest_oldest_date.c.id == Item.id)
             .join(Price, Price.item_id == Item.id)
             .filter(Price.creation_date == _items_latest_oldest_date.c.min_date)
@@ -86,8 +88,8 @@ def get_difference_on_all_prices(
             .join(_items_oldest, _items_oldest.c.id == Item.id)
             .join(TypeItem, Item.type_item_id == TypeItem.id)
             .filter(
-                _items_latest.c.hundred != 0,
-                _items_oldest.c.hundred != 0,
+                getattr(_items_latest.c, quantity) != 0,
+                getattr(_items_oldest.c, quantity) != 0,
                 TypeItem.category.in_(
                     [CategoryEnum.RESOURCES, CategoryEnum.CONSUMABLES]
                 ),
@@ -96,9 +98,9 @@ def get_difference_on_all_prices(
             .with_entities(
                 TypeItem.name,
                 Item.name,
-                (_items_oldest.c.hundred - _items_latest.c.hundred).label("benefit"),
+                (getattr(_items_oldest.c, quantity) - getattr(_items_latest.c, quantity)).label("benefit"),
             )
-            .order_by(-(_items_oldest.c.hundred - _items_latest.c.hundred))
+            .order_by(-(getattr(_items_oldest.c, quantity) - getattr(_items_latest.c, quantity)))
             .limit(limit)
         )
 
@@ -106,14 +108,14 @@ def get_difference_on_all_prices(
 
 
 def get_benefit_nugget(
-        engine: Engine, server_id: int | None, limit: int = 10
+        engine: Engine, server_id: int | None, quantity: str, limit: int = 10
 ) -> RowReturningQuery[tuple[str, list[Item], int]] | Query | None:
     # TODO Test server id
     if server_id is None:
         return None
     with sessionmaker(bind=engine)() as session:
         price_for_100_nugget = (
-            session.query(Price.hundred)
+            session.query(getattr(Price, quantity))
             .filter(Price.server_id == server_id)
             .join(Item, Price.item_id == Item.id)
             .order_by(Price.creation_date)
@@ -139,7 +141,7 @@ def get_benefit_nugget(
                 TypeItem.name,
                 Item.name,
                 func.round(
-                    Item.recycling_nuggets * price_for_100_nugget - Price.hundred, 0
+                    Item.recycling_nuggets * price_for_100_nugget - getattr(Price, quantity), 0
                 ).label("benefits"),
                 Item.favorite_recycling_sub_areas,
             )
@@ -152,15 +154,15 @@ def get_benefit_nugget(
                 TypeItem.category == CategoryEnum.RESOURCES,
             )
             .group_by(Price.item_id)
-            .having(Price.hundred != 0)
+            .having(getattr(Price, quantity) != 0)
             .order_by(
-                desc(Item.recycling_nuggets * price_for_100_nugget - Price.hundred)
+                desc(Item.recycling_nuggets * price_for_100_nugget - getattr(Price, quantity))
             )
             .with_entities(
                 TypeItem.name,
                 Item,
                 func.round(
-                    Item.recycling_nuggets * price_for_100_nugget - Price.hundred, 0
+                    Item.recycling_nuggets * price_for_100_nugget - getattr(Price, quantity), 0
                 ).label("benefits"),
             )
             .options(joinedload(Item.favorite_recycling_sub_areas))

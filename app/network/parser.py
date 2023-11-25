@@ -1,4 +1,6 @@
+import json
 import logging
+from pathlib import Path
 from typing import Callable
 
 from app.gui.signals import AppSignals
@@ -25,11 +27,9 @@ class MessageRawDataParser:
         try:
             message_type = Message.get_message_type_from_id(message.id)
             logger.info(message_type)
-            # test_json_msg = get_json_from_message(message_type, deepcopy(message.data))
             json_msg = Message.get_json_from_message(message_type, message.data)
             if self.handler is not None:
                 self.handler.handle_message_unpacked(json_msg, from_client)
         except (KeyError, IndexError, UnicodeDecodeError) as err:
             if self.on_error_callback is not None:
                 self.on_error_callback(err)
-            return None

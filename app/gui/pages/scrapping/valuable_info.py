@@ -1,4 +1,5 @@
-from PyQt5.QtWidgets import QTableWidgetItem, QLabel
+from PyQt5.QtWidgets import QTableWidgetItem, QLabel, QComboBox
+from icecream import ic
 from sqlalchemy import Engine
 
 from app.gui.components.common import TableWidget, Widget
@@ -8,6 +9,12 @@ from app.utils import get_benefit_nugget, get_difference_on_all_prices
 
 
 class ValuableInfo(Widget):
+    FIELD_BY_QUANTITY = {
+        "100": "hundred",
+        "10": "ten",
+        "1": "one"
+    }
+
     table_benefit_recycling: TableWidget
     table_price_drop: TableWidget
 
@@ -25,8 +32,8 @@ class ValuableInfo(Widget):
         self.setup_price_drop()
 
     def on_reset(self):
-        self.get_benefit_recycling()
-        self.get_price_drop()
+        self.get_benefit_recycling(self.FIELD_BY_QUANTITY.get(self.quantity_nuggets_combobox.currentText()))
+        self.get_price_drop(self.FIELD_BY_QUANTITY.get(self.quantity_drop_price_combobox.currentText()))
 
     def setup_benefit_recycling(self):
         benefit_recycling = Widget(parent=self)
@@ -36,6 +43,12 @@ class ValuableInfo(Widget):
 
         title = QLabel(parent=self, text="Meilleur bénéfice recyclage")
         v_layout.addWidget(title)
+
+        self.quantity_nuggets_combobox = QComboBox(parent=self)
+        self.quantity_nuggets_combobox.addItems(["100", "10", "1"])
+        self.quantity_nuggets_combobox.currentTextChanged.connect(
+            lambda text: self.get_benefit_recycling(self.FIELD_BY_QUANTITY.get(text)))
+        v_layout.addWidget(self.quantity_nuggets_combobox)
 
         table_benefit_recycling_scroll = TableWidget(["Type", "Nom", "Bénéfices", "Zone favorite"])
         self.table_benefit_recycling = table_benefit_recycling_scroll.table
@@ -52,21 +65,29 @@ class ValuableInfo(Widget):
         title = QLabel(parent=self, text="Chute de prix")
         v_layout.addWidget(title)
 
+        self.quantity_drop_price_combobox = QComboBox(parent=self)
+        self.quantity_drop_price_combobox.addItems(["100", "10", "1"])
+        self.quantity_drop_price_combobox.currentTextChanged.connect(
+            lambda text: self.get_price_drop(self.FIELD_BY_QUANTITY.get(text)))
+        v_layout.addWidget(self.quantity_drop_price_combobox)
+
         table_price_drop_scroll = TableWidget(["Type", "Nom", "Différence"])
         self.table_price_drop = table_price_drop_scroll.table
         v_layout.addWidget(self.table_price_drop)
 
         self.main_layout.addWidget(price_drop_widget)
 
-    def get_price_drop(self):
+    def get_price_drop(self, quantity: str):
         self.table_price_drop.clearContents()
         self.table_price_drop.setRowCount(0)
 
-        items = get_difference_on_all_prices(self.engine, self.server_id)
+        rows = 20
+
+        items = ic(get_difference_on_all_prices(self.engine, self.server_id, quantity, rows))
         if items is None:
             return
 
-        self.table_price_drop.setRowCount(10)
+        self.table_price_drop.setRowCount(rows)
 
         for index, (_type, name, benefit) in enumerate(items):
             type_col = QTableWidgetItem(_type)
@@ -77,15 +98,17 @@ class ValuableInfo(Widget):
             self.table_price_drop.setItem(index, 1, name_col)
             self.table_price_drop.setItem(index, 2, difference_col)
 
-    def get_benefit_recycling(self):
+    def get_benefit_recycling(self, quantity: str):
         self.table_benefit_recycling.clearContents()
         self.table_benefit_recycling.setRowCount(0)
 
-        items_for_nugget = get_benefit_nugget(self.engine, self.server_id)
+        rows = 20
+
+        items_for_nugget = ic(get_benefit_nugget(self.engine, self.server_id, quantity, rows))
         if items_for_nugget is None:
             return
 
-        self.table_benefit_recycling.setRowCount(10)
+        self.table_benefit_recycling.setRowCount(rows)
         for index, (_type, item, benefit) in enumerate(items_for_nugget):
             type_col = QTableWidgetItem(_type)
             name_col = QTableWidgetItem(item.name)

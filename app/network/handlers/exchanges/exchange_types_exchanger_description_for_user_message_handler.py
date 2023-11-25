@@ -15,7 +15,6 @@ class ExchangeTypesExchangerDescriptionForUserMessageHandler(
     """Received hdv object types after checking category"""
 
     def handle(self, bot_info: BotInfo, app_signals: AppSignals) -> None:
-        assert bot_info.scraping_info.buying_hdv is not None
         bot_info.scraping_info.buying_hdv.objects_left_in_type = [
             {"object_gid": type_description, "is_opened": False}
             for type_description in self.typeDescription

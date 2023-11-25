@@ -38,9 +38,6 @@ def readVec(var, data):
 
 
 def read(_type, data: Data):
-    if _type == "InventoryContentMessage":
-        print("l")
-
     if _type is False:
         _type = types_from_id[data.readUnsignedShort()]
     elif isinstance(_type, str):

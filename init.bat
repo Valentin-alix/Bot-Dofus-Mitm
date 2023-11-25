@@ -1,9 +1,9 @@
-if not exist .venv/ (
-    python -m venv .venv
+if not exist venv/ (
+    python -m venv venv
 )
 SET BASE_PATH=%CD%
 
-cd .venv/Scripts/
+cd venv/Scripts/
 call activate
 
 cd %BASE_PATH%

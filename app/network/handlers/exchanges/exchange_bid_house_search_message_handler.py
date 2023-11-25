@@ -23,7 +23,6 @@ class ExchangeBidHouseSearchMessageHandler(
                     "is_placed": False,
                 }
             else:
-                assert selling_hdv.selected_object is not None
                 selling_hdv.selected_object = None
 
         elif (buying_hdv := bot_info.scraping_info.buying_hdv) is not None:
