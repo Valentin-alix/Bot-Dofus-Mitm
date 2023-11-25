@@ -3,12 +3,12 @@ from PyQt5.QtWidgets import (
     QComboBox,
 )
 from sqlalchemy import Engine
+from sqlalchemy.orm import sessionmaker
 
-from app.database.models import CategoryEnum
+from app.database.models import CategoryEnum, Item, Price, TypeItem
 from app.gui.components.common import Widget
 from app.gui.components.organization import VerticalLayout, HorizontalLayout
 from app.types_.models.common import BotInfo
-from app.utils import get_info_by_type_or_object, get_type, get_items
 
 matplotlib.use("Qt5Agg")
 
@@ -46,8 +46,9 @@ class ChartFilters(Widget):
             (CategoryEnum.CONSUMABLES, "Consommables"),
             (CategoryEnum.COSMETICS, "Cosmétiques"),
         ]
-        self.types = get_type(self.engine)
-        self.items = get_items(self.engine)
+        with sessionmaker(bind=engine)() as session:
+            self.types = session.query(TypeItem).order_by(TypeItem.name).distinct().all()
+            self.items = session.query(Item).order_by(Item.name).distinct().all()
 
         self.layout = HorizontalLayout()
         self.setLayout(self.layout)
@@ -108,3 +109,25 @@ class Chart(Widget):
                                                  object_name=item_name)
             if df_info is not None:
                 self.canvas.show(df_info)
+
+
+def get_info_by_type_or_object(
+        engine: Engine, server_id: int | None, object_name: str | None = None
+) -> pd.DataFrame | None:
+    if server_id is None:
+        return None
+    # TODO Remove zeroes values
+    with sessionmaker(bind=engine)() as session:
+        df_prices = pd.read_sql(
+            session.query(Item, Price, TypeItem)
+            .join(TypeItem, Item.type_item_id == TypeItem.id)
+            .join(Price, Item.id == Price.item_id)
+            .filter(Item.name == object_name, Price.server_id == server_id)
+            .with_entities(
+                Item.name, Price.creation_date, Price.one, Price.ten, Price.hundred
+            )
+            .statement,
+            engine,
+        )
+
+    return df_prices

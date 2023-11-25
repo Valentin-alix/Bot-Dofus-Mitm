@@ -5,10 +5,6 @@ import os
 import socket
 from importlib import import_module
 from queue import Queue
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    pass
 
 try:
     from app.types_.dofus.utils import CLASSES_BY_NAME

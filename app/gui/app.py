@@ -97,7 +97,8 @@ class MainWindow(QMainWindow):
         self.stacked_frames.addWidget(self.frame_sniffer)
 
         if not self.only_sniffer:
-            self.frame_scrapping = ScrappingFrame(name="Scraping", bot_info=self.bot_info, app_signals=self.app_signals)
+            self.frame_scrapping = ScrappingFrame(name="Scraping", bot_info=self.bot_info,
+                                                  app_signals=self.app_signals)
             self.stacked_frames.addWidget(self.frame_scrapping)
 
             self.frame_seller = SellerFrame(name="Vendeur", bot_info=self.bot_info, app_signals=self.app_signals)

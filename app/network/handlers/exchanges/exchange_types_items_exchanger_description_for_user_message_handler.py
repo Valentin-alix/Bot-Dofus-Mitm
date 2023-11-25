@@ -19,18 +19,21 @@ class ExchangeTypesItemsExchangerDescriptionForUserMessageHandler(
     """Received hdv object prices after clicking in objects"""
 
     def handle(self, bot_info: BotInfo, app_signals: AppSignals) -> None:
-        # TODO Why itemTypeDescriptions is list
-        if len(self.itemTypeDescriptions) == 1:
+        if len(self.itemTypeDescriptions) >= 1:
+            lowest_price_item_unity = min([_item.prices[0] for _item in self.itemTypeDescriptions])
+            lowest_price_item_ten = min([_item.prices[1] for _item in self.itemTypeDescriptions])
+            lowest_price_item_hundred = min([_item.prices[2] for _item in self.itemTypeDescriptions])
+
             # storing prices in database
             engine = get_engine()
-            logger.info(f"Got prices of objects : {self.itemTypeDescriptions[0]}")
+            logger.info(f"Got minimal prices of objects : {self.itemTypeDescriptions[0]}")
             with sessionmaker(bind=engine)() as session:
                 price = Price(
                     creation_date=datetime.now(),
                     item_id=self.objectGID,
-                    one=self.itemTypeDescriptions[0].prices[0],
-                    ten=self.itemTypeDescriptions[0].prices[1],
-                    hundred=self.itemTypeDescriptions[0].prices[2],
+                    one=lowest_price_item_unity,
+                    ten=lowest_price_item_ten,
+                    hundred=lowest_price_item_hundred,
                     server_id=bot_info.common_info.server_id,
                 )
                 session.add(price)

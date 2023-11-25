@@ -6,7 +6,7 @@ from app.types_.dicts.scraping import ScrapingCurrentState
 from app.types_.models.common import BotInfo
 
 
-class RemainingContent(Widget):
+class ScrappingProgression(Widget):
     def __init__(self, bot_info: BotInfo, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.bot_info = bot_info
