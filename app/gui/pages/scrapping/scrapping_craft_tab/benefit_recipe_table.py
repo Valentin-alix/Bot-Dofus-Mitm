@@ -41,7 +41,7 @@ class BenefitRecipeTable(Widget):
 
 def get_benefit_from_craft(engine: Engine, server_id: int | None, category: CategoryEnum,
                            type_name: str | None = None, limit=40):
-    # TODO FILTER TO GET RECIPE WITH ALL INGREDIENTS NOT WORKING
+    # FIXME FILTER TO GET RECIPE WITH ALL INGREDIENTS NOT WORKING
     with sessionmaker(bind=engine)() as session:
         filters = [
             TypeItem.category == category,
@@ -78,6 +78,7 @@ def get_benefit_from_craft(engine: Engine, server_id: int | None, category: Cate
                                                                                                     Price.item_id == Item.id).join(
             _price_latest_date,
             _price_latest_date.c.id == Ingredient.item_id).having(*filters, Price.server_id == server_id,
+                                                                  Price.one != 0,
                                                                   not_(_price_latest_date.c.one == 0)).order_by(
             func.sum(_price_latest_date.c.one * Ingredient.quantity) - Price.one).with_entities(
             Item.name,

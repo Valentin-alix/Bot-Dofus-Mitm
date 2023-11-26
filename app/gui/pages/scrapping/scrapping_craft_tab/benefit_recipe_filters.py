@@ -22,7 +22,6 @@ class BenefitRecipeFilters(Widget):
 
         self.categories = [
             (CategoryEnum.CONSUMABLES, "Consommables"),
-            (CategoryEnum.COSMETICS, "Cosmétiques"),
             (CategoryEnum.EQUIPMENT, "Equipements"),
             (CategoryEnum.RESOURCES, "Ressources")
         ]
