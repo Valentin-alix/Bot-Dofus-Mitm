@@ -23,21 +23,25 @@ class ExchangeTypesItemsExchangerDescriptionForUserMessageHandler(
             lowest_price_item_unity = min([_item.prices[0] for _item in self.itemTypeDescriptions])
             lowest_price_item_ten = min([_item.prices[1] for _item in self.itemTypeDescriptions])
             lowest_price_item_hundred = min([_item.prices[2] for _item in self.itemTypeDescriptions])
+        else:
+            lowest_price_item_unity = 0
+            lowest_price_item_ten = 0
+            lowest_price_item_hundred = 0
 
-            # storing prices in database
-            engine = get_engine()
-            logger.info(f"Got minimal prices of objects : {self.itemTypeDescriptions[0]}")
-            with sessionmaker(bind=engine)() as session:
-                price = Price(
-                    creation_date=datetime.now(),
-                    item_id=self.objectGID,
-                    one=lowest_price_item_unity,
-                    ten=lowest_price_item_ten,
-                    hundred=lowest_price_item_hundred,
-                    server_id=bot_info.common_info.server_id,
-                )
-                session.add(price)
-                session.commit()
+        # storing prices in database
+        engine = get_engine()
+        logger.info(f"Got minimal prices of objects")
+        with sessionmaker(bind=engine)() as session:
+            price = Price(
+                creation_date=datetime.now(),
+                item_id=self.objectGID,
+                one=lowest_price_item_unity,
+                ten=lowest_price_item_ten,
+                hundred=lowest_price_item_hundred,
+                server_id=bot_info.common_info.server_id,
+            )
+            session.add(price)
+            session.commit()
 
         if (
                 buying_hdv := bot_info.scraping_info.buying_hdv

@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QLabel, QTableWidgetItem
-from sqlalchemy import Engine, func
+from sqlalchemy import Engine, func, not_
 from sqlalchemy.orm import sessionmaker
 
 from app.database.models import CategoryEnum, Item, Price, Ingredient, Recipe, TypeItem
@@ -72,21 +72,15 @@ def get_benefit_from_craft(engine: Engine, server_id: int | None, category: Cate
             .subquery()
         )
 
-        session.query(Recipe).join(Ingredient, Ingredient.recipe_id == Recipe.id).join(Item,
-                                                                                       Item.id == Ingredient.item_id).join(
-            Price, Price.item_id == Item.id).filter(Price.one)
-
-        return session.query(Ingredient.id).join(
+        return session.query(Ingredient.recipe_id).join(Recipe, Recipe.id == Ingredient.recipe_id).join(
+            Item,
+            Item.id == Recipe.result_item_id).join(TypeItem, TypeItem.id == Item.type_item_id).join(Price,
+                                                                                                    Price.item_id == Item.id).join(
             _price_latest_date,
-            _price_latest_date.c.id == Ingredient.item_id).join(
-            Recipe,
-            Recipe.id == Ingredient.recipe_id).join(Price, Price.item_id == Recipe.result_item_id).join(Item,
-                                                                                                        Item.id == Recipe.result_item_id).join(
-            TypeItem, TypeItem.id == Item.type_item_id).group_by(
-            Ingredient.recipe_id).having(
-            *filters,
-            Price.server_id == server_id,
-            ~_price_latest_date.c.one == 0).order_by(
+            _price_latest_date.c.id == Ingredient.item_id).having(*filters, Price.server_id == server_id,
+                                                                  not_(_price_latest_date.c.one == 0)).order_by(
             func.sum(_price_latest_date.c.one * Ingredient.quantity) - Price.one).with_entities(
             Item.name,
-            Price.one - func.sum(_price_latest_date.c.one * Ingredient.quantity)).limit(limit)
+            Price.one - func.sum(_price_latest_date.c.one * Ingredient.quantity)
+        ).group_by(
+            Ingredient.recipe_id).limit(limit)
