@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QLabel, QTableWidgetItem
-from sqlalchemy import Engine, func, case
+from sqlalchemy import Engine, func
 from sqlalchemy.orm import sessionmaker
 
 from app.database.models import CategoryEnum, Item, Price, Ingredient, Recipe, TypeItem
@@ -22,15 +22,15 @@ class BenefitRecipeTable(Widget):
         self.table_benefit_recipe = table_benefit_recipe_scroll.table
         v_layout.addWidget(table_benefit_recipe_scroll)
 
-    def get_benefit_recipe(self):
+    def get_benefit_recipe(self, category: CategoryEnum, type_name: str | None = None):
         self.table_benefit_recipe.clearContents()
         self.table_benefit_recipe.setRowCount(0)
 
         rows = 40
 
-        benefit_recipe = get_benefit_from_craft(self.engine, self.server_id)
+        benefit_recipe = get_benefit_from_craft(self.engine, self.server_id, category, type_name, rows)
 
-        self.table_benefit_recipe.setRowCount(rows)
+        self.table_benefit_recipe.setRowCount(benefit_recipe.count())
         for index, (name, benefit) in enumerate(benefit_recipe):
             name_col = QTableWidgetItem(name)
             benefit_col = QTableWidgetItem(str(benefit))
@@ -39,10 +39,16 @@ class BenefitRecipeTable(Widget):
             self.table_benefit_recipe.setItem(index, 1, benefit_col)
 
 
-def get_benefit_from_craft(engine: Engine, server_id: int | None, category: CategoryEnum = CategoryEnum.EQUIPMENT,
-                           type_item: str | None = None, limit=40):
+def get_benefit_from_craft(engine: Engine, server_id: int | None, category: CategoryEnum,
+                           type_name: str | None = None, limit=40):
     # TODO FILTER TO GET RECIPE WITH ALL INGREDIENTS NOT WORKING
     with sessionmaker(bind=engine)() as session:
+        filters = [
+            TypeItem.category == category,
+        ]
+        if type_name is not None:
+            filters.append(TypeItem.name == type_name)
+
         _items_latest_date = (
             session.query(
                 Item.id,
@@ -66,6 +72,10 @@ def get_benefit_from_craft(engine: Engine, server_id: int | None, category: Cate
             .subquery()
         )
 
+        session.query(Recipe).join(Ingredient, Ingredient.recipe_id == Recipe.id).join(Item,
+                                                                                       Item.id == Ingredient.item_id).join(
+            Price, Price.item_id == Item.id).filter(Price.one)
+
         return session.query(Ingredient.id).join(
             _price_latest_date,
             _price_latest_date.c.id == Ingredient.item_id).join(
@@ -74,9 +84,9 @@ def get_benefit_from_craft(engine: Engine, server_id: int | None, category: Cate
                                                                                                         Item.id == Recipe.result_item_id).join(
             TypeItem, TypeItem.id == Item.type_item_id).group_by(
             Ingredient.recipe_id).having(
-            TypeItem.category == category,
+            *filters,
             Price.server_id == server_id,
-            (func.sum(case((_price_latest_date.c.one == 0, 1), else_=0)) == 0)).order_by(
+            ~_price_latest_date.c.one == 0).order_by(
             func.sum(_price_latest_date.c.one * Ingredient.quantity) - Price.one).with_entities(
             Item.name,
             Price.one - func.sum(_price_latest_date.c.one * Ingredient.quantity)).limit(limit)
