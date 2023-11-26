@@ -11,7 +11,7 @@ def get_as_scripts():
     if os.path.exists(output_as_scripts):
         shutil.rmtree(output_as_scripts)
     os.system(
-        f'java -Xmx10512m  -jar "{os.environ.get("FFDECJAR_PATH")}"\
+        f'java -jar "{os.environ.get("FFDECJAR_PATH")}"\
         -config parallelSpeedUp=0 -selectclass {selected_classes}\
         -export script "{output_as_scripts}" "{os.environ.get("DOFUS_INVOKER")}"'
     )

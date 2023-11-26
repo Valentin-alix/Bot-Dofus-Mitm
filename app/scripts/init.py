@@ -4,14 +4,14 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
+
+ROOT_DIR = str(Path(__file__).parent.parent.parent)
+sys.path.append(ROOT_DIR)
+
 from app.scripts.decompile_code_source import get_as_scripts
 from app.scripts.generate_python_class import (
     launch_generator,
 )
-
-ROOT_DIR = str(Path(__file__).parent.parent)
-sys.path.append(ROOT_DIR)
-
 from dofus_unpack.d2i_unpack import d2i_unpack
 from dofus_unpack.d2o_unpack import d2o_unpack
 from init_bdd import init_bdd

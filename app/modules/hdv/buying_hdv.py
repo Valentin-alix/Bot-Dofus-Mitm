@@ -1,98 +1,130 @@
 import logging
-from threading import Thread
-from time import sleep
+from threading import Event
+from typing import TYPE_CHECKING
 
-from sqlalchemy.orm import sessionmaker
-
-from app.database.models import TypeItem, get_engine
+from app.database.models import get_engine
+from app.gui.signals import AppSignals
+from app.modules.hdv.hdv import Hdv
 from app.network.utils import send_parsed_msg
-from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidHouseSearchMessage import (
-    ExchangeBidHouseSearchMessage,
-)
+from app.types_.dicts.common import EventValueChangeWithCallback
 from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidHouseTypeMessage import (
     ExchangeBidHouseTypeMessage,
 )
-from app.types_.interface import BotInfo
+
+if TYPE_CHECKING:
+    from app.types_.models.common import CommonInfo
 
 logger = logging.getLogger(__name__)
 
 
-class BuyingHdv:
-    def __init__(self, categories: list[int], bot_info: BotInfo) -> None:
+class BuyingHdv(Hdv):
+    def __init__(
+            self,
+            types: list[int],
+            is_playing_event: Event,
+            app_signals: AppSignals,
+            common_info: 'CommonInfo',
+    ) -> None:
+        super().__init__(common_info, app_signals)
         self.engine = get_engine()
-        self.categories = self.get_consistent_categories(categories)
-        self.types_object: list[dict] = []
+        self.is_playing_event = is_playing_event
 
-        self.bot_info = bot_info
+        self.selected_type: int | None = None
 
-        self.is_playing = self.bot_info.scraping_info.is_playing_event.is_set()
-        self.stop_timer = False
+        self.types_left = self.get_accepted_types(types)
+        self.objects_left_in_type: list[dict] = []
 
-        check_event_play_thread = Thread(target=self.check_event_play, daemon=True)
-        check_event_play_thread.start()
+        if self.is_playing_event.is_set():
+            self.on_start(True)
+        else:
+            self.on_stop(True)
 
-    def check_event_play(self):
-        """continuously check if event play has changed to true"""
-        while (
-            not self.bot_info.common_info.is_closed_event.is_set()
-            and not self.stop_timer
-        ):
-            if (
-                not self.is_playing
-                and self.bot_info.scraping_info.is_playing_event.is_set()
-            ):
-                logger.info("launching hdv bot after manual start")
-                self.is_playing = True
-                self.process()
-            self.is_playing = self.bot_info.scraping_info.is_playing_event.is_set()
-            sleep(2)
+    def on_start(self, is_first: bool = False):
+        if not is_first:
+            self.process()
 
-    def get_consistent_categories(self, categories: list[int]) -> list[int]:
-        """filter type category to be in database"""
-        with sessionmaker(bind=self.engine)() as session:
-            _consistent_types_category = [
-                int(_type[0])
-                for _type in (
-                    session.query(TypeItem.id).filter(TypeItem.id.in_(categories)).all()
+        self.check_event_change_thread(
+            [
+                EventValueChangeWithCallback(
+                    target_value=False,
+                    event=self.is_playing_event,
+                    callback=self.on_stop,
                 )
             ]
-        return _consistent_types_category
+        )
 
-    def get_available_objects_gid(self):
-        if len(self.types_object) > 0:
-            type_object = self.types_object[-1]
-            if type_object.get("is_opened"):
-                # close prices panel and remove object from list
-                self.send_get_prices(self.types_object.pop())
-            else:
-                # open prices panel
-                self.send_get_prices(type_object)
-                type_object["is_opened"] = True
+    def on_stop(self, is_first: bool = False):
+        if not is_first:
+            if self.selected_object is not None:
+                self.close_selected_object()
+            if self.selected_type is not None:
+                self.close_type()
 
-    def send_get_category(self):
-        if len(self.categories) > 0:
-            category = self.categories.pop()
-            send_parsed_msg(
-                self.bot_info,
-                ExchangeBidHouseTypeMessage(
-                    follow=True,
-                    type=category,
-                ),
-            )
-            logger.info(f"Sending check category {category}")
+        self.check_event_change_thread(
+            [
+                EventValueChangeWithCallback(
+                    target_value=True,
+                    event=self.is_playing_event,
+                    callback=self.on_start,
+                )
+            ]
+        )
 
-    def send_get_prices(self, type_object):
-        logger.info(f"Sending get prices {type_object.get('object_gid')}")
-        send_parsed_msg(
-            self.bot_info,
-            ExchangeBidHouseSearchMessage(
-                objectGID=type_object.get("object_gid"),
-                follow=not type_object.get("is_opened"),
-            ),
+    def clear(self):
+        super().clear()
+        # FIXME When quitting hdv
+        self.is_playing_event.clear()
+        self.app_signals.on_new_buying_hdv_playing_value.emit()
+
+    def update_progression(self):
+        self.app_signals.on_new_scraping_current_state.emit(
+            {
+                "category_remaining": len(self.types_left),
+                "object_remaining": len(self.objects_left_in_type),
+            }
         )
 
     def process(self):
-        if len(self.types_object) > 0:
-            self.get_available_objects_gid()
-        elif len(self.categories) > 0:
-            self.send_get_category()
+        if self.selected_object is not None:
+            self.close_selected_object()
+        elif len(self.objects_left_in_type) > 0:
+            _object = self.objects_left_in_type.pop()
+            self.place_object(_object["object_gid"])
+        elif len(self.types_left) > 0:
+            if self.selected_type is not None:
+                self.close_type()
+            else:
+                self.place_type()
+        else:
+            logger.info("no object or type left to check prices")
+            self.is_playing_event.clear()
+            self.app_signals.on_new_buying_hdv_playing_value.emit()
+
+        self.update_progression()
+
+    def place_type(self):
+        assert len(self.types_left) > 0
+        _type = self.types_left.pop()
+        send_parsed_msg(
+            self.common_info.message_to_send_queue,
+            ExchangeBidHouseTypeMessage(
+                follow=True,
+                type=_type,
+            ),
+        )
+        self.selected_type = _type
+        logger.info(f"Sending check type {_type}")
+
+    def close_type(self):
+        assert self.selected_type is not None
+        logger.info(f"Sending check type {self.selected_type} to close")
+        send_parsed_msg(
+            self.common_info.message_to_send_queue,
+            ExchangeBidHouseTypeMessage(
+                follow=False,
+                type=self.selected_type,
+            ),
+        )
+        self.selected_type = None
+        if self.is_playing_event.is_set():
+            self.process()

@@ -64,9 +64,9 @@ def init_item(session: Session, d2i_texts: dict):
         items_entities = []
         for item in tqdm(items):
             if (
-                item["isSaleable"] is True
-                and item.get("exchangeable", None) is True
-                and (_item_db := session.query(Item).get(item["id"])) is None
+                    item["isSaleable"] is True
+                    and item.get("exchangeable", None) is True
+                    and (_item_db := session.query(Item).get(item["id"])) is None
             ):
                 item_object = Item(
                     id=item["id"],
@@ -82,9 +82,6 @@ def init_item(session: Session, d2i_texts: dict):
                     )
                 )
                 items_entities.append(item_object)
-            else:
-                if _item_db is not None:
-                    session.delete(_item_db)
         session.add_all(items_entities)
         session.flush()
 
@@ -98,10 +95,10 @@ def init_recipes(session: Session):
         ingredients_entites = []
         for recipe in tqdm(recipes):
             if (
-                session.query(Recipe.id)
-                .filter_by(result_item_id=recipe["resultId"])
-                .first()
-                is None
+                    session.query(Recipe.id)
+                            .filter_by(result_item_id=recipe["resultId"])
+                            .first()
+                    is None
             ):
                 recipe_object = Recipe(result_item_id=recipe["resultId"])
                 session.add(recipe_object)
@@ -122,14 +119,14 @@ def init_recipes(session: Session):
 
 def init_runes(session: Session):
     with open(
-        os.path.join(Path(__file__).parent.parent.parent, "resources", "runes.json")
+            os.path.join(Path(__file__).parent.parent.parent, "resources", "runes.json")
     ) as rune_file:
         runes = json.load(rune_file)
         runes_entities = []
         for rune in runes:
             if (
-                session.query(Rune).filter_by(id=rune["positive_effect_Id"]).first()
-                is None
+                    session.query(Rune).filter_by(id=rune["positive_effect_Id"]).first()
+                    is None
             ):
                 positive_rune = Rune(
                     id=rune["positive_effect_Id"], weight=rune["weight"]
@@ -138,10 +135,10 @@ def init_runes(session: Session):
                 session.flush()
                 session.query(Item).filter(
                     Item.id.in_(_item["id"] for _item in rune["runes"])
-                ).update({Item.rune_id: positive_rune.id})
+                ).update({"rune_id": positive_rune.id})
 
             if (
-                negative_rune_id := rune.get("negative_effect_Id", None)
+                    negative_rune_id := rune.get("negative_effect_Id", None)
             ) is not None and session.query(Rune).filter_by(
                 id=negative_rune_id
             ).first() is None:

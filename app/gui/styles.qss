@@ -1,15 +1,73 @@
+QWidget {
+    font-size: 18px;
+    color: white;
+}
+QWidget#around-app {
+    background-color: rgb(25,25,25);
+}
+
 QLabel {
-    font-size: 14px;
+    qproperty-alignment: AlignCenter;
+}
+
+
+QGroupBox {
+    qproperty-alignment: AlignCenter;
 }
 
 QGroupBox#not-title{
     padding-top:0x;
 }
 
-QPushButton#inactive {
-    background-color: rgb(53, 53, 53)
+
+QAbstractButton {
+    border: none;
+    background-color: rgb(39,39,39);
 }
 
-QPushButton#active{
-    background-color: rgb(80, 80, 80)
+QAbstractButton:pressed {
+    background-color: grey;
+}
+
+QAbstractButton:hover {
+    background-color: rgb(80,80,80);
+}
+
+
+QAbstractButton#inactive {
+    border: none;
+    font-size: 18px;
+    background-color: rgb(39,39,39);
+}
+
+QAbstractButton#active{
+    border: none;
+    font-size: 18px;
+    background-color: grey;
+}
+
+QAbstractButton#inactive:hover {
+    background-color: rgb(80,80,80);
+}
+
+QAbstractButton#sidebar-item-menu {
+    border: none;
+    background-color: rgb(0,150,255);
+}
+
+
+
+QAbstractButton#around-app-inactive {
+    border: none;
+    font-size: 18px;
+    background-color: rgb(25,25,25);
+}
+QAbstractButton#around-app-inactive:hover {
+    background-color: rgb(80,80,80);
+}
+
+QAbstractButton#around-app-active{
+    border: none;
+    font-size: 18px;
+    background-color: grey;
 }

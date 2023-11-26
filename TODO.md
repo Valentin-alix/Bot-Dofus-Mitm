@@ -1,15 +1,25 @@
-POUVOIR Trier par catégories, type d'item
-chute de prix
-et voir graphique par type d'item
+- stop playing when quitting hdv or finished
 
-ajouter heure dans interface sniffer
+- close object automatically when stopped hdv buyer or selling
 
-ajouter migrations tool pour sqlalchemy
+- protocol_builder
+    - refactor
 
-voir SimpleNamespace
+- gui:
+    - clean sniffer if 200+ rows
+    - signal from thread to main gui
+    - voir list graphique par liste d'item
+    - fix graphique enlever value quand 0
 
-clean exit mitm when quit gui
+- generate_python_class:
+    - refactor
+    - Fix when variable = self
 
-bugs:
-write exchange object move message
-write exchange object move priced message
+- use postgresql with docker
+
+- selling hdv fixme, disable buttons when hdv is None, stop scraping when hdv full scrapped or quit
+
+- bot fm
+
+- firing event from thread to main thread -> ok
+    - but reverse not possible because of intermediate thread non QThread in injector
