@@ -26,7 +26,6 @@ class Widget(QWidget):
 
 class TableWidget(QScrollArea):
     def __init__(self, columns_name: list[str], delegate_type=AlignDelegate, *args, **kwargs):
-        # TODO Delegate painter
         super().__init__(*args, **kwargs)
 
         self.table = QTableWidget(parent=self)

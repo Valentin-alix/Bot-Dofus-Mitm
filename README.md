@@ -24,11 +24,10 @@
 
 - Sniffer
 
-- Scrapping hdv
-    - Chart on prices by item
+- Scrapping sale hotel
+    - Chart on prices by item FIXME Need to remove value when equal to zero
     - Top 10 of best benefits item in nuggets
     - Top 10 of most important price drop
-    - FIXME Need to remove value when equal to zero
 
 - Automate sells resource in hdv
     - Vente automatique des objets(ressource/consommable/cosmétique) en hdv

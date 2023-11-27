@@ -51,7 +51,6 @@ class Item(Base):
     favorite_recycling_sub_areas: Mapped[List[SubArea]] = relationship(
         secondary=sub_area_association
     )
-    rune_id: Mapped[int] = mapped_column(ForeignKey("rune.id"), nullable=True)
 
 
 class SubArea(Base):
