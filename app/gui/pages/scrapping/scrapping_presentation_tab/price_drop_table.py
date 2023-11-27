@@ -62,8 +62,6 @@ class PriceDropTable(Widget):
 def get_difference_on_all_prices(
         engine: Engine, server_id: int | None, quantity: str, limit: int = 10
 ) -> RowReturningQuery[tuple[str, Item, int]] | None:
-    # TODO Filter by server id
-    # FIXME Difference enorme la premiere fois => a cause de server id ?
     if server_id is None:
         return None
 

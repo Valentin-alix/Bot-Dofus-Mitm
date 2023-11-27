@@ -33,9 +33,6 @@
 - Automate sells resource in hdv
     - Vente automatique des objets(ressource/consommable/cosmétique) en hdv
     - Modification automatique des prix des objets (ressource/consommable/cosmétique) en hdv
-    - <!> Still in testing
-
-- Automate FM &#8594; WIP
 
 # Technologies :
 

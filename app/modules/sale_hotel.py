@@ -5,14 +5,14 @@ from threading import Thread
 from time import sleep
 from typing import TYPE_CHECKING
 
+from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidHouseSearchMessage import \
+    ExchangeBidHouseSearchMessage
 from sqlalchemy.orm import sessionmaker
 
 from app.database.models import get_engine, TypeItem
 from app.gui.signals import AppSignals
 from app.network.utils import send_parsed_msg
 from app.types_.dicts.common import EventValueChangeWithCallback
-from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidHouseSearchMessage import \
-    ExchangeBidHouseSearchMessage
 
 if TYPE_CHECKING:
     from app.types_.models.common import CommonInfo
@@ -21,7 +21,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-class Hdv:
+class SaleHotel:
     def __init__(self, common_info: CommonInfo, app_signals: AppSignals) -> None:
         self.common_info = common_info
         self.app_signals = app_signals

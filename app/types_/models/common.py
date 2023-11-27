@@ -6,8 +6,7 @@ from queue import Queue
 
 from app.gui.signals import AppSignals
 from app.modules.character import Character
-from app.types_.models.fm import FmInfo
-from app.types_.models.scraping import ScrapingInfo
+from app.types_.models.scrapping import ScrappingInfo
 from app.types_.models.selling import SellingInfo
 from app.types_.models.sniffer import SnifferInfo
 
@@ -24,8 +23,7 @@ class CommonInfo:
 class BotInfo:
     common_info: CommonInfo = field(default_factory=CommonInfo)
     sniffer_info: SnifferInfo = field(default_factory=SnifferInfo)
-    scraping_info: ScrapingInfo = field(default_factory=ScrapingInfo)
-    fm_info: FmInfo = field(default_factory=FmInfo)
+    scraping_info: ScrappingInfo = field(default_factory=ScrappingInfo)
     selling_info: SellingInfo = field(default_factory=SellingInfo)
 
 

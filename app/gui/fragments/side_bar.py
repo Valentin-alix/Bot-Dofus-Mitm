@@ -41,8 +41,7 @@ class SideBar(Widget):
     ICON_BY_NAME = {
         "Sniffer": "search.svg",
         "Scraping": "activity.svg",
-        "Vendeur": "sell.svg",
-        "Fm": "magic-icon.svg",
+        "Vendeur": "sell.svg"
     }
 
     def __init__(self, parent: MainWindow, frames: list[Frame], *args, **kwargs) -> None:

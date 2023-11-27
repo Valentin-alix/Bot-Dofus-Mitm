@@ -83,7 +83,6 @@ class Ingredient(Base):
     recipe_id: Mapped[int] = mapped_column(ForeignKey("recipe.id"))
 
 
-# For hdv scrapping
 class Price(Base):
     __tablename__ = "price"
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -93,15 +92,6 @@ class Price(Base):
     ten: Mapped[int] = mapped_column(nullable=False)
     one: Mapped[int] = mapped_column(nullable=False)
     server_id: Mapped[int] = mapped_column(nullable=False)
-
-
-# For fm
-class Rune(Base):
-    __tablename__ = "rune"
-    id: Mapped[int] = mapped_column(
-        primary_key=True, autoincrement=False, comment="actionId"
-    )
-    weight: Mapped[float] = mapped_column(nullable=False)
 
 
 def get_engine():

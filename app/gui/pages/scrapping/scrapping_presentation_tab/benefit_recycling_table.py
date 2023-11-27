@@ -64,7 +64,6 @@ class BenefitRecyclingTable(Widget):
 def get_benefit_nugget(
         engine: Engine, server_id: int | None, quantity: str, limit: int = 10
 ) -> RowReturningQuery[tuple[str, list[Item], int]] | Query | None:
-    # TODO Test server id
     if server_id is None:
         return None
     with sessionmaker(bind=engine)() as session:
@@ -72,7 +71,7 @@ def get_benefit_nugget(
             session.query(getattr(Price, quantity))
             .filter(Price.server_id == server_id)
             .join(Item, Price.item_id == Item.id)
-            .order_by(Price.creation_date)
+            .order_by(Price.creation_date.desc())
             .filter(Item.name == "Pépite")
             .first()
         )

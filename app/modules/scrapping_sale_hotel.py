@@ -2,14 +2,15 @@ import logging
 from threading import Event
 from typing import TYPE_CHECKING
 
-from app.database.models import get_engine
-from app.gui.signals import AppSignals
-from app.modules.hdv.hdv import Hdv
-from app.network.utils import send_parsed_msg
-from app.types_.dicts.common import EventValueChangeWithCallback
 from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidHouseTypeMessage import (
     ExchangeBidHouseTypeMessage,
 )
+
+from app.database.models import get_engine
+from app.gui.signals import AppSignals
+from app.modules.sale_hotel import SaleHotel
+from app.network.utils import send_parsed_msg
+from app.types_.dicts.common import EventValueChangeWithCallback
 
 if TYPE_CHECKING:
     from app.types_.models.common import CommonInfo
@@ -17,7 +18,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-class BuyingHdv(Hdv):
+class ScrappingSaleHotel(SaleHotel):
     def __init__(
             self,
             types: list[int],
@@ -72,7 +73,6 @@ class BuyingHdv(Hdv):
 
     def clear(self):
         super().clear()
-        # FIXME When quitting hdv
         self.is_playing_event.clear()
         self.app_signals.on_new_buying_hdv_playing_value.emit()
 
@@ -97,8 +97,7 @@ class BuyingHdv(Hdv):
                 self.place_type()
         else:
             logger.info("no object or type left to check prices")
-            self.is_playing_event.clear()
-            self.app_signals.on_new_buying_hdv_playing_value.emit()
+            self.clear()
 
         self.update_progression()
 

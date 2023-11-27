@@ -14,7 +14,6 @@ from app.database.models import (
     TypeItem,
     get_engine,
     Base,
-    Rune,
 )
 
 BASE_PATH_OUTPUT = os.path.join(Path(__file__).parent.parent.parent, "resources")
@@ -117,39 +116,6 @@ def init_recipes(session: Session):
         session.flush()
 
 
-def init_runes(session: Session):
-    with open(
-            os.path.join(Path(__file__).parent.parent.parent, "resources", "runes.json")
-    ) as rune_file:
-        runes = json.load(rune_file)
-        runes_entities = []
-        for rune in runes:
-            if (
-                    session.query(Rune).filter_by(id=rune["positive_effect_Id"]).first()
-                    is None
-            ):
-                positive_rune = Rune(
-                    id=rune["positive_effect_Id"], weight=rune["weight"]
-                )
-                runes_entities.append(positive_rune)
-                session.flush()
-                session.query(Item).filter(
-                    Item.id.in_(_item["id"] for _item in rune["runes"])
-                ).update({"rune_id": positive_rune.id})
-
-            if (
-                    negative_rune_id := rune.get("negative_effect_Id", None)
-            ) is not None and session.query(Rune).filter_by(
-                id=negative_rune_id
-            ).first() is None:
-                runes_entities.append(
-                    Rune(id=negative_rune_id, weight=rune["weight"] / 2)
-                )
-
-    session.add_all(runes_entities)
-    session.flush()
-
-
 def init_bdd():
     engine = get_engine()
     Base.metadata.create_all(engine)
@@ -163,7 +129,6 @@ def init_bdd():
         init_type(session, d2i_texts)
         init_item(session, d2i_texts)
         init_recipes(session)
-        init_runes(session)
 
     session.commit()
     session.close()

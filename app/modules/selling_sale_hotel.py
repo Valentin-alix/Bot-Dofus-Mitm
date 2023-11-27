@@ -7,14 +7,6 @@ from datetime import datetime
 from threading import Event
 from typing import Tuple, TYPE_CHECKING
 
-from sqlalchemy.orm import sessionmaker
-
-from app.database.models import Item, TypeItem, get_engine
-from app.gui.signals import AppSignals
-from app.modules.hdv.hdv import Hdv
-from app.network.utils import send_parsed_msg
-from app.types_.dicts.common import EventValueChangeWithCallback
-from app.types_.dicts.selling import TreatedObjectProgression
 from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidHousePriceMessage import (
     ExchangeBidHousePriceMessage,
 )
@@ -33,6 +25,14 @@ from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.data.item
 from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.data.items.SellerBuyerDescriptor import (
     SellerBuyerDescriptor,
 )
+from sqlalchemy.orm import sessionmaker
+
+from app.database.models import Item, TypeItem, get_engine
+from app.gui.signals import AppSignals
+from app.modules.sale_hotel import SaleHotel
+from app.network.utils import send_parsed_msg
+from app.types_.dicts.common import EventValueChangeWithCallback
+from app.types_.dicts.selling import TreatedObjectProgression
 
 if TYPE_CHECKING:
     from app.types_.models.common import CommonInfo
@@ -40,7 +40,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-class SellingHdv(Hdv):
+class SellingSaleHotel(SaleHotel):
     def __init__(
             self,
             seller_buyer_descriptor: SellerBuyerDescriptor,

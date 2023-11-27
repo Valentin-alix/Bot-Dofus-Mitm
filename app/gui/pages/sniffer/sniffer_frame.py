@@ -114,6 +114,10 @@ class SnifferFrame(Frame):
             message_col_data.setData(0, vars(parsed_message_info["parsed_msg"]))
             self.table_messages.setItem(0, 3, message_col_data)
 
+            if self.table_messages.rowCount() > 500:
+                for index in range(200):
+                    self.table_messages.removeRow(index)
+
     def show_info_message(self, row: int, _):
         if (msg_item := self.table_messages.item(row, 3)) is not None:
             self.quit_detail_msg()

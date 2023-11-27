@@ -16,7 +16,6 @@ from app.gui.components.organization import HorizontalLayout, VerticalLayout
 from app.gui.fragments.header import Header
 from app.gui.fragments.palette import DarkThemePalette
 from app.gui.fragments.side_bar import SideBar
-from app.gui.pages.fm.fm_frame import FmFrame
 from app.gui.pages.scrapping.scrapping_frame import ScrappingFrame
 from app.gui.pages.seller.seller_frame import SellerFrame
 from app.gui.pages.sniffer.sniffer_frame import SnifferFrame
@@ -42,8 +41,8 @@ class Signals(QObject):
 
 
 class MainWindow(QMainWindow):
-    BASE_WIDTH = 1600
-    BASE_HEIGHT = 900
+    BASE_WIDTH = 1280
+    BASE_HEIGHT = 720
 
     def __init__(
             self,
@@ -104,8 +103,6 @@ class MainWindow(QMainWindow):
             self.frame_seller = SellerFrame(name="Vendeur", bot_info=self.bot_info, app_signals=self.app_signals)
             self.stacked_frames.addWidget(self.frame_seller)
 
-            self.frame_fm = FmFrame(name="Fm", bot_info=self.bot_info)
-            self.stacked_frames.addWidget(self.frame_fm)
         self.main_content_layout.addWidget(self.stacked_frames)
 
     def closeEvent(self, _: QCloseEvent):
