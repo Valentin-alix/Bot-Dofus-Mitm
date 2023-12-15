@@ -23,10 +23,13 @@ class ExchangeTypesItemsExchangerDescriptionForUserMessageHandler(
             lowest_price_item_unity = min([_item.prices[0] for _item in self.itemTypeDescriptions])
             lowest_price_item_ten = min([_item.prices[1] for _item in self.itemTypeDescriptions])
             lowest_price_item_hundred = min([_item.prices[2] for _item in self.itemTypeDescriptions])
+
+            # taking minimal from these 3 categories because one is not consistant
+            filtered_price = list(filter(lambda elem: elem !=0, [lowest_price_item_unity, lowest_price_item_ten//10, lowest_price_item_hundred//100]))
+
+            lowest_price = 0 if len(filtered_price) == 0 else min(filtered_price)
         else:
-            lowest_price_item_unity = 0
-            lowest_price_item_ten = 0
-            lowest_price_item_hundred = 0
+            lowest_price = 0
 
         # storing prices in database
         engine = get_engine()
@@ -35,9 +38,9 @@ class ExchangeTypesItemsExchangerDescriptionForUserMessageHandler(
             price = Price(
                 creation_date=datetime.now(),
                 item_id=self.objectGID,
-                one=lowest_price_item_unity,
-                ten=lowest_price_item_ten,
-                hundred=lowest_price_item_hundred,
+                one=lowest_price,
+                ten=lowest_price*10,
+                hundred=lowest_price*100,
                 server_id=bot_info.common_info.server_id,
             )
             session.add(price)
