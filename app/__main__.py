@@ -9,12 +9,12 @@ from PyQt5.QtCore import QThread
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
+from app.gui.app import Application, MainWindow
 from app.gui.signals import AppSignals
+from app.logs.config import LOGGING_CONFIG
+from app.network.mitm import Mitm
+from app.network.sniffer import Sniffer
 from app.types_.models.common import BotInfo
-from gui.app import Application, MainWindow
-from logs.config import LOGGING_CONFIG
-from network.mitm import Mitm
-from network.sniffer import Sniffer
 
 logging.config.dictConfig(LOGGING_CONFIG)
 logger = logging.getLogger(__name__)

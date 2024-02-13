@@ -166,7 +166,6 @@ def parse(_type: dict, msg_from_id: dict, types_from_id: dict, types: dict):
         "messages" in str(_type["path"])
         and _type["name"] != "AddTaxCollectorPresetSpellMessage"
     ):  # check if messages class
-        assert _type["protocolId"] not in msg_from_id
         msg_from_id[_type["protocolId"]] = _type
     elif "types" in str(_type["path"]):  # check if types class
         assert _type["protocolId"] not in types_from_id

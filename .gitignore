@@ -4,7 +4,7 @@ from_d2o/
 __pycache__/
 .pytest_cache/
 *.py[cod]
-venv/
+.venv/
 .env
 sqlite3.db
 protocol.pk
