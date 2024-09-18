@@ -1,49 +1,58 @@
-from PyQt5.QtWidgets import QLabel, QComboBox, QTableWidgetItem
-from sqlalchemy import Engine, func, desc
-from sqlalchemy.orm import Query, sessionmaker, joinedload
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QTableWidgetItem
+from qfluentwidgets import BodyLabel, ComboBox, VBoxLayout
+from sqlalchemy import Engine, desc, func
+from sqlalchemy.orm import Query, joinedload, sessionmaker
 from sqlalchemy.orm.query import RowReturningQuery
 
-from app.database.models import Item, Price, TypeItem, CategoryEnum
-from app.gui.components.common import Widget, TableWidget
-from app.gui.components.organization import VerticalLayout
+from app.database.models import CategoryEnum, Item, Price, TypeItem
+from app.gui.components.common import QWidget
+from app.gui.components.table import BaseTableWidget, ColumnInfo
 
 
-class BenefitRecyclingTable(Widget):
-    FIELD_BY_QUANTITY = {
-        "100": "hundred",
-        "10": "ten",
-        "1": "one"
-    }
+class BenefitRecyclingTable(QWidget):
+    FIELD_BY_QUANTITY = {"100": "hundred", "10": "ten", "1": "one"}
 
     def __init__(self, engine: Engine):
         super().__init__()
         self.engine = engine
         self.server_id: int | None = None
-        v_layout = VerticalLayout()
-        self.setLayout(v_layout)
+        self.setLayout(VBoxLayout(self))
+        self.layout().setAlignment(Qt.AlignTop)
 
-        title = QLabel(parent=self, text="Meilleur bénéfice recyclage")
-        v_layout.addWidget(title)
+        title = BodyLabel(parent=self, text="Meilleur bénéfice recyclage")
+        self.layout().addWidget(title)
 
-        self.quantity_nuggets_combobox = QComboBox(parent=self)
+        self.quantity_nuggets_combobox = ComboBox(parent=self)
         self.quantity_nuggets_combobox.addItems(["100", "10", "1"])
         self.quantity_nuggets_combobox.currentTextChanged.connect(
-            lambda text: self.get_benefit_recycling())
-        v_layout.addWidget(self.quantity_nuggets_combobox)
+            lambda _: self.get_benefit_recycling()
+        )
+        self.layout().addWidget(self.quantity_nuggets_combobox)
 
-        table_benefit_recycling_scroll = TableWidget(["Type", "Nom", "Bénéfices", "Zone favorite"])
-        self.table_benefit_recycling = table_benefit_recycling_scroll.table
-        v_layout.addWidget(table_benefit_recycling_scroll)
+        table_benefit_recycling = BaseTableWidget(is_searchable=False)
+        table_benefit_recycling.set_columns(
+            [
+                ColumnInfo(name="Type", search_type=None),
+                ColumnInfo(name="Nom", search_type=None),
+                ColumnInfo(name="Bénéfices", search_type=None),
+                ColumnInfo(name="Zone favorite", search_type=None),
+            ]
+        )
+        self.table_benefit_recycling = table_benefit_recycling.table
+        self.layout().addWidget(self.table_benefit_recycling)
 
     def get_benefit_recycling(self):
-        quantity = self.FIELD_BY_QUANTITY.get(self.quantity_nuggets_combobox.currentText())
+        quantity = self.FIELD_BY_QUANTITY[self.quantity_nuggets_combobox.currentText()]
 
         self.table_benefit_recycling.clearContents()
         self.table_benefit_recycling.setRowCount(0)
 
         rows = 20
 
-        items_for_nugget = get_benefit_nugget(self.engine, self.server_id, quantity, rows)
+        items_for_nugget = get_benefit_nugget(
+            self.engine, self.server_id, quantity, rows
+        )
         if items_for_nugget is None:
             return
 
@@ -53,7 +62,12 @@ class BenefitRecyclingTable(Widget):
             name_col = QTableWidgetItem(item.name)
             benefit_col = QTableWidgetItem(str(benefit))
             favorite_zone_col = QTableWidgetItem(
-                str(", ".join(sub_area.name for sub_area in item.favorite_recycling_sub_areas)))
+                str(
+                    ", ".join(
+                        sub_area.name for sub_area in item.favorite_recycling_sub_areas
+                    )
+                )
+            )
 
             self.table_benefit_recycling.setItem(index, 0, type_col)
             self.table_benefit_recycling.setItem(index, 1, name_col)
@@ -62,7 +76,7 @@ class BenefitRecyclingTable(Widget):
 
 
 def get_benefit_nugget(
-        engine: Engine, server_id: int | None, quantity: str, limit: int = 10
+    engine: Engine, server_id: int | None, quantity: str, limit: int = 10
 ) -> RowReturningQuery[tuple[str, list[Item], int]] | Query | None:
     if server_id is None:
         return None
@@ -94,7 +108,9 @@ def get_benefit_nugget(
                 TypeItem.name,
                 Item.name,
                 func.round(
-                    Item.recycling_nuggets * price_for_100_nugget - getattr(Price, quantity), 0
+                    Item.recycling_nuggets * price_for_100_nugget
+                    - getattr(Price, quantity),
+                    0,
                 ).label("benefits"),
                 Item.favorite_recycling_sub_areas,
             )
@@ -109,13 +125,18 @@ def get_benefit_nugget(
             .group_by(Price.item_id)
             .having(getattr(Price, quantity) != 0)
             .order_by(
-                desc(Item.recycling_nuggets * price_for_100_nugget - getattr(Price, quantity))
+                desc(
+                    Item.recycling_nuggets * price_for_100_nugget
+                    - getattr(Price, quantity)
+                )
             )
             .with_entities(
                 TypeItem.name,
                 Item,
                 func.round(
-                    Item.recycling_nuggets * price_for_100_nugget - getattr(Price, quantity), 0
+                    Item.recycling_nuggets * price_for_100_nugget
+                    - getattr(Price, quantity),
+                    0,
                 ).label("benefits"),
             )
             .options(joinedload(Item.favorite_recycling_sub_areas))

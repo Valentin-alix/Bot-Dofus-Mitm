@@ -1,49 +1,59 @@
-from PyQt5.QtWidgets import QLabel, QComboBox, QTableWidgetItem
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QTableWidgetItem
+from qfluentwidgets import BodyLabel, ComboBox, VBoxLayout
 from sqlalchemy import Engine, func
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.query import RowReturningQuery
 
-from app.database.models import Item, Price, TypeItem, CategoryEnum
-from app.gui.components.common import Widget, TableWidget
-from app.gui.components.organization import VerticalLayout
+from app.database.models import CategoryEnum, Item, Price, TypeItem
+from app.gui.components.common import QWidget
+from app.gui.components.table import BaseTableWidget, ColumnInfo
 
 
-class PriceDropTable(Widget):
-    FIELD_BY_QUANTITY = {
-        "100": "hundred",
-        "10": "ten",
-        "1": "one"
-    }
+class PriceDropTable(QWidget):
+    FIELD_BY_QUANTITY = {"100": "hundred", "10": "ten", "1": "one"}
 
     def __init__(self, engine: Engine):
         super().__init__()
         self.engine = engine
         self.server_id: int | None = None
-        v_layout = VerticalLayout()
-        self.setLayout(v_layout)
+        self.setLayout(VBoxLayout(self))
+        self.layout().setAlignment(Qt.AlignTop)
 
-        title = QLabel(parent=self, text="Chute de prix")
-        v_layout.addWidget(title)
+        title = BodyLabel(parent=self, text="Chute de prix")
+        self.layout().addWidget(title)
 
-        self.quantity_drop_price_combobox = QComboBox(parent=self)
+        self.quantity_drop_price_combobox = ComboBox(parent=self)
         self.quantity_drop_price_combobox.addItems(["100", "10", "1"])
         self.quantity_drop_price_combobox.currentTextChanged.connect(
-            lambda text: self.get_price_drop())
-        v_layout.addWidget(self.quantity_drop_price_combobox)
+            self.get_price_drop
+        )
+        self.layout().addWidget(self.quantity_drop_price_combobox)
 
-        table_price_drop_scroll = TableWidget(["Type", "Nom", "Différence"])
+        table_price_drop_scroll = BaseTableWidget(is_searchable=False)
+        table_price_drop_scroll.set_columns(
+            [
+                ColumnInfo(name="Type", search_type=None),
+                ColumnInfo(name="Nom", search_type=None),
+                ColumnInfo(name="Différence", search_type=None),
+            ]
+        )
         self.table_price_drop = table_price_drop_scroll.table
-        v_layout.addWidget(self.table_price_drop)
+        self.layout().addWidget(self.table_price_drop)
 
     def get_price_drop(self):
-        quantity = self.FIELD_BY_QUANTITY.get(self.quantity_drop_price_combobox.currentText())
+        quantity = self.FIELD_BY_QUANTITY[
+            self.quantity_drop_price_combobox.currentText()
+        ]
 
         self.table_price_drop.clearContents()
         self.table_price_drop.setRowCount(0)
 
         rows = 20
 
-        items = get_difference_on_all_prices(self.engine, self.server_id, quantity, rows)
+        items = get_difference_on_all_prices(
+            self.engine, self.server_id, quantity, rows
+        )
         if items is None:
             return
 
@@ -60,7 +70,7 @@ class PriceDropTable(Widget):
 
 
 def get_difference_on_all_prices(
-        engine: Engine, server_id: int | None, quantity: str, limit: int = 10
+    engine: Engine, server_id: int | None, quantity: str, limit: int = 10
 ) -> RowReturningQuery[tuple[str, Item, int]] | None:
     if server_id is None:
         return None
@@ -112,10 +122,18 @@ def get_difference_on_all_prices(
             .with_entities(
                 TypeItem.name,
                 Item.name,
-                (getattr(_items_oldest.c, quantity) - getattr(_items_latest.c, quantity)).label("benefit"),
+                (
+                    getattr(_items_oldest.c, quantity)
+                    - getattr(_items_latest.c, quantity)
+                ).label("benefit"),
             )
-            .order_by(-(getattr(_items_oldest.c, quantity) - getattr(_items_latest.c, quantity)))
+            .order_by(
+                -(
+                    getattr(_items_oldest.c, quantity)
+                    - getattr(_items_latest.c, quantity)
+                )
+            )
             .limit(limit)
         )
 
-    return difference_items
+    return difference_items  # type: ignore

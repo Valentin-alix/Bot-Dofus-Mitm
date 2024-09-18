@@ -11,5 +11,7 @@ psutil==5.9.6
 pytest==7.4.3
 black==23.11.0
 mypy==1.7.0
+PyQt5-stubs==5.15.6.0
+PyQt-Fluent-Widgets==1.6.5
 
 icecream~=2.1.3

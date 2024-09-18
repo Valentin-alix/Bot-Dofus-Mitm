@@ -1,23 +1,21 @@
-from PyQt5.QtWidgets import QLabel
+from PyQt5.QtWidgets import QHBoxLayout, QWidget
+from qfluentwidgets import BodyLabel
 
-from app.gui.components.common import Widget
-from app.gui.components.organization import HorizontalLayout
 from app.types_.dicts.scraping import ScrapingCurrentState
 from app.types_.models.common import BotInfo
 
 
-class ScrappingProgression(Widget):
+class ScrappingProgression(QWidget):
     def __init__(self, bot_info: BotInfo, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.bot_info = bot_info
-        layout = HorizontalLayout()
-        self.setLayout(layout)
+        self.setLayout(QHBoxLayout())
 
-        self.label_remaining_objects = QLabel(parent=self)
-        layout.addWidget(self.label_remaining_objects)
+        self.label_remaining_objects = BodyLabel(parent=self)
+        self.layout().addWidget(self.label_remaining_objects)
 
-        self.label_remaining_categories = QLabel(parent=self)
-        layout.addWidget(self.label_remaining_categories)
+        self.label_remaining_categories = BodyLabel(parent=self)
+        self.layout().addWidget(self.label_remaining_categories)
 
     def update_content(self, scrapping_current_state: ScrapingCurrentState):
         self.label_remaining_objects.setText(

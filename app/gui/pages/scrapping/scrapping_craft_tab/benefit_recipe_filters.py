@@ -1,14 +1,14 @@
 from PyQt5.QtCore import QObject, pyqtSignal
-from PyQt5.QtWidgets import QComboBox
+from PyQt5.QtWidgets import QHBoxLayout
+from qfluentwidgets import ComboBox
 from sqlalchemy import Engine
 from sqlalchemy.orm import sessionmaker
 
-from app.database.models import CategoryEnum, TypeItem, Item, Recipe
-from app.gui.components.common import Widget
-from app.gui.components.organization import VerticalLayout
+from app.database.models import CategoryEnum, Item, Recipe, TypeItem
+from app.gui.components.common import QWidget
 
 
-class BenefitRecipeFilters(Widget):
+class BenefitRecipeFilters(QWidget):
     class FilterSignals(QObject):
         on_select_type = pyqtSignal(str)
         on_select_category = pyqtSignal(CategoryEnum)
@@ -17,25 +17,29 @@ class BenefitRecipeFilters(Widget):
         super().__init__()
         self.filter_signals = self.FilterSignals()
 
-        v_layout = VerticalLayout()
-        self.setLayout(v_layout)
+        self.setLayout(QHBoxLayout())
 
         self.categories = [
             (CategoryEnum.CONSUMABLES, "Consommables"),
             (CategoryEnum.EQUIPMENT, "Equipements"),
-            (CategoryEnum.RESOURCES, "Ressources")
+            (CategoryEnum.RESOURCES, "Ressources"),
         ]
         with sessionmaker(bind=engine)() as session:
-            self.types_with_recipe = session.query(Recipe).join(Item, Item.id == Recipe.result_item_id).join(TypeItem,
-                                                                                                             TypeItem.id == Item.type_item_id).with_entities(
-                TypeItem).order_by(TypeItem.name).all()
+            self.types_with_recipe = (
+                session.query(Recipe)
+                .join(Item, Item.id == Recipe.result_item_id)
+                .join(TypeItem, TypeItem.id == Item.type_item_id)
+                .with_entities(TypeItem)
+                .order_by(TypeItem.name)
+                .all()
+            )
 
-        self.combo_category = QComboBox(parent=self)
+        self.combo_category = ComboBox(parent=self)
         self.combo_category.addItems([category[1] for category in self.categories])
-        v_layout.addWidget(self.combo_category)
+        self.layout().addWidget(self.combo_category)
 
-        self.combo_type_item = QComboBox(parent=self)
-        v_layout.addWidget(self.combo_type_item)
+        self.combo_type_item = ComboBox(parent=self)
+        self.layout().addWidget(self.combo_type_item)
         self.combo_type_item.currentTextChanged.connect(self.on_select_type)
 
         self.combo_category.currentIndexChanged.connect(self.on_select_category)
@@ -45,12 +49,19 @@ class BenefitRecipeFilters(Widget):
         self.combo_type_item.clear()
         self.combo_type_item.addItem("")
         self.combo_type_item.addItems(
-            type_item.name for type_item in self.types_with_recipe if type_item.category == category)
+            type_item.name
+            for type_item in self.types_with_recipe
+            if type_item.category == category
+        )
         self.filter_signals.on_select_category.emit(category)
 
     def on_select_type(self, type_name: str):
         if type_name != "":
-            _type = next(type_item for type_item in self.types_with_recipe if type_item.name == type_name)
+            _type = next(
+                type_item
+                for type_item in self.types_with_recipe
+                if type_item.name == type_name
+            )
             self.filter_signals.on_select_type.emit(_type.name)
 
     def emit_change(self):

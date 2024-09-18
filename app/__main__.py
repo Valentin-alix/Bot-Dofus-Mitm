@@ -5,16 +5,19 @@ import sys
 from pathlib import Path
 from threading import Thread
 
-from PyQt5.QtCore import QThread
+from PyQt5.QtCore import Qt, QThread
+from PyQt5.QtWidgets import QApplication
+from qfluentwidgets import Theme, setTheme, setThemeColor
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
-from app.gui.signals import AppSignals
-from app.types_.models.common import BotInfo
 from gui.app import Application, MainWindow
 from logs.config import LOGGING_CONFIG
 from network.mitm import Mitm
 from network.sniffer import Sniffer
+
+from app.gui.signals import AppSignals
+from app.types_.models.common import BotInfo
 
 logging.config.dictConfig(LOGGING_CONFIG)
 logger = logging.getLogger(__name__)
@@ -35,7 +38,7 @@ if __name__ == "__main__":
     )
     args = vars(arg_parsed.parse_args())
 
-    run_migrations()
+    # run_migrations()
 
     app_signals = AppSignals()
     bot_info = BotInfo()
@@ -52,7 +55,14 @@ if __name__ == "__main__":
         mitm_thread.started.connect(mitm.launch)
         mitm_thread.start()
 
+    QApplication.setHighDpiScaleFactorRoundingPolicy(
+        Qt.HighDpiScaleFactorRoundingPolicy.PassThrough
+    )
+    QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
+    QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps)
     app = Application(sys.argv)
-
     main_window = MainWindow(bot_info, app_signals, args["sniffer"] == "y")
-    sys.exit(app.exec_())
+    main_window.show()
+    setTheme(Theme.DARK)
+    setThemeColor(Qt.GlobalColor.yellow)
+    app.exec()
