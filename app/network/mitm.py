@@ -1,14 +1,15 @@
 import logging
 import random
+import select
 from datetime import datetime
 from queue import Empty
-from socket import socket as Socket, SHUT_WR
+from socket import SHUT_WR
+from socket import socket as Socket
 from threading import Thread
 from time import sleep
 
 import fritm
 import psutil
-import select
 from PyQt5.QtCore import QObject
 
 from app.gui.signals import AppSignals
@@ -34,7 +35,7 @@ class Mitm(QObject):
                 bridge.connection_server.shutdown(SHUT_WR)
 
     def on_connection_callback(
-            self, connection_game: fritm.proxy.ConnectionWrapper, connection_server: Socket
+        self, connection_game: fritm.proxy.ConnectionWrapper, connection_server: Socket
     ):
         bridge = InjectorBridgeHandler(
             connection_game, connection_server, self.bot_info, self.app_signals
@@ -45,7 +46,7 @@ class Mitm(QObject):
         bridge.loop()
 
     def launch(self):
-        # TODO Launch dofus from ankama launcher, voir :
+        # TODO Launch dofus from ankama launcher, see :
         #   - https://cadernis.fr/index.php?threads/bypass-ankama-launcher.2909/#post-28075
         while "Dofus.exe" not in (process.name() for process in psutil.process_iter()):
             print("Waiting for dofus.exe")
@@ -58,11 +59,11 @@ class InjectorBridgeHandler:
     TIME_BETWEEN_SEND = [0.1, 0.2]
 
     def __init__(
-            self,
-            connection_game: fritm.proxy.ConnectionWrapper,
-            connection_server: Socket,
-            bot_info: BotInfo,
-            app_signals: AppSignals
+        self,
+        connection_game: fritm.proxy.ConnectionWrapper,
+        connection_server: Socket,
+        bot_info: BotInfo,
+        app_signals: AppSignals,
     ):
         self.connection_game = connection_game
         self.connection_server = connection_server

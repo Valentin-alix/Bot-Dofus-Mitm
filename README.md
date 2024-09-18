@@ -41,6 +41,10 @@
 
 ![scaping craft](./resources/scrapping_craft_interface.png)
 
+### Benefit from craft :
+
+![craft bot](./resources/benefit_craft.png)
+
 ## Bot hdv selling :
 
 ![selling bot](./resources/selling_bot.gif)
