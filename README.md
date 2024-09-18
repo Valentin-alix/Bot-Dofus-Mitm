@@ -39,11 +39,9 @@
 
 ![scrapping bot](./resources/scrapping_interface.png)
 
-![scaping craft](./resources/scrapping_craft_interface.png)
-
 ### Benefit from craft :
 
-![craft bot](./resources/benefit_craft.png)
+![scaping craft](./resources/scrapping_craft_interface.png)
 
 ## Bot hdv selling :
 
