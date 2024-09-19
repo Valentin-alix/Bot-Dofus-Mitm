@@ -35,15 +35,15 @@
 - SQLAlchemy
 - PyQt5
 
-## Bot hdv scrapping :
+## Interface de scapping :
 
 ![scrapping bot](./resources/scrapping_interface.png)
 
-### Benefit from craft :
+### Benefice par craft :
 
 ![scaping craft](./resources/scrapping_craft_interface.png)
 
-## Bot hdv selling :
+## Interface de vente :
 
 ![selling bot](./resources/selling_bot.gif)
 
