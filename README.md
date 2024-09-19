@@ -35,11 +35,11 @@
 - SQLAlchemy
 - PyQt5
 
-## Interface de scapping :
+## Interface de scrapping :
 
 ![scrapping bot](./resources/scrapping_interface.png)
 
-### Benefice par craft :
+## Interface des bénéfices par craft :
 
 ![scaping craft](./resources/scrapping_craft_interface.png)
 
@@ -47,6 +47,6 @@
 
 ![selling bot](./resources/selling_bot.gif)
 
-## Sniffer :
+## Interface du sniffer :
 
 ![sniffer](./resources/sniffer_interface.png)
