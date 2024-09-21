@@ -2,29 +2,28 @@ import logging
 from threading import Event
 from typing import TYPE_CHECKING
 
-from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidHouseTypeMessage import (
+from app.database.utils import get_engine
+from app.gui.signals import AppSignals
+from app.interfaces.dicts.common import EventValueChangeWithCallback
+from app.interfaces.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidHouseTypeMessage import (
     ExchangeBidHouseTypeMessage,
 )
-
-from app.database.models import get_engine
-from app.gui.signals import AppSignals
 from app.modules.sale_hotel import SaleHotel
-from app.network.utils import send_parsed_msg
-from app.types_.dicts.common import EventValueChangeWithCallback
+from app.utils.msg import send_parsed_msg
 
 if TYPE_CHECKING:
-    from app.types_.models.common import CommonInfo
+    from app.interfaces.models.common import CommonInfo
 
 logger = logging.getLogger(__name__)
 
 
 class ScrappingSaleHotel(SaleHotel):
     def __init__(
-            self,
-            types: list[int],
-            is_playing_event: Event,
-            app_signals: AppSignals,
-            common_info: 'CommonInfo',
+        self,
+        types: list[int],
+        is_playing_event: Event,
+        app_signals: AppSignals,
+        common_info: "CommonInfo",
     ) -> None:
         super().__init__(common_info, app_signals)
         self.engine = get_engine()

@@ -1,10 +1,10 @@
 import logging
 
 from app.gui.signals import AppSignals
-from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.ObjectDeletedMessage import (
+from app.interfaces.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.items.ObjectDeletedMessage import (
     ObjectDeletedMessage,
 )
-from app.types_.models.common import BotInfo, ParsedMessageHandler
+from app.interfaces.models.common import BotInfo, ParsedMessageHandler
 
 logger = logging.getLogger(__name__)
 

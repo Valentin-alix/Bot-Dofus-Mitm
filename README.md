@@ -12,13 +12,16 @@
   DOFUS_INVOKER="C:\\Users\\valen\\AppData\\Local\\Ankama\\Dofus\\DofusInvoker.swf"
   FFDECJAR_PATH="C:\\Program Files (x86)\\FFDec\\ffdec.jar"
   ```
-- Lancer init.bat
 
-- Python app/__main__.py # Lance le bot
+`init.bat` # Initialise le bot (c'est à faire à chaque nouvelle maj)
+
+`python app/__main__.py` # Lance le bot
 
 Vous n'avez plus qu'à connecter votre personnage (vous devez déco/reco si votre personnage est déjà connecté).
 
 # Fonctionnalités :
+
+Toutes les données sont stocké en local dans un fichier sqlite, pour enregistrer les prix vous devez aller à un hdv et lancer le bot depuis la page scrapping avec le bouton play, il ne vous reste plus qu'a attendre la fin.
 
 - Sniffer
 

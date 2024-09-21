@@ -4,8 +4,8 @@ from qfluentwidgets import BodyLabel
 
 from app.gui.components.common import TopPage
 from app.gui.signals import AppSignals
-from app.types_.dicts.selling import TreatedObjectProgression
-from app.types_.models.common import BotInfo
+from app.interfaces.dicts.selling import TreatedObjectProgression
+from app.interfaces.models.common import BotInfo
 
 
 class SellingUpdate(QWidget):

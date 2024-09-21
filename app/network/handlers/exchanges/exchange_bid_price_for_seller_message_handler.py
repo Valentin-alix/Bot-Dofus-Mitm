@@ -1,10 +1,10 @@
 import logging
 
 from app.gui.signals import AppSignals
-from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidPriceForSellerMessage import (
+from app.interfaces.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidPriceForSellerMessage import (
     ExchangeBidPriceForSellerMessage,
 )
-from app.types_.models.common import BotInfo, ParsedMessageHandler
+from app.interfaces.models.common import BotInfo, ParsedMessageHandler
 
 logger = logging.getLogger(__name__)
 
@@ -16,7 +16,10 @@ class ExchangeBidPriceForSellerMessageHandler(
 
     def handle(self, bot_info: BotInfo, app_signals: AppSignals) -> None:
         if (selling_hdv := bot_info.selling_info.selling_hdv) is not None:
-            if selling_hdv.selected_object is None or selling_hdv.selected_object["object_gid"] != self.genericId:
+            if (
+                selling_hdv.selected_object is None
+                or selling_hdv.selected_object["object_gid"] != self.genericId
+            ):
                 # when selected object is set to None before receiving
                 return
             selling_hdv.selected_object["minimal_prices"] = self.minimalPrices

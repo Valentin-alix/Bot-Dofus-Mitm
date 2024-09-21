@@ -6,7 +6,7 @@ from pathlib import Path
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
-from app.network.utils import get_classes_in_path
+from app.utils.common import get_classes_in_path
 
 
 def convert_byte_type_python(byte_type: str):
@@ -18,19 +18,19 @@ def convert_byte_type_python(byte_type: str):
         case "Float" | "Double":
             return "float"
         case (
-        "Byte"
-        | "Int"
-        | "Short"
-        | "VarUhShort"
-        | "VarUhLong"
-        | "VarUhInt"
-        | "UnsignedByte"
-        | "UnsignedInt"
-        | "UnsignedShort"
-        | "VarInt"
-        | "VarShort"
-        | "VarLong"
-        | "Uuid"
+            "Byte"
+            | "Int"
+            | "Short"
+            | "VarUhShort"
+            | "VarUhLong"
+            | "VarUhInt"
+            | "UnsignedByte"
+            | "UnsignedInt"
+            | "UnsignedShort"
+            | "VarInt"
+            | "VarShort"
+            | "VarLong"
+            | "Uuid"
         ):
             return "int"
         case "ByteArray":
@@ -40,7 +40,7 @@ def convert_byte_type_python(byte_type: str):
 
 
 def find_import_path_by_class_name(
-        class_name: str, protocol_json: dict, base_path_imports: str
+    class_name: str, protocol_json: dict, base_path_imports: str
 ) -> str:
     class_data = protocol_json.get(class_name)
     if class_data is not None:
@@ -93,9 +93,9 @@ def create_python_class_dofus_file(base_path_output):
                     if _var["name"] == "self":
                         continue
 
-                    if (var_spe := (_var.get('extra_type', None))) is not None:
-                        _var['length'] = var_spe.get('length')
-                        _var['type'] = var_spe.get('type')
+                    if (var_spe := (_var.get("extra_type", None))) is not None:
+                        _var["length"] = var_spe.get("length")
+                        _var["type"] = var_spe.get("type")
 
                     python_type = convert_byte_type_python(_var.get("type"))
                     if not python_type:
@@ -136,12 +136,12 @@ def create_python_class_dofus_file(base_path_output):
             init_method_name_optional += "):"
 
             python_code = (
-                    import_lines
-                    + import_class_lines
-                    + class_line
-                    + init_method_name
-                    + init_method_name_optional
-                    + init_vars_init
+                import_lines
+                + import_class_lines
+                + class_line
+                + init_method_name
+                + init_method_name_optional
+                + init_vars_init
             )
 
             class_path = os.path.dirname(
@@ -152,8 +152,8 @@ def create_python_class_dofus_file(base_path_output):
             ).replace("global", "_global")
             os.makedirs(class_path, exist_ok=True)
             with open(
-                    os.path.join(class_path, class_name + ".py"),
-                    "w",
+                os.path.join(class_path, class_name + ".py"),
+                "w",
             ) as python_file:
                 python_file.write(python_code)
 

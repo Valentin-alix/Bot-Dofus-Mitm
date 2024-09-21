@@ -17,7 +17,7 @@ from network.mitm import Mitm
 from network.sniffer import Sniffer
 
 from app.gui.signals import AppSignals
-from app.types_.models.common import BotInfo
+from app.interfaces.models.common import BotInfo
 
 logging.config.dictConfig(LOGGING_CONFIG)
 logger = logging.getLogger(__name__)

@@ -3,8 +3,8 @@ from __future__ import annotations
 import logging
 from typing import Callable
 
+from app.interfaces.models.network.data import BufferInfos, Data
 from app.network.protocol import protocol, protocol_load
-from app.types_.models.network.data import BufferInfos, Data
 
 logger = logging.getLogger(__name__)
 
@@ -42,9 +42,9 @@ class Message:
 
     @staticmethod
     def from_raw(
-            from_client: bool,
-            buffer_info: BufferInfos,
-            on_error_callback: Callable | None = None,
+        from_client: bool,
+        buffer_info: BufferInfos,
+        on_error_callback: Callable | None = None,
     ) -> Message | None:
         if buffer_info.data.remaining() == 0:
             return None
@@ -82,7 +82,7 @@ class Message:
 
     @staticmethod
     def unpack_network_data_container_message(
-            message_length, from_client, buffer_infos: BufferInfos
+        message_length, from_client, buffer_infos: BufferInfos
     ):
         logger.info("Received NetworkDataContainerMessage")
         if buffer_infos.data.remaining() >= message_length:

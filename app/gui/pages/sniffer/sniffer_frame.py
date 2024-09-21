@@ -11,8 +11,8 @@ from app.gui.components.common import TopPage
 from app.gui.components.table import BaseTableWidget, ColumnInfo
 from app.gui.pages.sniffer.detail_message import DetailMessage
 from app.gui.signals import AppSignals
-from app.types_.dicts.sniffer import ParsedMessageInfo
-from app.types_.models.common import BotInfo
+from app.interfaces.dicts.sniffer import ParsedMessageInfo
+from app.interfaces.models.common import BotInfo
 
 
 class SnifferFrame(QFrame):

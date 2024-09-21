@@ -1,41 +1,10 @@
-from __future__ import annotations
-
-import logging
 import os
-import socket
 from importlib import import_module
-from queue import Queue
 
 try:
-    from app.types_.dofus.utils import CLASSES_BY_NAME
+    from app.interfaces.dofus.utils import CLASSES_BY_NAME
 except ModuleNotFoundError:
     CLASSES_BY_NAME = {}
-
-logger = logging.getLogger(__name__)
-
-
-def get_local_ip() -> str:
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    sock.settimeout(0)
-    try:
-        sock.connect(("10.255.255.255", 1))
-        ip_local = sock.getsockname()[0]
-        logger.info(msg=f"Local ip = {ip_local}")
-    except Exception as err:
-        logger.error(f"Exception on get local ip : {err}")
-        ip_local = "127.0.0.1"
-    finally:
-        sock.close()
-    return ip_local
-
-
-def send_parsed_msg(message_to_send_queue: Queue[dict], parsed_message):
-    logger.info(f"Sending: {parsed_message.__class__.__name__}")
-    msg_to_send = {
-        **vars(parsed_message),
-        "__type__": parsed_message.__class__.__name__,
-    }
-    message_to_send_queue.put(msg_to_send)
 
 
 def convert_snake_case_to_camel_case(snake_case_str: str):
@@ -55,8 +24,8 @@ def deep_dict_to_object(**kwargs):
             value = [deep_dict_to_object(**_value) for _value in value]
             props[key] = value
     if (
-            kwargs.get("__type__") is not None
-            and (class_type := CLASSES_BY_NAME.get(kwargs.pop("__type__"))) is not None
+        kwargs.get("__type__") is not None
+        and (class_type := CLASSES_BY_NAME.get(kwargs.pop("__type__"))) is not None
     ):
         return class_type(**props)
     raise ValueError("object must contains valid __type__ key")

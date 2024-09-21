@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import (
 from app.gui.pages.seller.selling_from_inventory import SellingFromInventory
 from app.gui.pages.seller.selling_update import SellingUpdate
 from app.gui.signals import AppSignals
-from app.types_.models.common import BotInfo
+from app.interfaces.models.common import BotInfo
 
 
 class SellerFrame(QFrame):

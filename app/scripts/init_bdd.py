@@ -2,19 +2,19 @@ import json
 import os
 from pathlib import Path
 
-from sqlalchemy.orm import Session, sessionmaker
+from sqlalchemy.orm import Session
 from tqdm import tqdm
 
 from app.database.models import (
+    Base,
     CategoryEnum,
     Ingredient,
     Item,
     Recipe,
     SubArea,
     TypeItem,
-    get_engine,
-    Base,
 )
+from app.database.utils import ENGINE, SessionLocal
 
 BASE_PATH_OUTPUT = os.path.join(Path(__file__).parent.parent.parent, "resources")
 
@@ -63,9 +63,9 @@ def init_item(session: Session, d2i_texts: dict):
         items_entities = []
         for item in tqdm(items):
             if (
-                    item["isSaleable"] is True
-                    and item.get("exchangeable", None) is True
-                    and (_item_db := session.query(Item).get(item["id"])) is None
+                item["isSaleable"] is True
+                and item.get("exchangeable", None) is True
+                and (_item_db := session.query(Item).get(item["id"])) is None
             ):
                 item_object = Item(
                     id=item["id"],
@@ -94,10 +94,10 @@ def init_recipes(session: Session):
         ingredients_entites = []
         for recipe in tqdm(recipes):
             if (
-                    session.query(Recipe.id)
-                            .filter_by(result_item_id=recipe["resultId"])
-                            .first()
-                    is None
+                session.query(Recipe.id)
+                .filter_by(result_item_id=recipe["resultId"])
+                .first()
+                is None
             ):
                 recipe_object = Recipe(result_item_id=recipe["resultId"])
                 session.add(recipe_object)
@@ -117,18 +117,13 @@ def init_recipes(session: Session):
 
 
 def init_bdd():
-    engine = get_engine()
-    Base.metadata.create_all(engine)
-
-    session = sessionmaker(bind=engine)()
-
-    d2i_path = os.path.join(BASE_PATH_OUTPUT, "from_d2i.json")
-    with open(d2i_path, encoding="utf8") as d2i_file:
-        d2i_texts = json.load(d2i_file)["texts"]
-        init_sub_areas(session, d2i_texts)
-        init_type(session, d2i_texts)
-        init_item(session, d2i_texts)
-        init_recipes(session)
-
-    session.commit()
-    session.close()
+    Base.metadata.create_all(ENGINE)
+    with SessionLocal() as session:
+        d2i_path = os.path.join(BASE_PATH_OUTPUT, "from_d2i.json")
+        with open(d2i_path, encoding="utf8") as d2i_file:
+            d2i_texts = json.load(d2i_file)["texts"]
+            init_sub_areas(session, d2i_texts)
+            init_type(session, d2i_texts)
+            init_item(session, d2i_texts)
+            init_recipes(session)
+        session.commit()

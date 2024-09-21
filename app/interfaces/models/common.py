@@ -5,10 +5,10 @@ from pprint import pformat
 from queue import Queue
 
 from app.gui.signals import AppSignals
+from app.interfaces.models.scrapping import ScrappingInfo
+from app.interfaces.models.selling import SellingInfo
+from app.interfaces.models.sniffer import SnifferInfo
 from app.modules.character import Character
-from app.types_.models.scrapping import ScrappingInfo
-from app.types_.models.selling import SellingInfo
-from app.types_.models.sniffer import SnifferInfo
 
 
 @dataclass
@@ -29,8 +29,7 @@ class BotInfo:
 
 class ParsedMessageHandler:
     @abstractmethod
-    def handle(self, bot_info: BotInfo, app_signals: AppSignals) -> None:
-        ...
+    def handle(self, bot_info: BotInfo, app_signals: AppSignals) -> None: ...
 
 
 class ParsedMessage:

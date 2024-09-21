@@ -1,10 +1,10 @@
 from PyQt5.QtCore import QObject, pyqtSignal
 from PyQt5.QtWidgets import QHBoxLayout
 from qfluentwidgets import ComboBox
-from sqlalchemy import Engine
-from sqlalchemy.orm import sessionmaker
 
-from app.database.models import CategoryEnum, Item, Recipe, TypeItem
+from app.database.models import CategoryEnum
+from app.database.queries import get_recipes
+from app.database.utils import SessionLocal
 from app.gui.components.common import QWidget
 
 
@@ -13,7 +13,7 @@ class BenefitRecipeFilters(QWidget):
         on_select_type = pyqtSignal(str)
         on_select_category = pyqtSignal(CategoryEnum)
 
-    def __init__(self, engine: Engine):
+    def __init__(self):
         super().__init__()
         self.filter_signals = self.FilterSignals()
 
@@ -24,15 +24,8 @@ class BenefitRecipeFilters(QWidget):
             (CategoryEnum.EQUIPMENT, "Equipements"),
             (CategoryEnum.RESOURCES, "Ressources"),
         ]
-        with sessionmaker(bind=engine)() as session:
-            self.types_with_recipe = (
-                session.query(Recipe)
-                .join(Item, Item.id == Recipe.result_item_id)
-                .join(TypeItem, TypeItem.id == Item.type_item_id)
-                .with_entities(TypeItem)
-                .order_by(TypeItem.name)
-                .all()
-            )
+        with SessionLocal() as session:
+            self.types_with_recipe = get_recipes(session)
 
         self.combo_category = ComboBox(parent=self)
         self.combo_category.addItems([category[1] for category in self.categories])

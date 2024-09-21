@@ -1,15 +1,12 @@
 from __future__ import annotations
 
-import os
 from datetime import datetime
 from enum import Enum
-from pathlib import Path
 from pprint import pformat
 from typing import List
 
-from sqlalchemy import Column, ForeignKey, Table, create_engine
-from sqlalchemy.orm import DeclarativeBase, relationship
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy import Column, ForeignKey, Table
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 
 class Base(DeclarativeBase):
@@ -91,10 +88,3 @@ class Price(Base):
     ten: Mapped[int] = mapped_column(nullable=False)
     one: Mapped[int] = mapped_column(nullable=False)
     server_id: Mapped[int] = mapped_column(nullable=False)
-
-
-def get_engine():
-    return create_engine(
-        f"sqlite:///{os.path.join(Path(__file__).parent, 'sqlite3.db')}",
-        echo=False,
-    )

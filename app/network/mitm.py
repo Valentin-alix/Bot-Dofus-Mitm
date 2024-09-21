@@ -13,10 +13,10 @@ import psutil
 from PyQt5.QtCore import QObject
 
 from app.gui.signals import AppSignals
+from app.interfaces.models.common import BotInfo
+from app.interfaces.models.network.data import BufferInfos
+from app.interfaces.models.network.message import Message
 from app.network.parser import MessageRawDataParser
-from app.types_.models.common import BotInfo
-from app.types_.models.network.data import BufferInfos
-from app.types_.models.network.message import Message
 
 logger = logging.getLogger(__name__)
 
@@ -46,8 +46,6 @@ class Mitm(QObject):
         bridge.loop()
 
     def launch(self):
-        # TODO Launch dofus from ankama launcher, see :
-        #   - https://cadernis.fr/index.php?threads/bypass-ankama-launcher.2909/#post-28075
         while "Dofus.exe" not in (process.name() for process in psutil.process_iter()):
             print("Waiting for dofus.exe")
             sleep(1)
@@ -109,19 +107,6 @@ class InjectorBridgeHandler:
     def is_server_closed(self):
         return self.connection_server.fileno() == -1
 
-    @classmethod
-    def proxy_callback(cls, connection_game, connection_server, threads_infos):
-        """Callback that can be called by the proxy
-
-        It creates an instance of the class and
-        calls `handle` on every packet
-
-        coJeu: socket to the game
-        coSer: socket to the server
-        """
-        bridge_handler = cls(connection_game, connection_server, threads_infos)
-        bridge_handler.loop()
-
     def handle(self, _bytes: bytes, origin):
         buffer_info = self.buffers[origin]
         from_client = origin == self.connection_game
@@ -173,9 +158,3 @@ class InjectorBridgeHandler:
         self.injected_to_server += 1
         if not self.is_server_closed():
             self.connection_server.sendall(data)
-
-    def send_message(self, content: str):
-        msg = Message.get_message_from_json(
-            {"__type__": "ChatClientMultiMessage", "content": content, "channel": 0}
-        )
-        self.send_to_server(msg)

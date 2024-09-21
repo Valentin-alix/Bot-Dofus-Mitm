@@ -1,27 +1,29 @@
-import json
 import logging
-from pathlib import Path
 from typing import Callable
 
 from app.gui.signals import AppSignals
+from app.interfaces.models.common import BotInfo
+from app.interfaces.models.network.message import Message
 from app.network.handler import Handler
-from app.types_.models.common import BotInfo
-from app.types_.models.network.message import Message
 
 logger = logging.getLogger(__name__)
 
 
 class MessageRawDataParser:
     def __init__(
-            self,
-            bot_info: BotInfo | None,
-            app_signals: AppSignals,
-            on_error_callback: Callable | None = None,
+        self,
+        bot_info: BotInfo | None,
+        app_signals: AppSignals,
+        on_error_callback: Callable | None = None,
     ) -> None:
         self.bot_info = bot_info
         self.app_signals = app_signals
         self.on_error_callback = on_error_callback
-        self.handler = Handler(self.bot_info, self.app_signals) if self.bot_info is not None else None
+        self.handler = (
+            Handler(self.bot_info, self.app_signals)
+            if self.bot_info is not None
+            else None
+        )
 
     def parse(self, message: Message, from_client: bool):
         try:

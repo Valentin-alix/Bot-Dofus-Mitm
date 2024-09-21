@@ -12,7 +12,7 @@ from app.gui.pages.scrapping.scrapping_frame import ScrappingFrame
 from app.gui.pages.seller.seller_frame import SellerFrame
 from app.gui.pages.sniffer.sniffer_frame import SnifferFrame
 from app.gui.signals import AppSignals
-from app.types_.models.common import BotInfo
+from app.interfaces.models.common import BotInfo
 
 TITLE = "Bot Dofus"
 

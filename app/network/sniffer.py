@@ -4,25 +4,27 @@ from typing import Optional
 from scapy.all import Packet, Raw, sniff
 from scapy.layers.inet import IP
 
+from app.gui.signals import AppSignals
+from app.interfaces.constants import FILTER_DOFUS
+from app.interfaces.models.common import BotInfo
+from app.interfaces.models.network.data import BufferInfos, Data
+from app.interfaces.models.network.message import Message
 from app.network.parser import MessageRawDataParser
-from app.network.utils import get_local_ip
-from app.types_.constants import FILTER_DOFUS
-from app.types_.models.common import BotInfo
-from app.types_.models.network.data import BufferInfos, Data
-from app.types_.models.network.message import Message
+from app.utils.network import get_local_ip
 
 logger = logging.getLogger(__name__)
 
 
 class Sniffer:
     def __init__(
-            self,
-            bot_info: BotInfo | None = None,
-            capture_path: Optional[str] = None,
+        self,
+        bot_info: BotInfo | None = None,
+        capture_path: Optional[str] = None,
     ):
         self.bot_info = bot_info
         self.raw_parser = MessageRawDataParser(
             bot_info=bot_info,
+            app_signals=AppSignals(),
             on_error_callback=self.on_error,
         )
         self.not_completed_message_number: int = 0
@@ -37,15 +39,15 @@ class Sniffer:
         else:
             while True:
                 if (
-                        self.bot_info is None
-                        or self.bot_info.sniffer_info.is_playing_event.wait()
+                    self.bot_info is None
+                    or self.bot_info.sniffer_info.is_playing_event.wait()
                 ):
                     sniff(
                         prn=self.on_receive,
                         store=False,
                         filter=FILTER_DOFUS,
                         stop_filter=lambda _: self.bot_info is None
-                                              or not self.bot_info.sniffer_info.is_playing_event.is_set(),
+                        or not self.bot_info.sniffer_info.is_playing_event.is_set(),
                     )
 
     def on_receive(self, packet: Packet):

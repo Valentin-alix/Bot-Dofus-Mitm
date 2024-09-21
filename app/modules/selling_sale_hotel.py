@@ -5,50 +5,49 @@ import math
 from copy import deepcopy
 from datetime import datetime
 from threading import Event
-from typing import Tuple, TYPE_CHECKING
+from typing import TYPE_CHECKING, Tuple
 
-from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidHousePriceMessage import (
+from app.database.models import Item, TypeItem
+from app.database.utils import SessionLocal, get_engine
+from app.gui.signals import AppSignals
+from app.interfaces.dicts.common import EventValueChangeWithCallback
+from app.interfaces.dicts.selling import TreatedObjectProgression
+from app.interfaces.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeBidHousePriceMessage import (
     ExchangeBidHousePriceMessage,
 )
-from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeObjectModifyPricedMessage import (
+from app.interfaces.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeObjectModifyPricedMessage import (
     ExchangeObjectModifyPricedMessage,
 )
-from app.types_.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeObjectMovePricedMessage import (
+from app.interfaces.dofus.scripts.com.ankamagames.dofus.network.messages.game.inventory.exchanges.ExchangeObjectMovePricedMessage import (
     ExchangeObjectMovePricedMessage,
 )
-from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.data.items.ObjectItem import (
+from app.interfaces.dofus.scripts.com.ankamagames.dofus.network.types.game.data.items.ObjectItem import (
     ObjectItem,
 )
-from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.data.items.ObjectItemToSellInBid import (
+from app.interfaces.dofus.scripts.com.ankamagames.dofus.network.types.game.data.items.ObjectItemToSellInBid import (
     ObjectItemToSellInBid,
 )
-from app.types_.dofus.scripts.com.ankamagames.dofus.network.types.game.data.items.SellerBuyerDescriptor import (
+from app.interfaces.dofus.scripts.com.ankamagames.dofus.network.types.game.data.items.SellerBuyerDescriptor import (
     SellerBuyerDescriptor,
 )
-from sqlalchemy.orm import sessionmaker
-
-from app.database.models import Item, TypeItem, get_engine
-from app.gui.signals import AppSignals
 from app.modules.sale_hotel import SaleHotel
-from app.network.utils import send_parsed_msg
-from app.types_.dicts.common import EventValueChangeWithCallback
-from app.types_.dicts.selling import TreatedObjectProgression
+from app.utils.msg import send_parsed_msg
 
 if TYPE_CHECKING:
-    from app.types_.models.common import CommonInfo
+    from app.interfaces.models.common import CommonInfo
 
 logger = logging.getLogger(__name__)
 
 
 class SellingSaleHotel(SaleHotel):
     def __init__(
-            self,
-            seller_buyer_descriptor: SellerBuyerDescriptor,
-            object_on_sale_info: list[ObjectItemToSellInBid],
-            is_playing_from_inventory_event: Event,
-            is_playing_update_event: Event,
-            common_info: CommonInfo,
-            app_signals: AppSignals
+        self,
+        seller_buyer_descriptor: SellerBuyerDescriptor,
+        object_on_sale_info: list[ObjectItemToSellInBid],
+        is_playing_from_inventory_event: Event,
+        is_playing_update_event: Event,
+        common_info: CommonInfo,
+        app_signals: AppSignals,
     ) -> None:
         super().__init__(common_info, app_signals)
         self.engine = get_engine()
@@ -59,8 +58,13 @@ class SellingSaleHotel(SaleHotel):
         self.accepted_objects_type: list[int] = seller_buyer_descriptor.types
         self.accepted_objects_gid = self.get_accepted_objects()
 
-        self.origin_object_in_inventory_count = len([object_ for object_ in self.common_info.character.objects
-                                                     if object_.objectGID in self.accepted_objects_gid])
+        self.origin_object_in_inventory_count = len(
+            [
+                object_
+                for object_ in self.common_info.character.objects
+                if object_.objectGID in self.accepted_objects_gid
+            ]
+        )
 
         self.treated_objects_in_inventory: list[int] = []
 
@@ -99,7 +103,7 @@ class SellingSaleHotel(SaleHotel):
                     target_value=True,
                     event=self.is_playing_update_event,
                     callback=self.on_start_update,
-                )
+                ),
             ]
         )
 
@@ -144,16 +148,18 @@ class SellingSaleHotel(SaleHotel):
         self.emit_progression_update()
 
     def emit_progression_update(self):
-        self.app_signals.on_new_hdv_update_progression.emit(TreatedObjectProgression(
-            treated_objects_count=len(self.object_on_sale_info) - len(self.objects_to_update),
-            total_objects_count=len(self.object_on_sale_info)
-        ))
+        self.app_signals.on_new_hdv_update_progression.emit(
+            TreatedObjectProgression(
+                treated_objects_count=len(self.object_on_sale_info)
+                - len(self.objects_to_update),
+                total_objects_count=len(self.object_on_sale_info),
+            )
+        )
 
     def process_from_inventory(self) -> None:
         if (
-                self.selected_object is not None
-                and self.get_quantity_in_inventory(self.selected_object["object_gid"])
-                != 0
+            self.selected_object is not None
+            and self.get_quantity_in_inventory(self.selected_object["object_gid"]) != 0
         ):
             if self.selected_object["is_placed"]:
                 self.sell_selected_object()
@@ -170,22 +176,24 @@ class SellingSaleHotel(SaleHotel):
         self.emit_progression_inventory()
 
     def emit_progression_inventory(self):
-        self.app_signals.on_new_hdv_inventory_progression.emit(TreatedObjectProgression(
-            treated_objects_count=len(self.treated_objects_in_inventory),
-            total_objects_count=self.origin_object_in_inventory_count
-        ))
+        self.app_signals.on_new_hdv_inventory_progression.emit(
+            TreatedObjectProgression(
+                treated_objects_count=len(self.treated_objects_in_inventory),
+                total_objects_count=self.origin_object_in_inventory_count,
+            )
+        )
 
     def place_object(self, object_gid: int, do_exchange_bid_house_search: bool = True):
         if do_exchange_bid_house_search:
             super().place_object(object_gid)
-        assert self.selected_object['is_placed'] is False
+        assert self.selected_object["is_placed"] is False
         send_parsed_msg(
             self.common_info.message_to_send_queue,
             ExchangeBidHousePriceMessage(
                 objectGID=object_gid,
             ),
         )
-        self.selected_object['is_placed'] = True
+        self.selected_object["is_placed"] = True
 
         logger.info(
             f"sending ExchangeBidHousePriceMessage with objectGID : {object_gid}"
@@ -280,7 +288,7 @@ class SellingSaleHotel(SaleHotel):
         )
 
     def get_accepted_objects(self) -> list[int]:
-        with sessionmaker(bind=self.engine)() as _session:
+        with SessionLocal() as _session:
             if self.common_info.subscription_end_date <= datetime.now():
                 accepted_gids = [
                     object_gid.id
@@ -309,15 +317,15 @@ class SellingSaleHotel(SaleHotel):
                 object_
                 for object_ in self.common_info.character.objects
                 if object_.objectGID in self.accepted_objects_gid
-                   and object_.objectGID not in self.treated_objects_in_inventory
+                and object_.objectGID not in self.treated_objects_in_inventory
             ),
             None,
         )
-        logger.info(f"Get first accepted objects in inventory")
+        logger.info("Get first accepted objects in inventory")
         return accepted_objects_inventory
 
     def get_price_and_quantity(
-            self, object_gid: int, quantity: int, minimal_prices: list[int]
+        self, object_gid: int, quantity: int, minimal_prices: list[int]
     ) -> Tuple[int, int] | None:
         forbidden_quantity = 0
         minimal_price_authorized = 2
@@ -341,10 +349,10 @@ class SellingSaleHotel(SaleHotel):
         price = math.ceil(price * quantity)
 
         if not any(
-                _object.quantity == quantity
-                and _object.objectPrice == price
-                and _object.objectGID == object_gid
-                for _object in self.object_on_sale_info
+            _object.quantity == quantity
+            and _object.objectPrice == price
+            and _object.objectGID == object_gid
+            for _object in self.object_on_sale_info
         ):
             # check if object is not already on sale with same prices
             price -= 1
