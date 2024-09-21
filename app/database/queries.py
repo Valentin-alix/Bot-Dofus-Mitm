@@ -4,20 +4,16 @@ from sqlalchemy.orm import Session, joinedload
 
 from app.database.models import CategoryEnum, Ingredient, Item, Price, Recipe, TypeItem
 from app.database.utils import ENGINE
-from app.utils.debugger import timeit
 
 
-@timeit
 def get_types_items(session: Session):
     return session.query(TypeItem).order_by(TypeItem.name).distinct().all()
 
 
-@timeit
 def get_items(session: Session):
     return session.query(Item).order_by(Item.name).distinct().all()
 
 
-@timeit
 def get_recipes(session: Session):
     types_with_recipe = (
         session.query(Recipe)
@@ -97,7 +93,6 @@ def get_benefit_from_craft(
     )
 
 
-@timeit
 def get_benefit_nugget(
     session: Session, server_id: int | None, quantity: str, limit: int = 10
 ) -> list | None:
@@ -168,7 +163,6 @@ def get_benefit_nugget(
     return benefits_nugget
 
 
-@timeit
 def get_info_by_type_or_object(
     session: Session, server_id: int | None, object_name: str | None = None
 ) -> pd.DataFrame | None:
@@ -189,7 +183,6 @@ def get_info_by_type_or_object(
     return df_prices
 
 
-@timeit
 def get_difference_on_all_prices(
     session: Session, server_id: int | None, quantity: str, limit: int = 10
 ) -> list | None:

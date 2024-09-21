@@ -19,6 +19,9 @@
 
 Vous n'avez plus qu'à connecter votre personnage (vous devez déco/reco si votre personnage est déjà connecté).
 
+Il peux arriver que la connexion se passe mal et que la console affiche un caractère bizzard de ce style : ▲M
+Si c'est le cas c'est probablement à cause de la latence, rééssayer et ca devrait passer.
+
 # Fonctionnalités :
 
 Toutes les données sont stocké en local dans un fichier sqlite, pour enregistrer les prix vous devez aller à un hdv et lancer le bot depuis la page scrapping avec le bouton play, il ne vous reste plus qu'a attendre la fin.
@@ -31,8 +34,8 @@ Toutes les données sont stocké en local dans un fichier sqlite, pour enregistr
     - Top 10 des chutes les plus importante de prix
 
 - Automatisation de la vente d'objets en hdv
-    - Vente automatique des objets(ressource/consommable/cosmétique) en hdv
-    - Modification automatique des prix des objets (ressource/consommable/cosmétique) en hdv
+    - Vente automatique des objets(ressource/consommable/cosmétique) en hdv (il faut être dans l'onglet vente de l'hdv correspondant)
+    - Modification automatique des prix des objets (ressource/consommable/cosmétique) en hdv (il faut être dans l'onglet vente de l'hdv correspondant)
 
 # Technologies :
 
@@ -41,18 +44,22 @@ Toutes les données sont stocké en local dans un fichier sqlite, pour enregistr
 - SQLAlchemy
 - PyQt5
 
-## Interface de scrapping :
+## Interface d'évolution des prix :
 
-![scrapping bot](./resources/scrapping_interface.png)
+![scrapping bot](./docs/screenshots/evolution_price.png)
+
+## Interface des chutes de prix / bénéfices du recyclage :
+
+![scrapping bot](./docs/screenshots/price_drop_recycling.png)
 
 ## Interface des bénéfices par craft :
 
-![scaping craft](./resources/scrapping_craft_interface.png)
+![scaping craft](./docs/screenshots/benefit_craft.png)
 
 ## Interface de vente :
 
-![selling bot](./resources/selling_bot.gif)
+![selling bot](./docs/screenshots/selling_bot.gif)
 
 ## Interface du sniffer :
 
-![sniffer](./resources/sniffer_interface.png)
+![sniffer](./docs/screenshots/sniffer_interface.png)

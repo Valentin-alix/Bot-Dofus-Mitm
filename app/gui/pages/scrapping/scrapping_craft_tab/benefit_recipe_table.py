@@ -8,7 +8,6 @@ from app.database.utils import SessionLocal
 from app.gui.components.common import QWidget
 from app.gui.components.table import BaseTableWidget, ColumnInfo
 from app.gui.utils import Worker, run_in_background
-from app.utils.debugger import timeit
 
 
 class BenefitRecipeTableSignals(QObject):
@@ -40,7 +39,6 @@ class BenefitRecipeTable(QWidget):
         self.table_benefit_recipe = table_benefit_recipe_scroll.table
         self.layout().addWidget(self.table_benefit_recipe)
 
-    @timeit
     def get_benefits_recipes(
         self, category: CategoryEnum, type_name: str | None = None
     ):
