@@ -65,55 +65,55 @@ class SnifferFrame(QFrame):
         self.layout().addWidget(self.content)
 
     def set_list_message(self):
-        table_messages = BaseTableWidget()
-        table_messages.set_columns(
+        scroll_table_msg = BaseTableWidget()
+        scroll_table_msg.set_columns(
             [
                 ColumnInfo(name="Heure"),
                 ColumnInfo(name="Origine"),
                 ColumnInfo(name="Message"),
             ]
         )
-        self.table_messages = table_messages.table
+        self.table_msg = scroll_table_msg.table
 
-        self.table_messages.setColumnCount(4)
-        self.table_messages.setColumnHidden(3, True)
-        self.table_messages.cellClicked.connect(self.show_info_message)
+        self.table_msg.setColumnCount(4)
+        self.table_msg.setColumnHidden(3, True)
+        self.table_msg.cellClicked.connect(self.show_info_message)
 
-        self.content_layout.addWidget(table_messages.table)
+        self.content_layout.addWidget(scroll_table_msg)
 
     def on_get_message(self, parsed_message_info: ParsedMessageInfo):
         if self.bot_info.sniffer_info.is_playing_event.is_set():
             background_color = "red" if parsed_message_info["from_client"] else "green"
 
-            index = self.table_messages.rowCount()
-            self.table_messages.setRowCount(index + 1)
+            index = self.table_msg.rowCount()
+            self.table_msg.setRowCount(index + 1)
 
             time_col = QTableWidgetItem(
                 parsed_message_info["time"].strftime("%H:%M:%S")
             )
             time_col.setBackground(QColor(background_color))
-            self.table_messages.setItem(index, 0, time_col)
+            self.table_msg.setItem(index, 0, time_col)
 
             origin_col = QTableWidgetItem(
                 "Client" if parsed_message_info["from_client"] else "Server"
             )
             origin_col.setBackground(QColor(background_color))
-            self.table_messages.setItem(index, 1, origin_col)
+            self.table_msg.setItem(index, 1, origin_col)
 
             message_col = QTableWidgetItem(parsed_message_info["parsed_msg"].__type__)
             message_col.setBackground(QColor(background_color))
-            self.table_messages.setItem(index, 2, message_col)
+            self.table_msg.setItem(index, 2, message_col)
 
             message_col_data = QTableWidgetItem()
             message_col_data.setData(0, vars(parsed_message_info["parsed_msg"]))
-            self.table_messages.setItem(index, 3, message_col_data)
+            self.table_msg.setItem(index, 3, message_col_data)
 
-            if self.table_messages.rowCount() > 500:
+            if self.table_msg.rowCount() > 500:
                 for index in range(1, 200):
-                    self.table_messages.removeRow(index)
+                    self.table_msg.removeRow(index)
 
     def show_info_message(self, row: int, _):
-        if (msg_item := self.table_messages.item(row, 3)) is not None:
+        if (msg_item := self.table_msg.item(row, 3)) is not None:
             self.quit_detail_msg()
             parsed_msg_json: dict = msg_item.data(0)
             self.detail_msg = DetailMessage(parsed_msg_json)

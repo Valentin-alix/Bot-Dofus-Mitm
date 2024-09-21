@@ -22,8 +22,14 @@ class ColumnInfo:
 class BaseTableWidget(SingleDirectionScrollArea):
     def __init__(self, is_searchable: bool = True, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
         self.is_searchable = is_searchable
         self.table = TableWidget(parent=self)
+
+        self.setWidget(self.table)
+        self.setStyleSheet("QScrollArea{background: transparent; border: none}")
+        self.table.setStyleSheet("QWidget{background: transparent}")
+
         self.table.setWordWrap(True)
         self.table.scrollDelagate.verticalSmoothScroll.setSmoothMode(
             SmoothMode.NO_SMOOTH
@@ -45,17 +51,17 @@ class BaseTableWidget(SingleDirectionScrollArea):
         self.columns_infos = columns_infos
         self.table.setColumnCount(len(columns_infos))
 
-        for index, col_info in enumerate(columns_infos):
-            if not self.is_searchable:
-                continue
-            if not col_info.search_type:
-                self.col_header_edit.append(None)
-                continue
+        if self.is_searchable:
+            for index, col_info in enumerate(columns_infos):
+                if not col_info.search_type:
+                    self.col_header_edit.append(None)
+                    continue
 
-            col_search_edit = LineEdit()
-            col_search_edit.textChanged.connect(self.on_header_text_changed)
-            self.col_header_edit.append(col_search_edit)
-            self.table.setCellWidget(0, index, col_search_edit)
+                col_search_edit = LineEdit()
+                col_search_edit.textChanged.connect(self.on_header_text_changed)
+                col_search_edit.textEdited.connect(self.on_header_text_changed)
+                self.col_header_edit.append(col_search_edit)
+                self.table.setCellWidget(0, index, col_search_edit)
 
         self.table.setHorizontalHeaderLabels([_col.name for _col in columns_infos])
 
@@ -63,7 +69,7 @@ class BaseTableWidget(SingleDirectionScrollArea):
         cols_filters: list[str] = []
 
         for index, col_info in enumerate(columns_infos):
-            if not col_info.search_type or not self.is_searchable:
+            if not col_info.search_type:
                 cols_filters.append("")
                 continue
             col_edit = self.col_header_edit[index]
@@ -73,7 +79,7 @@ class BaseTableWidget(SingleDirectionScrollArea):
         return cols_filters
 
     def filter_row(self, row_index: int, cols_filters: list[str]):
-        if row_index == 0 or not self.is_searchable:
+        if row_index == 0:
             return
         for col_index, col_info in enumerate(self.columns_infos):
             if not col_info.search_type or cols_filters[col_index] == "":
@@ -115,6 +121,5 @@ class BaseTableWidget(SingleDirectionScrollArea):
         cols_filters = self.get_header_filters(self.columns_infos)
         self.filter_row(row_index, cols_filters)
 
-    @pyqtSlot()
     def on_header_text_changed(self):
         self.filter_rows()

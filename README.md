@@ -14,6 +14,10 @@
   ```
 - Lancer init.bat
 
+- Python app/__main__.py # Lance le bot
+
+Vous n'avez plus qu'à connecter votre personnage (vous devez déco/reco si votre personnage est déjà connecté).
+
 # Fonctionnalités :
 
 - Sniffer
