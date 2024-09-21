@@ -3,8 +3,7 @@
 - Désactiver l'ipv6 sur votre pc
 
 - Installer Jpexs-decompiler : https://github.com/jindrapetrik/jpexs-decompiler
-- Créer un fichier .env
-    - exemple d'un .env :
+- Créer un fichier .env dans app/.env ,vous pouvez prendre exemple sur le fichier app/.env.template : 
   ```
   D2O_FOLDER="C:\\Users\\valen\\AppData\\Local\\Ankama\\Dofus\\data\\common"
   D2P_FOLDER="C:\\Users\\valen\\AppData\\Local\\Ankama\\Dofus\\content\\gfx\\items"
