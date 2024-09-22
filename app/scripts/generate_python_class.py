@@ -4,7 +4,7 @@ import shutil
 import sys
 from pathlib import Path
 
-sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+sys.path.append(str(Path(__file__).parent.parent.parent))
 
 from app.utils.common import get_classes_in_path
 
@@ -55,8 +55,8 @@ def find_import_path_by_class_name(
     raise Exception
 
 
-def create_python_class_dofus_file(base_path_output):
-    base_path_imports = os.path.join("app", "types_", "dofus")
+def create_python_class_dofus_file(base_path_output: str):
+    base_path_imports = os.path.join("app", "interfaces", "dofus")
     protocol_json_path = os.path.join(
         Path(__file__).parent.parent, "network", "protocol", "protocol_type.json"
     )
@@ -163,7 +163,7 @@ def create_utils_file(base_path_output: str) -> None:
     utils_code = "CLASSES_BY_NAME = {\n"
 
     classes = get_classes_in_path(
-        os.path.join(Path(__file__).parent.parent, "types_", "dofus"), ".py"
+        os.path.join(Path(__file__).parent.parent, "interfaces", "dofus"), ".py"
     )
     for _class in classes:
         utils_import += f"from {_class.__module__} import {_class.__name__}\n"
@@ -174,7 +174,7 @@ def create_utils_file(base_path_output: str) -> None:
 
 
 def launch_generator():
-    base_path_output = os.path.join(Path(__file__).parent.parent, "types_", "dofus")
+    base_path_output = os.path.join(Path(__file__).parent.parent, "interfaces", "dofus")
     create_python_class_dofus_file(base_path_output)
     create_utils_file(base_path_output)
 
