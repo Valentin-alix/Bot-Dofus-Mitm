@@ -3,7 +3,7 @@
 - Désactiver l'ipv6 sur votre PC
 
 - Installer Jpexs-decompiler : https://github.com/jindrapetrik/jpexs-decompiler
-- Créer un fichier .env dans app/.env , vous pouvez prendre exemple sur le fichier app/.env.template : 
+- Créer un fichier .env dans app/.env , vous pouvez prendre exemple sur le fichier app/.env.template :
   ```
   D2O_FOLDER="C:\\Users\\valen\\AppData\\Local\\Ankama\\Dofus\\data\\common"
   D2P_FOLDER="C:\\Users\\valen\\AppData\\Local\\Ankama\\Dofus\\content\\gfx\\items"
@@ -17,7 +17,7 @@
 
 Vous ne devez avoir qu'une seule instance du jeu ouvert.
 
-`python app/__main__.py` # Lance le bot
+`start.bat` # Lance le bot
 
 Vous n'avez plus qu'à connecter votre personnage (vous devez déco/reco si votre personnage est déjà connecté).
 
@@ -31,13 +31,14 @@ Toutes les données sont stockés en local dans un fichier sqlite, pour enregist
 - Sniffer
 
 - Scrapping de l'hdv
-    - Graphique du prix des items au fil du temps
-    - Top 10 des meilleurs bénéfices au recyclage des pépites
-    - Top 10 des chutes les plus importantes de prix
+
+  - Graphique du prix des items au fil du temps
+  - Top 10 des meilleurs bénéfices au recyclage des pépites
+  - Top 10 des chutes les plus importantes de prix
 
 - Automatisation de la vente d'objets en hdv
-    - Vente automatique des objets(ressources/consommables/cosmétiques) en hdv (il faut être dans l'onglet vente de l'hdv correspondant)
-    - Modification automatique des prix des objets (ressources/consommables/cosmétiques) en hdv (il faut être dans l'onglet vente de l'hdv correspondant)
+  - Vente automatique des objets(ressources/consommables/cosmétiques) en hdv (il faut être dans l'onglet vente de l'hdv correspondant)
+  - Modification automatique des prix des objets (ressources/consommables/cosmétiques) en hdv (il faut être dans l'onglet vente de l'hdv correspondant)
 
 # Technologies :
 

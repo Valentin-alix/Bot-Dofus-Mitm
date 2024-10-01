@@ -8,7 +8,6 @@ from socket import socket as Socket
 from threading import Thread
 from time import sleep
 
-import fritm
 import psutil
 from PyQt5.QtCore import QObject
 
@@ -16,6 +15,8 @@ from app.gui.signals import AppSignals
 from app.interfaces.models.common import BotInfo
 from app.interfaces.models.network.data import BufferInfos
 from app.interfaces.models.network.message import Message
+from app.network.fritm.hook import hook
+from app.network.fritm.proxy import ConnectionWrapper, start_proxy_server
 from app.network.parser import MessageRawDataParser
 
 logger = logging.getLogger(__name__)
@@ -35,7 +36,7 @@ class Mitm(QObject):
                 bridge.connection_server.shutdown(SHUT_WR)
 
     def on_connection_callback(
-        self, connection_game: fritm.proxy.ConnectionWrapper, connection_server: Socket
+        self, connection_game: ConnectionWrapper, connection_server: Socket
     ):
         bridge = InjectorBridgeHandler(
             connection_game, connection_server, self.bot_info, self.app_signals
@@ -49,8 +50,8 @@ class Mitm(QObject):
         while "Dofus.exe" not in (process.name() for process in psutil.process_iter()):
             print("Waiting for dofus.exe")
             sleep(1)
-        fritm.start_proxy_server(self.on_connection_callback, 8080)
-        fritm.hook("Dofus.exe", 8080, "port==5555")
+        start_proxy_server(self.on_connection_callback, 8080)
+        hook("Dofus.exe", 8080, "port==5555")
 
 
 class InjectorBridgeHandler:
@@ -58,7 +59,7 @@ class InjectorBridgeHandler:
 
     def __init__(
         self,
-        connection_game: fritm.proxy.ConnectionWrapper,
+        connection_game: ConnectionWrapper,
         connection_server: Socket,
         bot_info: BotInfo,
         app_signals: AppSignals,
