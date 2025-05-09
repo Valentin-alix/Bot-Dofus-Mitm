@@ -65,4 +65,4 @@ To record item prices, go to an in-game market (HDV) and start the bot from the 
 ![sniffer](./docs/screenshots/sniffer_interface.png)
 
 ## Disclaimer
-This script is provided for educational and informational purposes only. It was created just for fun. The author is not responsible for any misuse or violation of terms of service resulting from the use of this script. Always stick to terms of service of website you're using.
+This repository is provided for educational and informational purposes only. It was created just for fun. The author is not responsible for any misuse or violation of terms of service resulting from the use of this repository.
