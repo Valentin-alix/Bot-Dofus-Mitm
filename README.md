@@ -1,9 +1,9 @@
 # Setup :
 
-- Désactiver l'ipv6 sur votre PC
+- Disable IPV6 on your PC
 
-- Installer Jpexs-decompiler : https://github.com/jindrapetrik/jpexs-decompiler
-- Créer un fichier .env dans app/.env , vous pouvez prendre exemple sur le fichier app/.env.template :
+- Install Jpexs-decompiler : https://github.com/jindrapetrik/jpexs-decompiler
+- Create .env file in app/.env , you can take example of this file app/.env.template :
   ```
   D2O_FOLDER="C:\\Users\\valen\\AppData\\Local\\Ankama\\Dofus\\data\\common"
   D2P_FOLDER="C:\\Users\\valen\\AppData\\Local\\Ankama\\Dofus\\content\\gfx\\items"
@@ -13,32 +13,29 @@
   FFDECJAR_PATH="C:\\Program Files (x86)\\FFDec\\ffdec.jar"
   ```
 
-`init.bat` # Initialise le bot (c'est à faire à chaque nouvelle maj)
+`init.bat` # Initializes the bot (must be run after each update)
 
-Vous ne devez avoir qu'une seule instance du jeu ouvert.
+Make sure you have only one instance of the game running.
 
-`start.bat` # Lance le bot
+`start.bat` # Starts the bot
 
-Vous n'avez plus qu'à connecter votre personnage (vous devez déco/reco si votre personnage est déjà connecté).
+Simply log in with your character (if your character is already connected, you must disconnect and reconnect).
 
-Il peut arriver que la connexion se passe mal et que la console affiche un caractère bizzard de ce style : ▲M
-Si c'est le cas c'est probablement à cause de la latence, rééssayer et ça devrait passer.
+Sometimes the connection may fail and the console might display a strange character like: ▲M
+If that happens, it's most likely due to latency. Try again — it should work on a subsequent attempt.
 
-# Fonctionnalités :
-
-Toutes les données sont stockés en local dans un fichier sqlite, pour enregistrer les prix vous devez aller à un hdv et lancer le bot depuis la page scrapping avec le bouton play, il ne vous reste plus qu'a attendre la fin.
+# Features:
+All data is stored locally in an SQLite file.
+To record item prices, go to an in-game market (HDV) and start the bot from the scrapping page using the play button. Then just wait for the process to complete.
 
 - Sniffer
-
-- Scrapping de l'hdv
-
-  - Graphique du prix des items au fil du temps
-  - Top 10 des meilleurs bénéfices au recyclage des pépites
-  - Top 10 des chutes les plus importantes de prix
-
-- Automatisation de la vente d'objets en hdv
-  - Vente automatique des objets(ressources/consommables/cosmétiques) en hdv (il faut être dans l'onglet vente de l'hdv correspondant)
-  - Modification automatique des prix des objets (ressources/consommables/cosmétiques) en hdv (il faut être dans l'onglet vente de l'hdv correspondant)
+- HDV Scraping
+- Price trend graph over time
+- Top 10 most profitable items for nugget recycling
+- Top 10 biggest price drops
+- Automated item sales in HDV
+- Automatic listing of items (resources/consumables/cosmetics) in the market (you must be in the correct sales tab)
+- Automatic price adjustment of items (resources/consumables/cosmetics) in the market (you must be in the correct sales tab)
 
 # Technologies :
 
@@ -47,22 +44,25 @@ Toutes les données sont stockés en local dans un fichier sqlite, pour enregist
 - SQLAlchemy
 - PyQt5
 
-## Interface d'évolution des prix :
+## Evolution of price GUI :
 
 ![scrapping bot](./docs/screenshots/evolution_price.png)
 
-## Interface des chutes de prix / bénéfices du recyclage :
+## Loss price on item GUI / Nugget benefit GUI :
 
 ![scrapping bot](./docs/screenshots/price_drop_recycling.png)
 
-## Interface des bénéfices par craft :
+## Benefit by craft GUI :
 
 ![scaping craft](./docs/screenshots/benefit_craft.png)
 
-## Automatisation de la vente :
+## Sell automation :
 
 ![selling bot](./docs/screenshots/selling_bot.gif)
 
-## Interface du sniffer :
+## Sniffer GUI :
 
 ![sniffer](./docs/screenshots/sniffer_interface.png)
+
+## Disclaimer
+This script is provided for educational and informational purposes only. It was created just for fun. The author is not responsible for any misuse or violation of terms of service resulting from the use of this script. Always stick to terms of service of website you're using.
