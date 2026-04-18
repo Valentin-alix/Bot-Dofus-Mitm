@@ -1,7 +1,5 @@
 # Setup :
 
-- Disable IPV6 on your PC
-
 - Install Jpexs-decompiler : https://github.com/jindrapetrik/jpexs-decompiler
 - Create .env file in app/.env , you can take example of this file app/.env.template :
   ```
