@@ -44,25 +44,5 @@ To record item prices, go to an in-game market (HDV) and start the bot from the 
 - SQLAlchemy
 - PyQt5
 
-## Evolution of price GUI :
-
-![scrapping bot](./docs/screenshots/evolution_price.png)
-
-## Loss price on item GUI / Nugget benefit GUI :
-
-![scrapping bot](./docs/screenshots/price_drop_recycling.png)
-
-## Benefit by craft GUI :
-
-![scaping craft](./docs/screenshots/benefit_craft.png)
-
-## Sell automation :
-
-![selling bot](./docs/screenshots/selling_bot.gif)
-
-## Sniffer GUI :
-
-![sniffer](./docs/screenshots/sniffer_interface.png)
-
 ## Disclaimer
 This repository is provided for educational and informational purposes only. It was created just for fun. The author is not responsible for any misuse or violation of terms of service resulting from the use of this repository.
